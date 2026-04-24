@@ -102,7 +102,7 @@ export async function createBook(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
-
+    
     const output = BookSchema.omit({ book_id: true }).safeParse({
         book_name: req.body.book_name,
         book_cover_image: req.body.book_cover_image,
@@ -126,7 +126,7 @@ export async function updateBook(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
-
+    
     const output = nullableBy(BookSchema, ["book_name", "book_author", "book_cover_image", "book_background_image", "book_year"]).safeParse({
         book_id: req.body.book_id,
         book_name: req.body.book_name,

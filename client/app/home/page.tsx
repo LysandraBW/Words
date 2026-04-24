@@ -33,7 +33,7 @@ export default function Page() {
     }
 
     return (
-        <div className="w-full h-full grid grid-cols-[256px_1fr] bg-black overflow-y-scroll">
+        <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-scroll">
             {/* <NavBar/> */}
             <div className="flex col-start-2">
                 <section className="w-full px-4 py-4">
@@ -49,7 +49,7 @@ export default function Page() {
                             <Fragment key={i}>
                                 <Book
                                     book={book}
-                                    onClick={() => router.push(`/books?bookID=${book.book_id}`)}
+                                    onClick={() => router.push(`/book?bookID=${book.book_id}`)}
                                 />
                             </Fragment>
                         ))}

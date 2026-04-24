@@ -91,7 +91,8 @@ export async function UpdateBook(book: NullableBy<Book, "book_name" | "book_cove
                     book_background_image = COALESCE(${book.book_background_image ?? null}, book_background_image),
                     book_year = COALESCE(${book.book_year ?? null}, book_year),
                     book_author = COALESCE(${book.book_author ?? null}, book_author)
-            WHERE   reader_id = ${book.reader_id}
+            WHERE   reader_id = ${book.reader_id} AND
+                    book_id = ${book.book_id}
             RETURNING *
         `;
         return rows;

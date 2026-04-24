@@ -55,7 +55,7 @@ export async function SelectChapters(readerID: string) {
 export async function SelectChaptersFromBook(bookID: number, readerID: string) {
     try {
         const rows = await db<Chapter[]>`
-            SELECT  * 
+            SELECT  Chapter.* 
             FROM    Book 
             JOIN    Chapter
             ON      Chapter.book_id = Book.book_id
@@ -79,7 +79,7 @@ export async function InsertChapter(chapter: Omit<Chapter, "chapter_id">, reader
             INSERT INTO Chapter (
                 chapter_title, 
                 chapter_number, 
-                Chapterbook_id
+                book_id
             )
             SELECT  ${chapter.chapter_title},
                     ${chapter.chapter_number},
@@ -88,7 +88,7 @@ export async function InsertChapter(chapter: Omit<Chapter, "chapter_id">, reader
                 SELECT  1 
                 FROM    Book
                 WHERE   Book.reader_id = ${readerID} AND
-                WHERE   Book.chapter_id = ${chapter.book_id}
+                        Book.book_id = ${chapter.book_id}
                 LIMIT   1
             )
             RETURNING *

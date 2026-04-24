@@ -1,16 +1,16 @@
 import { ReactNode } from "react";
 import CloseButton from "./CloseButton";
 
-interface PanelProps {
+interface ModalProps {
     onClose: () => void;
     title?: string;
     description?: string;
     children?: ReactNode;
 }
 
-export default function Panel(props: PanelProps) {
+export default function Modal(props: ModalProps) {
     return (
-        <div className="w-[480px] min-w-[480px] max-w-[480px] min-h-screen h-screen max-h-screen sticky top-0 overflow-y-auto bg-black border-l border-l-zinc-800">
+        <div className="w-[480px] min-w-[480px] max-w-[480px] overflow-y-scroll bg-black border border-zinc-800">
             <div className="w-full h-min pt-4 px-4 flex justify-end">
                 <CloseButton
                     onClose={props.onClose}

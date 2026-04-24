@@ -26,6 +26,13 @@ export default function InputTags(props: Partial<InputTagsProps>) {
         setValue("");
     }
 
+    const onClick = (event: any) => {
+        if (!value || !props.onInsert)
+            return;
+        props.onInsert(value);
+        setValue("");
+    }
+
     return (
         <InputWrapper>
             <InputLabel
@@ -45,7 +52,7 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                     )}
                 />
                 <button
-                    onClick={onEnter}
+                    onClick={onClick}
                     className="px-4 py-1 bg-zinc-900 rounded-r-md cursor-pointer group"
                 >
                     <CornerDownLeftIcon
@@ -55,7 +62,7 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                 </button>
             </div>
             {!!props.value?.length &&
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                     {props.value?.map((value, i) => (
                         <Fragment key={i}>
                             <InputTag

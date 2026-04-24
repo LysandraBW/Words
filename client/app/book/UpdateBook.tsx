@@ -1,86 +1,55 @@
 "use client";
 import { useEffect, useState } from "react"
-import { BookType, createBook } from "@/services/db/books"
-import InputDropdown, { Option } from "@/components/input/InputDropdown";
-import { books_v1 } from "googleapis";
-import searchBook from "@/services/googleBooks/searchBook";
+import { BookType, updateBook } from "@/services/db/books"
 import InputText from "@/components/input/InputText";
 import InputTags from "@/components/input/InputTag/InputTags";
-import Panel from "@/components/Panel";
 import { createForm, Form, getFormData, updateFormValue } from "@/utilities/form";
 import z from "zod";
 import InputImageURL from "@/components/input/InputImageURL";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
-interface CreateBookProps {
+interface UpdateBookProps {
+    book: BookType;
     onClose: () => void;
-    onCreate: (book: BookType) => void;
+    onUpdate: (book: BookType) => void;
 }
 
-export default function CreateBook(props: CreateBookProps) {
-    const [books, setBooks] = useState<books_v1.Schema$Volume[]>([]);
-    const [bookOptions, setBookOptions] = useState<Option[]>([]);
-    const [selectedBookID, setSelectedBookID] = useState<string[]>();
-
+export default function UpdateBook(props: UpdateBookProps) {
     const [form, setForm] = useState<Form<BookType>>(createForm([
         {
+            label: "book_id",
+            value: props.book.book_id,
+            test: z.any()
+        },
+        {
             label: "book_name",
+            value: props.book.book_name,
             test: z.string().min(1, "Must enter the name of a book.")
         },
         {
             label: "book_cover_image",
+            value: props.book.book_cover_image,
             test: z.url("Must enter a valid URL.")
         },
         {
             label: "book_background_image",
+            value: props.book.book_background_image,
             test: z.url("Must enter a valid URL.")
         },
         {
             label: "book_year",
+            value: props.book.book_year,
             test: z.coerce.number("Must enter a valid year.")
             .min(1000, "Must enter a year greater than 1000.")
             .max(3000, "Must enter a year less than 3000.")
         },
         {
             label: "book_author",
+            value: props.book.book_author,
             test: z.array(z.string().min(1, "Authors must have a name."))
         }
     ]));
-    
-
-    useEffect(() => {
-        if (!selectedBookID?.length)
-            return;
-
-        const book = books.find(b => b.id === selectedBookID[0]);
-
-        let updatedForm = updateFormValue(form, "book_name", book?.volumeInfo?.title || "");
-        updatedForm = updateFormValue(updatedForm, "book_cover_image", book?.volumeInfo?.imageLinks?.thumbnail || "");
-        updatedForm = updateFormValue(updatedForm, "book_year", book?.volumeInfo?.publishedDate?.slice(0, 4) || "");
-        updatedForm = updateFormValue(updatedForm, "book_author", book?.volumeInfo?.authors || "");
-        setForm(updatedForm);
-
-    }, [selectedBookID]);
-
-
-    const updateBooks = async (search: string) => {
-        const books: books_v1.Schema$Volume[] = await searchBook(search);
-        setBooks(books);
-        setBookOptions(books.filter(book => book.id).slice(0, 10).map(book => ({
-            value: book.id || "",
-            textLabel: book.volumeInfo?.title || "",
-            optionLabel: (
-                <div className="overflow-clip text-inherit">
-                    <span className="block truncate text-inherit group-hover:text-blue-400 text-sm font-medium">
-                        {book.volumeInfo?.title}
-                    </span>
-                    <span className="block text-xs text-zinc-400">
-                        {book.volumeInfo?.publishedDate?.slice(0, 4) || "No Date Listed"}, {book.volumeInfo?.publisher || "No Publisher Listed"}
-                    </span>
-                </div>
-            )
-        })));
-    }
 
 
     const onInsertAuthor = (value: string) => {
@@ -97,9 +66,9 @@ export default function CreateBook(props: CreateBookProps) {
     }
 
 
-    const onCreateBook = async (book: BookType) => {
-        const createdBook = await createBook({
-            book_id: -1,
+    const onUpdateBook = async (book: BookType) => {
+        const updatedBook = await updateBook({
+            book_id: book.book_id,
             reader_id: '',
             book_name: book.book_name,
             book_year: book.book_year,
@@ -107,27 +76,23 @@ export default function CreateBook(props: CreateBookProps) {
             book_background_image: book.book_background_image || null,
             book_cover_image: book.book_cover_image || null
         });
-        
-        if (createdBook)
-            props.onCreate(createdBook[0]);
+                
+        if (updatedBook)
+            props.onUpdate(updatedBook[0]);
     }
 
-    
+   
+    useEffect(() => {
+        console.log(props.book);
+    }, [])
+
+
     return (
-        <Panel
-            title="Create Book"
+        <Modal
+            title="Update Book"
             onClose={props.onClose}
         >
             <div className="px-8 py-4 flex flex-col gap-y-4">
-                <InputDropdown
-                    toggleLabel="Search Books"
-                    value={selectedBookID}
-                    options={bookOptions}
-                    onChange={(value) => setSelectedBookID([value])}
-                    onSearchChange={updateBooks}
-                    search={true}
-                    searchPlaceholder="Search"
-                />
                 <InputText
                     label="Name"
                     value={form.book_name.value}
@@ -161,11 +126,11 @@ export default function CreateBook(props: CreateBookProps) {
                     error={form.book_background_image.error}
                 />
                 <Button
-                    label="Create Book"
+                    label="Update Book"
                     style="blue"
-                    onClick={() => onCreateBook(getFormData(form))}
+                    onClick={() => onUpdateBook(getFormData(form))}
                 />
             </div>
-        </Panel>
+        </Modal>
     )
 }

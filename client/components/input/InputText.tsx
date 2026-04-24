@@ -12,6 +12,7 @@ export interface InputTextProps {
     onChange: (value: string) => void;
     inputClassName: string;
     placeholder: string;
+    type: string;
 }
 
 export default function InputText(props: Partial<InputTextProps> & Partial<InputLabelProps>) {
@@ -28,6 +29,7 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
                 required={props.required}
             />
             <input
+                type={props.type}
                 value={props.value}
                 onChange={onChange}
                 onBlur={props.onBlur}

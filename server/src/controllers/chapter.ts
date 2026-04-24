@@ -80,6 +80,8 @@ export async function createChapter(req: Request, res: Response) {
     if (!sessionID)
         return res.sendStatus(401);
 
+    console.log(req.body);
+    
     const output = ChapterSchema.omit({ chapter_id: true }).safeParse({
         book_id: req.body.book_id,
         chapter_title: req.body.chapter_title,
@@ -103,6 +105,8 @@ export async function updateChapter(req: Request, res: Response) {
         return res.sendStatus(401);
 
     const output = nullableBy(ChapterSchema, ["chapter_title", "chapter_number"]).safeParse({
+        book_id: req.body.book_id,
+        chapter_id: req.body.chapter_id,
         chapter_title: req.body.chapter_title,
         chapter_number: req.body.chapter_number,
         reader_id: await AuthorizeReaderBySession(sessionID)
@@ -113,8 +117,8 @@ export async function updateChapter(req: Request, res: Response) {
         return res.sendStatus(400);
     }
     
-    const books = await UpdateChapter(output.data, output.data.reader_id);
-    return res.status(200).json(books);
+    const chapter = await UpdateChapter(output.data, output.data.reader_id);
+    return res.status(200).json(chapter);
 }
 
 

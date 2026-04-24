@@ -34,20 +34,6 @@ export default function Book(props: BookProps) {
                     />
                 }
             </div>
-            <div className="w-full h-[60px] flex flex-col items-center gap-y-2">
-                {props.book &&
-                    <>
-                        <span className="block text-xs text-center tracking-wide font-medium">
-                            {props.book.book_name}
-                        </span>
-                    </>
-                }
-                {!props.book &&
-                    <>
-                        <div className="w-[calc(100%)] h-[14px] bg-zinc-900"/>
-                    </>
-                }
-            </div>
         </div>
     )
 }

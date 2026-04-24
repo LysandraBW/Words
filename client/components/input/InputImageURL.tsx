@@ -12,10 +12,12 @@ export default function InputImageURL(props: Partial<InputTextProps>) {
                 onChange={props.onChange}
             />
             <div className="relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-zinc-900">
-                <ImageIcon
-                    size={16}
-                    className="text-zinc-500"
-                />
+                {!props.value &&
+                    <ImageIcon
+                        size={16}
+                        className="text-zinc-500"
+                    />
+                }
                 {props.value &&
                     <img
                         src={props.value}

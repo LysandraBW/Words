@@ -5,7 +5,8 @@ import { getReader, ReaderType } from "@/services/db/reader";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
-import ModifyChapters from "./ModifyChapter";
+import UpdateChapters from "./UpdateChapter";
+import UpdateBook from "./UpdateBook";
 
 export default function Page() {
     const router = useRouter();
@@ -28,17 +29,15 @@ export default function Page() {
             if (bookID === null)
                 return router.push('/home');
 
-            // Get Book by Book ID
+            // Get Book by ID
             const book = await getBook(bookID);
             if (!book?.length)
                 return;
             setBook(book[0]);
 
+            // Get Book's Chapters
             const bookChapters = await getBookChapters(bookID);
             setBookChapters(bookChapters || []);
-
-            console.log(book);
-            console.log(bookChapters);
         }
         load();
     }, []);
@@ -46,16 +45,25 @@ export default function Page() {
 
     return (
         <div>
-            {JSON.stringify(book)}
-            {JSON.stringify(bookChapters)}
-            <div className="bg-gray-50">
-                <ModifyChapters 
-                    onClose={() => null}
-                    chapters={bookChapters || []}
-                    onUpdate={(c: any) => null}
-                    onDelete={(c: any) => null}
-                    onCreate={(c: any) => null}
-                />
+            {/* {JSON.stringify(book)} */}
+            {/* {JSON.stringify(bookChapters)} */}
+            <div className="bg-red-500">
+                {(book && bookChapters) &&
+                    <UpdateChapters 
+                        onClose={() => null}
+                        book={book}
+                        chapters={bookChapters}
+                    />
+                }
+            </div>
+            <div className="bg-blue-500">
+                {book &&
+                    <UpdateBook
+                        book={book}
+                        onClose={() => 0}
+                        onUpdate={(book: BookType) => 0}
+                    />
+                }
             </div>
         </div>
     )

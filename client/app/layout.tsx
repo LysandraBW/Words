@@ -13,11 +13,11 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     	<html 
 			lang="en"
 			className={clsx(
-				"w-screen h-screen",
+				"w-screen min-w-screen max-w-screen h-screen",
 				abcDiatype.className
 			)}
 		>
-			<body className="w-screen h-screen">
+			<body className="w-full h-full overflow-hidden">
 				{children}
 			</body>
     	</html>
