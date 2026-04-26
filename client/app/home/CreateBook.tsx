@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react"
-import { BookType, createBook } from "@/services/db/books"
+import { BookType, createBook } from "@/services/db/book"
 import InputDropdown, { Option } from "@/components/input/InputDropdown";
 import { books_v1 } from "googleapis";
-import searchBook from "@/services/googleBooks/searchBook";
+import searchBook from "@/services/books/searchBook";
 import InputText from "@/components/input/InputText";
 import InputTags from "@/components/input/InputTag/InputTags";
 import Panel from "@/components/Panel";

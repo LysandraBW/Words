@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
-import { BookType } from "@/services/db/books";
+import { BookType } from "@/services/db/book";
 import { ChapterType, createChapter, deleteChapter, updateChapter } from "@/services/db/chapter";
 import { createForm, Form, getFormData, resetForm, testForm, updateFormValue } from "@/utilities/form";
 import { PlusIcon, Trash2Icon } from "lucide-react";
@@ -81,7 +81,21 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
         // -> Update
         const updateChapterIDs = oldChapterIDs.intersection(newChapterIDs);
         for (const id of updateChapterIDs) {
-            await updateChapter(getFormData(newChapters[id]));
+            const oldChapterData = oldChapters.find(chapter => chapter.chapter_id === id);
+            const newChapterData = getFormData(newChapters[id]);
+
+            if (!oldChapterData || !newChapterData) {
+                alert('Cannot Find Old or New Chapters');
+                return;
+            }
+
+            // No Changes Made
+            if (
+                (oldChapterData.chapter_title === newChapterData.chapter_title) && 
+                (oldChapterData.chapter_number === newChapterData.chapter_number)
+            ) continue;
+
+            await updateChapter(newChapterData);
 
             oldChapterIDs.delete(id);
             newChapterIDs.delete(id);
@@ -99,9 +113,16 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                 continue;
             }
 
-            const chapterData = getFormData(newChapter);
-            chapterData.chapter_id = oldChapter.chapter_id;
-            await updateChapter(chapterData);
+            const newChapterData = getFormData(newChapter);
+            newChapterData.chapter_id = oldChapter.chapter_id;
+
+            // No Changes Made
+            if (
+                (oldChapter.chapter_title === newChapterData.chapter_title) && 
+                (oldChapter.chapter_number === newChapterData.chapter_number)
+            ) continue;
+
+            await updateChapter(newChapterData);
 
             oldChapterIDs.delete(oldChapter.chapter_id);
             newChapterIDs.delete(newChapter.chapter_id.value);
@@ -114,7 +135,6 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
 
         const createChapterIDs = newChapterIDs.difference(oldChapterIDs);
         for (const id of createChapterIDs) {
-            console.log(id, Object.keys(newChapters));
             await createChapter(getFormData(newChapters[id]));
         }
     }

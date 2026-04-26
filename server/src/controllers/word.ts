@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express';
 import z from 'zod';
 import { getCookie } from '../utilities/cookie.js';
 import { AuthorizeReaderBySession } from '../db/reader.js';
-import { Decrementword_number_instances, DeleteWord, Incrementword_number_instances, InsertWord, SelectWord } from '../db/word.js';
+import { DecrementWordNumberInstances, DeleteWord, IncrementWordNumberInstances, InsertWord, SelectWord } from '../db/word.js';
 
 const wordSchema = z.object({
     word_id: z.coerce.number(),
@@ -14,7 +14,7 @@ const wordSchema = z.object({
 
 
 
-export async function getword(req: Request, res: Response) {
+export async function getWord(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
@@ -29,13 +29,13 @@ export async function getword(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const word = SelectWord(output.data.word_id, output.data.reader_id);
+    const word = await SelectWord(output.data.word_id, output.data.reader_id);
     return res.status(200).json(word);
 }
 
 
 
-export async function createword(req: Request, res: Response) {
+export async function createWord(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
@@ -57,7 +57,7 @@ export async function createword(req: Request, res: Response) {
 
 
 
-export async function deleteword(req: Request, res: Response) {
+export async function deleteWord(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
@@ -93,7 +93,7 @@ export async function incrementNumberInstances(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const rows = await Incrementword_number_instances(output.data.word_id, output.data.reader_id);
+    const rows = await IncrementWordNumberInstances(output.data.word_id, output.data.reader_id);
     return res.status(200).json(rows);
 }
 
@@ -114,6 +114,6 @@ export async function decrementNumberInstances(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const rows = await Decrementword_number_instances(output.data.word_id, output.data.reader_id);
+    const rows = await DecrementWordNumberInstances(output.data.word_id, output.data.reader_id);
     return res.status(200).json(rows);
 }

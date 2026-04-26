@@ -1,4 +1,5 @@
 import type { NullableBy } from "../utilities/types.js";
+import type { Book } from "./book.js";
 import db from "./db.js";
 
 
@@ -12,7 +13,7 @@ export interface Chapter {
 
 export async function SelectChapter(chapterID: number, readerID: string) {
     try {
-        const rows = await db<Chapter[]>`
+        const rows = await db<(Book & Chapter)[]>`
             SELECT  * 
             FROM    Chapter 
             JOIN    Book 
@@ -34,7 +35,7 @@ export async function SelectChapter(chapterID: number, readerID: string) {
 
 export async function SelectChapters(readerID: string) {
     try {
-        const rows = await db<Chapter[]>`
+        const rows = await db<(Book & Chapter)[]>`
             SELECT  * 
             FROM    Book
             JOIN    Chapter 

@@ -35,7 +35,7 @@ export async function SelectWordsFromBook(bookID: number, readerID: string) {
     try {
         const rows = await db<Word[]>`
             SELECT  * 
-            FROM    word
+            FROM    Word
             JOIN    Chapter ON word.chapter_id = Chapter.chapter_id
             JOIN    Book    ON Book.book_id = Chapter.book_id 
             WHERE   Book.reader_id = ${readerID} AND
@@ -56,8 +56,8 @@ export async function SelectWordsFromChapter(chapterID: number, readerID: string
     try {
         const rows = await db<Word[]>`
             SELECT  * 
-            FROM    word
-            JOIN    Chapter ON word.chapter_id = Chapter.chapter_id
+            FROM    Word
+            JOIN    Chapter ON Word.chapter_id = Chapter.chapter_id
             JOIN    Book    ON Book.book_id = Chapter.book_id 
             WHERE   Book.reader_id = ${readerID} AND
                     Chapter.chapter_id = ${chapterID}
@@ -76,7 +76,7 @@ export async function SelectWordsFromChapter(chapterID: number, readerID: string
 export async function InsertWord(word: Omit<Word, "word_id" | "word_number_instances">, readerID: string) {
     try {
         const rows = await db<Word[]>`
-            INSERT INTO word (
+            INSERT INTO Word (
                 word,
                 chapter_id
             )
@@ -86,10 +86,10 @@ export async function InsertWord(word: Omit<Word, "word_id" | "word_number_insta
                 FROM    Chapter
                 JOIN    Book ON Chapter.book_id = Book.book_id
                 WHERE   Book.reader_id = ${readerID} AND
-                WHERE   Chapter.chapter_id = ${word.chapter_id}
+                        Chapter.chapter_id = ${word.chapter_id}
                 LIMIT   1
             )
-            RETURNING word_id
+            RETURNING *
         `;
         return rows;
     }
@@ -105,16 +105,16 @@ export async function InsertWord(word: Omit<Word, "word_id" | "word_number_insta
 export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_instances">, readerID: string) {
     try {
         const rows = await db<Word[]>`
-            UPDATE  word
+            UPDATE  Word
             SET     word = COALESCE(${word.word ?? null}, word),
                     word_number_instances = COALESCE(${word.word_number_instances ?? null}, word_number_instances)
             WHERE   word_id = ${word.word_id} AND
                     ${readerID} IN (
                         SELECT  reader_id 
-                        FROM    word 
-                        JOIN    Chapter ON Chapter.chapter_id = word.word_id
+                        FROM    Word 
+                        JOIN    Chapter ON Chapter.chapter_id = Word.word_id
                         JOIN    Book ON Book.book_id = Chapter.book_id
-                        WHERE   word.word_id = ${word.word_id}
+                        WHERE   Word.word_id = ${word.word_id}
                         LIMIT   1
                     )
         `;
@@ -132,16 +132,17 @@ export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_ins
 export async function DeleteWord(wordID: number, readerID: string) {
     try {
         const rows = await db`
-            DELETE FROM word
+            DELETE FROM Word
             WHERE   word_id = ${wordID} AND
                     ${readerID} IN (
                         SELECT  reader_id 
-                        FROM    word 
-                        JOIN    Chapter ON Chapter.chapter_id = word.word_id
+                        FROM    Word 
+                        JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
                         JOIN    Book ON Book.book_id = Chapter.book_id
-                        WHERE   word.word_id = ${wordID}
+                        WHERE   Word.word_id = ${wordID}
                         LIMIT   1
                     )
+            RETURNING *
         `;
         return rows;
     }
@@ -154,16 +155,16 @@ export async function DeleteWord(wordID: number, readerID: string) {
 }
 
 
-export async function Incrementword_number_instances(wordID: number, readerID: string) {
+export async function IncrementWordNumberInstances(wordID: number, readerID: string) {
     try {
         const rows = await db`
-            UPDATE  word
-            SET     word_number_instances = word_number_instances + 1,
+            UPDATE  Word
+            SET     word_number_instances = word_number_instances + 1
             WHERE   word_id = ${wordID} AND
                     ${readerID} IN (
                         SELECT  reader_id 
-                        FROM    word 
-                        JOIN    Chapter ON Chapter.chapter_id = word.word_id
+                        FROM    Word 
+                        JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
                         JOIN    Book ON Book.book_id = Chapter.book_id
                         WHERE   word.word_id = ${wordID}
                         LIMIT   1
@@ -181,20 +182,21 @@ export async function Incrementword_number_instances(wordID: number, readerID: s
 }
 
 
-export async function Decrementword_number_instances(wordID: number, readerID: string) {
+export async function DecrementWordNumberInstances(wordID: number, readerID: string) {
     try {
         const rows = await db`
-            UPDATE  word
-            SET     word_number_instances = word_number_instances - 1,
+            UPDATE  Word
+            SET     word_number_instances = word_number_instances - 1
             WHERE   word_id = ${wordID} AND
                     ${readerID} IN (
                         SELECT  reader_id 
-                        FROM    word 
-                        JOIN    Chapter ON Chapter.chapter_id = word.word_id
+                        FROM    Word 
+                        JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
                         JOIN    Book ON Book.book_id = Chapter.book_id
                         WHERE   word.word_id = ${wordID}
                         LIMIT   1
                     )
+            RETURNING *;
         `;
         return rows;
     }

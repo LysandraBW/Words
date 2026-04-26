@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react"
-import { BookType, updateBook } from "@/services/db/books"
+import { BookType, updateBook } from "@/services/db/book"
 import InputText from "@/components/input/InputText";
 import InputTags from "@/components/input/InputTag/InputTags";
 import { createForm, Form, getFormData, updateFormValue } from "@/utilities/form";
@@ -80,12 +80,7 @@ export default function UpdateBook(props: UpdateBookProps) {
         if (updatedBook)
             props.onUpdate(updatedBook[0]);
     }
-
-   
-    useEffect(() => {
-        console.log(props.book);
-    }, [])
-
+    
 
     return (
         <Modal

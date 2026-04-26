@@ -10,7 +10,7 @@ export interface BookType {
     reader_id: string;
 }
 
-export async function getBook(bookID: string) {
+export async function getBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}`, {
         credentials: "include"
     });
@@ -34,7 +34,7 @@ export async function getBooks() {
     return data;
 }
 
-export async function getBookChapters(bookID: string) {
+export async function getBookChapters(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/chapters`, {
         credentials: "include"
     });

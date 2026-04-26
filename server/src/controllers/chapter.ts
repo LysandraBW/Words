@@ -31,7 +31,7 @@ export async function getChapter(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const chapter = SelectChapter(output.data.chapter_id, output.data.reader_id);
+    const chapter = await SelectChapter(output.data.chapter_id, output.data.reader_id);
     return res.status(200).json(chapter);
 }
 
@@ -51,7 +51,7 @@ export async function getChapterWords(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const words = SelectWordsFromChapter(output.data.chapter_id, output.data.reader_id);
+    const words = await SelectWordsFromChapter(output.data.chapter_id, output.data.reader_id);
     return res.status(200).json(words);
 }
 
@@ -70,7 +70,7 @@ export async function getChapters(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const chapters = SelectChapters(output.data.reader_id);
+    const chapters = await SelectChapters(output.data.reader_id);
     return res.status(200).json(chapters);
 }
 
@@ -79,8 +79,6 @@ export async function createChapter(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
-
-    console.log(req.body);
     
     const output = ChapterSchema.omit({ chapter_id: true }).safeParse({
         book_id: req.body.book_id,

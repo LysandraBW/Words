@@ -135,8 +135,8 @@ export default function InputDropdown(props: Partial<InputDropdownProps>) {
                                     "group hover:bg-zinc-800 hover:text-blue-400"
                                 )}
                             >
-                                <div className="w-full grid grid-cols-1 text-inherit">
-                                    {option.optionLabel}
+                                <div className="w-full grid grid-cols-1 text-inherit text-sm tracking-wide">
+                                    {option.optionLabel || option.textLabel}
                                 </div>
                                 {props.value?.includes(option.value) &&
                                     <Check

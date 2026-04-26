@@ -1,11 +1,11 @@
 "use client";
-import { BookType, getBook, getBookChapters } from "@/services/db/books";
+import { BookType, getBook, getBookChapters } from "@/services/db/book";
 import { ChapterType } from "@/services/db/chapter";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
-import UpdateChapters from "./UpdateChapter";
+import UpdateChapters from "./UpdateChapters";
 import UpdateBook from "./UpdateBook";
 
 export default function Page() {
@@ -28,15 +28,16 @@ export default function Page() {
             const bookID = searchParams.get("bookID");
             if (bookID === null)
                 return router.push('/home');
+            const numberBookID = Number(bookID);
 
             // Get Book by ID
-            const book = await getBook(bookID);
+            const book = await getBook(numberBookID);
             if (!book?.length)
                 return;
             setBook(book[0]);
 
             // Get Book's Chapters
-            const bookChapters = await getBookChapters(bookID);
+            const bookChapters = await getBookChapters(numberBookID);
             setBookChapters(bookChapters || []);
         }
         load();
@@ -47,6 +48,14 @@ export default function Page() {
         <div>
             {/* {JSON.stringify(book)} */}
             {/* {JSON.stringify(bookChapters)} */}
+            {bookChapters && bookChapters.map((chapter, i) => (
+                <div 
+                    key={i}
+                    onClick={() => router.push(`/chapter?chapterID=${chapter.chapter_id}`)}
+                >
+                    {chapter.chapter_id}, {chapter.chapter_number}, {chapter.chapter_title}
+                </div>
+            ))}
             <div className="bg-red-500">
                 {(book && bookChapters) &&
                     <UpdateChapters 

@@ -1,4 +1,4 @@
-import { BookType as BookType } from "@/services/db/books";
+import { BookType as BookType } from "@/services/db/book";
 import clsx from "clsx";
 import { CirclePlusIcon, PlusIcon } from "lucide-react";
 import { useRouter } from "next/router";

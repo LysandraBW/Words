@@ -1,5 +1,5 @@
 "use client";
-import { BookType, getBooks } from "@/services/db/books";
+import { BookType, getBooks } from "@/services/db/book";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react"

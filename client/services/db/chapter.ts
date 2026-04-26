@@ -1,3 +1,6 @@
+import { BookType } from "./book";
+import { WordType } from "./word";
+
 export interface ChapterType {
     chapter_id: number;
     chapter_title: string;
@@ -6,8 +9,6 @@ export interface ChapterType {
 }
 
 export async function createChapter(chapter: ChapterType) {
-    console.log(chapter);
-    
     const response = await fetch('http://127.0.0.1:8000/chapters', {
         method: "POST",
         credentials: "include",
@@ -54,5 +55,31 @@ export async function deleteChapter(chapterID: number) {
         return null;
 
     const data: ChapterType[] = await response.json();
+    return data;
+}
+
+export async function getChapter(chapterID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: (ChapterType & BookType)[] = await response.json();
+    return data;
+}
+
+export async function getChapterWords(chapterID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/words`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: WordType[] = await response.json();
     return data;
 }
