@@ -1,7 +1,8 @@
-import express, { json, type Application } from 'express';
-import cookieParser from "cookie-parser";
+import 'dotenv/config';
 import cors from "cors";
 import router from './routes.js';
+import cookieParser from "cookie-parser";
+import express, { json, type Application } from 'express';
 
 const app: Application = express();
 app.use(cookieParser());

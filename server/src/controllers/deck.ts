@@ -6,6 +6,8 @@ import { AuthorizeReaderBySession } from '../db/reader.js';
 import { DeleteDeck, DeleteGradedDeck, InsertDeck, InsertGradedDeck, SelectDeck, SelectDecks, SelectGradedDeck, SelectGradedDecks, UpdateDeck } from '../db/deck.js';
 import '../db/deck.js';
 
+
+
 const DeckSchema = z.object({
     deck_id: z.coerce.number(),
     deck_name: z.string(),
@@ -41,7 +43,7 @@ export async function getDeck(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const deck = SelectDeck(output.data.deck_id, output.data.reader_id);
+    const deck = await SelectDeck(output.data.deck_id, output.data.reader_id);
     return res.status(200).json(deck);
 }
 
@@ -62,7 +64,7 @@ export async function getGradedDeck(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const deck = SelectGradedDeck(output.data.deck_graded_id, output.data.reader_id);
+    const deck = await SelectGradedDeck(output.data.deck_graded_id, output.data.reader_id);
     return res.status(200).json(deck); 
 }
 
@@ -82,7 +84,7 @@ export async function getDecks(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const decks = SelectDecks(output.data.reader_id);
+    const decks = await SelectDecks(output.data.reader_id);
     return res.status(200).json(decks);  
 }
 
@@ -102,7 +104,7 @@ export async function getGradedDecks(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const gradedDecks = SelectGradedDecks(output.data.reader_id);
+    const gradedDecks = await SelectGradedDecks(output.data.reader_id);
     return res.status(200).json(gradedDecks);
 }
 

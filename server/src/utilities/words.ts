@@ -2,9 +2,10 @@ import 'dotenv/config';
 import retry from 'async-retry';
 import * as lancedb from "@lancedb/lancedb";
 import words from 'an-array-of-english-words' with { type: 'json' };
+import { array } from 'zod';
 
 
-export async function getSimilarwords(word: string, n: number = 20) {
+export async function getSimilarWords(word: string, n: number = 20) {
     const embeddings = await lancedb.connect("./src/embeddings");
     const embeddingsTable = embeddings.openTable("Embeddings");
     
@@ -19,19 +20,19 @@ export async function getSimilarwords(word: string, n: number = 20) {
 }
 
 
-export async function getRandomwords(word: string = "", n: number = 3): Promise<[string, string][]> {
-    const pool = await getSimilarwords(word, Math.max(20, n)) || words;
+export async function getRandomWords(word: string = "", wordDefinition: string = "", n: number = 3): Promise<[string, string][]> {
+    const pool = await getSimilarWords(word, Math.max(20, n)) || words;
 
     // Shuffle Indices
     const poolIndices = [...Array(pool.length)].map((e, i) => i);
     poolIndices.sort(() => Math.random() - 0.5); // Shuffle Indices
-    
+
     // Offset
     // If a word isn't working out, for whatever reason,
     // we use to the offset to move on from it.
     let offset = 0;
     
-    const randwords: [string, string][] = [];
+    const randWords: [string, string][] = [];
 
     for (let i = 0; i < n; i++) {
         try {
@@ -40,14 +41,13 @@ export async function getRandomwords(word: string = "", n: number = 3): Promise<
                     return;
 
                 const randIndex = poolIndices[i + offset] as number;
-                const randword = pool[randIndex];
-                console.log("randword", randword);
+                const randWord = pool[randIndex];
 
                 let url = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/";
-                url += `${randword}?key=${process.env.MERRIAM_WEBSTER_API_KEY_DICTIONARY}`;
+                url += `${randWord}?key=${process.env.MERRIAM_WEBSTER_API_KEY_DICTIONARY}`;
 
                 const data = await (await fetch(url)).json();
-                const defs = data[0]?.shortdef;
+                const defs = data.reduce((accumulator: any[], currentEntry: any) => [...accumulator, ...currentEntry.shortdef], []).filter((definition: string) => definition !== wordDefinition);
 
                 if (!defs || !defs.length) {
                     offset += 1;
@@ -56,7 +56,7 @@ export async function getRandomwords(word: string = "", n: number = 3): Promise<
 
                 const randDefIndex = Math.floor(Math.random() * defs.length);
                 const randDef = defs[randDefIndex];
-                randwords.push([randword, randDef]);
+                randWords.push([randWord, randDef]);
             }, {
                 retries: 5,
                 minTimeout: 100,
@@ -69,5 +69,5 @@ export async function getRandomwords(word: string = "", n: number = 3): Promise<
         }
     }
 
-    return randwords;
+    return randWords;
 }

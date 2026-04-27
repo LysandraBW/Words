@@ -14,7 +14,7 @@ import Button from "@/components/Button";
 
 interface CreateBookProps {
     onClose: () => void;
-    onCreate: (book: BookType) => void;
+    onBookCreated: (book: BookType) => void;
 }
 
 export default function CreateBook(props: CreateBookProps) {
@@ -109,7 +109,7 @@ export default function CreateBook(props: CreateBookProps) {
         });
         
         if (createdBook)
-            props.onCreate(createdBook[0]);
+            props.onBookCreated(createdBook[0]);
     }
 
     
