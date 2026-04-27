@@ -1,5 +1,5 @@
 "use client";
-import { DeckCardType, DeckType, getDeck } from "@/services/db/deck";
+import { DeckCardGradedType, DeckCardType, DeckGradedType, DeckType, getDeck } from "@/services/db/deck";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
@@ -7,6 +7,10 @@ import UpdateDeck from "./UpdateDeck";
 import { BookType, getBooks } from "@/services/db/book";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
+import { useTimer } from "react-timer-hook";
+
+
+
 
 export default function Page() {
     const router = useRouter();
@@ -63,6 +67,12 @@ export default function Page() {
     }
 
 
+    const onQuizFinished = (deckGraded: DeckGradedType, deckCardGraded: DeckCardGradedType[]) => {
+        console.log('Quiz Finished', deckGraded, deckCardGraded);
+        return;
+    }
+
+
     return (
         <>
             {(showUpdateDeck && deck) &&
@@ -80,6 +90,7 @@ export default function Page() {
             {(showQuiz && deckCards) &&
                 <Quiz
                     deckCards={deckCards}
+                    onQuizFinished={onQuizFinished}
                 />
             }
         </>

@@ -132,6 +132,6 @@ export async function createGradedDeck(deck: DeckGradedType, choices: [number, n
     if (response.status !== 200)
         return null;
 
-    const data: DeckGradedType[] = await response.json();
+    const data: [DeckGradedType[], DeckCardGradedType[]] = await response.json();
     return data;
 }

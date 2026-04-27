@@ -223,40 +223,49 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
 
 export async function InsertGradedDeck(deck: Omit<DeckGraded, "deck_graded_id">, choices: [number, number][], readerID: string) {
     try {
-        const rowsDeckGraded = await db`
-            INSERT INTO deck_graded (
-                number_correct, 
-                number_incorrect, 
-                duration,
-                deck_id
-            )
-            SELECT  ${deck.number_correct},
-                    ${deck.number_incorrect},
-                    ${deck.duration},
-                    ${deck.deck_id}
-            WHERE EXISTS (
-                SELECT  1
-                FROM    Deck
-                WHERE   Deck.deck_id = ${deck.deck_id} AND
-                        Deck.reader_id = ${readerID}
-                LIMIT   1;
-            )
-            RETURNING *
-        `;
-        
-        if (!rowsDeckGraded.length)
-            return null;
-        
-        const deckGradedCard = choices.map(choice => ({ deck_card_id: choice[0], choice: choice[1]}));
-        const rowsDeckGradedCard = await db`
-            INSERT INTO deck_card_graded ${db(deckGradedCard)}
-            RETURNING *
-        `;
+        const output = await db.begin(async (db: any) => {
+            const rowsDeckGraded = await db`
+                INSERT INTO deck_graded (
+                    number_correct, 
+                    number_incorrect, 
+                    duration,
+                    deck_id
+                )
+                SELECT  ${deck.number_correct},
+                        ${deck.number_incorrect},
+                        ${deck.duration},
+                        ${deck.deck_id}
+                WHERE EXISTS (
+                    SELECT  1
+                    FROM    Deck
+                    WHERE   Deck.deck_id = ${deck.deck_id} AND
+                            Deck.reader_id = ${readerID}
+                    LIMIT   1
+                )
+                RETURNING *
+            `;
 
-        return [
-            rowsDeckGraded,
-            rowsDeckGradedCard
-        ];
+            if (!rowsDeckGraded || rowsDeckGraded.length === 1)
+                return null;
+
+            const deckGradedCard = choices.map(choice => ({ 
+                deck_graded_id: (<any> rowsDeckGraded)[0].deck_graded_id, 
+                deck_card_id: choice[0], 
+                choice: choice[1]
+            }));
+
+            const rowsDeckGradedCard = await db`
+                INSERT INTO deck_card_graded ${db(deckGradedCard)}
+                RETURNING *
+            `;
+
+            return [
+                rowsDeckGraded,
+                rowsDeckGradedCard
+            ];
+        });
+
+        return output;
     }
     catch (error) {
         console.error("Error Inserting Graded Deck");

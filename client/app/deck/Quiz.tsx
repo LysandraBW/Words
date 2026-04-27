@@ -1,11 +1,13 @@
 import Button from "@/components/Button";
-import { DeckCardType } from "@/services/db/deck"
+import { createGradedDeck, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { useStopwatch, useTimer } from "react-timer-hook";
+import { number } from "zod";
 
 interface QuizProps {
     deckCards: DeckCardType[];
-    onQuizFinished: () => void;
+    onQuizFinished: (deckGraded: DeckGradedType, deckCardGraded: DeckCardGradedType[]) => void;
 }
 
 interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
@@ -15,11 +17,22 @@ interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
     words: [string, string, number][];
 }
 
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+
 export default function Quiz(props: QuizProps) {
     const [index, setIndex] = useState(0);
     const [shuffledCards, setShuffledCards] = useState<DeckCardExtendedType[]>([]);
-    const [time, setTime] = useState(0);
     const [choices, setChoices] = useState<{[questionIndex: number]: number}>({});
+    
+    const {
+        totalMilliseconds,
+        milliseconds,
+        seconds,
+        minutes,
+        hours,
+        start
+    } = useStopwatch({ autoStart: false, interval: 20 });
     
 
     useEffect(() => {
@@ -30,16 +43,9 @@ export default function Quiz(props: QuizProps) {
     useEffect(() => {
         if (!shuffledCards.length)
             return;
+        start();
+    }, [shuffledCards]);
 
-        const intervalID = setInterval(() => setTime(time + 1), 1);
-        return () => clearInterval(intervalID);
-    }, [shuffledCards, time]);
-
-
-    const hours = Math.floor(time / 360000);
-    const minutes = Math.floor((time % 360000) / 6000);
-    const seconds = Math.floor((time % 6000) / 100);
-    const milliseconds = time % 100;
 
     const loadShuffleCards = (deckCards: DeckCardType[]): DeckCardExtendedType[] => {
         const deckCardsExtended = [];
@@ -68,8 +74,27 @@ export default function Quiz(props: QuizProps) {
         setChoices({...choices, [deckCard.deck_card_id]: choice});
     }
 
-    const onFinishQuiz = (choices: {[index: number]: number}) => {
+    const onFinishQuiz = async (choices: {[index: number]: number}, duration: number) => {
+        const choiceValues = props.deckCards.map(deckCard => choices[deckCard.deck_id]);
+        const numberCorrect = choiceValues.reduce((accumulator, currentValue) => currentValue === 0 ? accumulator + 1 : accumulator, 0);
+        const numberIncorrect = choiceValues.length - numberCorrect;
 
+        console.log(numberCorrect);
+
+        const createdGradedDeck = await createGradedDeck({
+            deck_graded_id: -1,
+            deck_id: props.deckCards[0].deck_id,
+            number_correct: numberCorrect,
+            number_incorrect: numberIncorrect,
+            duration: duration
+        }, Object.entries(choices).map(choice => [Number(choice[0]), Number(choice[1])]));
+
+        if (!createdGradedDeck || createdGradedDeck.length !== 2) {
+            alert('Failed to Create Graded Deck');
+            return;
+        }
+
+        props.onQuizFinished(createdGradedDeck[0][0], createdGradedDeck[1]);
     }
 
     if (props.deckCards.length <= 0)
@@ -145,7 +170,14 @@ export default function Quiz(props: QuizProps) {
                     {index === shuffledCards.length - 1 || choices[shuffledCards[index].deck_card_id] == null ?
                         <Button
                             label="Finish"
-                            onClick={() => 1}
+                            disabled={Object.values(choices).length !== props.deckCards.length}
+                            onClick={() => {
+                                if (Object.values(choices).length !== props.deckCards.length) {
+                                    alert('Must Answer All Questions');
+                                    return;
+                                }
+                                onFinishQuiz(choices, totalMilliseconds);
+                            }}
                         />
                         :
                         <Button
