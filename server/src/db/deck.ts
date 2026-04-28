@@ -121,7 +121,13 @@ export async function SelectGradedDeck(deckGradedID: number, readerID: string) {
                 SELECT  * 
                 FROM    deck_graded 
                 WHERE   deck_graded_id = ${deckGradedID} AND
-                        reader_id = ${readerID}
+                        EXISTS (
+                            SELECT  1
+                            FROM    Deck
+                            WHERE   Deck.deck_id = Deck_Graded.deck_id AND
+                                    Deck.reader_id = ${readerID}
+                            LIMIT   1
+                        )
                 LIMIT   1;
             `,
             await db<DeckCardGraded[]>`
@@ -130,7 +136,13 @@ export async function SelectGradedDeck(deckGradedID: number, readerID: string) {
                 JOIN    deck_graded  
                 ON      deck_graded.deck_graded_id = deck_card_graded.deck_graded_id
                 WHERE   deck_graded.deck_graded_id = ${deckGradedID} AND
-                        deck_graded.reader_id = ${readerID};
+                        EXISTS (
+                            SELECT  1
+                            FROM    Deck
+                            WHERE   Deck.deck_id = Deck_Graded.deck_id AND
+                                    Deck.reader_id = ${readerID}
+                            LIMIT   1
+                        )
             `
         ]);
 
@@ -155,9 +167,9 @@ export async function SelectGradedDecks(reader_id: string) {
     try {
         const rows = await db<DeckGraded[]>`
             SELECT  * 
-            FROM    deck_graded
+            FROM    Deck_Graded
             JOIN    Deck
-            ON      deck_graded.deck_id = Deck.deck_id 
+            ON      Deck_Graded.deck_id = Deck.deck_id 
             WHERE   Deck.reader_id = ${reader_id};
         `;
         return rows;
@@ -326,11 +338,15 @@ export async function DeleteGradedDeck(deckGradedID: number, readerID: string) {
     try {
         return await db.begin(async (db: any) => {
             const rows = await db`
-                DELETE FROM     deck_graded
-                JOIN    Deck
-                ON      Deck.deck_id = deck_graded.deck_id
+                DELETE FROM Deck_Graded
                 WHERE   deck_graded_id = ${deckGradedID} AND
-                        reader_id = ${readerID}
+                        EXISTS (
+                            SELECT  1
+                            FROM    Deck
+                            WHERE   Deck.deck_id = Deck_Graded.deck_id AND
+                                    Deck.reader_id = ${readerID}
+                            LIMIT   1
+                        )
                 RETURNING *
             `;
 

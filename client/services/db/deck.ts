@@ -122,3 +122,43 @@ export async function createGradedDeck(deck: DeckGradedType, choices: [number, n
     const data: [DeckGradedType, DeckCardGradedType[]] | null = await response.json();
     return data;
 }
+
+export async function getDecksGraded() {
+    console.log('Am I Here');
+    const response = await fetch('http://127.0.0.1:8000/decks/graded', {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: DeckGradedType[] | null = await response.json();
+    return data;
+}
+
+export async function getDeckGraded(deckGradedID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decks/graded/${deckGradedID}`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: [DeckGradedType, DeckCardGradedType[]] | null = await response.json();
+    return data;
+}
+
+export async function deleteDeckGraded(deckGradedID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decks/graded/${deckGradedID}`, {
+        method: "DELETE",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: DeckGradedType | null = await response.json();
+    return data;
+}

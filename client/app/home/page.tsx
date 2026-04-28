@@ -7,8 +7,9 @@ import CreateBook from "./CreateBook";
 import Book from "./Book";
 import NavBar from "@/components/NavBar";
 import CreateDeck from "./CreateDeck";
-import { DeckType, getDecks } from "@/services/db/deck";
+import { DeckType, deleteDeck, getDecks } from "@/services/db/deck";
 import Button from "@/components/Button";
+import { TrashIcon } from "lucide-react";
 
 export default function Page() {
     const router = useRouter();
@@ -31,7 +32,6 @@ export default function Page() {
                 setBooks(books);
 
             const decks = await getDecks();
-            console.log('decks', decks);
             if (decks)
                 setDecks(decks);
         }
@@ -51,6 +51,16 @@ export default function Page() {
     }
 
 
+    const onDeleteDeck = async (deckID: number) => {
+        const deletedDeck = await deleteDeck(deckID);
+        if (!deletedDeck) {
+            alert('Failed to Delete Deck');
+            return;
+        }
+        setDecks(decks.filter(deck => deck.deck_id !== deckID));
+    }
+
+    
     return (
         <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-scroll">
             <div className="flex col-start-2">
@@ -70,6 +80,13 @@ export default function Page() {
                                     onClick={() => router.push(`/deck?deckID=${deck.deck_id}`)}
                                 >
                                     {deck.deck_name}, {deck.deck_chapters.length} Chapters
+                                    <TrashIcon
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                            onDeleteDeck(deck.deck_id);
+                                        }}
+                                    />
                                 </p>
                             </Fragment>
                         ))}

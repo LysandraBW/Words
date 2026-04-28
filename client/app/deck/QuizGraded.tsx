@@ -1,12 +1,16 @@
 import Button from "@/components/Button";
 import { createGradedDeck, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
 import clsx from "clsx";
+import { TrashIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
 
-interface QuizProps {
+interface QuizGradedProps {
+    deckGraded: DeckGradedType;
     deckCards: DeckCardType[];
-    onQuizFinished: (deckGraded: DeckGradedType, deckCardGraded: DeckCardGradedType[]) => void;
+    deckGradedCards: DeckCardGradedType[];
+    onClose: () => void;
+    onDelete: () => void;
 }
 
 interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
@@ -16,35 +20,26 @@ interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
     words: [string, string, number][];
 }
 
-const tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
-
-export default function Quiz(props: QuizProps) {
+export default function QuizGraded(props: QuizGradedProps) {
     const [index, setIndex] = useState(0);
     const [shuffledCards, setShuffledCards] = useState<DeckCardExtendedType[]>([]);
     const [choices, setChoices] = useState<{[questionIndex: number]: number}>({});
-    
-    const {
-        start,
-        pause,
-        hours,
-        minutes,
-        seconds,
-        milliseconds,
-        totalMilliseconds
-    } = useStopwatch({ autoStart: false, interval: 20 });
-    
+   
 
     useEffect(() => {
         setShuffledCards(loadShuffleCards(props.deckCards));
     }, [props.deckCards]);
 
-
+    
     useEffect(() => {
-        if (!shuffledCards.length)
+        if (!props.deckGradedCards)
             return;
-        start();
-    }, [shuffledCards]);
+        const choices: {[questionIndex: number]: number} = {};
+        for (const card of props.deckGradedCards) {
+            choices[card.deck_card_id] = card.choice;
+        }
+        setChoices(choices);
+    }, [props.deckGradedCards]);
 
 
     const loadShuffleCards = (deckCards: DeckCardType[]): DeckCardExtendedType[] => {
@@ -74,49 +69,20 @@ export default function Quiz(props: QuizProps) {
     }
 
 
-    const selectChoice = (index: number, choice: number) => {
-        const deckCard = props.deckCards[index];
-        const updatedChoices = {
-            ...choices,
-            [deckCard.deck_card_id]: choice
-        }
-        setChoices(updatedChoices);
-
-        // Stop the Timer
-        if (Object.values(updatedChoices).length !== props.deckCards.length) {
-            pause();
-        }
-    }
-
-
-    const onFinishQuiz = async (choices: {[index: number]: number}, duration: number) => {
-        const choiceValues = props.deckCards.map(deckCard => choices[deckCard.deck_card_id]);
-        const numberCorrect = choiceValues.reduce((accumulator, currentValue) => currentValue === 0 ? accumulator + 1 : accumulator, 0);
-        const numberIncorrect = choiceValues.length - numberCorrect;
-
-        const createdGradedDeck = await createGradedDeck({
-            deck_graded_id: -1,
-            deck_id: props.deckCards[0].deck_id,
-            number_correct: numberCorrect,
-            number_incorrect: numberIncorrect,
-            duration: duration
-        }, Object.entries(choices).map(choice => [Number(choice[0]), Number(choice[1])]));
-
-        if (!createdGradedDeck) {
-            alert('Failed to Create Graded Deck');
-            return;
-        }
-
-        props.onQuizFinished(createdGradedDeck[0], createdGradedDeck[1]);
-    }
-
-
     if (props.deckCards.length <= 0)
         return <></>
 
 
     return (
-        <div>
+        <div
+            className="bg-purple-500"
+        >
+            <XIcon
+                onClick={props.onClose}
+            />
+            <TrashIcon
+                onClick={props.onDelete}
+            />
             <h3>Quiz</h3>
             {shuffledCards.length && [...Array(props.deckCards.length)].map((e, i) => (
                 <button 
@@ -135,7 +101,9 @@ export default function Quiz(props: QuizProps) {
             {JSON.stringify(choices)}
             {JSON.stringify(shuffledCards)}
             <div>
-                <span className="tabular-nums">{hours}:{minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}:{milliseconds.toString().padStart(2, "0")}</span>
+                Duration: {props.deckGraded.duration}
+                Number Correct: {props.deckGraded.number_correct}
+                Number Incorrect: {props.deckGraded.number_incorrect}
             </div>
             {shuffledCards.length &&
                 <>
@@ -152,11 +120,6 @@ export default function Quiz(props: QuizProps) {
                                     (choices[shuffledCards[index].deck_card_id] != null && wordIndex !== 0) && "bg-red-500",
                                     choices[shuffledCards[index].deck_card_id] === wordIndex && "border-2 border-blue-500"
                                 )}
-                                onClick={() => {
-                                    if (choices[shuffledCards[index].deck_card_id] != null)
-                                        return;
-                                    selectChoice(index, wordIndex)
-                                }}
                             >
                                 <div>
                                     {wordDefinition}
@@ -173,25 +136,11 @@ export default function Quiz(props: QuizProps) {
                         disabled={index === 0}
                         onClick={() => setIndex(index - 1)}
                     />
-                    {index === shuffledCards.length - 1 || choices[shuffledCards[index].deck_card_id] == null ?
-                        <Button
-                            label="Finish"
-                            disabled={Object.values(choices).length !== props.deckCards.length}
-                            onClick={() => {
-                                if (Object.values(choices).length !== props.deckCards.length) {
-                                    alert('Must Answer All Questions');
-                                    return;
-                                }
-                                onFinishQuiz(choices, totalMilliseconds);
-                            }}
-                        />
-                        :
-                        <Button
-                            label="Next"
-                            disabled={index === shuffledCards.length - 1 || choices[shuffledCards[index].deck_card_id] == null}
-                            onClick={() => setIndex(index + 1)}
-                        />
-                    }
+                    <Button
+                        label="Next"
+                        disabled={index === shuffledCards.length - 1 || choices[shuffledCards[index].deck_card_id] == null}
+                        onClick={() => setIndex(index + 1)}
+                    />
                 </>
             }
         </div>
