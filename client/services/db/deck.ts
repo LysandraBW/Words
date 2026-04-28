@@ -106,6 +106,21 @@ export async function deleteDeck(deckID: number) {
     return data;
 }
 
+
+export async function reloadDeck(deckID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}/reload`, {
+        method: "PUT",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: DeckCardType[] | null = await response.json();
+    return data;
+}
+
+
 export async function createGradedDeck(deck: DeckGradedType, choices: [number, number][]) {
     const response = await fetch('http://127.0.0.1:8000/decks/graded', {
         method: "POST",
@@ -123,8 +138,8 @@ export async function createGradedDeck(deck: DeckGradedType, choices: [number, n
     return data;
 }
 
+
 export async function getDecksGraded() {
-    console.log('Am I Here');
     const response = await fetch('http://127.0.0.1:8000/decks/graded', {
         method: "GET",
         credentials: "include"
@@ -136,6 +151,21 @@ export async function getDecksGraded() {
     const data: DeckGradedType[] | null = await response.json();
     return data;
 }
+
+
+export async function getDecksGradedDecks(deckID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}/graded`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: DeckGradedType[] | null = await response.json();
+    return data;
+}
+
 
 export async function getDeckGraded(deckGradedID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/graded/${deckGradedID}`, {
@@ -149,6 +179,7 @@ export async function getDeckGraded(deckGradedID: number) {
     const data: [DeckGradedType, DeckCardGradedType[]] | null = await response.json();
     return data;
 }
+
 
 export async function deleteDeckGraded(deckGradedID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/graded/${deckGradedID}`, {

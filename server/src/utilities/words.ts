@@ -2,7 +2,6 @@ import 'dotenv/config';
 import retry from 'async-retry';
 import * as lancedb from "@lancedb/lancedb";
 import words from 'an-array-of-english-words' with { type: 'json' };
-import { array } from 'zod';
 
 
 export async function getSimilarWords(word: string, n: number = 20) {
@@ -22,7 +21,7 @@ export async function getSimilarWords(word: string, n: number = 20) {
 
 export async function getRandomWords(word: string = "", wordDefinition: string = "", n: number = 3): Promise<[string, string][]> {
     const pool = await getSimilarWords(word, Math.max(20, n)) || words;
-
+    
     // Shuffle Indices
     const poolIndices = [...Array(pool.length)].map((e, i) => i);
     poolIndices.sort(() => Math.random() - 0.5); // Shuffle Indices

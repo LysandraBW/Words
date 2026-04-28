@@ -3,7 +3,7 @@ import { getCookie } from '../utilities/cookie.js';
 import { nullableBy } from '../utilities/types.js';
 import { type Request, type Response } from 'express';
 import { AuthorizeReaderBySession } from '../db/reader.js';
-import { DeleteDeck, DeleteGradedDeck, InsertDeck, InsertGradedDeck, SelectDeck, SelectDecks, SelectGradedDeck, SelectGradedDecks, UpdateDeck } from '../db/deck.js';
+import { DeleteDeck, DeleteGradedDeck, InsertDeck, InsertGradedDeck, ReloadDeck as ReloadDeck, SelectDeck, SelectDecks, SelectDecksGradedDecks, SelectGradedDeck, SelectGradedDecks, UpdateDeck } from '../db/deck.js';
 import '../db/deck.js';
 
 
@@ -108,6 +108,28 @@ export async function getGradedDecks(req: Request, res: Response) {
     return res.status(200).json(gradedDecks);
 }
 
+
+// This may not be the clearest in name, but it makes sense
+// to me. This function retrieves a deck's graded decks, so
+// it's like a teacher retrieving a quiz's submissions.
+export async function getDecksGradedDecks(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+    
+    const output = DeckGradedSchema.pick({ deck_id: true, reader_id: true }).safeParse({
+        deck_id: req.params.deck_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+
+    const gradedDecks = await SelectDecksGradedDecks(output.data.deck_id, output.data.reader_id);
+    return res.status(200).json(gradedDecks);
+}
 
 
 export async function createDeck(req: Request, res: Response) {
@@ -225,4 +247,24 @@ export async function deleteGradedDeck(req: Request, res: Response) {
 
     const deleted = await DeleteGradedDeck(output.data.deck_graded_id, output.data.reader_id);
     return res.status(200).json(deleted);
+}
+
+
+export async function reloadDeck(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+
+    const output = DeckSchema.pick({ deck_id: true, reader_id: true }).safeParse({
+        deck_id: req.params.deck_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+    
+    const books = await ReloadDeck(output.data.deck_id, output.data.reader_id);
+    return res.status(200).json(books);
 }

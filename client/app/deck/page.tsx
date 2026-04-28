@@ -1,5 +1,5 @@
 "use client";
-import { DeckCardGradedType, DeckCardType, DeckGradedType, DeckType, deleteDeck, deleteDeckGraded, getDeck, getDeckGraded, getDecksGraded } from "@/services/db/deck";
+import { DeckCardGradedType, DeckCardType, DeckGradedType, DeckType, deleteDeck, deleteDeckGraded, getDeck, getDeckGraded, getDecksGraded, getDecksGradedDecks, reloadDeck } from "@/services/db/deck";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
@@ -57,12 +57,14 @@ export default function Page() {
                 return router.push('/home');
             }
 
+            console.log(deck);
+
             setDeck(deck[0]);
             setDeckCards(deck[1]);
 
 
             // Get Deck Graded
-            const decksGraded = await getDecksGraded();
+            const decksGraded = await getDecksGradedDecks(deck[0].deck_id);
             if (decksGraded)
                 setDecksGraded(decksGraded);
         }
@@ -132,11 +134,24 @@ export default function Page() {
         setShowQuizResults(deckGraded);
     }
 
+
+    const onReloadDeck = async (deckID: number) => {
+        const deckCards = await reloadDeck(deckID);
+        if (!deckCards) {
+            alert('Failed to Reload Deck');
+            return;
+        }
+        setDeckCards(deckCards);
+    }
+
+
     if (!deck)
         return <></>;
 
     return (
-        <>
+        <div
+            className="h-screen overflow-y-scroll"
+        >
             <div
                 className="flex flex-col gap-2"
             >
@@ -151,6 +166,14 @@ export default function Page() {
                         }
                         router.back();
                     }}
+                />
+                <Button
+                    label="Reload Deck"
+                    onClick={async () => onReloadDeck(deck.deck_id)}
+                />
+                <Button
+                    label="Update Deck"
+                    onClick={async () => setShowUpdateDeck(true)}
                 />
                 {decksGraded && decksGraded.map((deckGraded, i) => (
                     <div 
@@ -211,6 +234,6 @@ export default function Page() {
                     onQuizFinished={onQuizFinished}
                 />
             }
-        </>
+        </div>
     )
 }

@@ -3,6 +3,7 @@ export interface WordType {
     word: [string, string];
     word_number_instances: number;
     chapter_id: number;
+    created_at: string;
 }
 
 

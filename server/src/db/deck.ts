@@ -163,14 +163,35 @@ export async function SelectGradedDeck(deckGradedID: number, readerID: string) {
 }
 
 
-export async function SelectGradedDecks(reader_id: string) {
+export async function SelectGradedDecks(readerID: string) {
     try {
         const rows = await db<DeckGraded[]>`
             SELECT  * 
             FROM    Deck_Graded
             JOIN    Deck
             ON      Deck_Graded.deck_id = Deck.deck_id 
-            WHERE   Deck.reader_id = ${reader_id};
+            WHERE   Deck.reader_id = ${readerID};
+        `;
+        return rows;
+    }
+    catch (error) {
+        console.error("Error Selecting Graded Decks");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return null;
+    }
+}
+
+
+export async function SelectDecksGradedDecks(deckID: number, readerID: string) {
+    try {
+        const rows = await db<DeckGraded[]>`
+            SELECT  * 
+            FROM    Deck_Graded
+            JOIN    Deck
+            ON      Deck_Graded.deck_id = Deck.deck_id 
+            WHERE   Deck.deck_id = ${deckID} AND 
+                    Deck.reader_id = ${readerID};
         `;
         return rows;
     }
@@ -401,7 +422,7 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
                 deck_id: deck.deck_id,
                 words: [
                     word, 
-                    ...await getRandomWords(word)
+                    ...await getRandomWords(word[0], word[1])
                 ]
             })));
 
@@ -420,6 +441,69 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
                 rowsDeck[0],
                 rowsDeckCard
             ];
+        });
+    }
+    catch (error) {
+        console.error("Error Updating Deck");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return null;
+    }
+}
+
+
+export async function ReloadDeck(deckID: number, readerID: string) {
+    try {
+        return await db.begin(async (db: any) => {
+            await db`
+                DELETE FROM deck_card
+                WHERE deck_id = ${deckID}
+            `;
+            
+            const [deckChapters] = (await db`
+                SELECT deck_chapters
+                FROM Deck
+                WHERE deck_id = ${deckID}
+                LIMIT 1;
+            `);
+
+            if (!deckChapters)
+                throw 'Deck Chapter Selection Failed';
+
+            
+            // Words
+            const words = await SelectWordsFromChapters(
+                deckChapters.deck_chapters, 
+                readerID
+            );
+
+            if (!words || !words.length)
+                throw 'Word Selection Failed';
+
+
+            // Words -> Cards
+            const cards = await Promise.all(words.map(async (word) => ({
+                deck_id: deckID,
+                words: [
+                    word, 
+                    ...await getRandomWords(word[0], word[1])
+                ]
+            })));
+
+            if (!cards || !cards.length) 
+                throw 'Card Creation Failed'
+
+
+            // Cards
+            const rowsDeckCard = await db`
+                INSERT INTO deck_card ${db(cards)}
+                RETURNING *
+            `;
+
+            if (!rowsDeckCard || rowsDeckCard.length !== words.length)
+                throw 'Insert Failed';
+            
+            return rowsDeckCard;
         });
     }
     catch (error) {

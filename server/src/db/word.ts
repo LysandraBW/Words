@@ -6,6 +6,7 @@ export interface Word {
     word: string[];
     word_number_instances: number;
     chapter_id: number;
+    created_at: string;
 }
 
 
@@ -59,7 +60,7 @@ export async function SelectWordsFromBook(bookID: number, readerID: string) {
 export async function SelectWordsFromChapter(chapterID: number, readerID: string) {
     try {
         const rows = await db<Word[]>`
-            SELECT  * 
+            SELECT  Word.* 
             FROM    Word
             JOIN    Chapter ON Word.chapter_id = Chapter.chapter_id
             JOIN    Book    ON Book.book_id = Chapter.book_id 
@@ -77,7 +78,7 @@ export async function SelectWordsFromChapter(chapterID: number, readerID: string
 }
 
 
-export async function InsertWord(word: Omit<Word, "word_id" | "word_number_instances">, readerID: string) {
+export async function InsertWord(word: Omit<Word, "word_id" | "word_number_instances" | "created_at">, readerID: string) {
     try {
         return await db.begin(async (db: any) => {
             const rows = await db<Word[]>`
@@ -112,7 +113,7 @@ export async function InsertWord(word: Omit<Word, "word_id" | "word_number_insta
 }
 
 
-export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_instances">, readerID: string) {
+export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_instances" | "created_at">, readerID: string) {
     try {
         return await db.begin(async (db: any) => {
             const rows = await db<Word[]>`

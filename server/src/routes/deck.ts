@@ -6,8 +6,10 @@ import {
     deleteGradedDeck, 
     getDeck, 
     getDecks, 
+    getDecksGradedDecks, 
     getGradedDeck, 
     getGradedDecks, 
+    reloadDeck as reloadDeck, 
     updateDeck, 
 } from "../controllers/deck.js";
 
@@ -20,8 +22,11 @@ router.post('/graded', createGradedDeck);
 
 router.get('/', getDecks);
 router.get('/:deck_id', getDeck);
+router.get('/:deck_id/graded', getDecksGradedDecks);
 router.put('/:deck_id', updateDeck);
 router.delete('/:deck_id', deleteDeck);
 router.post('/', createDeck);
+
+router.put('/:deck_id/reload', reloadDeck);
 
 export default router;
