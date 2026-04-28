@@ -103,10 +103,10 @@ export async function SelectDecksByBooks(bookIDs: number[], readerID: string) {
         const rows = await db<Deck[]>`
             SELECT  Deck.* 
             FROM    Deck 
-            JOIN    Chapter     ON      Chapter.chapter_id = Deck.deck_chapters 
+            JOIN    Chapter     ON      Chapter.chapter_id = ANY(Deck.deck_chapters)
             JOIN    Book        ON      Book.book_id = Chapter.book_id
-            WHERE   reader_id = ${readerID} AND
-                    Book.book_id = ${bookIDs}
+            WHERE   Book.reader_id = ${readerID} AND
+                    Book.book_id IN ${db(bookIDs)}
         `;
         return rows;
     }
@@ -124,9 +124,9 @@ export async function SelectDecksByChapters(chapterIDs: number[], readerID: stri
         const rows = await db<Deck[]>`
             SELECT  Deck.* 
             FROM    Deck 
-            JOIN    Chapter     ON      Chapter.chapter_id = Deck.deck_chapters 
-            WHERE   reader_id = ${readerID} AND
-                    Chapter.chapter_id = ${chapterIDs}
+            JOIN    Chapter     ON      Chapter.chapter_id = ANY(Deck.deck_chapters)
+            WHERE   Deck.reader_id = ${readerID} AND
+                    Chapter.chapter_id IN ${db(chapterIDs)}
         `;
         return rows;
     }

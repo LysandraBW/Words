@@ -99,7 +99,7 @@ export default function InputDropdown(props: Partial<InputDropdownProps>) {
                     <div 
                         className={clsx(
                             "absolute top-[calc(36px+4px)]",
-                            "w-full max-h-[256px] overflow-y-scroll",
+                            "max-h-[256px] overflow-y-auto",
                             "bg-zinc-900 rounded-md",
                             props.optionClassName
                         )}
@@ -129,13 +129,13 @@ export default function InputDropdown(props: Partial<InputDropdownProps>) {
                                 key={i}
                                 onClick={() => props.onChange && props.onChange(option.value)}
                                 className={clsx(
-                                    "w-full p-2 overflow-x-clip",
-                                    "grid grid-cols-[1fr_16px] gap-x-4 items-center",
+                                    "p-2 overflow-x-clip",
+                                    "grid grid-cols-[auto_16px] gap-x-4 items-center",
                                     "bg-zinc-900 border-b border-b-zinc-800 last:border-b-0 text-white cursor-pointer",
                                     "group hover:bg-zinc-800 hover:text-blue-400"
                                 )}
                             >
-                                <div className="w-full grid grid-cols-1 text-inherit text-sm tracking-wide">
+                                <div className="text-inherit text-sm tracking-wide">
                                     {option.optionLabel || option.textLabel}
                                 </div>
                                 {props.value?.includes(option.value) &&

@@ -14,8 +14,8 @@ export interface Word {
 export async function SelectWord(wordID: number, readerID: string) {
     try {
         const rows = await db<Word[]>`
-            SELECT  * 
-            FROM    word 
+            SELECT  Word.* 
+            FROM    Word 
             JOIN    Chapter ON word.chapter_id = Chapter.chapter_id
             JOIN    Book    ON Book.book_id = Chapter.book_id 
             WHERE   word.word_id = ${wordID} AND
@@ -40,7 +40,7 @@ export async function SelectWord(wordID: number, readerID: string) {
 export async function SelectWords(readerID: string) {
     try {
         const rows = await db<Word[]>`
-            SELECT  * 
+            SELECT  Word.* 
             FROM    Word
             JOIN    Chapter ON word.chapter_id = Chapter.chapter_id
             JOIN    Book    ON Book.book_id = Chapter.book_id 
@@ -60,7 +60,7 @@ export async function SelectWords(readerID: string) {
 export async function SelectWordsFromBook(bookID: number, readerID: string) {
     try {
         const rows = await db<Word[]>`
-            SELECT  * 
+            SELECT  Word.* 
             FROM    Word
             JOIN    Chapter ON word.chapter_id = Chapter.chapter_id
             JOIN    Book    ON Book.book_id = Chapter.book_id 
@@ -92,6 +92,36 @@ export async function SelectWordsFromChapter(chapterID: number, readerID: string
     }
     catch (error) {
         console.error("Error Selecting Words");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return null;
+    }
+}
+
+
+export async function SelectWordsFromDeck(deckID: number, readerID: string) {
+    try {
+        const rows = await db`
+            SELECT  Word.*
+            FROM    Word
+            JOIN    Chapter ON Word.chapter_id = Chapter.chapter_id
+            JOIN    Book    ON Book.book_id = Chapter.book_id 
+            WHERE   Book.reader_id = ${readerID} AND
+                    EXISTS (
+                        SELECT  1
+                        FROM    Deck
+                        WHERE   Chapter.chapter_id = ANY(Deck.deck_chapters)
+                        LIMIT   1
+                    )
+        `;
+
+        if (!rows)
+            return null;
+
+        return rows;
+    }
+    catch (error) {
+        console.error("Error Selecting words");
         if (process.env.ENV !== "production")
             console.error(error);
         return null;

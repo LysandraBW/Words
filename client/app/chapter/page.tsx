@@ -11,17 +11,25 @@ import getAutoCompletion from "@/services/words/getAutoCompletion";
 import getWordEntry from "@/services/words/getWordEntry";
 import { MinusIcon, PlusIcon, SettingsIcon, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import UpdateChapter from "./UpdateChapter";
+import useSortWords from "@/hooks/useSortWords";
+import InputDropdown from "@/components/input/InputDropdown";
+import getWordAccuracies from "@/utilities/wordAccuracies";
+import { getDecksGradedByChapters } from "@/services/db/deckGraded";
 
 
 export default function Page() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [user, setUser] = useState<ReaderType>();
+
     const [chapter, setChapter] = useState<(ChapterType & BookType)>();
-    const [chapterWords, setChapterWords] = useState<WordType[]>();
+    
+    const [words, setWords] = useState<WordType[]>();
+    const [wordAccuracies, setWordAccuracies] = useState<{[word: string]: number}>();
+    const sortWords = useSortWords(words);
 
 
     useEffect(() => {
@@ -41,14 +49,31 @@ export default function Page() {
 
             // Get Chapter by ID
             const chapter = await getChapter(numberChapterID);
-            if (!chapter)
+            if (!chapter) {
+                alert('Failed');
                 return;
+            }
             setChapter(chapter);
 
 
-            // Get Book's Chapters
-            const chapterWords = await getChapterWords(numberChapterID);
-            setChapterWords(chapterWords || []);
+            // Load Decks Graded
+            const decksGraded = await getDecksGradedByChapters(chapter.chapter_id);
+            if (!decksGraded) {
+                alert('Failed');
+                return;
+            }
+            
+            // Get Chapters's Words
+            const words = await getChapterWords(numberChapterID);
+            if (!words) {
+                alert('Failed');
+                return;
+            }
+            setWords(words);
+
+            // Load Word Accuracies
+            const wordAccuracies = await getWordAccuracies(decksGraded, words.map(word => word.word[0]));
+            setWordAccuracies(wordAccuracies);
         }
         load();
     }, []);
@@ -104,15 +129,15 @@ export default function Page() {
             return;
         }
         
-        const updatedChapterWords = [...(chapterWords || []), insertedWord];
-        setChapterWords(updatedChapterWords);
+        const updatedChapterWords = [...(words || []), insertedWord];
+        setWords(updatedChapterWords);
 
         return insertedWord;
     }
 
 
     const onDeleteWord = async (wordID: number) => {
-        if (!chapterWords)
+        if (!words)
             return;
         
         const deletedWord = await deleteWord(wordID);
@@ -121,15 +146,15 @@ export default function Page() {
             return;
         }
         
-        const updatedChapterWords = chapterWords.filter(word => word.word_id !== wordID);
-        setChapterWords(updatedChapterWords);
+        const updatedChapterWords = words.filter(word => word.word_id !== wordID);
+        setWords(updatedChapterWords);
 
         return deletedWord;
     }
 
 
     const onIncrementWordNumberInstances = async (wordID: number) => {
-        if (!chapterWords)
+        if (!words)
             return;
 
         const updatedWord = await incrementWordNumberInstances(wordID);
@@ -138,19 +163,19 @@ export default function Page() {
             return;
         }
 
-        const updatedChapterWords = chapterWords.map(word => {
+        const updatedChapterWords = words.map(word => {
             if (word.word_id === wordID)
                 word.word_number_instances += 1;
             return word;
         });
 
-        setChapterWords(updatedChapterWords);
+        setWords(updatedChapterWords);
         return updatedWord;
     }
 
 
     const onDecrementWordNumberInstances = async (wordID: number) => {
-        if (!chapterWords)
+        if (!words)
             return;
 
         const updatedWord = await decrementWordNumberInstances(wordID);
@@ -159,13 +184,13 @@ export default function Page() {
             return;
         }
 
-        const updatedChapterWords = chapterWords.map(word => {
+        const updatedChapterWords = words.map(word => {
             if (word.word_id === wordID)
                 word.word_number_instances -= 1;
             return word;
         });
 
-        setChapterWords(updatedChapterWords);
+        setWords(updatedChapterWords);
         return updatedWord;
     }
 
@@ -186,6 +211,8 @@ export default function Page() {
         setChapter({...chapter, ...updatedChapter});
     }
 
+    if (!chapter || !words || !wordAccuracies)
+        return <></>;
 
     return (
         <div>
@@ -204,19 +231,39 @@ export default function Page() {
                     Delete Chapter
                     <TrashIcon/>
                 </button>
-                {chapter &&
-                    <>
-                        <h3>
-                            {chapter.book_name} {'>'} ({chapter.chapter_number}) {chapter.chapter_title}
-                        </h3>
-                    </>
-                }
+                <h3>
+                    {chapter.book_name} {'>'} ({chapter.chapter_number}) {chapter.chapter_title}
+                </h3>
             </div>
+            <section className="w-full px-4 py-4">
+                <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
+                    Words
+                </h3>
+                <div className="flex flex-wrap gap-8">
+                    <InputDropdown
+                        label="Sort Words"
+                        options={sortWords.sortOptions}
+                        value={[sortWords.sort]}
+                        onChange={(value: string) => sortWords.setSort(value)}
+                    />
+                    <div>
+                        {words.map((word, i) => (
+                            <Fragment key={i}>
+                                <p 
+                                    className="p-4 text-white bg-pink-500"
+                                >
+                                    {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordAccuracies[word.word[0]]}
+                                </p>
+                            </Fragment>
+                        ))}
+                    </div>
+                </div>
+            </section>
             <div
                 className="bg-blue-200"
             >
                 <h3>Words</h3>
-                {chapterWords && chapterWords.map((word, i) => (
+                {words.map((word, i) => (
                     <div key={i}>
                         <button
                             onClick={() => onDeleteWord(word.word_id)}
@@ -246,7 +293,7 @@ export default function Page() {
             >
                 <SettingsIcon/>
             </button>
-            {(chapter && showUpdateChapter) &&
+            {(showUpdateChapter) &&
                 <div>
                     <UpdateChapter
                         chapter={chapter}

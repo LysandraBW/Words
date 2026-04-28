@@ -84,7 +84,7 @@ export async function getChapterGradedDecks(req: Request, res: Response) {
         return res.sendStatus(401);
     
     const output = ChapterSchema.pick({ chapter_id: true, reader_id: true }).safeParse({
-        chapter_id: req.params.book_id,
+        chapter_id: req.params.chapter_id,
         reader_id: await AuthorizeReaderBySession(sessionID)
     });
 

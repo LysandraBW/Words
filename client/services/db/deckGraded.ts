@@ -93,7 +93,7 @@ export async function getDecksGradedByDeck(deckID: number) {
 
 export async function getDecksGradedByBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/decksGraded`, {
-        method: "POST",
+        method: "GET",
         credentials: "include"
     });
 
@@ -107,7 +107,7 @@ export async function getDecksGradedByBook(bookID: number) {
 
 export async function getDecksGradedByChapters(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/decksGraded`, {
-        method: "POST",
+        method: "GET",
         credentials: "include"
     });
 

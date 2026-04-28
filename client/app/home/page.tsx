@@ -12,19 +12,26 @@ import { DeckGradedType, DeckGradedCardType, getDecksGraded, getDeckGraded } fro
 import Button from "@/components/Button";
 import { TrashIcon } from "lucide-react";
 import getWordAccuracies from "@/utilities/wordAccuracies";
-import { WordType } from "@/services/db/word";
+import { getWords, WordType } from "@/services/db/word";
+import InputDropdown from "@/components/input/InputDropdown";
+import useSortWords from "@/hooks/useSortWords";
 
 export default function Page() {
     const router = useRouter();
     const [user, setUser] = useState<ReaderType>();
-    const [words, setWords] = useState<WordType[]>();
+    
     const [books, setBooks] = useState<BookType[]>();
     const [decks, setDecks] = useState<DeckType[]>();
     const [showCreateDeck, setShowCreateDeck] = useState(true);
     const [showCreateBook, setShowCreateBook] = useState(false);
 
     const [decksGraded, setDecksGraded] = useState<DeckGradedType[]>();
+    
+
+    const [words, setWords] = useState<WordType[]>();
     const [wordAccuracies, setWordAccuracies] = useState<{[word: string]: number}>();
+    const sortWords = useSortWords(words, wordAccuracies);
+
 
     useEffect(() => {
         const load = async () => {
@@ -60,6 +67,15 @@ export default function Page() {
             }
             setDecksGraded(decksGraded);
             
+
+            // Load Words
+            const words = await getWords();
+            if (!words) {
+                alert('Failed');
+                return;
+            }
+            setWords(words);
+
 
             // Load Word Accuracies
             const wordAccuracies = await getWordAccuracies(decksGraded);
@@ -98,12 +114,36 @@ export default function Page() {
     }
 
     
-    if (!decks || !books) 
+    if (!decks || !books || !words || !wordAccuracies) 
         return <></>;
 
     return (
         <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-scroll">
             <div className="flex col-start-2">
+                <section className="w-full px-4 py-4">
+                    <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
+                        Words
+                    </h3>
+                    <div className="flex flex-wrap gap-8">
+                        <InputDropdown
+                            label="Sort Words"
+                            options={sortWords.sortOptions}
+                            value={[sortWords.sort]}
+                            onChange={(value: string) => sortWords.setSort(value)}
+                        />
+                        <div>
+                            {words.map((word, i) => (
+                                <Fragment key={i}>
+                                    <p 
+                                        className="p-4 text-white bg-pink-500"
+                                    >
+                                        {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordAccuracies[word.word[0]]}
+                                    </p>
+                                </Fragment>
+                            ))}
+                        </div>
+                    </div>
+                </section>
                 <section className="w-full px-4 py-4">
                     <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
                         Decks

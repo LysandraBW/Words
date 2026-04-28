@@ -1,4 +1,5 @@
 import { NullableBy } from "./types";
+import { WordType } from "./word";
 
 export interface DeckType {
     deck_id: number;
@@ -129,5 +130,19 @@ export async function getDecksByChapters(chapterID: number) {
         return null;
 
     const data: DeckType[] | null = await response.json();
+    return data;
+}
+
+
+export async function getDeckWords(chapterID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decks/${chapterID}/words`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: WordType[] | null = await response.json();
     return data;
 }

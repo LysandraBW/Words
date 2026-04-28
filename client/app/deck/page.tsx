@@ -1,15 +1,19 @@
 "use client";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import UpdateDeck from "./UpdateDeck";
 import { BookType, getBooks } from "@/services/db/book";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
 import { BookIcon, TrashIcon } from "lucide-react";
 import QuizGraded from "./QuizGraded";
-import { DeckType, DeckCardType, getDeck, reloadDeck, deleteDeck } from "@/services/db/deck";
+import { DeckType, DeckCardType, getDeck, reloadDeck, deleteDeck, getDeckWords } from "@/services/db/deck";
 import { DeckGradedType, DeckGradedCardType, getDecksGradedByDeck, getDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
+import { WordType } from "@/services/db/word";
+import useSortWords from "@/hooks/useSortWords";
+import getWordAccuracies from "@/utilities/wordAccuracies";
+import InputDropdown from "@/components/input/InputDropdown";
 
 
 export default function Page() {
@@ -23,10 +27,15 @@ export default function Page() {
     const [deck, setDeck] = useState<DeckType>();
     const [deckCards, setDeckCards] = useState<DeckCardType[]>();
 
-    // Graded Decks (Submissions/Results)
+    // Graded Decks (Results)
     // and the Graded Cards for Each Graded Deck
     const [decksGraded, setDecksGraded] = useState<DeckGradedType[]>([]);
     const [decksGradedCards, setDecksGradedCards] = useState<{[deckGradedID: number]: DeckGradedCardType[]}>([]);
+
+    // Words
+    const [words, setWords] = useState<WordType[]>();
+    const [wordAccuracies, setWordAccuracies] = useState<{[word: string]: number}>();
+    const sortWords = useSortWords(words);
 
     // Rendering
     const [showQuizResults, setShowQuizResults] = useState<DeckGradedType|null>();
@@ -55,20 +64,33 @@ export default function Page() {
 
 
             // Get Deck
-            const deck = await getDeck(deckIDAsNumber);
-            if (!deck) {
+            const output = await getDeck(deckIDAsNumber);
+            if (!output) {
                 alert('Invalid Deck');
                 return router.push('/home');
             }
-
-            setDeck(deck.deck);
-            setDeckCards(deck.deckCards);
+            setDeck(output.deck);
+            setDeckCards(output.deckCards);
 
 
             // Get Deck Graded
-            const decksGraded = await getDecksGradedByDeck(deck.deck.deck_id);
-            if (decksGraded)
-                setDecksGraded(decksGraded);
+            const decksGraded = await getDecksGradedByDeck(output.deck.deck_id);
+            if (!decksGraded) {
+                alert('Failed 1');
+                return;
+            }
+            setDecksGraded(decksGraded);
+
+            // Words
+            const words = await getDeckWords(output.deck.deck_id);
+            if (!words) {
+                alert('Failed 2');
+                return;
+            }
+            setWords(words);
+            
+            const wordAccuracies = await getWordAccuracies(decksGraded, words.map(word => word.word[0]));
+            setWordAccuracies(wordAccuracies);
         }
         load();
     }, []);
@@ -147,7 +169,7 @@ export default function Page() {
     }
 
 
-    if (!deck)
+    if (!deck || !words || !wordAccuracies)
         return <></>;
 
     return (
@@ -200,6 +222,30 @@ export default function Page() {
                     </div>
                 ))}
             </div>
+            <section className="w-full px-4 py-4">
+                <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
+                    Words
+                </h3>
+                <div className="flex flex-wrap gap-8">
+                    <InputDropdown
+                        label="Sort Words"
+                        options={sortWords.sortOptions}
+                        value={[sortWords.sort]}
+                        onChange={(value: string) => sortWords.setSort(value)}
+                    />
+                    <div>
+                        {words.map((word, i) => (
+                            <Fragment key={i}>
+                                <p 
+                                    className="p-4 text-white bg-pink-500"
+                                >
+                                    {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordAccuracies[word.word[0]]}
+                                </p>
+                            </Fragment>
+                        ))}
+                    </div>
+                </div>
+            </section>
             {(showQuizResults && decksGradedCards[showQuizResults.deck_graded_id] && deckCards && showQuizResults) && (
                 <>
                     <QuizGraded

@@ -8,7 +8,7 @@ export interface WordType {
 }
 
 
-export async function selectWords() {
+export async function getWords() {
     const response = await fetch('http://127.0.0.1:8000/words', {
         method: "GET",
         credentials: "include"

@@ -1,4 +1,5 @@
 import { ChapterType } from "./chapter";
+import { WordType } from "./word";
 
 export interface BookType {
     book_id: number;
@@ -43,6 +44,18 @@ export async function getBookChapters(bookID: number) {
         return null;
 
     const data: ChapterType[] | null = await response.json();
+    return data;
+}
+
+export async function getBookWords(bookID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/words`, {
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: WordType[] | null = await response.json();
     return data;
 }
 

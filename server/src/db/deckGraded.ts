@@ -94,10 +94,10 @@ export async function SelectGradedDecksByBooks(bookIDs: number[], readerID: stri
                     Deck_Graded.*
             FROM    Deck 
             JOIN    Deck_Graded     ON      Deck.deck_id = Deck_Graded.deck_id
-            JOIN    Chapter         ON      Chapter.chapter_id = Deck.deck_chapters 
+            JOIN    Chapter         ON      Chapter.chapter_id = ANY(Deck.deck_chapters) 
             JOIN    Book            ON      Book.book_id = Chapter.book_id
-            WHERE   reader_id = ${readerID} AND
-                    Book.book_id = ${bookIDs}
+            WHERE   Book.reader_id = ${readerID} AND
+                    Book.book_id IN ${db(bookIDs)}
         `;
         return rows;
     }
@@ -117,9 +117,9 @@ export async function SelectGradedDecksByChapters(chapterIDs: number[], readerID
                     Deck_Graded.* 
             FROM    Deck 
             JOIN    Deck_Graded     ON      Deck.deck_id = Deck_Graded.deck_id
-            JOIN    Chapter         ON      Chapter.chapter_id = Deck.deck_chapters 
-            WHERE   reader_id = ${readerID} AND
-                    Chapter.chapter_id = ${chapterIDs}
+            JOIN    Chapter         ON      Chapter.chapter_id = ANY(Deck.deck_chapters) 
+            WHERE   Deck.reader_id = ${readerID} AND
+                    Chapter.chapter_id  IN ${db(chapterIDs)}
         `;
         return rows;
     }

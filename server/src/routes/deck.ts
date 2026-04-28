@@ -6,7 +6,8 @@ import {
     deleteDeck, 
     createDeck, 
     reloadDeck, 
-    getDeckGradedDecks
+    getDeckGradedDecks,
+    getDeckWords
 } from "../controllers/deck.js";
 
 const router = express.Router();
@@ -14,7 +15,8 @@ const router = express.Router();
 router.get('/', getDecks);
 router.post('/', createDeck);
 router.get('/:deck_id', getDeck);
-router.get('/:deck_id/graded', getDeckGradedDecks);
+router.get('/:deck_id/words', getDeckWords);
+router.get('/:deck_id/decksGraded', getDeckGradedDecks);
 router.put('/:deck_id', updateDeck);
 router.delete('/:deck_id', deleteDeck);
 router.put('/:deck_id/reload', reloadDeck);
