@@ -5,6 +5,7 @@ import { type Request, type Response } from 'express';
 import { AuthorizeReaderBySession } from '../db/reader.js';
 import { DeleteDeck, InsertDeck, ReloadDeck as ReloadDeck, SelectDeck, SelectDecks, SelectDecksByBooks, UpdateDeck, SelectDecksByChapters } from '../db/deck.js';
 import '../db/deck.js';
+import { SelectGradedDecksByDeck } from '../db/deckGraded.js';
 
 
 export const DeckSchema = z.object({
@@ -32,6 +33,26 @@ export async function getDeck(req: Request, res: Response) {
 
     const deck = await SelectDeck(output.data.deck_id, output.data.reader_id);
     return res.status(200).json(deck);
+}
+
+
+export async function getDeckGradedDecks(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+    
+    const output = DeckSchema.pick({ deck_id: true, reader_id: true }).safeParse({
+        deck_id: req.params.deck_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+
+    const decks = await SelectGradedDecksByDeck(output.data.deck_id, output.data.reader_id);
+    return res.status(200).json(decks);  
 }
 
 

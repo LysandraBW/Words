@@ -11,7 +11,7 @@ export interface DeckGraded {
 }
 
 
-export interface DeckCardGraded {
+export interface DeckGradedCard {
     choice: number;
     deck_graded_id: number;
     deck_card_id: number;
@@ -34,7 +34,7 @@ export async function SelectGradedDeck(deckGradedID: number, readerID: string) {
                         )
                 LIMIT   1;
             `,
-            await db<(DeckGraded & DeckCardGraded)[]>`
+            await db<(DeckGraded & DeckGradedCard)[]>`
                 SELECT  * 
                 FROM    deck_card_graded 
                 JOIN    deck_graded  
@@ -199,10 +199,10 @@ export async function InsertGradedDeck(deck: Omit<DeckGraded, "deck_graded_id">,
             if (!rowsDeckGradedCard || rowsDeckGradedCard.length !== choices.length)
                 throw 'Insert Failed';
 
-            return [
-                rowsDeckGraded[0],
-                rowsDeckGradedCard
-            ];
+            return {
+                deckGraded: rowsDeckGraded[0],
+                deckGradedCards: rowsDeckGradedCard
+            };
         });
     }
     catch (error) {

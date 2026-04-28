@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import { DeckCardType } from "@/services/db/deck";
-import { DeckGradedType, DeckCardGradedType } from "@/services/db/deckGraded";
+import { DeckGradedType, DeckGradedCardType } from "@/services/db/deckGraded";
 import clsx from "clsx";
 import { TrashIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 interface QuizGradedProps {
     deckGraded: DeckGradedType;
     deckCards: DeckCardType[];
-    deckGradedCards: DeckCardGradedType[];
+    deckGradedCards: DeckGradedCardType[];
     onClose: () => void;
     onDelete: () => void;
 }

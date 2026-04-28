@@ -2,7 +2,7 @@ import { type Request, type Response } from 'express';
 import z from 'zod';
 import { getCookie } from '../utilities/cookie.js';
 import { AuthorizeReaderBySession } from '../db/reader.js';
-import { DecrementWordNumberInstances, DeleteWord, IncrementWordNumberInstances, InsertWord, SelectWord } from '../db/word.js';
+import { DecrementWordNumberInstances, DeleteWord, IncrementWordNumberInstances, InsertWord, SelectWord, SelectWords, SelectWordsFromBook, SelectWordsFromChapter } from '../db/word.js';
 
 const wordSchema = z.object({
     word_id: z.coerce.number(),
@@ -30,6 +30,26 @@ export async function getWord(req: Request, res: Response) {
     }
 
     const word = await SelectWord(output.data.word_id, output.data.reader_id);
+    return res.status(200).json(word);
+}
+
+
+
+export async function getWords(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+
+    const output = wordSchema.pick({ reader_id: true }).safeParse({
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+
+    const word = await SelectWords(output.data.reader_id);
     return res.status(200).json(word);
 }
 

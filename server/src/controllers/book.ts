@@ -6,6 +6,8 @@ import { DeleteBook, InsertBook, SelectBook, SelectBooks, UpdateBook } from '../
 import { SelectChaptersFromBook } from '../db/chapter.js';
 import { SelectWordsFromBook } from '../db/word.js';
 import { nullableBy } from '../utilities/types.js';
+import { SelectDecksByBooks } from '../db/deck.js';
+import { SelectGradedDecksByBooks } from '../db/deckGraded.js';
 
 
 const BookSchema = z.object({
@@ -76,6 +78,46 @@ export async function getBookWords(req: Request, res: Response) {
     
     const words = await SelectWordsFromBook(output.data.book_id, output.data.reader_id);
     return res.status(200).json(words);
+}
+
+
+export async function getBookDecks(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+
+    const output = BookSchema.pick({ book_id: true, reader_id: true }).safeParse({
+        book_id: req.params.book_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+    
+    const words = await SelectDecksByBooks([output.data.book_id], output.data.reader_id);
+    return res.status(200).json(words);
+}
+
+
+export async function getBookGradedDecks(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+    
+    const output = BookSchema.pick({ book_id: true, reader_id: true }).safeParse({
+        book_id: req.params.book_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+
+    const decks = await SelectGradedDecksByBooks([output.data.book_id], output.data.reader_id);
+    return res.status(200).json(decks);  
 }
 
 

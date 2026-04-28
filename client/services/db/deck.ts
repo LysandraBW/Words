@@ -33,19 +33,6 @@ export async function createDeck(deck: DeckType) {
 }
 
 
-export async function getDeck(deckID: number) {
-    const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}`, {
-        credentials: "include"
-    });
-
-    if (response.status !== 200)
-        return null;
-
-    const data: {deck: DeckType, deckCards: (DeckType & DeckCardType)[]} | null = await response.json();
-    return data;
-}
-
-
 export async function updateDeck(deck: NullableBy<DeckType, 'deck_chapters'>) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${deck.deck_id}`, {
         method: "PUT",
@@ -78,6 +65,19 @@ export async function deleteDeck(deckID: number) {
 }
 
 
+export async function getDeck(deckID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}`, {
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: {deck: DeckType, deckCards: (DeckType & DeckCardType)[]} | null = await response.json();
+    return data;
+}
+
+
 export async function reloadDeck(deckID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}/reload`, {
         method: "PUT",
@@ -105,14 +105,10 @@ export async function getDecks() {
 }
 
 
-export async function getDecksByBooks(bookIDs: number[]) {
-    const response = await fetch(`http://127.0.0.1:8000/decks/byBooks`, {
+export async function getDecksByBook(bookID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/decks`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({bookIDs})
+        credentials: "include"
     });
 
     if (response.status !== 200)
@@ -123,14 +119,10 @@ export async function getDecksByBooks(bookIDs: number[]) {
 }
 
 
-export async function getDecksByChapters(chapterIDs: number[]) {
-    const response = await fetch(`http://127.0.0.1:8000/decks/byChapters`, {
+export async function getDecksByChapters(chapterID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/decks`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({chapterIDs})
+        credentials: "include"
     });
 
     if (response.status !== 200)

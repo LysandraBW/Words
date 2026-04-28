@@ -1,8 +1,9 @@
 import express from "express";
-import { createWord, decrementNumberInstances, deleteWord, getWord, incrementNumberInstances } from "../controllers/word.js";
+import { createWord, decrementNumberInstances, deleteWord, getWord, getWords, incrementNumberInstances } from "../controllers/word.js";
 
 const router = express.Router();
 
+router.get('/', getWords);
 router.get('/:word_id', getWord);
 router.delete('/:word_id', deleteWord);
 router.get('/:word_id/increment', incrementNumberInstances);

@@ -4,7 +4,7 @@ import bookRouter from "./routes/book.js";
 import readerRouter from "./routes/reader.js";
 import chapterRouter from "./routes/chapter.js";
 import deckRouter from "./routes/deck.js";
-import deckGradedRouter from "./routes/deck.js";
+import deckGradedRouter from "./routes/deckGraded.js";
 
 const router = Router();
 

@@ -9,7 +9,7 @@ import Button from "@/components/Button";
 import { BookIcon, TrashIcon } from "lucide-react";
 import QuizGraded from "./QuizGraded";
 import { DeckType, DeckCardType, getDeck, reloadDeck, deleteDeck } from "@/services/db/deck";
-import { DeckGradedType, DeckCardGradedType, getDecksGradedByDeck, getDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
+import { DeckGradedType, DeckGradedCardType, getDecksGradedByDeck, getDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
 
 
 export default function Page() {
@@ -26,7 +26,7 @@ export default function Page() {
     // Graded Decks (Submissions/Results)
     // and the Graded Cards for Each Graded Deck
     const [decksGraded, setDecksGraded] = useState<DeckGradedType[]>([]);
-    const [decksGradedCards, setDecksGradedCards] = useState<{[deckGradedID: number]: DeckCardGradedType[]}>([]);
+    const [decksGradedCards, setDecksGradedCards] = useState<{[deckGradedID: number]: DeckGradedCardType[]}>([]);
 
     // Rendering
     const [showQuizResults, setShowQuizResults] = useState<DeckGradedType|null>();
@@ -119,7 +119,7 @@ export default function Page() {
     }
 
 
-    const onQuizFinished = (deckGraded: DeckGradedType, deckCardGraded: DeckCardGradedType[]) => {
+    const onQuizFinished = (deckGraded: DeckGradedType, deckCardGraded: DeckGradedCardType[]) => {
         setDecksGraded([...decksGraded, deckGraded]);
         setDecksGradedCards({...decksGradedCards, [deckGraded.deck_graded_id]: deckCardGraded});
         setShowQuiz(false);

@@ -1,5 +1,6 @@
 import { DeckType } from "./deck";
 
+
 export interface DeckGradedType {
     deck_graded_id: number;
     duration: number;
@@ -9,7 +10,7 @@ export interface DeckGradedType {
 }
 
 
-export interface DeckCardGradedType {
+export interface DeckGradedCardType {
     choice: number;
     deck_graded_id: number;
     deck_card_id: number;
@@ -29,21 +30,7 @@ export async function createDeckGraded(deck: DeckGradedType, choices: [number, n
     if (response.status !== 200)
         return null;
 
-    const data: {deckGraded: DeckGradedType, deckGradedCard: DeckCardGradedType[]} | null = await response.json();
-    return data;
-}
-
-
-export async function getDeckGraded(deckGradedID: number) {
-    const response = await fetch(`http://127.0.0.1:8000/decksGraded/${deckGradedID}`, {
-        method: "GET",
-        credentials: "include"
-    });
-
-    if (response.status !== 200)
-        return null;
-
-    const data: {deckGraded: DeckGradedType, deckGradedCards: (DeckGradedType & DeckCardGradedType)[]} | null = await response.json();
+    const data: {deckGraded: DeckGradedType, deckGradedCard: DeckGradedCardType[]} | null = await response.json();
     return data;
 }
 
@@ -58,6 +45,20 @@ export async function deleteDeckGraded(deckGradedID: number) {
         return null;
 
     const data: DeckGradedType | null = await response.json();
+    return data;
+}
+
+
+export async function getDeckGraded(deckGradedID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/decksGraded/${deckGradedID}`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: {deckGraded: DeckGradedType, deckGradedCards: (DeckGradedType & DeckGradedCardType)[]} | null = await response.json();
     return data;
 }
 
@@ -77,7 +78,7 @@ export async function getDecksGraded() {
 
 
 export async function getDecksGradedByDeck(deckID: number) {
-    const response = await fetch(`http://127.0.0.1:8000/decksGraded/byDeck/${deckID}`, {
+    const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}/decksGraded`, {
         method: "GET",
         credentials: "include"
     });
@@ -90,14 +91,10 @@ export async function getDecksGradedByDeck(deckID: number) {
 }
 
 
-export async function getDecksGradedByBooks(bookIDs: number[]) {
-    const response = await fetch(`http://127.0.0.1:8000/decksGraded/byBooks`, {
+export async function getDecksGradedByBook(bookID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/decksGraded`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({bookIDs})
+        credentials: "include"
     });
 
     if (response.status !== 200)
@@ -108,14 +105,10 @@ export async function getDecksGradedByBooks(bookIDs: number[]) {
 }
 
 
-export async function getDecksGradedByChapters(chapterIDs: number[]) {
-    const response = await fetch(`http://127.0.0.1:8000/decksGraded/byChapters`, {
+export async function getDecksGradedByChapters(chapterID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/decksGraded`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({chapterIDs})
+        credentials: "include"
     });
 
     if (response.status !== 200)

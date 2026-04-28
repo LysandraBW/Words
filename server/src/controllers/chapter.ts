@@ -5,6 +5,8 @@ import { AuthorizeReaderBySession } from '../db/reader.js';
 import { DeleteChapter, InsertChapter, SelectChapter, SelectChapters, UpdateChapter } from '../db/chapter.js';
 import { SelectWordsFromChapter } from '../db/word.js';
 import { nullableBy } from '../utilities/types.js';
+import { SelectDecksByChapters } from '../db/deck.js';
+import { SelectGradedDecksByChapters } from '../db/deckGraded.js';
 
 
 const ChapterSchema = z.object({
@@ -53,6 +55,46 @@ export async function getChapterWords(req: Request, res: Response) {
 
     const words = await SelectWordsFromChapter(output.data.chapter_id, output.data.reader_id);
     return res.status(200).json(words);
+}
+
+
+export async function getChapterDecks(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+
+    const output = ChapterSchema.pick({ chapter_id: true, reader_id: true }).safeParse({
+        chapter_id: req.params.book_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+    
+    const words = await SelectDecksByChapters([output.data.chapter_id], output.data.reader_id);
+    return res.status(200).json(words);
+}
+
+
+export async function getChapterGradedDecks(req: Request, res: Response) {
+    const sessionID = await getCookie(req, "sessionID");
+    if (!sessionID)
+        return res.sendStatus(401);
+    
+    const output = ChapterSchema.pick({ chapter_id: true, reader_id: true }).safeParse({
+        chapter_id: req.params.book_id,
+        reader_id: await AuthorizeReaderBySession(sessionID)
+    });
+
+    if (!output.success) {
+        console.error(output.error);
+        return res.sendStatus(400);
+    }
+
+    const decks = await SelectGradedDecksByChapters([output.data.chapter_id], output.data.reader_id);
+    return res.status(200).json(decks);  
 }
 
 

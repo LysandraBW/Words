@@ -94,7 +94,8 @@ export default function Page() {
             word: [word, wordDefinition],
             word_number_instances: 0,
             chapter_id: chapterID,
-            created_at: ''
+            created_at: '',
+            last_seen: ''
         }
 
         const insertedWord = await createWord(initialWord);

@@ -7,6 +7,7 @@ export interface Word {
     word_number_instances: number;
     chapter_id: number;
     created_at: string;
+    last_seen: string;
 }
 
 
@@ -29,6 +30,26 @@ export async function SelectWord(wordID: number, readerID: string) {
     }
     catch (error) {
         console.error("Error Selecting Word");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return null;
+    }
+}
+
+
+export async function SelectWords(readerID: string) {
+    try {
+        const rows = await db<Word[]>`
+            SELECT  * 
+            FROM    Word
+            JOIN    Chapter ON word.chapter_id = Chapter.chapter_id
+            JOIN    Book    ON Book.book_id = Chapter.book_id 
+            WHERE   Book.reader_id = ${readerID}
+        `;
+        return rows;
+    }
+    catch (error) {
+        console.error("Error Selecting Words");
         if (process.env.ENV !== "production")
             console.error(error);
         return null;
@@ -78,7 +99,7 @@ export async function SelectWordsFromChapter(chapterID: number, readerID: string
 }
 
 
-export async function InsertWord(word: Omit<Word, "word_id" | "word_number_instances" | "created_at">, readerID: string) {
+export async function InsertWord(word: Omit<Word, "word_id" | "word_number_instances" | "created_at" | "last_seen">, readerID: string) {
     try {
         return await db.begin(async (db: any) => {
             const rows = await db<Word[]>`
@@ -113,7 +134,7 @@ export async function InsertWord(word: Omit<Word, "word_id" | "word_number_insta
 }
 
 
-export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_instances" | "created_at">, readerID: string) {
+export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_instances" | "created_at" | "last_seen">, readerID: string) {
     try {
         return await db.begin(async (db: any) => {
             const rows = await db<Word[]>`
@@ -183,7 +204,8 @@ export async function IncrementWordNumberInstances(wordID: number, readerID: str
         return await db.begin(async (db: any) => {
             const rows = await db`
                 UPDATE  Word
-                SET     word_number_instances = word_number_instances + 1
+                SET     word_number_instances = word_number_instances + 1,
+                        last_seen = NOW()
                 WHERE   word_id = ${wordID} AND
                         ${readerID} IN (
                             SELECT  reader_id 
@@ -216,7 +238,8 @@ export async function DecrementWordNumberInstances(wordID: number, readerID: str
         return await db.begin(async (db: any) => {
             const rows = await db`
                 UPDATE  Word
-                SET     word_number_instances = word_number_instances - 1
+                SET     word_number_instances = word_number_instances - 1,
+                        last_seen = NOW()
                 WHERE   word_id = ${wordID} AND
                         ${readerID} IN (
                             SELECT  reader_id 

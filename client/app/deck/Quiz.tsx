@@ -1,13 +1,13 @@
 import Button from "@/components/Button";
 import { DeckCardType } from "@/services/db/deck";
-import { DeckGradedType, DeckCardGradedType, createDeckGraded } from "@/services/db/deckGraded";
+import { DeckGradedType, DeckGradedCardType, createDeckGraded } from "@/services/db/deckGraded";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
 
 interface QuizProps {
     deckCards: DeckCardType[];
-    onQuizFinished: (deckGraded: DeckGradedType, deckCardGraded: DeckCardGradedType[]) => void;
+    onQuizFinished: (deckGraded: DeckGradedType, deckCardGraded: DeckGradedCardType[]) => void;
 }
 
 interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
@@ -84,7 +84,7 @@ export default function Quiz(props: QuizProps) {
         setChoices(updatedChoices);
 
         // Stop the Timer
-        if (Object.values(updatedChoices).length !== props.deckCards.length) {
+        if (Object.values(updatedChoices).length === props.deckCards.length) {
             pause();
         }
     }
@@ -108,6 +108,7 @@ export default function Quiz(props: QuizProps) {
             return;
         }
 
+        console.log(createdGradedDeck);
         props.onQuizFinished(createdGradedDeck.deckGraded, createdGradedDeck.deckGradedCard);
     }
 
