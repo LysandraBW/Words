@@ -19,7 +19,7 @@ export async function createWord(word: WordType) {
     if (response.status !== 200)
         return null;
 
-    const data: WordType[] = await response.json();
+    const data: WordType | null = await response.json();
     return data;
 }
 
@@ -33,7 +33,7 @@ export async function deleteWord(wordID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: WordType[] = await response.json();
+    const data: WordType | null = await response.json();
     return data;
 
 }
@@ -47,7 +47,7 @@ export async function incrementWordNumberInstances(wordID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: WordType[] = await response.json();
+    const data: WordType | null = await response.json();
     return data;
 
 }
@@ -61,7 +61,6 @@ export async function decrementWordNumberInstances(wordID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: WordType[] = await response.json();
+    const data: WordType | null = await response.json();
     return data;
-
 }

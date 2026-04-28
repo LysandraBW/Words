@@ -18,7 +18,7 @@ export async function getBook(bookID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: BookType[] = await response.json();
+    const data: BookType | null = await response.json();
     return data;
 }
 
@@ -30,7 +30,7 @@ export async function getBooks() {
     if (response.status !== 200)
         return null;
 
-    const data: BookType[] = await response.json();
+    const data: BookType[] | null = await response.json();
     return data;
 }
 
@@ -42,7 +42,7 @@ export async function getBookChapters(bookID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: ChapterType[] = await response.json();
+    const data: ChapterType[] | null = await response.json();
     return data;
 }
 
@@ -59,7 +59,7 @@ export async function createBook(book: BookType) {
     if (response.status !== 200)
         return null;
 
-    const data: BookType[] = await response.json();
+    const data: BookType | null = await response.json();
     return data;
 }
 
@@ -76,6 +76,19 @@ export async function updateBook(book: BookType) {
     if (response.status !== 200)
         return null;
 
-    const data: BookType[] = await response.json();
+    const data: BookType | null = await response.json();
+    return data;
+}
+
+export async function deleteBook(bookID: number) {
+    const response = await fetch(`http://127.0.0.1:8000/books/${bookID}`, {
+        method: "DELETE",
+        credentials: "include",
+    });
+
+    if (response.status !== 200)
+        return null;
+
+    const data: BookType | null = await response.json();
     return data;
 }

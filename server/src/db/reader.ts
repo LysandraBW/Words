@@ -84,7 +84,11 @@ export async function SelectReader(readerID: string) {
             WHERE   reader_id = ${readerID}
             LIMIT   1;
         `;
-        return rows;
+
+        if (!rows || rows.length !== 1)
+            throw 'Select Failed';
+
+        return rows[0];
     }
     catch (error) {
         console.log("Error Authenticating Reader");
@@ -97,20 +101,26 @@ export async function SelectReader(readerID: string) {
 
 export async function InsertReader(reader: Pick<Reader, "reader_name" | "reader_email" | "reader_password">) {
     try {
-        const rows = await db<Reader[]>`
-            INSERT INTO Reader (
-                reader_name, 
-                reader_email, 
-                reader_password
-            )
-            VALUES (
-                ${reader.reader_name},
-                ${reader.reader_email},
-                crypt(${reader.reader_password}, gen_salt(\'bf\'))
-            ) 
-            RETURNING   *
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db<Reader[]>`
+                INSERT INTO Reader (
+                    reader_name, 
+                    reader_email, 
+                    reader_password
+                )
+                VALUES (
+                    ${reader.reader_name},
+                    ${reader.reader_email},
+                    crypt(${reader.reader_password}, gen_salt(\'bf\'))
+                ) 
+                RETURNING   *
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Insert Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.log("Error Inserting Reader");
@@ -123,16 +133,22 @@ export async function InsertReader(reader: Pick<Reader, "reader_name" | "reader_
 
 export async function UpdateReader(reader: NullableBy<Reader, "reader_name" | "reader_email" | "reader_password" | "reader_profile_image">) {
     try {
-        const rows = await db<Reader[]>`
-            UPDATE  Reader
-            SET     reader_name = COALESCE(${reader.reader_name ?? null}, reader_name),
-                    reader_email = COALESCE(${reader.reader_email ?? null}, reader_email),
-                    reader_password = COALESCE(${reader.reader_password ?? null}, reader_password),
-                    reader_profile_image = COALESCE(${reader.reader_profile_image ?? null}, reader_profile_image)
-            WHERE   reader_id = ${reader.reader_id}
-            RETURNING *
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db<Reader[]>`
+                UPDATE  Reader
+                SET     reader_name = COALESCE(${reader.reader_name ?? null}, reader_name),
+                        reader_email = COALESCE(${reader.reader_email ?? null}, reader_email),
+                        reader_password = COALESCE(${reader.reader_password ?? null}, reader_password),
+                        reader_profile_image = COALESCE(${reader.reader_profile_image ?? null}, reader_profile_image)
+                WHERE   reader_id = ${reader.reader_id}
+                RETURNING *
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Update Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Updating Reader");
@@ -145,11 +161,17 @@ export async function UpdateReader(reader: NullableBy<Reader, "reader_name" | "r
 
 export async function DeleteReader(readerID: string) {
     try {
-        const rows = await db`
-            DELETE FROM Reader
-            WHERE reader_id = ${readerID}
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db`
+                DELETE FROM Reader
+                WHERE reader_id = ${readerID}
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Delete Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Deleting Reader");
@@ -166,9 +188,9 @@ export async function SignUpReader(reader: Pick<Reader, "reader_name" | "reader_
     if (!insertedReader)
         return "";
     
-    const insertedreader_id = insertedReader[0]?.reader_id;
-    if (insertedreader_id)
-        return await InsertSession(insertedreader_id);
+    const insertedReaderID = insertedReader[0]?.reader_id;
+    if (insertedReaderID)
+        return await InsertSession(insertedReaderID);
     
     console.error("Error Signing Up Reader");
     return "";

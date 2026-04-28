@@ -46,9 +46,10 @@ export async function SelectWordsFromChapters(chapterIDs: number[], readerID: st
                     Chapter.chapter_id = ANY(${db.array(chapterIDs)}::int[])
         `;
 
-        if (rows)
-            return rows.map(row => row.word)
-        return null;
+        if (!rows)
+            return null;
+
+        return rows.map(row => row.word);
     }
     catch (error) {
         console.error("Error Selecting words");
@@ -78,8 +79,11 @@ export async function SelectDeck(deckID: number, readerID: string) {
             `
         ]);
 
+        if (!rowsDeck || rowsDeck.length !== 1)
+            return null;
+        
         return [
-            rowsDeck,
+            rowsDeck[0],
             rowsDeckCard
         ];
     }
@@ -130,10 +134,13 @@ export async function SelectGradedDeck(deckGradedID: number, readerID: string) {
             `
         ]);
 
-        return {
-            rowsDeck,
+        if (!rowsDeck || rowsDeck.length !== 1)
+            return null;
+
+        return [
+            rowsDeck[0],
             rowsDeckCard
-        };
+        ];
     }
     catch (error) {
         console.error("Error Selecting Graded Deck");
@@ -166,7 +173,8 @@ export async function SelectGradedDecks(reader_id: string) {
 
 export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
     try {
-        const output = await db.begin(async (db: any) => {
+        return await db.begin(async (db: any) => {
+            // Deck
             const rowsDeck = await db<Deck[]>`
                 INSERT INTO Deck (
                     deck_name, 
@@ -181,14 +189,18 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
                 RETURNING *
             `;
 
-            if (!rowsDeck || !rowsDeck.length)
-                return null;
+            if (!rowsDeck || rowsDeck.length !== 1)
+                throw 'Insert Failed';
 
+
+            // Words
             const words = await SelectWordsFromChapters(deck.deck_chapters, deck.reader_id);
             
             if (!words)
-                return null;
+                throw 'Word Selection Failed';
+            
 
+            // Words -> Cards
             const cards = await Promise.all(words.map(async (word) => ({
                 deck_id: (rowsDeck[0] as any).deck_id,
                 words: [
@@ -197,20 +209,23 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
                 ]
             })));
 
-            if (!cards || !cards.length)
-                return null;
+            if (!cards || cards.length !== words.length)
+                throw 'Card Creation Failed';
 
+            // Cards
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
             `;
 
+            if (!rowsDeck || rowsDeckCard.length !== words.length)
+                throw 'Deck Card Insert Failed';
+
             return [
-                rowsDeck,
+                rowsDeck[0],
                 rowsDeckCard
             ];
-        });
-        return output;        
+        });       
     }
     catch (error) {
         console.error("Error Inserting Deck");
@@ -223,7 +238,8 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
 
 export async function InsertGradedDeck(deck: Omit<DeckGraded, "deck_graded_id">, choices: [number, number][], readerID: string) {
     try {
-        const output = await db.begin(async (db: any) => {
+        return await db.begin(async (db: any) => {
+            // Deck
             const rowsDeckGraded = await db`
                 INSERT INTO deck_graded (
                     number_correct, 
@@ -245,27 +261,32 @@ export async function InsertGradedDeck(deck: Omit<DeckGraded, "deck_graded_id">,
                 RETURNING *
             `;
 
-            if (!rowsDeckGraded || rowsDeckGraded.length === 1)
-                return null;
+            if (!rowsDeckGraded || rowsDeckGraded.length !== 1)
+                throw 'Insert Failed';
 
+
+            // Choices -> Cards
             const deckGradedCard = choices.map(choice => ({ 
                 deck_graded_id: (<any> rowsDeckGraded)[0].deck_graded_id, 
                 deck_card_id: choice[0], 
                 choice: choice[1]
             }));
 
+
+            // Card
             const rowsDeckGradedCard = await db`
                 INSERT INTO deck_card_graded ${db(deckGradedCard)}
                 RETURNING *
             `;
 
+            if (!rowsDeckGradedCard || rowsDeckGradedCard.length !== choices.length)
+                throw 'Insert Failed';
+
             return [
-                rowsDeckGraded,
+                rowsDeckGraded[0],
                 rowsDeckGradedCard
             ];
         });
-
-        return output;
     }
     catch (error) {
         console.error("Error Inserting Graded Deck");
@@ -278,13 +299,19 @@ export async function InsertGradedDeck(deck: Omit<DeckGraded, "deck_graded_id">,
 
 export async function DeleteDeck(deckID: number, readerID: string) {
     try {
-        const rows = await db`
-            DELETE FROM Deck
-            WHERE   deck_id = ${deckID} AND
-                    reader_id = ${readerID}
-            RETURNING *
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db`
+                DELETE FROM Deck
+                WHERE   deck_id = ${deckID} AND
+                        reader_id = ${readerID}
+                RETURNING *
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Delete Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Deleting Deck");
@@ -297,15 +324,21 @@ export async function DeleteDeck(deckID: number, readerID: string) {
 
 export async function DeleteGradedDeck(deckGradedID: number, readerID: string) {
     try {
-        const rows = await db`
-            DELETE FROM     deck_graded
-            JOIN    Deck
-            ON      Deck.deck_id = deck_graded.deck_id
-            WHERE   deck_graded_id = ${deckGradedID} AND
-                    reader_id = ${readerID}
-            RETURNING *
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db`
+                DELETE FROM     deck_graded
+                JOIN    Deck
+                ON      Deck.deck_id = deck_graded.deck_id
+                WHERE   deck_graded_id = ${deckGradedID} AND
+                        reader_id = ${readerID}
+                RETURNING *
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Delete Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Deleting Graded Deck");
@@ -318,7 +351,8 @@ export async function DeleteGradedDeck(deckGradedID: number, readerID: string) {
 
 export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chapters">) {
     try {
-        const output = await db.begin(async (db: any) => {
+        return await db.begin(async (db: any) => {
+            // Deck
             const rowsDeck = await db<Deck[]>`
                 UPDATE  Deck
                 SET     deck_name = COALESCE(${deck.deck_name ?? null}, deck_name)
@@ -327,22 +361,26 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
                 RETURNING *
             `;
 
-            if (!rowsDeck || !rowsDeck.length)
-                return null;
+            if (!rowsDeck || rowsDeck.length !== 1)
+                throw 'Update Failed';
 
             if (!deck.deck_chapters || !deck.deck_chapters.length)
-                return [rowsDeck];
+                return [rowsDeck[0]];
             
             await db`
                 DELETE FROM deck_card
                 WHERE deck_id = ${deck.deck_id}
             `;
             
+            
+            // Words
             const words = await SelectWordsFromChapters(deck.deck_chapters, deck.reader_id);
             
             if (!words || !words.length)
-                return null;
+                throw 'Word Selection Failed';
 
+
+            // Words -> Cards
             const cards = await Promise.all(words.map(async (word) => ({
                 deck_id: deck.deck_id,
                 words: [
@@ -352,19 +390,21 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
             })));
 
             if (!cards || !cards.length) 
-                return null;
+                throw 'Card Creation Failed'
 
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
             `;
 
+            if (!rowsDeckCard || rowsDeckCard.length !== words.length)
+                throw 'Insert Failed';
+            
             return [
-                rowsDeck,
+                rowsDeck[0],
                 rowsDeckCard
             ];
-        })
-        return output;
+        });
     }
     catch (error) {
         console.error("Error Updating Deck");

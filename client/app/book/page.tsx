@@ -32,9 +32,9 @@ export default function Page() {
 
             // Get Book by ID
             const book = await getBook(numberBookID);
-            if (!book?.length)
+            if (!book)
                 return;
-            setBook(book[0]);
+            setBook(book);
 
             // Get Book's Chapters
             const bookChapters = await getBookChapters(numberBookID);
@@ -58,10 +58,11 @@ export default function Page() {
             ))}
             <div className="bg-red-500">
                 {(book && bookChapters) &&
-                    <UpdateChapters 
-                        onClose={() => null}
+                    <UpdateChapters
                         book={book}
                         chapters={bookChapters}
+                        onChaptersUpdated={(chapters: ChapterType[]) => 0}
+                        onClose={() => 0}
                     />
                 }
             </div>
@@ -69,8 +70,8 @@ export default function Page() {
                 {book &&
                     <UpdateBook
                         book={book}
+                        onBookUpdated={(book: BookType) => 0}
                         onClose={() => 0}
-                        onUpdate={(book: BookType) => 0}
                     />
                 }
             </div>

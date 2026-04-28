@@ -41,9 +41,9 @@ export default function Page() {
 
             // Get Chapter by ID
             const chapter = await getChapter(numberChapterID);
-            if (!chapter?.length)
+            if (!chapter)
                 return;
-            setChapter(chapter[0]);
+            setChapter(chapter);
 
 
             // Get Book's Chapters
@@ -79,7 +79,7 @@ export default function Page() {
 
     const onDeleteChapter = async (chapterID: number) => {
         const deletedChapter = await deleteChapter(chapterID);
-        if (!deletedChapter || !deletedChapter.length) {
+        if (!deletedChapter) {
             alert('Failed to Delete Word');
             return;
         }
@@ -97,12 +97,12 @@ export default function Page() {
         }
 
         const insertedWord = await createWord(initialWord);
-        if (!insertedWord || !insertedWord.length) {
+        if (!insertedWord) {
             alert('Failed to Insert Word');
             return;
         }
         
-        const updatedChapterWords = [...(chapterWords || []), ...insertedWord];
+        const updatedChapterWords = [...(chapterWords || []), insertedWord];
         setChapterWords(updatedChapterWords);
 
         return insertedWord;
@@ -114,7 +114,7 @@ export default function Page() {
             return;
         
         const deletedWord = await deleteWord(wordID);
-        if (!deletedWord || !deletedWord.length) {
+        if (!deletedWord) {
             alert('Failed to Delete Word');
             return;
         }
@@ -131,7 +131,7 @@ export default function Page() {
             return;
 
         const updatedWord = await incrementWordNumberInstances(wordID);
-        if (!updatedWord || !updatedWord.length) {
+        if (!updatedWord) {
             alert('Failed to Increment Word\'s Number of Instances');
             return;
         }
@@ -152,7 +152,7 @@ export default function Page() {
             return;
 
         const updatedWord = await decrementWordNumberInstances(wordID);
-        if (!updatedWord || !updatedWord.length) {
+        if (!updatedWord) {
             alert('Failed to Increment Word\'s Number of Instances');
             return;
         }
@@ -171,7 +171,8 @@ export default function Page() {
     const onSearchWord = async (word: string) => {
         setWord(word);
         setSearch(word);
-        
+
+        // Get Entry
         const entry = await getWordEntry(word);
         setWordEntry(entry);
     }

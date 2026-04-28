@@ -76,16 +76,18 @@ export default function UpdateDeck(props: UpdateDeckProps) {
             deck_name: deck.deck_name,
             deck_chapters: chaptersNotUpdated ? null : deck.deck_chapters
         });
-
-        console.log(updatedDeck);
         
-        if (!updatedDeck || (chaptersNotUpdated && updatedDeck.length !== 1) || (!chaptersNotUpdated && updatedDeck.length !== 2)) {
+        if (
+            !updatedDeck || 
+            (chaptersNotUpdated && updatedDeck.length !== 1) || 
+            (!chaptersNotUpdated && updatedDeck.length !== 2)
+        ) {
             alert('Failed to Create Deck');
             return;
         }
 
         const [decks, deckCards] = updatedDeck;
-        props.onDeckUpdated(decks[0], deckCards || null);
+        props.onDeckUpdated(decks, deckCards || null);
     }
 
 

@@ -44,7 +44,7 @@ export async function createDeck(deck: DeckType) {
     if (response.status !== 200)
         return null;
 
-    const data: [DeckType[], DeckCardType[]] = await response.json();
+    const data: [DeckType, DeckCardType[]] | null = await response.json();
     return data;
 }
 
@@ -62,7 +62,7 @@ export async function updateDeck(deck: NullableBy<DeckType, 'deck_chapters'>) {
     if (response.status !== 200)
         return null;
 
-    const data: [DeckType[], DeckCardType[]] | [DeckType[]] = await response.json();
+    const data: [DeckType, DeckCardType[]] | [DeckType] | null = await response.json();
     return data;
 }
 
@@ -75,7 +75,7 @@ export async function getDecks() {
     if (response.status !== 200)
         return null;
 
-    const data: DeckType[] = await response.json();
+    const data: DeckType[] | null = await response.json();
     return data;
 }
 
@@ -88,20 +88,7 @@ export async function getDeck(deckID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: [DeckType[], DeckCardType[]] = await response.json();
-    return data;
-}
-
-
-export async function getDeckCards(deckID: number) {
-    const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}`, {
-        credentials: "include"
-    });
-
-    if (response.status !== 200)
-        return null;
-
-    const data: DeckType[] = await response.json();
+    const data: [DeckType, DeckCardType[]] | null = await response.json();
     return data;
 }
 
@@ -115,7 +102,7 @@ export async function deleteDeck(deckID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: DeckType[] = await response.json();
+    const data: DeckType | null = await response.json();
     return data;
 }
 
@@ -132,6 +119,6 @@ export async function createGradedDeck(deck: DeckGradedType, choices: [number, n
     if (response.status !== 200)
         return null;
 
-    const data: [DeckGradedType[], DeckCardGradedType[]] = await response.json();
+    const data: [DeckGradedType, DeckCardGradedType[]] | null = await response.json();
     return data;
 }

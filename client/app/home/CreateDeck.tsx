@@ -31,10 +31,10 @@ export default function CreateDeck(props: CreateDeckProps) {
         }
     ]));
 
+
     useEffect(() => {
         const load = async () => {
             const bookChapters = await loadBookChapters(props.books);
-            console.log(props.books, bookChapters);
             setBookChapters(bookChapters);
         }
         load();
@@ -43,7 +43,6 @@ export default function CreateDeck(props: CreateDeckProps) {
 
     const loadBookChapters = async (books: BookType[]) => {
         const bookChapters: BookChapters = {};
-
         for (const book of books) {
             const chapters = await getBookChapters(book.book_id);
             if (!chapters) {
@@ -52,7 +51,6 @@ export default function CreateDeck(props: CreateDeckProps) {
             }
             bookChapters[book.book_id] = chapters;
         }
-
         return bookChapters;
     }
 
@@ -70,7 +68,7 @@ export default function CreateDeck(props: CreateDeckProps) {
             return;
         }
 
-        props.onDeckCreated((createdDeck as any)[0][0]);
+        props.onDeckCreated(createdDeck[0]);
     }
 
     

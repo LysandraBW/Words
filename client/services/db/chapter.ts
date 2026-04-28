@@ -21,7 +21,7 @@ export async function createChapter(chapter: ChapterType) {
     if (response.status !== 200)
         return null;
 
-    const data: ChapterType[] = await response.json();
+    const data: ChapterType | null = await response.json();
     return data;
 }
 
@@ -38,7 +38,7 @@ export async function updateChapter(chapter: ChapterType) {
     if (response.status !== 200)
         return null;
 
-    const data: ChapterType[] = await response.json();
+    const data: ChapterType | null = await response.json();
     return data;
 }
 
@@ -54,7 +54,7 @@ export async function deleteChapter(chapterID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: ChapterType[] = await response.json();
+    const data: ChapterType | null = await response.json();
     return data;
 }
 
@@ -67,7 +67,7 @@ export async function getChapter(chapterID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: (ChapterType & BookType)[] = await response.json();
+    const data: (ChapterType & BookType) | null = await response.json();
     return data;
 }
 
@@ -80,6 +80,6 @@ export async function getChapterWords(chapterID: number) {
     if (response.status !== 200)
         return null;
 
-    const data: WordType[] = await response.json();
+    const data: WordType[] | null = await response.json();
     return data;
 }

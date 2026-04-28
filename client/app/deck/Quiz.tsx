@@ -2,8 +2,7 @@ import Button from "@/components/Button";
 import { createGradedDeck, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { useStopwatch, useTimer } from "react-timer-hook";
-import { number } from "zod";
+import { useStopwatch } from "react-timer-hook";
 
 interface QuizProps {
     deckCards: DeckCardType[];
@@ -11,9 +10,9 @@ interface QuizProps {
 }
 
 interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
-    // This number represents the initial
-    // numbering of the cards. I'm storing it
-    // as they need to be shuffled.
+    // We add a number in order to keep
+    // track of the numbering as we shuffle
+    // the words.
     words: [string, string, number][];
 }
 
@@ -26,12 +25,12 @@ export default function Quiz(props: QuizProps) {
     const [choices, setChoices] = useState<{[questionIndex: number]: number}>({});
     
     const {
-        totalMilliseconds,
-        milliseconds,
-        seconds,
-        minutes,
+        start,
         hours,
-        start
+        minutes,
+        seconds,
+        milliseconds,
+        totalMilliseconds
     } = useStopwatch({ autoStart: false, interval: 20 });
     
 
@@ -57,7 +56,11 @@ export default function Quiz(props: QuizProps) {
             const shuffledWords: [string, string, number][] = [];
             for (let i = 0; i < card.words.length; i++) {
                 const shuffledIndex = shuffledIndices[i];
-                shuffledWords.push([card.words[shuffledIndex][0], card.words[shuffledIndex][1], shuffledIndex]);
+                shuffledWords.push([
+                    card.words[shuffledIndex][0], 
+                    card.words[shuffledIndex][1], 
+                    shuffledIndex
+                ]);
             }
 
             deckCardsExtended.push({
@@ -69,17 +72,20 @@ export default function Quiz(props: QuizProps) {
         return deckCardsExtended;
     }
 
+
     const selectChoice = (index: number, choice: number) => {
         const deckCard = props.deckCards[index];
-        setChoices({...choices, [deckCard.deck_card_id]: choice});
+        setChoices({
+            ...choices, 
+            [deckCard.deck_card_id]: choice
+        });
     }
+
 
     const onFinishQuiz = async (choices: {[index: number]: number}, duration: number) => {
         const choiceValues = props.deckCards.map(deckCard => choices[deckCard.deck_id]);
         const numberCorrect = choiceValues.reduce((accumulator, currentValue) => currentValue === 0 ? accumulator + 1 : accumulator, 0);
         const numberIncorrect = choiceValues.length - numberCorrect;
-
-        console.log(numberCorrect);
 
         const createdGradedDeck = await createGradedDeck({
             deck_graded_id: -1,
@@ -89,16 +95,18 @@ export default function Quiz(props: QuizProps) {
             duration: duration
         }, Object.entries(choices).map(choice => [Number(choice[0]), Number(choice[1])]));
 
-        if (!createdGradedDeck || createdGradedDeck.length !== 2) {
+        if (!createdGradedDeck) {
             alert('Failed to Create Graded Deck');
             return;
         }
 
-        props.onQuizFinished(createdGradedDeck[0][0], createdGradedDeck[1]);
+        props.onQuizFinished(createdGradedDeck[0], createdGradedDeck[1]);
     }
+
 
     if (props.deckCards.length <= 0)
         return <></>
+
 
     return (
         <div>
@@ -127,6 +135,7 @@ export default function Quiz(props: QuizProps) {
             >
                 {shuffledCards.length &&
                     <>
+                        <p>Select the Definition of Word: <b>{shuffledCards[index].words[0][0]}</b></p>
                         {shuffledCards[index].words.map(([word, wordDefinition, wordIndex], i) => (
                             <button
                                 key={i}
@@ -134,6 +143,7 @@ export default function Quiz(props: QuizProps) {
                                     "border",
                                     (choices[shuffledCards[index].deck_card_id] != null && wordIndex === 0) && "bg-green-500",
                                     (choices[shuffledCards[index].deck_card_id] != null && wordIndex !== 0) && "bg-red-500",
+                                    choices[shuffledCards[index].deck_card_id] === wordIndex && "border-2 border-blue-500"
                                 )}
                                 onClick={() => {
                                     if (choices[shuffledCards[index].deck_card_id] != null)
@@ -141,16 +151,6 @@ export default function Quiz(props: QuizProps) {
                                     selectChoice(index, wordIndex)
                                 }}
                             >
-                                {choices[shuffledCards[index].deck_card_id] === wordIndex &&
-                                    <div>
-                                        Selected
-                                    </div>
-                                }
-                                <div>
-                                    <b>
-                                        {word}
-                                    </b>
-                                </div>
                                 <div>
                                     {wordDefinition}
                                 </div>

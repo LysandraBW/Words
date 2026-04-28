@@ -12,7 +12,7 @@ import Modal from "@/components/Modal";
 interface UpdateBookProps {
     book: BookType;
     onClose: () => void;
-    onUpdate: (book: BookType) => void;
+    onBookUpdated: (book: BookType) => void;
 }
 
 export default function UpdateBook(props: UpdateBookProps) {
@@ -78,7 +78,7 @@ export default function UpdateBook(props: UpdateBookProps) {
         });
                 
         if (updatedBook)
-            props.onUpdate(updatedBook[0]);
+            props.onBookUpdated(updatedBook);
     }
     
 

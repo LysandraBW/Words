@@ -54,12 +54,13 @@ export default function CreateBook(props: CreateBookProps) {
 
         const book = books.find(b => b.id === selectedBookID[0]);
 
+        // Update Form
         let updatedForm = updateFormValue(form, "book_name", book?.volumeInfo?.title || "");
         updatedForm = updateFormValue(updatedForm, "book_cover_image", book?.volumeInfo?.imageLinks?.thumbnail || "");
         updatedForm = updateFormValue(updatedForm, "book_year", book?.volumeInfo?.publishedDate?.slice(0, 4) || "");
         updatedForm = updateFormValue(updatedForm, "book_author", book?.volumeInfo?.authors || "");
         setForm(updatedForm);
-
+        
     }, [selectedBookID]);
 
 
@@ -109,7 +110,7 @@ export default function CreateBook(props: CreateBookProps) {
         });
         
         if (createdBook)
-            props.onBookCreated(createdBook[0]);
+            props.onBookCreated(createdBook);
     }
 
     

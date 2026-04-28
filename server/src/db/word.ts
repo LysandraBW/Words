@@ -20,7 +20,11 @@ export async function SelectWord(wordID: number, readerID: string) {
                     Book.reader_id = ${readerID}
             LIMIT   1;
         `;
-        return rows;
+
+        if (!rows || rows.length !== 1)
+            return null;
+
+        return rows[0];
     }
     catch (error) {
         console.error("Error Selecting Word");
@@ -75,23 +79,29 @@ export async function SelectWordsFromChapter(chapterID: number, readerID: string
 
 export async function InsertWord(word: Omit<Word, "word_id" | "word_number_instances">, readerID: string) {
     try {
-        const rows = await db<Word[]>`
-            INSERT INTO Word (
-                word,
-                chapter_id
-            )
-            SELECT ${word.word}, ${word.chapter_id}
-            WHERE EXISTS (
-                SELECT  1 
-                FROM    Chapter
-                JOIN    Book ON Chapter.book_id = Book.book_id
-                WHERE   Book.reader_id = ${readerID} AND
-                        Chapter.chapter_id = ${word.chapter_id}
-                LIMIT   1
-            )
-            RETURNING *
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db<Word[]>`
+                INSERT INTO Word (
+                    word,
+                    chapter_id
+                )
+                SELECT ${word.word}, ${word.chapter_id}
+                WHERE EXISTS (
+                    SELECT  1 
+                    FROM    Chapter
+                    JOIN    Book ON Chapter.book_id = Book.book_id
+                    WHERE   Book.reader_id = ${readerID} AND
+                            Chapter.chapter_id = ${word.chapter_id}
+                    LIMIT   1
+                )
+                RETURNING *
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Insert Failed';
+            
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Inserting Word");
@@ -104,21 +114,27 @@ export async function InsertWord(word: Omit<Word, "word_id" | "word_number_insta
 
 export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_instances">, readerID: string) {
     try {
-        const rows = await db<Word[]>`
-            UPDATE  Word
-            SET     word = COALESCE(${word.word ?? null}, word),
-                    word_number_instances = COALESCE(${word.word_number_instances ?? null}, word_number_instances)
-            WHERE   word_id = ${word.word_id} AND
-                    ${readerID} IN (
-                        SELECT  reader_id 
-                        FROM    Word 
-                        JOIN    Chapter ON Chapter.chapter_id = Word.word_id
-                        JOIN    Book ON Book.book_id = Chapter.book_id
-                        WHERE   Word.word_id = ${word.word_id}
-                        LIMIT   1
-                    )
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db<Word[]>`
+                UPDATE  Word
+                SET     word = COALESCE(${word.word ?? null}, word),
+                        word_number_instances = COALESCE(${word.word_number_instances ?? null}, word_number_instances)
+                WHERE   word_id = ${word.word_id} AND
+                        ${readerID} IN (
+                            SELECT  reader_id 
+                            FROM    Word 
+                            JOIN    Chapter ON Chapter.chapter_id = Word.word_id
+                            JOIN    Book ON Book.book_id = Chapter.book_id
+                            WHERE   Word.word_id = ${word.word_id}
+                            LIMIT   1
+                        )
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Update Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Updating Word");
@@ -131,20 +147,26 @@ export async function UpdateWord(word: PartialBy<Word, "word" | "word_number_ins
 
 export async function DeleteWord(wordID: number, readerID: string) {
     try {
-        const rows = await db`
-            DELETE FROM Word
-            WHERE   word_id = ${wordID} AND
-                    ${readerID} IN (
-                        SELECT  reader_id 
-                        FROM    Word 
-                        JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
-                        JOIN    Book ON Book.book_id = Chapter.book_id
-                        WHERE   Word.word_id = ${wordID}
-                        LIMIT   1
-                    )
-            RETURNING *
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db`
+                DELETE FROM Word
+                WHERE   word_id = ${wordID} AND
+                        ${readerID} IN (
+                            SELECT  reader_id 
+                            FROM    Word 
+                            JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
+                            JOIN    Book ON Book.book_id = Chapter.book_id
+                            WHERE   Word.word_id = ${wordID}
+                            LIMIT   1
+                        )
+                RETURNING *
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Delete Failed';
+            
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Deleting Word");
@@ -157,21 +179,27 @@ export async function DeleteWord(wordID: number, readerID: string) {
 
 export async function IncrementWordNumberInstances(wordID: number, readerID: string) {
     try {
-        const rows = await db`
-            UPDATE  Word
-            SET     word_number_instances = word_number_instances + 1
-            WHERE   word_id = ${wordID} AND
-                    ${readerID} IN (
-                        SELECT  reader_id 
-                        FROM    Word 
-                        JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
-                        JOIN    Book ON Book.book_id = Chapter.book_id
-                        WHERE   word.word_id = ${wordID}
-                        LIMIT   1
-                    )
-            RETURNING *;
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db`
+                UPDATE  Word
+                SET     word_number_instances = word_number_instances + 1
+                WHERE   word_id = ${wordID} AND
+                        ${readerID} IN (
+                            SELECT  reader_id 
+                            FROM    Word 
+                            JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
+                            JOIN    Book ON Book.book_id = Chapter.book_id
+                            WHERE   word.word_id = ${wordID}
+                            LIMIT   1
+                        )
+                RETURNING *;
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Increment Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Incrementing Word Number Instances");
@@ -184,21 +212,27 @@ export async function IncrementWordNumberInstances(wordID: number, readerID: str
 
 export async function DecrementWordNumberInstances(wordID: number, readerID: string) {
     try {
-        const rows = await db`
-            UPDATE  Word
-            SET     word_number_instances = word_number_instances - 1
-            WHERE   word_id = ${wordID} AND
-                    ${readerID} IN (
-                        SELECT  reader_id 
-                        FROM    Word 
-                        JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
-                        JOIN    Book ON Book.book_id = Chapter.book_id
-                        WHERE   word.word_id = ${wordID}
-                        LIMIT   1
-                    )
-            RETURNING *;
-        `;
-        return rows;
+        return await db.begin(async (db: any) => {
+            const rows = await db`
+                UPDATE  Word
+                SET     word_number_instances = word_number_instances - 1
+                WHERE   word_id = ${wordID} AND
+                        ${readerID} IN (
+                            SELECT  reader_id 
+                            FROM    Word 
+                            JOIN    Chapter ON Chapter.chapter_id = Word.chapter_id
+                            JOIN    Book ON Book.book_id = Chapter.book_id
+                            WHERE   word.word_id = ${wordID}
+                            LIMIT   1
+                        )
+                RETURNING *;
+            `;
+
+            if (!rows || rows.length !== 1)
+                throw 'Decrement Failed';
+
+            return rows[0];
+        });
     }
     catch (error) {
         console.error("Error Decrementing Word Number Instances");

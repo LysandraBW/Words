@@ -10,8 +10,8 @@ export async function getReader() {
     });
     if (response.status !== 200)
         return null;
-    const data = await response.json();
-    return data[0] as ReaderType;
+    const data: ReaderType | null = await response.json();
+    return data;
 }
 
 export async function signIn(email: string, password: string) {

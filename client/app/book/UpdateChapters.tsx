@@ -11,6 +11,7 @@ interface UpdateChaptersProps {
     book: BookType;
     chapters: ChapterType[];
     onClose: () => void;
+    onChaptersUpdated: (chapters: ChapterType[]) => void;
 }
 
 let chapterID = -1;
@@ -71,6 +72,11 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
 
 
     const onUpdateChapters = async (oldChapters: ChapterType[], newChapters: ChapterForms) => {
+        if (!Object.values(newChapters).every(chapter => testForm(chapter))) {
+            alert('Invalid Chapters');
+            return;
+        }
+        
         const oldChapterIDs = new Set(oldChapters.map(chapter => chapter.chapter_id));
         const newChapterIDs = new Set(Object.values(newChapters).map(chapter => chapter.chapter_id.value));
         
@@ -95,7 +101,11 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                 (oldChapterData.chapter_number === newChapterData.chapter_number)
             ) continue;
 
-            await updateChapter(newChapterData);
+            const chapterUpdated = await updateChapter(newChapterData);
+            if (!chapterUpdated) {
+                alert('Update Failed');
+                return;
+            }
 
             oldChapterIDs.delete(id);
             newChapterIDs.delete(id);
@@ -122,7 +132,11 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                 (oldChapter.chapter_number === newChapterData.chapter_number)
             ) continue;
 
-            await updateChapter(newChapterData);
+            const chapterUpdated = await updateChapter(newChapterData);
+            if (!chapterUpdated) {
+                alert('Update Failed');
+                return;
+            }
 
             oldChapterIDs.delete(oldChapter.chapter_id);
             newChapterIDs.delete(newChapter.chapter_id.value);
@@ -130,13 +144,24 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
 
         const deleteChapterIDs = oldChapterIDs.difference(newChapterIDs);
         for (const id of deleteChapterIDs) {
-            await deleteChapter(id);
+            const chapterDeleted = await deleteChapter(id);
+            if (!chapterDeleted) {
+                alert('Update Failed');
+                return;
+            }
         }
 
         const createChapterIDs = newChapterIDs.difference(oldChapterIDs);
         for (const id of createChapterIDs) {
-            await createChapter(getFormData(newChapters[id]));
+            const chapterCreated = await createChapter(getFormData(newChapters[id]));
+            if (!chapterCreated) {
+                alert('Update Failed');
+                return;
+            }
         }
+        
+        // Relay Changes
+        props.onChaptersUpdated(Object.values(forms).map((form: Form<ChapterType>) => getFormData(form) as ChapterType));
     }
 
     return (
