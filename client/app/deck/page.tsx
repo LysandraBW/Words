@@ -1,5 +1,4 @@
 "use client";
-import { DeckCardGradedType, DeckCardType, DeckGradedType, DeckType, deleteDeck, deleteDeckGraded, getDeck, getDeckGraded, getDecksGraded, getDecksGradedByDeck, reloadDeck } from "@/services/db/deck";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
@@ -7,24 +6,29 @@ import UpdateDeck from "./UpdateDeck";
 import { BookType, getBooks } from "@/services/db/book";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
-import { useTimer } from "react-timer-hook";
 import { BookIcon, TrashIcon } from "lucide-react";
 import QuizGraded from "./QuizGraded";
-
-
+import { DeckType, DeckCardType, getDeck, reloadDeck, deleteDeck } from "@/services/db/deck";
+import { DeckGradedType, DeckCardGradedType, getDecksGradedByDeck, getDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
 
 
 export default function Page() {
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const [user, setUser] = useState<ReaderType>();
+
     const [books, setBooks] = useState<Array<BookType>>([]);
+
+    // Deck and the Deck's Cards
     const [deck, setDeck] = useState<DeckType>();
     const [deckCards, setDeckCards] = useState<DeckCardType[]>();
+
+    // Graded Decks (Submissions/Results)
+    // and the Graded Cards for Each Graded Deck
     const [decksGraded, setDecksGraded] = useState<DeckGradedType[]>([]);
     const [decksGradedCards, setDecksGradedCards] = useState<{[deckGradedID: number]: DeckCardGradedType[]}>([]);
 
+    // Rendering
     const [showQuizResults, setShowQuizResults] = useState<DeckGradedType|null>();
     const [showQuiz, setShowQuiz] = useState(false);
     const [showUpdateDeck, setShowUpdateDeck] = useState(false);
@@ -52,19 +56,17 @@ export default function Page() {
 
             // Get Deck
             const deck = await getDeck(deckIDAsNumber);
-            if (!deck || deck.length !== 2) {
+            if (!deck) {
                 alert('Invalid Deck');
                 return router.push('/home');
             }
 
-            console.log(deck);
-
-            setDeck(deck[0]);
-            setDeckCards(deck[1]);
+            setDeck(deck.deck);
+            setDeckCards(deck.deckCards);
 
 
             // Get Deck Graded
-            const decksGraded = await getDecksGradedByDeck(deck[0].deck_id);
+            const decksGraded = await getDecksGradedByDeck(deck.deck.deck_id);
             if (decksGraded)
                 setDecksGraded(decksGraded);
         }
@@ -82,10 +84,10 @@ export default function Page() {
         // Update (Cache) Cards
         setDecksGradedCards({
             ...decksGradedCards, 
-            [deckGraded[0].deck_graded_id]: deckGraded[1]
+            [deckGraded.deckGraded.deck_graded_id]: deckGraded.deckGradedCards
         });
 
-        return deckGraded[1];
+        return deckGraded.deckGradedCards;
     }
 
 

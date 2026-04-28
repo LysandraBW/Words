@@ -1,9 +1,10 @@
 import Button from "@/components/Button";
-import { createDeckGraded, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
+import { DeckCardType } from "@/services/db/deck";
+import { DeckGradedType, DeckCardGradedType } from "@/services/db/deckGraded";
 import clsx from "clsx";
 import { TrashIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useStopwatch } from "react-timer-hook";
+
 
 interface QuizGradedProps {
     deckGraded: DeckGradedType;

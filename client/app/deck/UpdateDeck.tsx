@@ -6,8 +6,8 @@ import { DeckCardType, DeckType, updateDeck } from "@/services/db/deck"
 import { createForm, getFormData, testForm, updateFormValue } from "@/utilities/form";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { useTimer } from "react-timer-hook";
 import z from "zod";
+
 
 interface UpdateDeckProps {
     deck: DeckType;
@@ -77,17 +77,12 @@ export default function UpdateDeck(props: UpdateDeckProps) {
             deck_chapters: chaptersNotUpdated ? null : deck.deck_chapters
         });
         
-        if (
-            !updatedDeck || 
-            (chaptersNotUpdated && updatedDeck.length !== 1) || 
-            (!chaptersNotUpdated && updatedDeck.length !== 2)
-        ) {
+        if (!updatedDeck) {
             alert('Failed to Create Deck');
             return;
         }
 
-        const [decks, deckCards] = updatedDeck;
-        props.onDeckUpdated(decks, deckCards || null);
+        props.onDeckUpdated(updatedDeck.deck, updatedDeck.deckCards || null);
     }
 
 

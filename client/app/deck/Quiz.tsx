@@ -1,5 +1,6 @@
 import Button from "@/components/Button";
-import { createDeckGraded, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
+import { DeckCardType } from "@/services/db/deck";
+import { DeckGradedType, DeckCardGradedType, createDeckGraded } from "@/services/db/deckGraded";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
@@ -107,7 +108,7 @@ export default function Quiz(props: QuizProps) {
             return;
         }
 
-        props.onQuizFinished(createdGradedDeck[0], createdGradedDeck[1]);
+        props.onQuizFinished(createdGradedDeck.deckGraded, createdGradedDeck.deckGradedCard);
     }
 
 

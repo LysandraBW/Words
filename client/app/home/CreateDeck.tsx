@@ -63,12 +63,12 @@ export default function CreateDeck(props: CreateDeckProps) {
             reader_id: "",
         });
 
-        if (!createdDeck || !createdDeck.length) {
+        if (!createdDeck) {
             alert('Failed to Create Deck');
             return;
         }
 
-        props.onDeckCreated(createdDeck[0]);
+        props.onDeckCreated(createdDeck.deck);
     }
 
     
