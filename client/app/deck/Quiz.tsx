@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { createGradedDeck, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
+import { createDeckGraded, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
@@ -94,7 +94,7 @@ export default function Quiz(props: QuizProps) {
         const numberCorrect = choiceValues.reduce((accumulator, currentValue) => currentValue === 0 ? accumulator + 1 : accumulator, 0);
         const numberIncorrect = choiceValues.length - numberCorrect;
 
-        const createdGradedDeck = await createGradedDeck({
+        const createdGradedDeck = await createDeckGraded({
             deck_graded_id: -1,
             deck_id: props.deckCards[0].deck_id,
             number_correct: numberCorrect,

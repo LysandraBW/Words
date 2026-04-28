@@ -1,5 +1,5 @@
 "use client";
-import { DeckCardGradedType, DeckCardType, DeckGradedType, DeckType, deleteDeck, deleteDeckGraded, getDeck, getDeckGraded, getDecksGraded, getDecksGradedDecks, reloadDeck } from "@/services/db/deck";
+import { DeckCardGradedType, DeckCardType, DeckGradedType, DeckType, deleteDeck, deleteDeckGraded, getDeck, getDeckGraded, getDecksGraded, getDecksGradedByDeck, reloadDeck } from "@/services/db/deck";
 import { getReader, ReaderType } from "@/services/db/reader";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
@@ -64,7 +64,7 @@ export default function Page() {
 
 
             // Get Deck Graded
-            const decksGraded = await getDecksGradedDecks(deck[0].deck_id);
+            const decksGraded = await getDecksGradedByDeck(deck[0].deck_id);
             if (decksGraded)
                 setDecksGraded(decksGraded);
         }

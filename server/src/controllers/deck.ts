@@ -3,29 +3,16 @@ import { getCookie } from '../utilities/cookie.js';
 import { nullableBy } from '../utilities/types.js';
 import { type Request, type Response } from 'express';
 import { AuthorizeReaderBySession } from '../db/reader.js';
-import { DeleteDeck, DeleteGradedDeck, InsertDeck, InsertGradedDeck, ReloadDeck as ReloadDeck, SelectDeck, SelectDecks, SelectDecksGradedDecks, SelectGradedDeck, SelectGradedDecks, UpdateDeck } from '../db/deck.js';
+import { DeleteDeck, InsertDeck, ReloadDeck as ReloadDeck, SelectDeck, SelectDecks, SelectDecksByBooks, UpdateDeck, SelectDecksByChapters } from '../db/deck.js';
 import '../db/deck.js';
 
 
-
-const DeckSchema = z.object({
+export const DeckSchema = z.object({
     deck_id: z.coerce.number(),
     deck_name: z.string(),
     deck_chapters: z.array(z.coerce.number()),
     reader_id: z.uuidv7()
 });
-
-
-
-const DeckGradedSchema = z.object({
-    deck_graded_id: z.coerce.number(),
-    duration: z.coerce.number(),
-    number_correct: z.coerce.number(),
-    number_incorrect: z.coerce.number(),
-    deck_id: z.coerce.number(),
-    reader_id: z.uuidv7()
-});
-
 
 
 export async function getDeck(req: Request, res: Response) {
@@ -48,28 +35,6 @@ export async function getDeck(req: Request, res: Response) {
 }
 
 
-
-export async function getGradedDeck(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
-    
-    const output = DeckGradedSchema.pick({ deck_graded_id: true, reader_id: true }).safeParse({
-        deck_graded_id: req.params.deck_graded_id,
-        reader_id: await AuthorizeReaderBySession(sessionID)
-    });
-
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
-    }
-
-    const deck = await SelectGradedDeck(output.data.deck_graded_id, output.data.reader_id);
-    return res.status(200).json(deck); 
-}
-
-
-
 export async function getDecks(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
@@ -89,13 +54,17 @@ export async function getDecks(req: Request, res: Response) {
 }
 
 
-
-export async function getGradedDecks(req: Request, res: Response) {
+export async function getDecksByBooks(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
     
-    const output = DeckGradedSchema.pick({ reader_id: true }).safeParse({
+    const output = DeckSchema.pick({ 
+        reader_id: true 
+    }).extend({
+        book_ids: z.array(z.coerce.number())
+    }).safeParse({
+        book_ids: req.body.bookIDs,
         reader_id: await AuthorizeReaderBySession(sessionID)
     });
 
@@ -104,21 +73,22 @@ export async function getGradedDecks(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const gradedDecks = await SelectGradedDecks(output.data.reader_id);
-    return res.status(200).json(gradedDecks);
+    const decks = await SelectDecksByBooks(output.data.book_ids, output.data.reader_id);
+    return res.status(200).json(decks);  
 }
 
 
-// This may not be the clearest in name, but it makes sense
-// to me. This function retrieves a deck's graded decks, so
-// it's like a teacher retrieving a quiz's submissions.
-export async function getDecksGradedDecks(req: Request, res: Response) {
+export async function getDecksByChapters(req: Request, res: Response) {
     const sessionID = await getCookie(req, "sessionID");
     if (!sessionID)
         return res.sendStatus(401);
     
-    const output = DeckGradedSchema.pick({ deck_id: true, reader_id: true }).safeParse({
-        deck_id: req.params.deck_id,
+    const output = DeckSchema.pick({ 
+        reader_id: true 
+    }).extend({
+        chapter_ids: z.array(z.coerce.number())
+    }).safeParse({
+        chapter_ids: req.body.chapterIDs,
         reader_id: await AuthorizeReaderBySession(sessionID)
     });
 
@@ -127,8 +97,8 @@ export async function getDecksGradedDecks(req: Request, res: Response) {
         return res.sendStatus(400);
     }
 
-    const gradedDecks = await SelectDecksGradedDecks(output.data.deck_id, output.data.reader_id);
-    return res.status(200).json(gradedDecks);
+    const decks = await SelectDecksByChapters(output.data.chapter_ids, output.data.reader_id);
+    return res.status(200).json(decks);  
 }
 
 
@@ -151,39 +121,6 @@ export async function createDeck(req: Request, res: Response) {
     const deck = await InsertDeck(output.data);
     return res.status(200).json(deck);
 }
-
-
-
-export async function createGradedDeck(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
-
-    const output = DeckGradedSchema.omit({ 
-        deck_graded_id: true 
-    }).extend({
-        choices: z.array(z.tuple([
-            z.coerce.number(), 
-            z.coerce.number()
-        ]))
-    }).safeParse({
-        choices: req.body.choices,
-        number_correct: req.body.number_correct,
-        number_incorrect: req.body.number_incorrect,
-        duration: req.body.duration,
-        deck_id: req.body.deck_id,
-        reader_id: await AuthorizeReaderBySession(sessionID)
-    });
-
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
-    }
-    
-    const deck = await InsertGradedDeck(output.data, output.data.choices, output.data.reader_id);
-    return res.status(200).json(deck);
-}
-
 
 
 export async function updateDeck(req: Request, res: Response) {
@@ -225,27 +162,6 @@ export async function deleteDeck(req: Request, res: Response) {
     }
 
     const deleted = await DeleteDeck(output.data.deck_id, output.data.reader_id);
-    return res.status(200).json(deleted);
-}
-
-
-
-export async function deleteGradedDeck(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
-
-    const output = DeckGradedSchema.pick({ deck_graded_id: true, reader_id: true}).safeParse({
-        deck_graded_id: req.params.deck_graded_id,
-        reader_id: await AuthorizeReaderBySession(sessionID)
-    });
-
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
-    }
-
-    const deleted = await DeleteGradedDeck(output.data.deck_graded_id, output.data.reader_id);
     return res.status(200).json(deleted);
 }
 

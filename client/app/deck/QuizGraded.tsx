@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { createGradedDeck, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
+import { createDeckGraded, DeckCardGradedType, DeckCardType, DeckGradedType } from "@/services/db/deck"
 import clsx from "clsx";
 import { TrashIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
