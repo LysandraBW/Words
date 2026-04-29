@@ -19,9 +19,12 @@ export async function insertChapter(chapter: ChapterType) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: ChapterType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -36,9 +39,12 @@ export async function updateChapter(chapter: ChapterType) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: ChapterType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -52,9 +58,12 @@ export async function deleteChapter(chapterID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: ChapterType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -65,9 +74,12 @@ export async function selectChapter(chapterID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: (ChapterType & BookType) | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -78,8 +90,11 @@ export async function selectChapterWords(chapterID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }

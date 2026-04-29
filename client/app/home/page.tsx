@@ -1,12 +1,12 @@
 "use client";
-import { BookType } from "@/services/db/book";
-import { selectReader, ReaderType } from "@/services/db/reader";
+import { BookType } from "@/services/server/book";
+import { selectReader, ReaderType } from "@/services/server/reader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
 import CreateBook from "./CreateBook";
 import CreateDeck from "./CreateDeck";
-import { DeckType, deleteDeck as deleteDeckDB } from "@/services/db/deck";
-import { ChapterType } from "@/services/db/chapter";
+import { DeckType, deleteDeck as deleteDeck } from "@/services/server/deck";
+import { ChapterType } from "@/services/server/chapter";
 import loadData from "./loadData";
 import ShowWords from "@/components/ShowWords";
 import ShowDecks from "./ShowDecks";
@@ -38,7 +38,7 @@ export default function Page() {
                 setData(data);
             }
             catch (err) {
-                alert((err as Error).message);
+                alert(err);
             }
         }
         load();
@@ -90,27 +90,19 @@ export default function Page() {
     }
 
 
-    const deleteDeck = async (deckID: number) => {
-        const deletedDeck = await deleteDeckDB(deckID);
-        if (!deletedDeck)
-            throw new Error('Failed to Create Book');
-        return deletedDeck;
-    }
-
-
     const onDeleteDeck = async (deckID: number) => {
         try {
             const deletedDeck = await deleteDeck(deckID);
             handleDeckDeleted(deletedDeck);
         }
         catch (err) {
-            alert((err as Error).message);
+            alert(err);
         }
     }
 
     
     if (!user || !data) 
-        return <>Loading...</>;
+        return <>Loading</>;
 
     
     return (

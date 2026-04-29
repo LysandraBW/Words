@@ -1,20 +1,19 @@
 import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
-import { BookType } from "@/services/db/book";
-import { ChapterType, insertChapter, deleteChapter, updateChapter } from "@/services/db/chapter";
+import { BookType } from "@/services/server/book";
+import { ChapterType, insertChapter, deleteChapter, updateChapter } from "@/services/server/chapter";
 import { createForm, Form, getFormData, resetForm, testForm, updateFormValue } from "@/utilities/form";
 import { PlusIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import z from "zod";
 
-interface UpdateChaptersProps {
-    book: BookType;
-    chapters: ChapterType[];
-    onClose: () => void;
-    onChaptersUpdated: (chapters: ChapterType[]) => void;
-}
 
+// Newly created chapters are given a fake ID.
+// As negative IDs aren't used, we can
+// safely take advantage of them. Anyway, this
+// variable stored the next available ID.
 let chapterID = -1;
+
 
 const createChapterForm = (bookID: number, chapterID: number, chapterTitle: string, chapterNumber: string) => {
     return createForm([
@@ -41,14 +40,27 @@ const createChapterForm = (bookID: number, chapterID: number, chapterTitle: stri
     ]);
 }
 
+
 type ChapterForm = Form<ChapterType>;
 type ChapterForms = {[id: string]: ChapterForm};
 
+
+interface UpdateChaptersProps {
+    book: BookType;
+    chapters: ChapterType[];
+    onClose: () => void;
+    onChaptersUpdated: (chapters: ChapterType[]) => void;
+}
+
+
 export default function UpdateChapters(props: UpdateChaptersProps) {
     const [form, setForm] = useState<ChapterForm>(createChapterForm(props.book.book_id, chapterID, "", ""));
-    const [forms, setForms] = useState<ChapterForms>(Object.fromEntries(props.chapters.map(chapter => [String(chapter.chapter_id), createChapterForm(props.book.book_id, chapter.chapter_id, chapter.chapter_title, chapter.chapter_number)])));
+    const [forms, setForms] = useState<ChapterForms>(Object.fromEntries(props.chapters.map(chapter => [
+        String(chapter.chapter_id), 
+        createChapterForm(props.book.book_id, chapter.chapter_id, chapter.chapter_title, chapter.chapter_number)
+    ])));
 
-
+    
     const updateChapterForm = (forms: ChapterForms, id: string, form: ChapterForm, label: keyof ChapterForm, value: ChapterType[keyof Form<ChapterType>]) => {
         if (!Object.keys(form).includes(label))
             return forms;

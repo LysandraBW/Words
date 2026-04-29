@@ -15,9 +15,12 @@ export async function selectWords() {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -32,9 +35,12 @@ export async function insertWord(word: WordType) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -46,9 +52,12 @@ export async function deleteWord(wordID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+    
     return data;
 
 }
@@ -60,9 +69,12 @@ export async function incrementWordNumberInstances(wordID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+    
     return data;
 
 }
@@ -74,8 +86,11 @@ export async function decrementWordNumberInstances(wordID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+    
     return data;
 }

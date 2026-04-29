@@ -1,8 +1,7 @@
 import Button from "@/components/Button";
-import { DeckType } from "@/services/db/deck";
-import { TrashIcon } from "lucide-react";
+import { DeckType } from "@/services/server/deck";
+import { ArrowUpRightFromSquareIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { MouseEvent } from "react";
 import { Fragment } from "react/jsx-runtime";
 
 interface ShowDeckProps {
@@ -14,14 +13,7 @@ interface ShowDeckProps {
 
 export default function ShowDecks(props: ShowDeckProps) {
     const router = useRouter();
-
-
-    const onClickDeleteDeck = (deckID: number, event: any) => {
-        event.preventDefault();
-        event.stopPropagation();
-        props.onDeleteDeck(deckID);
-    }
-
+    
     
     return (
         <section className="w-full px-4 py-4">
@@ -34,17 +26,19 @@ export default function ShowDecks(props: ShowDeckProps) {
                     onClick={props.onCreateDeck}
                 />
                 {props.decks.map((deck) => (
-                    <Fragment key={deck.deck_id}>
-                        <p 
-                            className="p-4 text-white bg-orange-500"
+                    <div 
+                        key={deck.deck_id}
+                    >
+                        <ArrowUpRightFromSquareIcon
                             onClick={() => router.push(`/deck?deckID=${deck.deck_id}`)}
-                        >
-                            {deck.deck_name}, {deck.deck_chapters.length} Chapters
-                            <TrashIcon
-                                onClick={(event) => onClickDeleteDeck(deck.deck_id, event)}
-                            />
+                        />
+                        <TrashIcon 
+                            onClick={() => props.onDeleteDeck(deck.deck_id)}
+                        />
+                        <p className="p-4 text-white bg-orange-500">
+                            {deck.deck_name}
                         </p>
-                    </Fragment>
+                    </div>
                 ))}
             </div>
         </section>

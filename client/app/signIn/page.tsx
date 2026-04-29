@@ -3,7 +3,7 @@
 import Logo from "@/components/Logo";
 import InputButton from "@/components/input/InputButton";
 import InputText from "@/components/input/InputText";
-import { signIn } from "@/services/db/reader";
+import { signIn } from "@/services/server/reader";
 import { CircleAlert } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";

@@ -1,4 +1,4 @@
-import { BookType as BookType } from "@/services/db/book";
+import { BookType as BookType } from "@/services/server/book";
 import { CirclePlusIcon } from "lucide-react";
 
 interface BookProps {

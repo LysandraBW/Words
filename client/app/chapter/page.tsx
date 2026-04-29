@@ -3,10 +3,10 @@ import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
 import Word from "@/components/word/Word";
 import WordNotFound from "@/components/word/WordNotFound";
-import { BookType } from "@/services/db/book";
-import { ChapterType, deleteChapter, selectChapter, selectChapterWords, updateChapter } from "@/services/db/chapter";
-import { selectReader, ReaderType } from "@/services/db/reader";
-import { insertWord, decrementWordNumberInstances, deleteWord, incrementWordNumberInstances, WordType } from "@/services/db/word";
+import { BookType } from "@/services/server/book";
+import { ChapterType, deleteChapter, selectChapter, selectChapterWords, updateChapter } from "@/services/server/chapter";
+import { selectReader, ReaderType } from "@/services/server/reader";
+import { insertWord, decrementWordNumberInstances, deleteWord, incrementWordNumberInstances, WordType } from "@/services/server/word";
 import getAutoCompletion from "@/services/words/getAutoCompletion";
 import getWordEntry from "@/services/words/getWordEntry";
 import { MinusIcon, PlusIcon, SettingsIcon, TrashIcon } from "lucide-react";
@@ -17,7 +17,7 @@ import UpdateChapter from "./UpdateChapter";
 import useSortWords from "@/hooks/useSortWords";
 import InputDropdown from "@/components/input/InputDropdown";
 import getWordData from "@/utilities/wordData";
-import { selectDecksGradedByChapters } from "@/services/db/deckGraded";
+import { selectDecksGradedByChapters } from "@/services/server/deckGraded";
 
 
 export default function Page() {

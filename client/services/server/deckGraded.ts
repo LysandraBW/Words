@@ -28,9 +28,12 @@ export async function insertDeckGraded(deck: DeckGradedType, choices: [number, n
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: {deckGraded: DeckGradedType, deckGradedCard: DeckGradedCardType[]} | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -42,9 +45,12 @@ export async function deleteDeckGraded(deckGradedID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: DeckGradedType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -56,9 +62,12 @@ export async function selectDeckGraded(deckGradedID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: {deckGraded: DeckGradedType, deckGradedCards: (DeckGradedType & DeckGradedCardType)[]} | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -70,9 +79,12 @@ export async function selectDecksGraded() {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: (DeckType & DeckGradedType)[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -84,9 +96,12 @@ export async function selectDecksGradedByDeck(deckID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: (DeckType & DeckGradedType)[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -98,9 +113,12 @@ export async function selectDecksGradedByBook(bookID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: (DeckType & DeckGradedType)[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -112,8 +130,11 @@ export async function selectDecksGradedByChapters(chapterID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: (DeckType & DeckGradedType)[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }

@@ -1,4 +1,4 @@
-import { WordType } from "@/services/db/word";
+import { WordType } from "@/services/server/word";
 import { useEffect, useState } from "react";
 
 export default function useSortWords(words: WordType[] | undefined | null, wordAccuracies?: {[word: string]: number} | undefined | null) {

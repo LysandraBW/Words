@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react"
-import { BookType, CreateBookType, insertBook } from "@/services/db/book";
+import { BookType, CreateBookType, insertBook } from "@/services/server/book";
 import InputText from "@/components/input/InputText";
 import InputTags from "@/components/input/InputTag/InputTags";
 import Panel from "@/components/Panel";
@@ -57,25 +57,17 @@ export default function CreateBook(props: CreateBookProps) {
     ]));
     
     
-    const createBook = async (book: CreateBookType) => {
-        const createdBook = await insertBook(book);
-        if (!createdBook)
-            throw new Error('Failed to Create Book');
-        return createdBook;
-    }
-
-    
     const onCreateBook = async (form: Form<CreateBookType>) => {
         try {
             if (!testForm(form))
                 throw new Error('Invalid Form');
 
             const book = getFormData(form);
-            const createdBook = await createBook(book);
+            const createdBook = await insertBook(book);
             props.onBookCreated(createdBook);
         }
         catch (error) {
-            alert((error as Error).message);
+            alert(error);
         }
     }
 

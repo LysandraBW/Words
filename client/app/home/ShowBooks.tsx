@@ -1,4 +1,4 @@
-import { BookType } from "@/services/db/book"
+import { BookType } from "@/services/server/book"
 import Book from "./Book";
 import { useRouter } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";

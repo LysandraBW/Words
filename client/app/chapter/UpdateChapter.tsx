@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
-import { ChapterType, updateChapter } from "@/services/db/chapter";
+import { ChapterType, updateChapter } from "@/services/server/chapter";
 import { createForm, Form, getFormData, testForm, updateFormValue } from "@/utilities/form";
 import { useState } from "react";
 import z from "zod";

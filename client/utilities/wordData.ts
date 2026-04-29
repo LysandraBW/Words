@@ -1,5 +1,5 @@
-import { selectDeck } from "@/services/db/deck";
-import { DeckGradedType, selectDeckGraded } from "@/services/db/deckGraded";
+import { selectDeck } from "@/services/server/deck";
+import { DeckGradedType, selectDeckGraded } from "@/services/server/deckGraded";
 
 
 export interface WordData {

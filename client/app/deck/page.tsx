@@ -1,16 +1,16 @@
 "use client";
-import { selectReader, ReaderType } from "@/services/db/reader";
+import { selectReader, ReaderType } from "@/services/server/reader";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect, Fragment } from "react";
 import UpdateDeck from "./UpdateDeck";
-import { BookType, selectBooks } from "@/services/db/book";
+import { BookType, selectBooks } from "@/services/server/book";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
 import { BookIcon, TrashIcon } from "lucide-react";
 import QuizGraded from "./QuizGraded";
-import { DeckType, DeckCardType, selectDeck, reloadDeck, deleteDeck, selectDeckWords } from "@/services/db/deck";
-import { DeckGradedType, DeckGradedCardType, selectDecksGradedByDeck, selectDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
-import { WordType } from "@/services/db/word";
+import { DeckType, DeckCardType, selectDeck, reloadDeck, deleteDeck, selectDeckWords } from "@/services/server/deck";
+import { DeckGradedType, DeckGradedCardType, selectDecksGradedByDeck, selectDeckGraded, deleteDeckGraded } from "@/services/server/deckGraded";
+import { WordType } from "@/services/server/word";
 import useSortWords from "@/hooks/useSortWords";
 import getWordData from "@/utilities/wordData";
 import InputDropdown from "@/components/input/InputDropdown";

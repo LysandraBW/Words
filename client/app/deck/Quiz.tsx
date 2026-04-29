@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
-import { DeckCardType } from "@/services/db/deck";
-import { DeckGradedType, DeckGradedCardType, insertDeckGraded } from "@/services/db/deckGraded";
+import { DeckCardType } from "@/services/server/deck";
+import { DeckGradedType, DeckGradedCardType, insertDeckGraded } from "@/services/server/deckGraded";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";

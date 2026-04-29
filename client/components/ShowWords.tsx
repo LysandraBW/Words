@@ -1,6 +1,6 @@
 import useSortWords from "@/hooks/useSortWords";
-import { DeckGradedType } from "@/services/db/deckGraded";
-import { WordType } from "@/services/db/word";
+import { DeckGradedType } from "@/services/server/deckGraded";
+import { WordType } from "@/services/server/word";
 import getWordData, { WordData } from "@/utilities/wordData";
 import { Fragment, useEffect, useState } from "react";
 import InputDropdown from "./input/InputDropdown";

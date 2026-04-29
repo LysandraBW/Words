@@ -1,15 +1,15 @@
 "use client";
-import { BookType, selectBook, selectBookChapters, selectBookWords } from "@/services/db/book";
-import { ChapterType } from "@/services/db/chapter";
-import { selectReader, ReaderType } from "@/services/db/reader";
+import { BookType, selectBook, selectBookChapters, selectBookWords } from "@/services/server/book";
+import { ChapterType } from "@/services/server/chapter";
+import { selectReader, ReaderType } from "@/services/server/reader";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react"
 import UpdateChapters from "./UpdateChapters";
 import UpdateBook from "./UpdateBook";
-import { WordType } from "@/services/db/word";
+import { WordType } from "@/services/server/word";
 import useSortWords from "@/hooks/useSortWords";
-import { selectDecksGradedByBook } from "@/services/db/deckGraded";
+import { selectDecksGradedByBook } from "@/services/server/deckGraded";
 import getWordData from "@/utilities/wordData";
 import InputDropdown from "@/components/input/InputDropdown";
 

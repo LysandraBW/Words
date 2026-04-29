@@ -16,15 +16,23 @@ export type CreateBookType = Pick<
     "book_name" | "book_author" | "book_cover_image" | "book_background_image" | "book_year"
 >;
 
+export type UpdateBookType = Omit<
+    BookType, 
+    "reader_id"
+>;
+
 export async function selectBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}`, {
         credentials: "include"
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: BookType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -34,9 +42,12 @@ export async function selectBooks() {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: BookType[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -46,9 +57,12 @@ export async function selectBookChapters(bookID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: ChapterType[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -58,9 +72,12 @@ export async function selectBookWords(bookID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: WordType[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -75,13 +92,16 @@ export async function insertBook(book: CreateBookType) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: BookType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
-export async function updateBook(book: BookType) {
+export async function updateBook(book: UpdateBookType) {
     const response = await fetch(`http://127.0.0.1:8000/books/${book.book_id}`, {
         method: "PUT",
         credentials: "include",
@@ -92,9 +112,12 @@ export async function updateBook(book: BookType) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: BookType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
@@ -105,8 +128,11 @@ export async function deleteBook(bookID: number) {
     });
 
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`);
 
     const data: BookType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }

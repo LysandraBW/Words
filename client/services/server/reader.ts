@@ -8,9 +8,14 @@ export async function selectReader() {
     const response = await fetch('http://127.0.0.1:8000/readers', {
         credentials: "include"
     });
+    
     if (response.status !== 200)
-        return null;
+        throw new Error(`Response (${response.status})`)
+    
     const data: ReaderType | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
     return data;
 }
 
