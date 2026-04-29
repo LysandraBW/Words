@@ -9,7 +9,9 @@ export interface WordData {
 }
 
 
-export default async function getWordData(decksGraded: DeckGradedType[], allowed?: string[]): Promise<{[word: string]: WordData}> {
+export default async function getWordData(decksGraded: DeckGradedType[], wordLiterals?: string[]): Promise<{[word: string]: WordData}> {
+    console.log(decksGraded);
+
     const data = await Promise.all(decksGraded.map(async (deck: any) => {
         const fullDeck = await selectDeck(deck.deck_id);
         if (!fullDeck)
@@ -27,8 +29,21 @@ export default async function getWordData(decksGraded: DeckGradedType[], allowed
 
     const fullDecksGraded = data.map(d => d.fullDeckGraded);
     const fullDeckToDeckCards = Object.fromEntries(data.map(d => [d.fullDeck.deck.deck_id, d.fullDeck.deckCards]));
+
+    console.log(fullDecksGraded);
+    console.log(fullDeckToDeckCards);
     
+    // Initialize
     const words: {[word: string]: WordData} = {};
+    if (wordLiterals) {
+        for (const wordLiteral of wordLiterals) {
+            words[wordLiteral] = {
+                count: 0,
+                correct: 0,
+                accuracy: 0
+            };
+        }
+    }
 
     for (const fullDeckGraded of fullDecksGraded) {
         const deckID = fullDeckGraded.deckGraded.deck_id;
@@ -46,7 +61,7 @@ export default async function getWordData(decksGraded: DeckGradedType[], allowed
             const word = deckCard.words[0][0];
 
             // Not Allowed
-            if (allowed && !allowed.includes(word))
+            if (wordLiterals && !wordLiterals.includes(word))
                 continue
             
             if (!(word in words)) {

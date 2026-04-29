@@ -4,8 +4,8 @@ import { DeckGradedType, DeckGradedCardType } from "@/services/server/deckGraded
 import { TrashIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DeckCardExtendedType, shuffleCards } from "./shuffleCards";
-import Progress from "@/components/quiz/Progress";
-import Question from "@/components/quiz/Question";
+import Progress from "@/app/deck/Progress";
+import Question from "@/app/deck/Question";
 
 
 interface QuizGradedProps {
@@ -60,7 +60,7 @@ export default function QuizGraded(props: QuizGradedProps) {
                 cards={props.deckCards}
                 shuffledCards={shuffledCards}
                 index={index}
-                onClickIndex={() => setIndex(index)}
+                onClickIndex={(i: number) => setIndex(i)}
                 choices={choices}
             />
             <Question

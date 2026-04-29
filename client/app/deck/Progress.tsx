@@ -25,13 +25,13 @@ export default function Progress(props: ProgressProps) {
                         onClick={() => props.onClickIndex(i)}
                         className={clsx(
                             "p-2 bg-black text-white",
-                            props.index === i && "bg-blue-500",
+                            props.index === i && "!bg-blue-500",
                             correct && "bg-green-500",
                             incorrect && "bg-red-500",
-                            unanswered && "bg-gray-500"
+                            unanswered && "bg-gray-500",
                         )}
                     >
-                        {i}
+                        {i+1}
                     </button>
                 )
             })}

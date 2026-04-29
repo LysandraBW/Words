@@ -31,7 +31,7 @@ async function SelectWordsFromChapters(chapterIDs: number[], readerID: string) {
         `;
 
         if (!rows)
-            return null;
+            throw 'Words Failed';
 
         return rows.map(row => row.word);
     }
@@ -180,12 +180,7 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
-            `.then(async () => {
-                const output = await SelectDeck(deckID, deck.reader_id);
-                if (!output)
-                    return null;
-                return output.deckCards;
-            });
+            `;
 
             if (!rowsDeck || rowsDeckCard.length !== words.length)
                 throw 'Deck Card Insert Failed';
@@ -271,12 +266,7 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
-            `.then(async () => {
-                const output = await SelectDeck(deck.deck_id, deck.reader_id);
-                if (!output)
-                    return null;
-                return output.deckCards;
-            });
+            `;
 
             if (!rowsDeckCard || rowsDeckCard.length !== words.length)
                 throw 'Insert Failed';
@@ -317,7 +307,7 @@ export async function ReloadDeck(deckID: number, readerID: string) {
 
             // Words
             const words = await SelectWordsFromChapters(deckChapters.deck_chapters, readerID);
-            if (!words || !words.length)
+            if (!words)
                 throw 'Word Failed';
 
             // Words -> Cards
@@ -326,20 +316,15 @@ export async function ReloadDeck(deckID: number, readerID: string) {
                 words: [word, ...await getRandomWords(word[0], word[1])]
             })));
 
-            if (!cards || !cards.length) 
+            if (!cards) 
                 throw 'Card Failed';
 
             // Cards
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
-            `.then(async () => {
-                const output = await SelectDeck(deckID, readerID);
-                if (!output)
-                    return null;
-                return output.deckCards;
-            });
-
+            `;
+            
             if (!rowsDeckCard || rowsDeckCard.length !== words.length)
                 throw 'Insert Failed';
             

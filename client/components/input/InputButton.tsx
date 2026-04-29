@@ -18,8 +18,8 @@ export default function InputButton(props: Partial<InputButtonProps>) {
 
 
     const disabled = props.disabled;
-    const isBlue = !props.disabled && (!props.style || props.style === "black");
-    const isBlack = !props.disabled && props.style === "blue";
+    const isBlack = !props.disabled && (!props.style || props.style === "black");
+    const isBlue = !props.disabled && props.style === "blue";
 
 
     return (

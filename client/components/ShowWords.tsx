@@ -39,7 +39,7 @@ export default function ShowWords(props: ShowWordsProps) {
                 onChange={(value: string) => sortWords.setSort(value)}
             />
             <div>
-                {props.words.map((word, i) => (
+                {(sortWords.sortedWords || props.words).map((word, i) => (
                     <Fragment key={i}>
                         <p 
                             className="p-4 text-white bg-pink-500"

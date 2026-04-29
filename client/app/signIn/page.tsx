@@ -4,8 +4,7 @@ import Logo from "@/components/Logo";
 import InputButton from "@/components/input/InputButton";
 import InputText from "@/components/input/InputText";
 import { signIn } from "@/services/server/reader";
-import { CircleAlert } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
@@ -17,20 +16,26 @@ export default function Page() {
     const [password, setPassword] = useState("123");
     const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
 
-    const onSignIn = async (email: string, password: string) => {
-        const isValidEmail = checkEmail(email);
-        const isValidPassword = checkPassword(password);
-        
-        if (!isValidEmail || !isValidPassword)
-            return;
 
-        const data = await signIn(email, password);
-        if (!data) {
-            alert("Failed");
-            return;
+    const onSignIn = async (email: string, password: string) => {
+        try {
+            const isValidEmail = checkEmail(email);
+            const isValidPassword = checkPassword(password);
+            if (!isValidEmail || !isValidPassword)
+                return;
+
+            const data = await signIn(email, password);
+            if (!data) {
+                alert("Failed");
+                return;
+            }
+            router.push("/home");
         }
-        router.push("/home");
+        catch (err) {
+            alert(err);
+        }
     }
+
 
     const checkEmail = (email: string): boolean => {
         const isValidEmail = !!email.length;
@@ -38,21 +43,25 @@ export default function Page() {
         return isValidEmail;
     }
 
+
     const checkPassword = (password: string): boolean => {
         const isValidPassword = !!password.length;
         setPasswordErrorMessage(isValidPassword ? "" : "Must enter password.");
         return isValidPassword;
     }
 
+
     const onChangeEmail = (email: string): void => {
         setEmail(email);
         checkEmail(email);        
     }
 
+
     const onChangePassword = (password: string): void => {
         setPassword(password);
         checkPassword(password);        
     }
+    
 
     return (
         <div className="w-screen h-screen grid grid-cols-2 bg-black">
@@ -100,8 +109,7 @@ export default function Page() {
                         />
                         <InputButton
                             label="Sign In"
-                            style="black"
-                            disabled={true}
+                            style="blue"
                             onClick={() => onSignIn(email, password)}
                         />
                     </form>

@@ -4,8 +4,8 @@ import { insertDeckGraded } from "@/services/server/deckGraded";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
 import { DeckCardExtendedType, shuffleCards } from "./shuffleCards";
-import Progress from "@/components/quiz/Progress";
-import Question from "@/components/quiz/Question";
+import Progress from "@/app/deck/Progress";
+import Question from "@/app/deck/Question";
 
 
 interface QuizProps {
@@ -102,7 +102,7 @@ export default function Quiz(props: QuizProps) {
                 cards={props.cards}
                 shuffledCards={shuffledCards}
                 index={index}
-                onClickIndex={() => setIndex(index)}
+                onClickIndex={(i: number) => setIndex(i)}
                 choices={choices}
             />
             <div>

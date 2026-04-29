@@ -32,5 +32,6 @@ export async function signIn(email: string, password: string) {
             reader_password: password
         })
     });
+
     return response.status === 200;
 }

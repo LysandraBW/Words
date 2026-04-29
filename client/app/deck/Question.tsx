@@ -20,9 +20,9 @@ export default function Question(props: QuestionProps) {
             <p>Select the Definition of Word: <b>{word}</b></p>
             <div className="grid grid-cols-2 grid-rows-2 gap-2">
                 {props.shuffledCard.words.map(([shuffledWord, shuffledWordDef, originalIndex], i) => {
-                    const answered = props.choices[props.shuffledCard.deck_card_id] !== null;
-                    const correct = answered && props.choices[props.shuffledCard.deck_card_id] === 0;
-                    const incorrect = answered && !correct;
+                    const answered = props.choices[props.shuffledCard.deck_card_id] != null;
+                    const correct = answered && originalIndex === 0;
+                    const incorrect = answered && originalIndex !== 0;
                     const selected = props.choices[props.shuffledCard.deck_card_id] === originalIndex;
 
                     return (

@@ -5,6 +5,7 @@ export default function useSortWords(words: WordType[] | undefined | null, wordA
     const [sort, setSort] = useState('');
     const [sortedWords, setSortedWords] = useState<WordType[]>();
 
+
     const sortOptions = wordAccuracies ? [
         {
             value: 'count',
@@ -49,8 +50,9 @@ export default function useSortWords(words: WordType[] | undefined | null, wordA
         }
     ];
 
+
     const sortWords = (sort: string, words: WordType[], wordAccuracies: {[word: string]: number} | undefined | null): WordType[] => {
-        if (!sort || sort === 'seen') {
+        if (sort === 'seen') {
             return words.toSorted((a: WordType, b: WordType) => new Date(b.last_seen).getTime() - new Date(a.last_seen).getTime());
         }
         else if (sort === 'count') {
@@ -68,14 +70,19 @@ export default function useSortWords(words: WordType[] | undefined | null, wordA
         else if (sort === 'good' && wordAccuracies) {
             return words.toSorted((a: WordType, b: WordType) => wordAccuracies[b.word[0]] - wordAccuracies[a.word[0]]);
         }
-        return words;
+        else {
+            return words;
+        }
     }
+
 
     useEffect(() => {
         if (!words)
             return;
-        setSortedWords(sortWords(sort, words, wordAccuracies));
+        const sortedWords = sortWords(sort, words, wordAccuracies);
+        setSortedWords(sortedWords);
     }, [words, wordAccuracies, sort]);
+
 
     return {
         sort,

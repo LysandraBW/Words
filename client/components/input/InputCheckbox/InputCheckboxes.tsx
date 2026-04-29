@@ -1,3 +1,4 @@
+import { Fragment } from "react/jsx-runtime";
 import { Option } from "../InputDropdown";
 import InputCheckbox from "./InputCheckbox";
 
@@ -26,11 +27,13 @@ export default function InputCheckboxes<V>(props: Partial<InputCheckboxesProps<V
                 </p>
             }
             {props.options?.map((option, i) => (
-                <InputCheckbox
-                    label={option.textLabel}
-                    checked={props.value?.includes(option.value)}
-                    onChange={() => onChange(option.value)}
-                />
+                <Fragment key={i}>
+                    <InputCheckbox
+                        label={option.textLabel}
+                        checked={props.value?.includes(option.value)}
+                        onChange={() => onChange(option.value)}
+                    />
+                </Fragment>
             ))}
         </div>
     );

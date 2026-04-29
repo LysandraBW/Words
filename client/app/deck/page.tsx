@@ -47,7 +47,10 @@ export default function Page() {
                 deck: {
                     ...output,
                     deck: output.deck,
-                    deckCards: output.deckCards || data.deck.deckCards
+                    deckCards: output.deckCards ? data.deck.deckCards.map(deckCard => ({
+                        ...deckCard,
+                        ...output.deckCards?.find(d => d.deck_card_id === deckCard.deck_card_id)
+                    })) : data.deck.deckCards
                 }   
             }
         });
@@ -81,7 +84,10 @@ export default function Page() {
                 ...data,
                 deck: {
                     ...data.deck,
-                    deckCards
+                    deckCards: data.deck.deckCards.map(deckCard => ({
+                        ...deckCard,
+                        ...deckCards.find(d => d.deck_card_id === deckCard.deck_card_id)
+                    }))
                 }
             }
         });

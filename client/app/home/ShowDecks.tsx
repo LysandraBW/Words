@@ -28,6 +28,7 @@ export default function ShowDecks(props: ShowDeckProps) {
                 {props.decks.map((deck) => (
                     <div 
                         key={deck.deck_id}
+                        className="bg-white"
                     >
                         <ArrowUpRightFromSquareIcon
                             onClick={() => router.push(`/deck?deckID=${deck.deck_id}`)}
