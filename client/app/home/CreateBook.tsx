@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react"
-import { BookType, insertBook } from "@/services/db/book";
+import { BookType, CreateBookType, insertBook } from "@/services/db/book";
 import InputText from "@/components/input/InputText";
 import InputTags from "@/components/input/InputTag/InputTags";
 import Panel from "@/components/Panel";
@@ -16,12 +16,6 @@ interface CreateBookProps {
     onClose: () => void;
     onBookCreated: (book: BookType) => void;
 }
-
-
-export type CreateBookType = Pick<
-    BookType, 
-    "book_name" | "book_author" | "book_cover_image" | "book_background_image" | "book_year"
->;
 
 
 export default function CreateBook(props: CreateBookProps) {
@@ -71,7 +65,7 @@ export default function CreateBook(props: CreateBookProps) {
     }
 
     
-    const onClickCreateBook = async (form: Form<CreateBookType>) => {
+    const onCreateBook = async (form: Form<CreateBookType>) => {
         try {
             if (!testForm(form))
                 throw new Error('Invalid Form');
@@ -130,7 +124,7 @@ export default function CreateBook(props: CreateBookProps) {
                 <Button
                     label="Create Book"
                     style="blue"
-                    onClick={() => onClickCreateBook(form)}
+                    onClick={() => onCreateBook(form)}
                 />
             </div>
         </Panel>

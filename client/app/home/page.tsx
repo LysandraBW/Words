@@ -1,36 +1,29 @@
 "use client";
-import { BookType, selectBooks } from "@/services/db/book";
+import { BookType } from "@/services/db/book";
 import { selectReader, ReaderType } from "@/services/db/reader";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import CreateBook from "./CreateBook";
-import Book from "./Book";
-import NavBar from "@/components/NavBar";
 import CreateDeck from "./CreateDeck";
-import { DeckCardType, DeckType, deleteDeck, selectDeck, selectDecks } from "@/services/db/deck";
-import { DeckGradedType, DeckGradedCardType, selectDecksGraded, selectDeckGraded } from "@/services/db/deckGraded";
-import Button from "@/components/Button";
-import { TrashIcon } from "lucide-react";
-import getWordAccuracies from "@/utilities/wordAccuracies";
-import { selectWords, WordType } from "@/services/db/word";
-import InputDropdown from "@/components/input/InputDropdown";
-import useSortWords from "@/hooks/useSortWords";
+import { DeckType, deleteDeck as deleteDeckDB } from "@/services/db/deck";
+import { ChapterType } from "@/services/db/chapter";
+import loadData from "./loadData";
+import ShowWords from "@/components/ShowWords";
+import ShowDecks from "./ShowDecks";
+import ShowBooks from "./ShowBooks";
+import ShowDecksGraded from "./ShowDecksGraded";
+
+
+export interface BookToChapters {
+    [bookID: number]: ChapterType[];
+}
+
 
 export default function Page() {
     const router = useRouter();
     const [user, setUser] = useState<ReaderType>();
-    
-    const [books, setBooks] = useState<BookType[]>();
-    const [decks, setDecks] = useState<DeckType[]>();
-    const [showCreateDeck, setShowCreateDeck] = useState(true);
-    const [showCreateBook, setShowCreateBook] = useState(false);
-
-    const [decksGraded, setDecksGraded] = useState<DeckGradedType[]>();
-    
-
-    const [words, setWords] = useState<WordType[]>();
-    const [wordAccuracies, setWordAccuracies] = useState<{[word: string]: number}>();
-    const sortWords = useSortWords(words, wordAccuracies);
+    const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
+    const [show, setShow] = useState('');
 
 
     useEffect(() => {
@@ -40,168 +33,116 @@ export default function Page() {
                 return router.push('/signIn');
             setUser(user);
 
-
-            // Load Books
-            const books = await selectBooks();
-            if (!books) {
-                alert('Failed');
-                return;
+            try {
+                const data = await loadData();
+                setData(data);
             }
-            setBooks(books);
-
-
-            // Load Decks
-            const decks = await selectDecks();
-            if (!decks) {
-                alert('Failed');
-                return;
+            catch (err) {
+                alert((err as Error).message);
             }
-            setDecks(decks);
-
-
-            // Load Decks Graded
-            const decksGraded = await selectDecksGraded();
-            if (!decksGraded) {
-                alert('Failed');
-                return;
-            }
-            setDecksGraded(decksGraded);
-            
-
-            // Load Words
-            const words = await selectWords();
-            if (!words) {
-                alert('Failed');
-                return;
-            }
-            setWords(words);
-
-
-            // Load Word Accuracies
-            const wordAccuracies = await getWordAccuracies(decksGraded);
-            setWordAccuracies(wordAccuracies);
         }
         load();
     }, []);
 
 
-    const onBookCreated = (book: BookType) => {
-        if (!books)
-            return;
-        setBooks([...books, book]);
-        setShowCreateBook(false);
+    const handleBookCreated = (book: BookType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                books: [
+                    ...data.books, 
+                    book
+                ]
+            }
+        });
+        setShow('');
     }
 
 
-    const onDeckCreated = (deck: DeckType) => {
-        if (!decks)
-            return;
-        setDecks([...decks, deck]);
-        setShowCreateDeck(false);
+    const handleDeckCreated = (deck: DeckType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                decks: [
+                    ...data.decks, 
+                    deck
+                ]
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleDeckDeleted = (deck: DeckType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                decks: data.decks.filter(d => d.deck_id !== deck.deck_id)
+            }
+        });
+        setShow('');
+    }
+
+
+    const deleteDeck = async (deckID: number) => {
+        const deletedDeck = await deleteDeckDB(deckID);
+        if (!deletedDeck)
+            throw new Error('Failed to Create Book');
+        return deletedDeck;
     }
 
 
     const onDeleteDeck = async (deckID: number) => {
-        if (!decks)
-            return;
-        
-        const deletedDeck = await deleteDeck(deckID);
-        if (!deletedDeck) {
-            alert('Failed to Delete Deck');
-            return;
+        try {
+            const deletedDeck = await deleteDeck(deckID);
+            handleDeckDeleted(deletedDeck);
         }
-        setDecks(decks.filter(deck => deck.deck_id !== deckID));
+        catch (err) {
+            alert((err as Error).message);
+        }
     }
 
     
-    if (!decks || !books || !words || !wordAccuracies) 
-        return <></>;
+    if (!user || !data) 
+        return <>Loading...</>;
 
+    
     return (
         <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-scroll">
             <div className="flex col-start-2">
-                <section className="w-full px-4 py-4">
-                    <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                        Words
-                    </h3>
-                    <div className="flex flex-wrap gap-8">
-                        <InputDropdown
-                            label="Sort Words"
-                            options={sortWords.sortOptions}
-                            value={[sortWords.sort]}
-                            onChange={(value: string) => sortWords.setSort(value)}
-                        />
-                        <div>
-                            {words.map((word, i) => (
-                                <Fragment key={i}>
-                                    <p 
-                                        className="p-4 text-white bg-pink-500"
-                                    >
-                                        {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordAccuracies[word.word[0]]}
-                                    </p>
-                                </Fragment>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-                <section className="w-full px-4 py-4">
-                    <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                        Decks
-                    </h3>
-                    <div className="flex flex-wrap gap-8">
-                        <Button
-                            label="Create Deck"
-                            onClick={() => setShowCreateDeck(true)}
-                        />
-                        {decks.map((deck, i) => (
-                            <Fragment key={i}>
-                                <p 
-                                    className="p-4 text-white bg-orange-500"
-                                    onClick={() => router.push(`/deck?deckID=${deck.deck_id}`)}
-                                >
-                                    {deck.deck_name}, {deck.deck_chapters.length} Chapters
-                                    <TrashIcon
-                                        onClick={(event) => {
-                                            event.preventDefault();
-                                            event.stopPropagation();
-                                            onDeleteDeck(deck.deck_id);
-                                        }}
-                                    />
-                                </p>
-                            </Fragment>
-                        ))}
-                    </div>
-                </section>
-                <section className="w-full px-4 py-4">
-                    <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                        Books
-                    </h3>
-                    <div className="flex flex-wrap gap-8">
-                        <Book
-                            isCreate={true}
-                            onClick={() => setShowCreateBook(true)}
-                        />
-                        {books.map((book, i) => (
-                            <Fragment key={i}>
-                                <Book
-                                    book={book}
-                                    onClick={() => router.push(`/book?bookID=${book.book_id}`)}
-                                />
-                            </Fragment>
-                        ))}
-                    </div>
-                </section>
-                {showCreateDeck &&
+                <ShowWords
+                    words={data.words}
+                    decksGraded={data.decksGraded}
+                />
+                <ShowDecks
+                    decks={data.decks}
+                    onCreateDeck={() => setShow('Create Deck')}
+                    onDeleteDeck={onDeleteDeck}
+                />
+                <ShowBooks
+                    books={data.books}
+                    onCreateBook={() => setShow('Create Book')}
+                />
+                <ShowDecksGraded
+                    decksGraded={data.decksGraded}
+                />
+                {show === 'Create Deck' &&
                     <CreateDeck
-                        books={books}
-                        onClose={() => setShowCreateDeck(false)}   
-                        onDeckCreated={onDeckCreated}
+                        books={data.books}
+                        onClose={() => setShow('')}
+                        onDeckCreated={handleDeckCreated}
                     />
                 }
-                {showCreateBook &&
+                {show === 'Create Book' &&
                     <CreateBook
-                        onClose={() => setShowCreateBook(false)}
-                        onBookCreated={onBookCreated}
+                        onClose={() => setShow('')}
+                        onBookCreated={handleBookCreated}
                     />
                 }
             </div>

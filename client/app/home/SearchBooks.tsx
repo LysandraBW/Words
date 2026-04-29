@@ -1,7 +1,7 @@
 import InputDropdown from "@/components/input/InputDropdown";
 import searchBooks, { GoogleBook } from "@/services/books/searchBooks";
-import { useEffect, useState } from "react";
-import { CreateBookType } from "./CreateBook";
+import { CreateBookType } from "@/services/db/book";
+import { useState } from "react";
 
 
 interface SearchBooksProps {

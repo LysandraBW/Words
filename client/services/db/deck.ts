@@ -1,4 +1,3 @@
-import { NullableBy } from "./types";
 import { WordType } from "./word";
 
 export interface DeckType {
@@ -16,7 +15,19 @@ export interface DeckCardType {
 }
 
 
-export async function insertDeck(deck: DeckType) {
+export type CreateDeckType = Pick<
+    DeckType, 
+    "deck_name" | "deck_chapters"
+>;
+
+
+export type UpdateDeckType = Pick<
+    DeckType, 
+    "deck_id" | "deck_name" | "deck_chapters"
+>;
+
+
+export async function insertDeck(deck: CreateDeckType) {
     const response = await fetch('http://127.0.0.1:8000/decks', {
         method: "POST",
         credentials: "include",
@@ -34,7 +45,7 @@ export async function insertDeck(deck: DeckType) {
 }
 
 
-export async function updateDeck(deck: NullableBy<DeckType, 'deck_chapters'>) {
+export async function updateDeck(deck: UpdateDeckType) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${deck.deck_id}`, {
         method: "PUT",
         credentials: "include",

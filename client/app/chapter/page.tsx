@@ -16,7 +16,7 @@ import { useDebounce } from "use-debounce";
 import UpdateChapter from "./UpdateChapter";
 import useSortWords from "@/hooks/useSortWords";
 import InputDropdown from "@/components/input/InputDropdown";
-import getWordAccuracies from "@/utilities/wordAccuracies";
+import getWordData from "@/utilities/wordData";
 import { selectDecksGradedByChapters } from "@/services/db/deckGraded";
 
 
@@ -72,7 +72,7 @@ export default function Page() {
             setWords(words);
 
             // Load Word Accuracies
-            const wordAccuracies = await getWordAccuracies(decksGraded, words.map(word => word.word[0]));
+            const wordAccuracies = await getWordData(decksGraded, words.map(word => word.word[0]));
             setWordAccuracies(wordAccuracies);
         }
         load();

@@ -1,5 +1,4 @@
 import { ChapterType } from "./chapter";
-import { NullableBy } from "./types";
 import { WordType } from "./word";
 
 export interface BookType {
@@ -11,6 +10,11 @@ export interface BookType {
     book_author: string[];
     reader_id: string;
 }
+
+export type CreateBookType = Pick<
+    BookType, 
+    "book_name" | "book_author" | "book_cover_image" | "book_background_image" | "book_year"
+>;
 
 export async function selectBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}`, {
@@ -60,7 +64,7 @@ export async function selectBookWords(bookID: number) {
     return data;
 }
 
-export async function insertBook(book: NullableBy<BookType, "book_id" | "reader_id">) {
+export async function insertBook(book: CreateBookType) {
     const response = await fetch('http://127.0.0.1:8000/books', {
         method: "POST",
         credentials: "include",

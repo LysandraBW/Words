@@ -5,18 +5,18 @@ import { useDebounce } from "use-debounce";
 import InputWrapper from "./InputWrapper";
 import InputLabel from "./InputLabel";
 
-export interface Option {
-    value: string;
+export interface Option<V> {
+    value: V;
     textLabel?: string;
     optionLabel?: ReactNode;
 }
 
-interface InputDropdownProps {
-    value: string[];
+interface InputDropdownProps<V> {
+    value: V[];
     label: string;
     error: string;
-    options: Option[];
-    onChange: (value: string) => void;
+    options: Option<V>[];
+    onChange: (value: V) => void;
     toggleLabel: string;
     toggleClassName: string;
     optionClassName: string;
@@ -26,7 +26,7 @@ interface InputDropdownProps {
     itemName: string;
 }
 
-export default function InputDropdown(props: Partial<InputDropdownProps>) {
+export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");

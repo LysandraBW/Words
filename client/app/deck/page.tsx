@@ -12,7 +12,7 @@ import { DeckType, DeckCardType, selectDeck, reloadDeck, deleteDeck, selectDeckW
 import { DeckGradedType, DeckGradedCardType, selectDecksGradedByDeck, selectDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
 import { WordType } from "@/services/db/word";
 import useSortWords from "@/hooks/useSortWords";
-import getWordAccuracies from "@/utilities/wordAccuracies";
+import getWordData from "@/utilities/wordData";
 import InputDropdown from "@/components/input/InputDropdown";
 
 
@@ -89,7 +89,7 @@ export default function Page() {
             }
             setWords(words);
             
-            const wordAccuracies = await getWordAccuracies(decksGraded, words.map(word => word.word[0]));
+            const wordAccuracies = await getWordData(decksGraded, words.map(word => word.word[0]));
             setWordAccuracies(wordAccuracies);
         }
         load();
