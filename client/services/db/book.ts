@@ -1,4 +1,5 @@
 import { ChapterType } from "./chapter";
+import { NullableBy } from "./types";
 import { WordType } from "./word";
 
 export interface BookType {
@@ -11,7 +12,7 @@ export interface BookType {
     reader_id: string;
 }
 
-export async function getBook(bookID: number) {
+export async function selectBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}`, {
         credentials: "include"
     });
@@ -23,7 +24,7 @@ export async function getBook(bookID: number) {
     return data;
 }
 
-export async function getBooks() {
+export async function selectBooks() {
     const response = await fetch('http://127.0.0.1:8000/books', {
         credentials: "include"
     });
@@ -35,7 +36,7 @@ export async function getBooks() {
     return data;
 }
 
-export async function getBookChapters(bookID: number) {
+export async function selectBookChapters(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/chapters`, {
         credentials: "include"
     });
@@ -47,7 +48,7 @@ export async function getBookChapters(bookID: number) {
     return data;
 }
 
-export async function getBookWords(bookID: number) {
+export async function selectBookWords(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/words`, {
         credentials: "include"
     });
@@ -59,7 +60,7 @@ export async function getBookWords(bookID: number) {
     return data;
 }
 
-export async function createBook(book: BookType) {
+export async function insertBook(book: NullableBy<BookType, "book_id" | "reader_id">) {
     const response = await fetch('http://127.0.0.1:8000/books', {
         method: "POST",
         credentials: "include",

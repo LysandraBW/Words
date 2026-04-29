@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
 import { BookType } from "@/services/db/book";
-import { ChapterType, createChapter, deleteChapter, updateChapter } from "@/services/db/chapter";
+import { ChapterType, insertChapter, deleteChapter, updateChapter } from "@/services/db/chapter";
 import { createForm, Form, getFormData, resetForm, testForm, updateFormValue } from "@/utilities/form";
 import { PlusIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
@@ -153,7 +153,7 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
 
         const createChapterIDs = newChapterIDs.difference(oldChapterIDs);
         for (const id of createChapterIDs) {
-            const chapterCreated = await createChapter(getFormData(newChapters[id]));
+            const chapterCreated = await insertChapter(getFormData(newChapters[id]));
             if (!chapterCreated) {
                 alert('Update Failed');
                 return;

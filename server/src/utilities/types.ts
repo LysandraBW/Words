@@ -10,3 +10,7 @@ export function nullableBy<T extends z.ZodRawShape, K extends keyof T>(schema: z
         nullableSchema[key] = (nullableSchema[key] as z.ZodType).nullable() as any;
     return z.object(nullableSchema as unknown as NullableSchema<T, K>);
 }
+
+export function emptyStringToNull(value: unknown) {
+    return value === "" ? null : value;
+}

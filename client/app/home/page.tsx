@@ -1,18 +1,18 @@
 "use client";
-import { BookType, getBooks } from "@/services/db/book";
-import { getReader, ReaderType } from "@/services/db/reader";
+import { BookType, selectBooks } from "@/services/db/book";
+import { selectReader, ReaderType } from "@/services/db/reader";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react"
 import CreateBook from "./CreateBook";
 import Book from "./Book";
 import NavBar from "@/components/NavBar";
 import CreateDeck from "./CreateDeck";
-import { DeckCardType, DeckType, deleteDeck, getDeck, getDecks } from "@/services/db/deck";
-import { DeckGradedType, DeckGradedCardType, getDecksGraded, getDeckGraded } from "@/services/db/deckGraded";
+import { DeckCardType, DeckType, deleteDeck, selectDeck, selectDecks } from "@/services/db/deck";
+import { DeckGradedType, DeckGradedCardType, selectDecksGraded, selectDeckGraded } from "@/services/db/deckGraded";
 import Button from "@/components/Button";
 import { TrashIcon } from "lucide-react";
 import getWordAccuracies from "@/utilities/wordAccuracies";
-import { getWords, WordType } from "@/services/db/word";
+import { selectWords, WordType } from "@/services/db/word";
 import InputDropdown from "@/components/input/InputDropdown";
 import useSortWords from "@/hooks/useSortWords";
 
@@ -35,14 +35,14 @@ export default function Page() {
 
     useEffect(() => {
         const load = async () => {
-            const user = await getReader();
+            const user = await selectReader();
             if (!user)
                 return router.push('/signIn');
             setUser(user);
 
 
             // Load Books
-            const books = await getBooks();
+            const books = await selectBooks();
             if (!books) {
                 alert('Failed');
                 return;
@@ -51,7 +51,7 @@ export default function Page() {
 
 
             // Load Decks
-            const decks = await getDecks();
+            const decks = await selectDecks();
             if (!decks) {
                 alert('Failed');
                 return;
@@ -60,7 +60,7 @@ export default function Page() {
 
 
             // Load Decks Graded
-            const decksGraded = await getDecksGraded();
+            const decksGraded = await selectDecksGraded();
             if (!decksGraded) {
                 alert('Failed');
                 return;
@@ -69,7 +69,7 @@ export default function Page() {
             
 
             // Load Words
-            const words = await getWords();
+            const words = await selectWords();
             if (!words) {
                 alert('Failed');
                 return;
@@ -178,7 +178,7 @@ export default function Page() {
                     </h3>
                     <div className="flex flex-wrap gap-8">
                         <Book
-                            isCreateButton={true}
+                            isCreate={true}
                             onClick={() => setShowCreateBook(true)}
                         />
                         {books.map((book, i) => (

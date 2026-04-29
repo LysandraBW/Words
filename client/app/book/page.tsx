@@ -1,7 +1,7 @@
 "use client";
-import { BookType, getBook, getBookChapters, getBookWords } from "@/services/db/book";
+import { BookType, selectBook, selectBookChapters, selectBookWords } from "@/services/db/book";
 import { ChapterType } from "@/services/db/chapter";
-import { getReader, ReaderType } from "@/services/db/reader";
+import { selectReader, ReaderType } from "@/services/db/reader";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react"
@@ -9,7 +9,7 @@ import UpdateChapters from "./UpdateChapters";
 import UpdateBook from "./UpdateBook";
 import { WordType } from "@/services/db/word";
 import useSortWords from "@/hooks/useSortWords";
-import { getDecksGradedByBook } from "@/services/db/deckGraded";
+import { selectDecksGradedByBook } from "@/services/db/deckGraded";
 import getWordAccuracies from "@/utilities/wordAccuracies";
 import InputDropdown from "@/components/input/InputDropdown";
 
@@ -29,7 +29,7 @@ export default function Page() {
     useEffect(() => {
         const load = async () => {
             // User
-            const user = await getReader();
+            const user = await selectReader();
             if (!user)
                 return router.push('/signIn');
             setUser(user);
@@ -41,7 +41,7 @@ export default function Page() {
             const numberBookID = Number(bookID);
 
             // Get Book by ID
-            const book = await getBook(numberBookID);
+            const book = await selectBook(numberBookID);
             if (!book) {
                 alert('Failed');
                 return;
@@ -49,7 +49,7 @@ export default function Page() {
             setBook(book);
 
             // Get Book's Chapters
-            const chapters = await getBookChapters(numberBookID);
+            const chapters = await selectBookChapters(numberBookID);
             if (!chapters) {
                 alert('Failed');
                 return;
@@ -57,14 +57,14 @@ export default function Page() {
             setChapters(chapters);
 
             // Load Decks Graded
-            const decksGraded = await getDecksGradedByBook(book.book_id);
+            const decksGraded = await selectDecksGradedByBook(book.book_id);
             if (!decksGraded) {
                 alert('Failed');
                 return;
             }
 
             // Get Book's Words
-            const words = await getBookWords(numberBookID);
+            const words = await selectBookWords(numberBookID);
             if (!words) {
                 alert('Failed');
                 return;

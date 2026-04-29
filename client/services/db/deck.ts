@@ -16,7 +16,7 @@ export interface DeckCardType {
 }
 
 
-export async function createDeck(deck: DeckType) {
+export async function insertDeck(deck: DeckType) {
     const response = await fetch('http://127.0.0.1:8000/decks', {
         method: "POST",
         credentials: "include",
@@ -66,7 +66,7 @@ export async function deleteDeck(deckID: number) {
 }
 
 
-export async function getDeck(deckID: number) {
+export async function selectDeck(deckID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}`, {
         credentials: "include"
     });
@@ -93,7 +93,7 @@ export async function reloadDeck(deckID: number) {
 }
 
 
-export async function getDecks() {
+export async function selectDecks() {
     const response = await fetch('http://127.0.0.1:8000/decks', {
         credentials: "include"
     });
@@ -106,7 +106,7 @@ export async function getDecks() {
 }
 
 
-export async function getDecksByBook(bookID: number) {
+export async function selectDecksByBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/decks`, {
         method: "POST",
         credentials: "include"
@@ -120,7 +120,7 @@ export async function getDecksByBook(bookID: number) {
 }
 
 
-export async function getDecksByChapters(chapterID: number) {
+export async function selectDecksByChapters(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/decks`, {
         method: "POST",
         credentials: "include"
@@ -134,7 +134,7 @@ export async function getDecksByChapters(chapterID: number) {
 }
 
 
-export async function getDeckWords(chapterID: number) {
+export async function selectDeckWords(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${chapterID}/words`, {
         method: "GET",
         credentials: "include"

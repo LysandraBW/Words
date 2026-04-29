@@ -8,7 +8,7 @@ export interface ChapterType {
     book_id: number;
 }
 
-export async function createChapter(chapter: ChapterType) {
+export async function insertChapter(chapter: ChapterType) {
     const response = await fetch('http://127.0.0.1:8000/chapters', {
         method: "POST",
         credentials: "include",
@@ -58,7 +58,7 @@ export async function deleteChapter(chapterID: number) {
     return data;
 }
 
-export async function getChapter(chapterID: number) {
+export async function selectChapter(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}`, {
         method: "GET",
         credentials: "include"
@@ -71,7 +71,7 @@ export async function getChapter(chapterID: number) {
     return data;
 }
 
-export async function getChapterWords(chapterID: number) {
+export async function selectChapterWords(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/words`, {
         method: "GET",
         credentials: "include"

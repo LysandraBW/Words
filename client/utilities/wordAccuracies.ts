@@ -1,18 +1,18 @@
-import { DeckCardType, DeckType, getDeck } from "@/services/db/deck";
-import { DeckGradedType, getDeckGraded, getDecksGraded } from "@/services/db/deckGraded";
+import { DeckCardType, DeckType, selectDeck } from "@/services/db/deck";
+import { DeckGradedType, selectDeckGraded, selectDecksGraded } from "@/services/db/deckGraded";
 
 export default async function getWordAccuracies(decksGraded: DeckGradedType[], allowedWords?: string[]) {
     const deckToDeckCards: {[deckID: number]: {deck: DeckType, deckCards: DeckCardType[]}} = Object.fromEntries(
         await Promise.all(decksGraded.map(async (deck: any) => [
             deck.deck_id, 
-            await getDeck(deck.deck_id)
+            await selectDeck(deck.deck_id)
         ])
     ));
 
     const words: {[word: string]: {count: number; correct: number}} = {};
 
     for (const deck of decksGraded) {
-        const output = await getDeckGraded(deck.deck_graded_id);
+        const output = await selectDeckGraded(deck.deck_graded_id);
         if (!output) {
             return null;
         }

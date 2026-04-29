@@ -5,7 +5,7 @@ import z from 'zod';
 import { DeleteBook, InsertBook, SelectBook, SelectBooks, UpdateBook } from '../db/book.js';
 import { SelectChaptersFromBook } from '../db/chapter.js';
 import { SelectWordsFromBook } from '../db/word.js';
-import { nullableBy } from '../utilities/types.js';
+import { emptyStringToNull, nullableBy } from '../utilities/types.js';
 import { SelectDecksByBooks } from '../db/deck.js';
 import { SelectGradedDecksByBooks } from '../db/deckGraded.js';
 
@@ -13,9 +13,18 @@ import { SelectGradedDecksByBooks } from '../db/deckGraded.js';
 const BookSchema = z.object({
     book_id: z.coerce.number(),
     book_name: z.string(),
-    book_cover_image: z.url().nullish(),
-    book_background_image: z.url().nullish(),
-    book_year: z.coerce.number().nullish(),
+    book_cover_image: z.preprocess(
+        emptyStringToNull, 
+        z.url().nullish()
+    ),
+    book_background_image: z.preprocess(
+        emptyStringToNull, 
+        z.url().nullish()
+    ),
+    book_year: z.preprocess(
+        emptyStringToNull, 
+        z.coerce.number().nullish()
+    ),
     book_author: z.array(z.string()).nullish(),
     reader_id: z.uuidv7()
 });

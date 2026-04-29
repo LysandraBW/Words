@@ -4,9 +4,9 @@ import InputText from "@/components/input/InputText";
 import Word from "@/components/word/Word";
 import WordNotFound from "@/components/word/WordNotFound";
 import { BookType } from "@/services/db/book";
-import { ChapterType, deleteChapter, getChapter, getChapterWords, updateChapter } from "@/services/db/chapter";
-import { getReader, ReaderType } from "@/services/db/reader";
-import { createWord, decrementWordNumberInstances, deleteWord, incrementWordNumberInstances, WordType } from "@/services/db/word";
+import { ChapterType, deleteChapter, selectChapter, selectChapterWords, updateChapter } from "@/services/db/chapter";
+import { selectReader, ReaderType } from "@/services/db/reader";
+import { insertWord, decrementWordNumberInstances, deleteWord, incrementWordNumberInstances, WordType } from "@/services/db/word";
 import getAutoCompletion from "@/services/words/getAutoCompletion";
 import getWordEntry from "@/services/words/getWordEntry";
 import { MinusIcon, PlusIcon, SettingsIcon, TrashIcon } from "lucide-react";
@@ -17,7 +17,7 @@ import UpdateChapter from "./UpdateChapter";
 import useSortWords from "@/hooks/useSortWords";
 import InputDropdown from "@/components/input/InputDropdown";
 import getWordAccuracies from "@/utilities/wordAccuracies";
-import { getDecksGradedByChapters } from "@/services/db/deckGraded";
+import { selectDecksGradedByChapters } from "@/services/db/deckGraded";
 
 
 export default function Page() {
@@ -34,7 +34,7 @@ export default function Page() {
 
     useEffect(() => {
         const load = async () => {
-            const user = await getReader();
+            const user = await selectReader();
             if (!user)
                 return router.push('/signIn');
             setUser(user);
@@ -48,7 +48,7 @@ export default function Page() {
 
 
             // Get Chapter by ID
-            const chapter = await getChapter(numberChapterID);
+            const chapter = await selectChapter(numberChapterID);
             if (!chapter) {
                 alert('Failed');
                 return;
@@ -57,14 +57,14 @@ export default function Page() {
 
 
             // Load Decks Graded
-            const decksGraded = await getDecksGradedByChapters(chapter.chapter_id);
+            const decksGraded = await selectDecksGradedByChapters(chapter.chapter_id);
             if (!decksGraded) {
                 alert('Failed');
                 return;
             }
             
             // Get Chapters's Words
-            const words = await getChapterWords(numberChapterID);
+            const words = await selectChapterWords(numberChapterID);
             if (!words) {
                 alert('Failed');
                 return;
@@ -123,7 +123,7 @@ export default function Page() {
             last_seen: ''
         }
 
-        const insertedWord = await createWord(initialWord);
+        const insertedWord = await insertWord(initialWord);
         if (!insertedWord) {
             alert('Failed to Insert Word');
             return;

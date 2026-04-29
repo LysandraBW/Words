@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
-import { BookType, getBookChapters } from "@/services/db/book";
+import { BookType, selectBookChapters } from "@/services/db/book";
 import { ChapterType } from "@/services/db/chapter";
 import { DeckCardType, DeckType, updateDeck } from "@/services/db/deck"
 import { createForm, getFormData, testForm, updateFormValue } from "@/utilities/form";
@@ -47,7 +47,7 @@ export default function UpdateDeck(props: UpdateDeckProps) {
         const bookChapters: BookChapters = {};
 
         for (const book of books) {
-            const chapters = await getBookChapters(book.book_id);
+            const chapters = await selectBookChapters(book.book_id);
             if (!chapters) {
                 alert('Failed to Get Book\'s Chapters');
                 continue;

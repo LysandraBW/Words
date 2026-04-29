@@ -17,7 +17,7 @@ export interface DeckGradedCardType {
 }
 
 
-export async function createDeckGraded(deck: DeckGradedType, choices: [number, number][]) {
+export async function insertDeckGraded(deck: DeckGradedType, choices: [number, number][]) {
     const response = await fetch('http://127.0.0.1:8000/decksGraded', {
         method: "POST",
         credentials: "include",
@@ -49,7 +49,7 @@ export async function deleteDeckGraded(deckGradedID: number) {
 }
 
 
-export async function getDeckGraded(deckGradedID: number) {
+export async function selectDeckGraded(deckGradedID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decksGraded/${deckGradedID}`, {
         method: "GET",
         credentials: "include"
@@ -63,7 +63,7 @@ export async function getDeckGraded(deckGradedID: number) {
 }
 
 
-export async function getDecksGraded() {
+export async function selectDecksGraded() {
     const response = await fetch('http://127.0.0.1:8000/decksGraded', {
         method: "GET",
         credentials: "include"
@@ -77,7 +77,7 @@ export async function getDecksGraded() {
 }
 
 
-export async function getDecksGradedByDeck(deckID: number) {
+export async function selectDecksGradedByDeck(deckID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}/decksGraded`, {
         method: "GET",
         credentials: "include"
@@ -91,7 +91,7 @@ export async function getDecksGradedByDeck(deckID: number) {
 }
 
 
-export async function getDecksGradedByBook(bookID: number) {
+export async function selectDecksGradedByBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/decksGraded`, {
         method: "GET",
         credentials: "include"
@@ -105,7 +105,7 @@ export async function getDecksGradedByBook(bookID: number) {
 }
 
 
-export async function getDecksGradedByChapters(chapterID: number) {
+export async function selectDecksGradedByChapters(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/decksGraded`, {
         method: "GET",
         credentials: "include"

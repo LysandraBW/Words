@@ -4,7 +4,7 @@ export interface ReaderType {
     reader_email: string;
 }
 
-export async function getReader() {
+export async function selectReader() {
     const response = await fetch('http://127.0.0.1:8000/readers', {
         credentials: "include"
     });

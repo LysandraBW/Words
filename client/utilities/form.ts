@@ -52,7 +52,7 @@ export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>
     }
 }
 
-export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: {[K in keyof D]: D[K]}, test?: boolean): Form<D> {
+export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: Partial<Pick<D, K>>, test?: boolean): Form<D> {
     const labels: K[] = Object.keys(data) as any;
     const updatedForm: Form<D> = {...form};
 

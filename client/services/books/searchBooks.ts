@@ -1,9 +1,19 @@
 "use server";
 import { books_v1 } from "googleapis";
 
-const cache: {[k: string]: books_v1.Schema$Volume[]} = {};
+export type VolumeInfo = NonNullable<books_v1.Schema$Volume["volumeInfo"]>;
 
-export default async function searchBook(search: string, startIndex: number = 0, maxResults: number = 10) {
+// We filter the API's results to only retrieve books
+// with corresponding volume information and an ID.
+// So, we reflect this in the below type.
+export type GoogleBook = Omit<books_v1.Schema$Volume, "id" | "volumeInfo"> & {
+    id: string;
+    volumeInfo: VolumeInfo;
+};
+
+const cache: {[k: string]: GoogleBook[]} = {};
+
+export default async function searchBooks(search: string, startIndex: number = 0, maxResults: number = 10): Promise<GoogleBook[]> {
     if (search.length <= 0)
         return [];
 
@@ -20,7 +30,10 @@ export default async function searchBook(search: string, startIndex: number = 0,
     
     const response = await fetch(url);
     const data: books_v1.Schema$Volumes = await response.json();
-    const items = data.items ?? [];
+    
+    // Filter for Valid Books
+    let items = data.items ?? [];
+    items = items.filter(item => item.id && item.volumeInfo);
 
     // Store in Cache
     if (items && items.length) {
@@ -30,5 +43,5 @@ export default async function searchBook(search: string, startIndex: number = 0,
         cache[search] = cachedItems;
     }
     
-    return items;
+    return items as GoogleBook[];
 }

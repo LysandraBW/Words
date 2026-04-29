@@ -1,15 +1,15 @@
 "use client";
-import { getReader, ReaderType } from "@/services/db/reader";
+import { selectReader, ReaderType } from "@/services/db/reader";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect, Fragment } from "react";
 import UpdateDeck from "./UpdateDeck";
-import { BookType, getBooks } from "@/services/db/book";
+import { BookType, selectBooks } from "@/services/db/book";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
 import { BookIcon, TrashIcon } from "lucide-react";
 import QuizGraded from "./QuizGraded";
-import { DeckType, DeckCardType, getDeck, reloadDeck, deleteDeck, getDeckWords } from "@/services/db/deck";
-import { DeckGradedType, DeckGradedCardType, getDecksGradedByDeck, getDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
+import { DeckType, DeckCardType, selectDeck, reloadDeck, deleteDeck, selectDeckWords } from "@/services/db/deck";
+import { DeckGradedType, DeckGradedCardType, selectDecksGradedByDeck, selectDeckGraded, deleteDeckGraded } from "@/services/db/deckGraded";
 import { WordType } from "@/services/db/word";
 import useSortWords from "@/hooks/useSortWords";
 import getWordAccuracies from "@/utilities/wordAccuracies";
@@ -45,13 +45,13 @@ export default function Page() {
 
     useEffect(() => {
         const load = async () => {
-            const user = await getReader();
+            const user = await selectReader();
             if (!user)
                 return router.push('/signIn');
             setUser(user);
 
 
-            const books = await getBooks();
+            const books = await selectBooks();
             if (books)
                 setBooks(books);
 
@@ -64,7 +64,7 @@ export default function Page() {
 
 
             // Get Deck
-            const output = await getDeck(deckIDAsNumber);
+            const output = await selectDeck(deckIDAsNumber);
             if (!output) {
                 alert('Invalid Deck');
                 return router.push('/home');
@@ -74,7 +74,7 @@ export default function Page() {
 
 
             // Get Deck Graded
-            const decksGraded = await getDecksGradedByDeck(output.deck.deck_id);
+            const decksGraded = await selectDecksGradedByDeck(output.deck.deck_id);
             if (!decksGraded) {
                 alert('Failed 1');
                 return;
@@ -82,7 +82,7 @@ export default function Page() {
             setDecksGraded(decksGraded);
 
             // Words
-            const words = await getDeckWords(output.deck.deck_id);
+            const words = await selectDeckWords(output.deck.deck_id);
             if (!words) {
                 alert('Failed 2');
                 return;
@@ -97,7 +97,7 @@ export default function Page() {
 
 
     const loadGradedDeckCards = async (deckGradedID: number) => {
-        const deckGraded = await getDeckGraded(deckGradedID);
+        const deckGraded = await selectDeckGraded(deckGradedID);
         if (!deckGraded) {
             alert('Graded Deck Failed to Load');
             return;

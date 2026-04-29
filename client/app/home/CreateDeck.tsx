@@ -1,12 +1,13 @@
 import Button from "@/components/Button";
 import InputText from "@/components/input/InputText";
-import { BookType, getBookChapters } from "@/services/db/book";
+import { BookType, selectBookChapters } from "@/services/db/book";
 import { ChapterType } from "@/services/db/chapter";
-import { createDeck, DeckType } from "@/services/db/deck";
-import { createForm, getFormData, testForm, updateFormValue } from "@/utilities/form";
+import { insertDeck, DeckType } from "@/services/db/deck";
+import { createForm, Form, getFormData, testForm, updateFormValue } from "@/utilities/form";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import z from "zod";
+
 
 interface CreateDeckProps {
     books: BookType[];
@@ -14,70 +15,84 @@ interface CreateDeckProps {
     onDeckCreated: (deck: DeckType) => void;
 }
 
-interface BookChapters {[bookID: number]: ChapterType[]}
+
+interface BookToChapters {
+    [bookID: number]: ChapterType[];
+}
+
 
 export default function CreateDeck(props: CreateDeckProps) {
-    const [bookChapters, setBookChapters] = useState<BookChapters>();
-    const [form, setForm] = useState(createForm([
+    const [bookToChapters, setBookToChapters] = useState<BookToChapters>();
+    const [form, setForm] = useState<Form<DeckType>>(createForm([
         {
             label: 'deck_name',
             value: '',
-            test: z.any()
+            test: z.string().trim().min(1, "Must enter a name")
         },
         {
             label: 'deck_chapters',
             value: [],
-            test: z.any()
+            test: z.array(z.number())
         }
     ]));
 
 
     useEffect(() => {
         const load = async () => {
-            const bookChapters = await loadBookChapters(props.books);
-            setBookChapters(bookChapters);
+            try {
+                const bookToChapters = await loadBookToChapters(props.books);
+                setBookToChapters(bookToChapters);
+            }
+            catch (err) {
+                alert(err);
+            }
         }
         load();
     }, [props.books]);
 
 
-    const loadBookChapters = async (books: BookType[]) => {
-        const bookChapters: BookChapters = {};
-        for (const book of books) {
-            const chapters = await getBookChapters(book.book_id);
-            if (!chapters) {
-                alert('Failed to Get Book\'s Chapters');
-                continue;
-            }
-            bookChapters[book.book_id] = chapters;
-        }
-        return bookChapters;
+    const loadBookToChapters = async (books: BookType[]) => {
+        const chapters = await Promise.all(books.map(async book => {
+            const bookChapters = await selectBookChapters(book.book_id);
+            if (!bookChapters)
+                throw 'Failed to Load Book\'s Chapters';
+            return [book.book_id, bookChapters];
+        }));
+
+        const bookToChapters: BookToChapters = Object.fromEntries(chapters);
+        return bookToChapters;
     }
 
 
-    const onCreateDeck = async (deck: DeckType) => {
-        const createdDeck = await createDeck({
-            deck_id: -1,
-            deck_name: deck.deck_name,
-            deck_chapters: deck.deck_chapters,
-            reader_id: "",
-        });
+    const createDeck = async (deck: DeckType) => {
+        const createdDeck = await insertDeck(deck);
+        if (!createdDeck)
+            throw new Error('Failed to Create Deck');
+        return createdDeck;
+    }
 
-        if (!createdDeck) {
-            alert('Failed to Create Deck');
-            return;
+
+    const onClickCreateDeck = async (form: Form<DeckType>) => {
+        try {
+            if (!testForm(form))
+                throw new Error('Invalid Form');
+
+            const deck = getFormData(form);
+            const output = await createDeck(deck);
+            props.onDeckCreated(output.deck);
         }
-
-        props.onDeckCreated(createdDeck.deck);
+        catch (error) {
+            alert((error as Error).message);
+        }
     }
 
     
     return (
         <div>
             <InputText
-                label={"Deck Name"}
+                label="Deck Name"
                 value={form.deck_name.value}
-                onChange={(value: string) => setForm(updateFormValue(form, 'deck_name', value))}
+                onChange={value => setForm(updateFormValue(form, 'deck_name', value))}
             />
             {props.books.map((book, i) => (
                 <div 
@@ -85,7 +100,7 @@ export default function CreateDeck(props: CreateDeckProps) {
                     className="flex flex-col gap-y-2"
                 >
                     <h3><b>{book.book_name}</b></h3>
-                    {(bookChapters && bookChapters[book.book_id]) && bookChapters[book.book_id].map((chapter, j) => (
+                    {(bookToChapters && bookToChapters[book.book_id]) && bookToChapters[book.book_id].map((chapter, j) => (
                         <div 
                             key={j}
                             className={clsx(
@@ -116,7 +131,7 @@ export default function CreateDeck(props: CreateDeckProps) {
                         alert('Form Incorrect');
                         return;
                     }
-                    onCreateDeck(getFormData(form));
+                    onClickCreateDeck(form);
                 }}
             />
         </div>
