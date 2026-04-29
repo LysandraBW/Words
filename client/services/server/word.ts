@@ -8,6 +8,9 @@ export interface WordType {
 }
 
 
+export type CreateWordType = Pick<WordType, "word">;
+
+
 export async function selectWords() {
     const response = await fetch('http://127.0.0.1:8000/words', {
         method: "GET",
@@ -24,7 +27,7 @@ export async function selectWords() {
     return data;
 }
 
-export async function insertWord(word: WordType) {
+export async function insertWord(word: CreateWordType) {
     const response = await fetch('http://127.0.0.1:8000/words', {
         method: "POST",
         credentials: "include",

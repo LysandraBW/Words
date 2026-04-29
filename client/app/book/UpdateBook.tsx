@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react"
-import { BookType, updateBook as updateBookDB, UpdateBookType } from "@/services/server/book"
+import { BookType, updateBook, UpdateBookType } from "@/services/server/book"
 import InputText from "@/components/input/InputText";
 import InputTags from "@/components/input/InputTag/InputTags";
 import { createForm, Form, getFormData, testForm, updateFormValue } from "@/utilities/form";
@@ -8,13 +8,15 @@ import z from "zod";
 import InputImageURL from "@/components/input/InputImageURL";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
-import { addValue, deleteValue } from "@/utilities/arrays";
+import { addValue, deleteValue } from "@/utilities/array";
+
 
 interface UpdateBookProps {
     book: BookType;
     onClose: () => void;
     onBookUpdated: (book: BookType) => void;
 }
+
 
 export default function UpdateBook(props: UpdateBookProps) {
     const [form, setForm] = useState<Form<UpdateBookType>>(createForm([
@@ -57,14 +59,6 @@ export default function UpdateBook(props: UpdateBookProps) {
             test: z.array(z.string().min(1, "Authors must have a name."))
         }
     ]));
-
-
-    const updateBook = async (book: UpdateBookType) => {
-        const updatedBook = await updateBookDB(book);
-        if (!updatedBook)
-            throw new Error('Failed to Create Book');
-        return updatedBook;
-    }
 
 
     const onUpdateBook = async (form: Form<UpdateBookType>) => {

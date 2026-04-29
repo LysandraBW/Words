@@ -1,3 +1,4 @@
+import { NullableBy } from "./types";
 import { WordType } from "./word";
 
 
@@ -22,10 +23,7 @@ export type CreateDeckType = Pick<
 >;
 
 
-export type UpdateDeckType = Pick<
-    DeckType, 
-    "deck_id" | "deck_name" | "deck_chapters"
->;
+export type UpdateDeckType = Pick<DeckType, "deck_id"> & NullableBy<Pick<DeckType, "deck_name" | "deck_chapters">, "deck_name" | "deck_chapters">;
 
 
 export async function insertDeck(deck: CreateDeckType) {
@@ -41,7 +39,7 @@ export async function insertDeck(deck: CreateDeckType) {
     if (response.status !== 200)
         throw new Error(`Failed to Insert Deck (${response.status})`);
 
-    const data: {deck: DeckType, deckCards: DeckCardType[]} | null = await response.json();
+    const data: {deck: DeckType, deckCards: (DeckType & DeckCardType)[]} | null = await response.json();
     if (!data)
         throw new Error('Failed to Insert Deck');
 
@@ -62,7 +60,7 @@ export async function updateDeck(deck: UpdateDeckType) {
     if (response.status !== 200)
         throw new Error(`Failed to Update Deck (${response.status})`);
 
-    const data: {deck: DeckType, deckCards?: DeckCardType[]} | null = await response.json();
+    const data: {deck: DeckType, deckCards?: (DeckType & DeckCardType)[]} | null = await response.json();
     if (!data)
         throw new Error('Failed to Update Deck');
 
@@ -112,7 +110,7 @@ export async function reloadDeck(deckID: number) {
     if (response.status !== 200)
         throw new Error(`Failed to Reload Deck (${response.status})`);
 
-    const data: DeckCardType[] | null = await response.json();
+    const data: (DeckType & DeckCardType)[] | null = await response.json();
     if (!data)
         throw new Error('Failed to Reload Deck');
 

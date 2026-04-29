@@ -17,7 +17,10 @@ export interface DeckGradedCardType {
 }
 
 
-export async function insertDeckGraded(deck: DeckGradedType, choices: [number, number][]) {
+export type CreateDeckGradedType = Omit<DeckGradedType, "deck_graded_id">
+
+
+export async function insertDeckGraded(deck: CreateDeckGradedType, choices: [number, number][]) {
     const response = await fetch('http://127.0.0.1:8000/decksGraded', {
         method: "POST",
         credentials: "include",

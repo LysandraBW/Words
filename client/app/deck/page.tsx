@@ -1,205 +1,176 @@
 "use client";
-import { selectReader, ReaderType } from "@/services/server/reader";
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import UpdateDeck from "./UpdateDeck";
-import { BookType, selectBooks } from "@/services/server/book";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
 import { BookIcon, TrashIcon } from "lucide-react";
 import QuizGraded from "./QuizGraded";
-import { DeckType, DeckCardType, selectDeck, reloadDeck, deleteDeck, selectDeckWords } from "@/services/server/deck";
-import { DeckGradedType, DeckGradedCardType, selectDecksGradedByDeck, selectDeckGraded, deleteDeckGraded } from "@/services/server/deckGraded";
-import { WordType } from "@/services/server/word";
-import useSortWords from "@/hooks/useSortWords";
-import getWordData from "@/utilities/wordData";
-import InputDropdown from "@/components/input/InputDropdown";
+import { reloadDeck, deleteDeck, updateDeck } from "@/services/server/deck";
+import { DeckGradedType, deleteDeckGraded, insertDeckGraded } from "@/services/server/deckGraded";
+import loadData from "./loadData";
+import ShowWords from "@/components/ShowWords";
 
 
 export default function Page() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [user, setUser] = useState<ReaderType>();
-
-    const [books, setBooks] = useState<Array<BookType>>([]);
-
-    // Deck and the Deck's Cards
-    const [deck, setDeck] = useState<DeckType>();
-    const [deckCards, setDeckCards] = useState<DeckCardType[]>();
-
-    // Graded Decks (Results)
-    // and the Graded Cards for Each Graded Deck
-    const [decksGraded, setDecksGraded] = useState<DeckGradedType[]>([]);
-    const [decksGradedCards, setDecksGradedCards] = useState<{[deckGradedID: number]: DeckGradedCardType[]}>([]);
-
-    // Words
-    const [words, setWords] = useState<WordType[]>();
-    const [wordAccuracies, setWordAccuracies] = useState<{[word: string]: number}>();
-    const sortWords = useSortWords(words);
-
-    // Rendering
-    const [showQuizResults, setShowQuizResults] = useState<DeckGradedType|null>();
-    const [showQuiz, setShowQuiz] = useState(false);
-    const [showUpdateDeck, setShowUpdateDeck] = useState(false);
+    const deckID = searchParams.get('deckID');
+    
+    if (!deckID)
+        return router.back();
+    
+    const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
+    const [show, setShow] = useState<string|DeckGradedType>('');
 
 
     useEffect(() => {
         const load = async () => {
-            const user = await selectReader();
-            if (!user)
-                return router.push('/signIn');
-            setUser(user);
-
-
-            const books = await selectBooks();
-            if (books)
-                setBooks(books);
-
-                        
-            // Deck ID
-            const deckID = searchParams.get("deckID");
-            if (deckID === null)
-                return router.push('/home');
-            const deckIDAsNumber = Number(deckID);
-
-
-            // Get Deck
-            const output = await selectDeck(deckIDAsNumber);
-            if (!output) {
-                alert('Invalid Deck');
-                return router.push('/home');
+            try {
+                const data = await loadData(Number(deckID));
+                setData(data);
             }
-            setDeck(output.deck);
-            setDeckCards(output.deckCards);
-
-
-            // Get Deck Graded
-            const decksGraded = await selectDecksGradedByDeck(output.deck.deck_id);
-            if (!decksGraded) {
-                alert('Failed 1');
-                return;
+            catch (err) {
+                alert(err);
             }
-            setDecksGraded(decksGraded);
-
-            // Words
-            const words = await selectDeckWords(output.deck.deck_id);
-            if (!words) {
-                alert('Failed 2');
-                return;
-            }
-            setWords(words);
-            
-            const wordAccuracies = await getWordData(decksGraded, words.map(word => word.word[0]));
-            setWordAccuracies(wordAccuracies);
         }
         load();
     }, []);
 
 
-    const loadGradedDeckCards = async (deckGradedID: number) => {
-        const deckGraded = await selectDeckGraded(deckGradedID);
-        if (!deckGraded) {
-            alert('Graded Deck Failed to Load');
-            return;
-        }
-
-        // Update (Cache) Cards
-        setDecksGradedCards({
-            ...decksGradedCards, 
-            [deckGraded.deckGraded.deck_graded_id]: deckGraded.deckGradedCards
+    const handleDeckUpdated = (output: Awaited<ReturnType<typeof updateDeck>>) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                deck: {
+                    ...output,
+                    deck: output.deck,
+                    deckCards: output.deckCards || data.deck.deckCards
+                }   
+            }
         });
-
-        return deckGraded.deckGradedCards;
+        setShow('');
     }
 
 
-    const onDeckUpdated = (deck: DeckType, deckCards: DeckCardType[] | null) => {
-        setDeck(deck);
-        if (deckCards)
-            setDeckCards(deckCards);
-        setShowUpdateDeck(false);
+    const handleDeckGradedDeleted = (deletedDeckGraded: Awaited<ReturnType<typeof deleteDeckGraded>>) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                decksGraded: data.decksGraded.filter(deck => deck.deck_graded_id !== deletedDeckGraded.deck_graded_id),
+                decksGradedCards: Object.fromEntries(
+                    Object.entries(data.decksGradedCards).filter(entry => {
+                            return Number(entry[0]) !== deletedDeckGraded.deck_graded_id;
+                        })
+                    )
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleDeckReloaded = (deckCards: Awaited<ReturnType<typeof reloadDeck>>) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                deck: {
+                    ...data.deck,
+                    deckCards
+                }
+            }
+        });
+        setShow('');
     }
 
 
     const onDeleteDeckGraded = async (deckGradedID: number) => {
-        const deletedDeckGraded = await deleteDeckGraded(deckGradedID);
-        if (!deletedDeckGraded) {
-            alert('Failed to Delete Graded Deck');
-            return false;
+        try {
+            const deletedDeckGraded = await deleteDeckGraded(deckGradedID);
+            handleDeckGradedDeleted(deletedDeckGraded);
         }
-
-        // Updated Graded Decks
-        const updatedDecksGraded = decksGraded.filter(decksGraded => decksGraded.deck_graded_id !== deletedDeckGraded.deck_graded_id);
-        setDecksGraded(updatedDecksGraded);
-
-        // Updated Graded Decks' Cards
-        const updatedDecksGradedCards = {...decksGradedCards};
-        delete updatedDecksGradedCards[deletedDeckGraded.deck_graded_id];
-        setDecksGradedCards(updatedDecksGradedCards);
-
-        return true;
-    }
-
-
-    const onQuizFinished = (deckGraded: DeckGradedType, deckCardGraded: DeckGradedCardType[]) => {
-        setDecksGraded([...decksGraded, deckGraded]);
-        setDecksGradedCards({...decksGradedCards, [deckGraded.deck_graded_id]: deckCardGraded});
-        setShowQuiz(false);
-        return;
-    }
-
-
-    const onShowQuizResults = async (deckGraded: DeckGradedType) => {
-        const gradedDeckCards = deckGraded.deck_graded_id in decksGradedCards ? decksGradedCards[deckGraded.deck_graded_id] : await loadGradedDeckCards(deckGraded.deck_graded_id);
-        if (!gradedDeckCards) {
-            alert('Failed to Load Graded Deck Cards');
-            return;
+        catch (err) {
+            alert(err);
         }
-        setShowQuizResults(deckGraded);
     }
 
 
     const onReloadDeck = async (deckID: number) => {
-        const deckCards = await reloadDeck(deckID);
-        if (!deckCards) {
-            alert('Failed to Reload Deck');
-            return;
+        try {
+            const deckCards = await reloadDeck(deckID);
+            handleDeckReloaded(deckCards);
         }
-        setDeckCards(deckCards);
+        catch (err) {
+            alert(err);
+        }
     }
 
 
-    if (!deck || !words || !wordAccuracies)
-        return <></>;
+    const handleDeckGradedCreated = (output: Awaited<ReturnType<typeof insertDeckGraded>>) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                decksGraded: [
+                    ...data.decksGraded, 
+                    {
+                        ...data.deck.deck, 
+                        ...output.deckGraded
+                    }
+                ],
+                decksGradedCards: {
+                    ...data.decksGradedCards, 
+                    [output.deckGraded.deck_graded_id]: output.deckGradedCard
+                }
+            }
+        });
+        setShow('');
+    }
+
+
+    const onDeleteDeck = async (deckID: number) => {
+        try {
+            await deleteDeck(deckID);
+            router.back();
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+
+    const onShowQuizResults = async (deckGraded: DeckGradedType) => {
+        setShow(deckGraded);
+    }
+
+
+    if (!data)
+        return <>Loading</>;
+
 
     return (
-        <div
-            className="h-screen overflow-y-scroll"
-        >
-            <div
-                className="flex flex-col gap-2"
-            >
-                {deck.deck_name}
+        <div className="h-screen overflow-y-scroll">
+            <div className="flex flex-col gap-2">
+                {data.deck.deck.deck_name}
                 <Button
                     label="Delete Deck"
-                    onClick={async () => {
-                        const deletedDeck = await deleteDeck(deck.deck_id);
-                        if (!deletedDeck) {
-                            alert('Failed to Delete Deck');
-                            return;
-                        }
-                        router.back();
-                    }}
+                    onClick={() => onDeleteDeck(data.deck.deck.deck_id)}
                 />
                 <Button
                     label="Reload Deck"
-                    onClick={async () => onReloadDeck(deck.deck_id)}
+                    onClick={async () => onReloadDeck(data.deck.deck.deck_id)}
                 />
                 <Button
                     label="Update Deck"
-                    onClick={async () => setShowUpdateDeck(true)}
+                    onClick={async () => setShow('Update Deck')}
                 />
-                {decksGraded && decksGraded.map((deckGraded, i) => (
+                {data.decksGraded.map(deckGraded => (
                     <div 
                         key={deckGraded.deck_graded_id}
                         className="bg-gray-500"
@@ -211,75 +182,42 @@ export default function Page() {
                             onClick={() => onShowQuizResults(deckGraded)}
                         />
                         <p>
-                            Number Correct: {deckGraded.number_correct}
-                        </p>
-                        <p>
-                            Number Incorrect: {deckGraded.number_incorrect}
-                        </p>
-                        <p>
                             Duration: {deckGraded.duration}ms
+                            Number Correct: {deckGraded.number_correct}
+                            Number Incorrect: {deckGraded.number_incorrect}
                         </p>
                     </div>
                 ))}
             </div>
-            <section className="w-full px-4 py-4">
-                <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                    Words
-                </h3>
-                <div className="flex flex-wrap gap-8">
-                    <InputDropdown
-                        label="Sort Words"
-                        options={sortWords.sortOptions}
-                        value={[sortWords.sort]}
-                        onChange={(value: string) => sortWords.setSort(value)}
-                    />
-                    <div>
-                        {words.map((word, i) => (
-                            <Fragment key={i}>
-                                <p 
-                                    className="p-4 text-white bg-pink-500"
-                                >
-                                    {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordAccuracies[word.word[0]]}
-                                </p>
-                            </Fragment>
-                        ))}
-                    </div>
-                </div>
-            </section>
-            {(showQuizResults && decksGradedCards[showQuizResults.deck_graded_id] && deckCards && showQuizResults) && (
-                <>
-                    <QuizGraded
-                        deckCards={deckCards}
-                        deckGraded={showQuizResults}
-                        deckGradedCards={decksGradedCards[showQuizResults.deck_graded_id]}
-                        onClose={() => setShowQuizResults(null)}
-                        onDelete={async () => {
-                            const output = await onDeleteDeckGraded(showQuizResults.deck_graded_id);
-                            if (!output) {
-                                alert('Failed to Delete');
-                                return;
-                            }
-                            setShowQuizResults(null);
-                        }}
-                    />
-                </>
-            )}
-            {(showUpdateDeck && deck) &&
-                <UpdateDeck
-                    books={books}
-                    deck={deck}
-                    onDeckUpdated={onDeckUpdated}
-                    onClose={() => setShowUpdateDeck(false)}
-                />
-            }
+            <ShowWords
+                words={data.words}
+                decksGraded={data.decksGraded}
+            />
             <Button
                 label="Start Quiz"
-                onClick={() => setShowQuiz(true)}
+                onClick={() => setShow('Quiz')}
             />
-            {(showQuiz && deckCards) &&
+            {typeof show !== "string" && (
+                <QuizGraded
+                    deckCards={data.deck.deckCards}
+                    deckGraded={show}
+                    deckGradedCards={data.decksGradedCards[show.deck_graded_id]}
+                    onClose={() => setShow('')}
+                    onDelete={async () => onDeleteDeckGraded(show.deck_graded_id)}
+                />
+            )}
+            {show === 'Update Deck' &&
+                <UpdateDeck
+                    books={data.books}
+                    deck={data.deck.deck}
+                    onDeckUpdated={handleDeckUpdated}
+                    onClose={() => setShow('')}
+                />
+            }
+            {show === 'Quiz' &&
                 <Quiz
-                    deckCards={deckCards}
-                    onQuizFinished={onQuizFinished}
+                    cards={data.deck.deckCards}
+                    onQuizFinished={handleDeckGradedCreated}
                 />
             }
         </div>

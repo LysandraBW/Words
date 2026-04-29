@@ -1,200 +1,141 @@
 import Button from "@/components/Button";
 import { DeckCardType } from "@/services/server/deck";
-import { DeckGradedType, DeckGradedCardType, insertDeckGraded } from "@/services/server/deckGraded";
-import clsx from "clsx";
+import { insertDeckGraded } from "@/services/server/deckGraded";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
+import { DeckCardExtendedType, shuffleCards } from "./shuffleCards";
+import Progress from "@/components/quiz/Progress";
+import Question from "@/components/quiz/Question";
+
 
 interface QuizProps {
-    deckCards: DeckCardType[];
-    onQuizFinished: (deckGraded: DeckGradedType, deckCardGraded: DeckGradedCardType[]) => void;
+    cards: DeckCardType[];
+    onQuizFinished: (deck: Awaited<ReturnType<typeof insertDeckGraded>>) => void;
 }
 
-interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
-    // We add a number in order to keep
-    // track of the numbering as we shuffle
-    // the words.
-    words: [string, string, number][];
-}
-
-const tomorrow = new Date();
-tomorrow.setDate(tomorrow.getDate() + 1);
 
 export default function Quiz(props: QuizProps) {
     const [index, setIndex] = useState(0);
-    const [shuffledCards, setShuffledCards] = useState<DeckCardExtendedType[]>([]);
-    const [choices, setChoices] = useState<{[questionIndex: number]: number}>({});
-    
+    const [choices, setChoices] = useState<{[index: number]: number}>({});
+    const [shuffledCards, setShuffledCards] = useState<DeckCardExtendedType[]>();
+
+
     const {
-        start,
-        pause,
-        hours,
-        minutes,
-        seconds,
-        milliseconds,
+        start, pause,
+        hours, minutes, seconds, milliseconds,
         totalMilliseconds
     } = useStopwatch({ autoStart: false, interval: 20 });
     
 
     useEffect(() => {
-        setShuffledCards(loadShuffleCards(props.deckCards));
-    }, [props.deckCards]);
+        setShuffledCards(shuffleCards(props.cards));
+    }, [props.cards]);
 
 
     useEffect(() => {
-        if (!shuffledCards.length)
+        if (!shuffledCards?.length)
             return;
         start();
     }, [shuffledCards]);
 
 
-    const loadShuffleCards = (deckCards: DeckCardType[]): DeckCardExtendedType[] => {
-        const deckCardsExtended = [];
-
-        for (const card of deckCards) {
-            const shuffledIndices = [...Array(card.words.length)].map((e, i) => i);
-            shuffledIndices.sort(() => Math.random() - 0.5);
-
-            const shuffledWords: [string, string, number][] = [];
-            for (let i = 0; i < card.words.length; i++) {
-                const shuffledIndex = shuffledIndices[i];
-                shuffledWords.push([
-                    card.words[shuffledIndex][0], 
-                    card.words[shuffledIndex][1], 
-                    shuffledIndex
-                ]);
-            }
-
-            deckCardsExtended.push({
-                ...card,
-                words: shuffledWords
-            });
-        }
-
-        return deckCardsExtended;
-    }
-
-
     const selectChoice = (index: number, choice: number) => {
-        const deckCard = props.deckCards[index];
+        const deckCardID = props.cards[index].deck_card_id;
         const updatedChoices = {
             ...choices,
-            [deckCard.deck_card_id]: choice
+            [deckCardID]: choice
         }
         setChoices(updatedChoices);
 
         // Stop the Timer
-        if (Object.values(updatedChoices).length === props.deckCards.length) {
+        // If the user has answered all the questions (cards),
+        // we stop the timer.
+        const isComplete = Object.values(updatedChoices).length === props.cards.length;
+        if (isComplete)
             pause();
-        }
     }
 
-
+    
     const onFinishQuiz = async (choices: {[index: number]: number}, duration: number) => {
-        const choiceValues = props.deckCards.map(deckCard => choices[deckCard.deck_card_id]);
-        const numberCorrect = choiceValues.reduce((accumulator, currentValue) => currentValue === 0 ? accumulator + 1 : accumulator, 0);
-        const numberIncorrect = choiceValues.length - numberCorrect;
+        try {
+            if (Object.values(choices).length !== props.cards.length)
+                throw new Error('Must Answer All Questions');
 
-        const createdGradedDeck = await insertDeckGraded({
-            deck_graded_id: -1,
-            deck_id: props.deckCards[0].deck_id,
-            number_correct: numberCorrect,
-            number_incorrect: numberIncorrect,
-            duration: duration
-        }, Object.entries(choices).map(choice => [Number(choice[0]), Number(choice[1])]));
+            // Flatten Choices
+            const flatChoices = Object.entries(choices).map(choice => {
+                return [Number(choice[0]), Number(choice[1])]
+            }) as [number, number][];
 
-        if (!createdGradedDeck) {
-            alert('Failed to Create Graded Deck');
-            return;
+            // Find # Correct and # Incorrect
+            const choiceValues = props.cards.map(card => choices[card.deck_card_id]);
+            const numberCorrect = choiceValues.reduce((total, value) => value === 0 ? total + 1 : total, 0);
+            const numberIncorrect = choiceValues.length - numberCorrect;
+
+            const output = await insertDeckGraded({
+                deck_id: props.cards[0].deck_id,
+                duration: duration,
+                number_correct: numberCorrect,
+                number_incorrect: numberIncorrect,
+            }, flatChoices);
+
+            props.onQuizFinished(output);
         }
-
-        console.log(createdGradedDeck);
-        props.onQuizFinished(createdGradedDeck.deckGraded, createdGradedDeck.deckGradedCard);
+        catch (err) {
+            alert(err);
+        }
     }
 
 
-    if (props.deckCards.length <= 0)
+    if (!props.cards.length || !shuffledCards)
         return <></>
+
+
+    const notComplete = Object.values(choices).length !== props.cards.length;
+    const notAnswered = shuffledCards && choices[shuffledCards[index].deck_card_id] == null;
+    const lastCard = shuffledCards && index === shuffledCards.length - 1;
 
 
     return (
         <div>
             <h3>Quiz</h3>
-            {shuffledCards.length && [...Array(props.deckCards.length)].map((e, i) => (
-                <button 
-                    key={i}
-                    onClick={() => setIndex(i)}
-                    className={clsx(
-                        "p-2 bg-black text-white",
-                        index === i && "bg-blue-500",
-                        choices[shuffledCards[i].deck_card_id] != null && (choices[shuffledCards[i].deck_card_id] === 0 ? "bg-green-500" : "bg-red-500"),
-                        choices[shuffledCards[i].deck_card_id] == null && "bg-gray-500"
-                    )}
-                >
-                    {i}
-                </button>
-            ))}
-            {JSON.stringify(choices)}
-            {JSON.stringify(shuffledCards)}
+            <Progress
+                cards={props.cards}
+                shuffledCards={shuffledCards}
+                index={index}
+                onClickIndex={() => setIndex(index)}
+                choices={choices}
+            />
             <div>
-                <span className="tabular-nums">{hours}:{minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}:{milliseconds.toString().padStart(2, "0")}</span>
+                <span className="tabular-nums">
+                    {hours}:
+                    {minutes.toString().padStart(2, "0")}:
+                    {seconds.toString().padStart(2, "0")}:
+                    {milliseconds.toString().padStart(2, "0")}
+                </span>
             </div>
-            {shuffledCards.length &&
-                <>
-                    <p>Select the Definition of Word: <b>{props.deckCards[index].words[0][0]}</b></p>
-                    <div
-                        className="grid grid-cols-2 grid-rows-2 gap-2"
-                    >
-                        {shuffledCards[index].words.map(([word, wordDefinition, wordIndex], i) => (
-                            <button
-                                key={i}
-                                className={clsx(
-                                    "border",
-                                    (choices[shuffledCards[index].deck_card_id] != null && wordIndex === 0) && "bg-green-500",
-                                    (choices[shuffledCards[index].deck_card_id] != null && wordIndex !== 0) && "bg-red-500",
-                                    choices[shuffledCards[index].deck_card_id] === wordIndex && "border-2 border-blue-500"
-                                )}
-                                onClick={() => {
-                                    if (choices[shuffledCards[index].deck_card_id] != null)
-                                        return;
-                                    selectChoice(index, wordIndex)
-                                }}
-                            >
-                                <div>
-                                    {wordDefinition}
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                </>
-            }
-            {shuffledCards.length &&
-                <>
-                    <Button
-                        label="Back"
-                        disabled={index === 0}
-                        onClick={() => setIndex(index - 1)}
-                    />
-                    {index === shuffledCards.length - 1 || choices[shuffledCards[index].deck_card_id] == null ?
-                        <Button
-                            label="Finish"
-                            disabled={Object.values(choices).length !== props.deckCards.length}
-                            onClick={() => {
-                                if (Object.values(choices).length !== props.deckCards.length) {
-                                    alert('Must Answer All Questions');
-                                    return;
-                                }
-                                onFinishQuiz(choices, totalMilliseconds);
-                            }}
-                        />
-                        :
-                        <Button
-                            label="Next"
-                            disabled={index === shuffledCards.length - 1 || choices[shuffledCards[index].deck_card_id] == null}
-                            onClick={() => setIndex(index + 1)}
-                        />
-                    }
-                </>
+            <Question
+                card={props.cards[index]}
+                shuffledCard={shuffledCards[index]}
+                choices={choices}
+                selectChoice={(choice: number) => selectChoice(index, choice)}
+            />
+            <Button
+                label="Back"
+                disabled={index === 0}
+                onClick={() => setIndex(index - 1)}
+            />
+            {lastCard ?
+                <Button
+                    label="Finish"
+                    disabled={notComplete}
+                    onClick={() => onFinishQuiz(choices, totalMilliseconds)}
+                />
+                :
+                <Button
+                    label="Next"
+                    disabled={notAnswered}
+                    onClick={() => setIndex(index + 1)}
+                />
             }
         </div>
     )

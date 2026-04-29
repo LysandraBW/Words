@@ -1,8 +1,8 @@
 import { ReactNode, useEffect, useState } from "react";
-import Button from "../Button";
-import Inflection from "./Inflections";
-import Sense from "./Sense";
-import InputDropdown, { Option } from "../input/InputDropdown";
+import Button from "../../components/Button";
+import Inflection from "./word/Inflections";
+import Sense from "./word/Sense";
+import InputDropdown, { Option } from "../../components/input/InputDropdown";
 
 interface WordProps {
     word: string;
@@ -12,7 +12,7 @@ interface WordProps {
 
 export default function Word(props: WordProps) {
     const [selectedDefinition, setSelectedDefinition] = useState([""]);
-    const [definitionOptions, setDefinitionOptions] = useState<Option[]>([]);
+    const [definitionOptions, setDefinitionOptions] = useState<Option<string>[]>([]);
 
     useEffect(() => {
         if (!props.wordEntries)
@@ -23,7 +23,7 @@ export default function Word(props: WordProps) {
 
 
     const loadShortDefinitionOptions = (wordEntries: any) => {
-        const shortDefs: Option[] = [];
+        const shortDefs: Option<string>[] = [];
         for (const entry of wordEntries) {
             for (const def of entry.shortdef) {
                 if (def)

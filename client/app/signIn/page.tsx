@@ -100,7 +100,8 @@ export default function Page() {
                         />
                         <InputButton
                             label="Sign In"
-                            style="blue"
+                            style="black"
+                            disabled={true}
                             onClick={() => onSignIn(email, password)}
                         />
                     </form>

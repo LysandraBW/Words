@@ -15,6 +15,7 @@ export interface InputTextProps {
     type: string;
 }
 
+
 export default function InputText(props: Partial<InputTextProps> & Partial<InputLabelProps>) {
     const onChange = (event: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
         if (!props.onChange)

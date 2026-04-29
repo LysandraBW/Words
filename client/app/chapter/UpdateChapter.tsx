@@ -37,18 +37,17 @@ export default function UpdateChapter(props: UpdateChapterProps) {
 
 
     const onUpdateChapter = async (form: Form<ChapterType>) => {
-        if (!testForm(form)) {
-            alert("Invalid Chapter");
-            return;
-        }
+        try {
+            if (!testForm(form)) 
+                throw new Error('Failed to Update Chapter');
 
-        const updatedChapter = await updateChapter(getFormData(form));                
-        if (!updatedChapter) {
-            alert('Failed to Update Chapter');
-            return;
+            const chapter = getFormData(form);
+            const updatedChapter = await updateChapter(chapter);
+            props.onChapterUpdated(updatedChapter);            
         }
-
-        props.onChapterUpdated(updatedChapter);
+        catch (err) {
+            alert(err);
+        }
     }
 
 

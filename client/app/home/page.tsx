@@ -1,7 +1,5 @@
 "use client";
 import { BookType } from "@/services/server/book";
-import { selectReader, ReaderType } from "@/services/server/reader";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
 import CreateBook from "./CreateBook";
 import CreateDeck from "./CreateDeck";
@@ -20,19 +18,12 @@ export interface BookToChapters {
 
 
 export default function Page() {
-    const router = useRouter();
-    const [user, setUser] = useState<ReaderType>();
     const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
     const [show, setShow] = useState('');
 
 
     useEffect(() => {
         const load = async () => {
-            const user = await selectReader();
-            if (!user)
-                return router.push('/signIn');
-            setUser(user);
-
             try {
                 const data = await loadData();
                 setData(data);
@@ -101,7 +92,7 @@ export default function Page() {
     }
 
     
-    if (!user || !data) 
+    if (!data) 
         return <>Loading</>;
 
     

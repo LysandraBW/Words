@@ -143,7 +143,7 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
     try {
         return await db.begin(async (db: any) => {
             // Deck
-            const rowsDeck = await db<Deck[]>`
+            const [rowsDeck] = await db<Deck[]>`
                 INSERT INTO Deck (
                     deck_name, 
                     deck_chapters, 
@@ -159,32 +159,33 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
 
             if (!rowsDeck || rowsDeck.length !== 1)
                 throw 'Insert Failed';
-
+            
+            const deckID = rowsDeck[0].deck_id;
 
             // Words
             const words = await SelectWordsFromChapters(deck.deck_chapters, deck.reader_id);
-            
             if (!words)
-                throw 'Word Selection Failed';
+                throw 'Word Failed';
             
-
             // Words -> Cards
             const cards = await Promise.all(words.map(async (word) => ({
-                deck_id: (rowsDeck[0] as any).deck_id,
-                words: [
-                    word, 
-                    ...await getRandomWords(word[0], word[1])
-                ]
+                deck_id: deckID,
+                words: [word, ...await getRandomWords(word[0], word[1])]
             })));
 
             if (!cards || cards.length !== words.length)
-                throw 'Card Creation Failed';
+                throw 'Card Failed';
 
             // Cards
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
-            `;
+            `.then(async () => {
+                const output = await SelectDeck(deckID, deck.reader_id);
+                if (!output)
+                    return null;
+                return output.deckCards;
+            });
 
             if (!rowsDeck || rowsDeckCard.length !== words.length)
                 throw 'Deck Card Insert Failed';
@@ -245,39 +246,37 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
                 throw 'Update Failed';
 
             if (!deck.deck_chapters || !deck.deck_chapters.length)
-                return {
-                    deck: rowsDeck[0]
-                };
+                return {deck: rowsDeck[0]};
             
+            // Delete Existing Cards
             await db`
                 DELETE FROM deck_card
                 WHERE deck_id = ${deck.deck_id}
             `;
             
-            
             // Words
             const words = await SelectWordsFromChapters(deck.deck_chapters, deck.reader_id);
-            
             if (!words || !words.length)
-                throw 'Word Selection Failed';
-
+                throw 'Word Failed';
 
             // Words -> Cards
             const cards = await Promise.all(words.map(async (word) => ({
                 deck_id: deck.deck_id,
-                words: [
-                    word, 
-                    ...await getRandomWords(word[0], word[1])
-                ]
+                words: [word, ...await getRandomWords(word[0], word[1])]
             })));
 
             if (!cards || !cards.length) 
-                throw 'Card Creation Failed'
+                throw 'Card Failed'
 
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
-            `;
+            `.then(async () => {
+                const output = await SelectDeck(deck.deck_id, deck.reader_id);
+                if (!output)
+                    return null;
+                return output.deckCards;
+            });
 
             if (!rowsDeckCard || rowsDeckCard.length !== words.length)
                 throw 'Insert Failed';
@@ -300,6 +299,7 @@ export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_chap
 export async function ReloadDeck(deckID: number, readerID: string) {
     try {
         return await db.begin(async (db: any) => {
+            // Delete Existing Cards
             await db`
                 DELETE FROM deck_card
                 WHERE deck_id = ${deckID}
@@ -313,37 +313,32 @@ export async function ReloadDeck(deckID: number, readerID: string) {
             `);
 
             if (!deckChapters)
-                throw 'Deck Chapter Selection Failed';
+                throw 'Chapters Failed';
 
-            
             // Words
-            const words = await SelectWordsFromChapters(
-                deckChapters.deck_chapters, 
-                readerID
-            );
-
+            const words = await SelectWordsFromChapters(deckChapters.deck_chapters, readerID);
             if (!words || !words.length)
-                throw 'Word Selection Failed';
-
+                throw 'Word Failed';
 
             // Words -> Cards
             const cards = await Promise.all(words.map(async (word) => ({
                 deck_id: deckID,
-                words: [
-                    word, 
-                    ...await getRandomWords(word[0], word[1])
-                ]
+                words: [word, ...await getRandomWords(word[0], word[1])]
             })));
 
             if (!cards || !cards.length) 
-                throw 'Card Creation Failed'
-
+                throw 'Card Failed';
 
             // Cards
             const rowsDeckCard = await db`
                 INSERT INTO deck_card ${db(cards)}
                 RETURNING *
-            `;
+            `.then(async () => {
+                const output = await SelectDeck(deckID, readerID);
+                if (!output)
+                    return null;
+                return output.deckCards;
+            });
 
             if (!rowsDeckCard || rowsDeckCard.length !== words.length)
                 throw 'Insert Failed';

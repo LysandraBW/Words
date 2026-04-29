@@ -6,7 +6,7 @@ import { createForm, Form, getFormData, testForm, updateFormValue } from "@/util
 import { useEffect, useState } from "react";
 import z from "zod";
 import InputCheckboxes from "@/components/input/InputCheckbox/InputCheckboxes";
-import { toggleValue } from "@/utilities/arrays";
+import { toggleValue } from "@/utilities/array";
 import { ChapterType } from "@/services/server/chapter";
 
 

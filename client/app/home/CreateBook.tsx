@@ -9,7 +9,7 @@ import z from "zod";
 import InputImageURL from "@/components/input/InputImageURL";
 import Button from "@/components/Button";
 import SearchBooks from "./SearchBooks";
-import { addValue, deleteValue } from "@/utilities/arrays";
+import { addValue, deleteValue } from "@/utilities/array";
 
 
 interface CreateBookProps {

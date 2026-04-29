@@ -1,219 +1,101 @@
 "use client";
 import Button from "@/components/Button";
-import InputText from "@/components/input/InputText";
-import Word from "@/components/word/Word";
-import WordNotFound from "@/components/word/WordNotFound";
-import { BookType } from "@/services/server/book";
-import { ChapterType, deleteChapter, selectChapter, selectChapterWords, updateChapter } from "@/services/server/chapter";
-import { selectReader, ReaderType } from "@/services/server/reader";
-import { insertWord, decrementWordNumberInstances, deleteWord, incrementWordNumberInstances, WordType } from "@/services/server/word";
-import getAutoCompletion from "@/services/words/getAutoCompletion";
-import getWordEntry from "@/services/words/getWordEntry";
+import { deleteChapter } from "@/services/server/chapter";
+import { insertWord, decrementWordNumberInstances as decrementWord, deleteWord, incrementWordNumberInstances as incrementWord } from "@/services/server/word";
 import { MinusIcon, PlusIcon, SettingsIcon, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
+import { useEffect, useState } from "react";
 import UpdateChapter from "./UpdateChapter";
-import useSortWords from "@/hooks/useSortWords";
-import InputDropdown from "@/components/input/InputDropdown";
-import getWordData from "@/utilities/wordData";
-import { selectDecksGradedByChapters } from "@/services/server/deckGraded";
+import ShowWords from "@/components/ShowWords";
+import LogWord from "./LogWord";
+import loadData, { useDataHandlers } from "./loadData";
 
 
 export default function Page() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [user, setUser] = useState<ReaderType>();
+    const chapterID = searchParams.get("chapterID");
+    if (!chapterID)
+        return router.push('/home');
 
-    const [chapter, setChapter] = useState<(ChapterType & BookType)>();
-    
-    const [words, setWords] = useState<WordType[]>();
-    const [wordAccuracies, setWordAccuracies] = useState<{[word: string]: number}>();
-    const sortWords = useSortWords(words);
+    const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
+    const handlers = useDataHandlers(setData);
+    const [show, setShow] = useState<string>('');
 
 
     useEffect(() => {
         const load = async () => {
-            const user = await selectReader();
-            if (!user)
-                return router.push('/signIn');
-            setUser(user);
-
-
-            // Chapter ID
-            const chapterID = searchParams.get("chapterID");
-            if (chapterID === null)
-                return router.push('/home');
-            const numberChapterID = Number(chapterID);
-
-
-            // Get Chapter by ID
-            const chapter = await selectChapter(numberChapterID);
-            if (!chapter) {
-                alert('Failed');
-                return;
+            try {
+                const data = await loadData(Number(chapterID));
+                setData(data);
             }
-            setChapter(chapter);
-
-
-            // Load Decks Graded
-            const decksGraded = await selectDecksGradedByChapters(chapter.chapter_id);
-            if (!decksGraded) {
-                alert('Failed');
-                return;
+            catch (err) {
+                alert(err);
             }
-            
-            // Get Chapters's Words
-            const words = await selectChapterWords(numberChapterID);
-            if (!words) {
-                alert('Failed');
-                return;
-            }
-            setWords(words);
-
-            // Load Word Accuracies
-            const wordAccuracies = await getWordData(decksGraded, words.map(word => word.word[0]));
-            setWordAccuracies(wordAccuracies);
         }
         load();
     }, []);
     
 
-    // Add Word
-    const [word, setWord] = useState<string>();
-    const [wordEntry, setWordEntry] = useState<any>();
-    
-    const [showAddWord, setShowAddWord] = useState(true);
-    const [showUpdateChapter, setShowUpdateChapter] = useState(true);
-
-    const [search, setSearch] = useState("");
-    const [searchDebounced] = useDebounce(search, 500);
-    const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
-    
-
-    useEffect(() => {
-        autoCompleteSearch(searchDebounced);
-    }, [searchDebounced]);
-
-
-    const autoCompleteSearch = (search: string) => {
-        const suggestions = getAutoCompletion(search, 5);
-        setSearchSuggestions(suggestions);
-    }
-
-
     const onDeleteChapter = async (chapterID: number) => {
-        const deletedChapter = await deleteChapter(chapterID);
-        if (!deletedChapter) {
-            alert('Failed to Delete Word');
-            return;
+        try {
+            await deleteChapter(chapterID);
+            router.back();
         }
-
-        router.back();
+        catch (err) {
+            alert(err);
+        }
     }
 
 
-    const onInsertWord = async (chapterID: number, word: string, wordDefinition: string) => {
-        const initialWord: WordType = {
-            word_id: -1,
-            word: [word, wordDefinition],
-            word_number_instances: 0,
-            chapter_id: chapterID,
-            created_at: '',
-            last_seen: ''
+    const onCreateWord = async (word: string, wordDefinition: string) => {
+        try {
+            const createdWord = await insertWord({word: [word, wordDefinition]});
+            handlers.handleWordCreated(createdWord);
         }
-
-        const insertedWord = await insertWord(initialWord);
-        if (!insertedWord) {
-            alert('Failed to Insert Word');
-            return;
+        catch (err) {
+            alert(err);
         }
-        
-        const updatedChapterWords = [...(words || []), insertedWord];
-        setWords(updatedChapterWords);
-
-        return insertedWord;
-    }
+    }  
 
 
     const onDeleteWord = async (wordID: number) => {
-        if (!words)
-            return;
-        
-        const deletedWord = await deleteWord(wordID);
-        if (!deletedWord) {
-            alert('Failed to Delete Word');
-            return;
+        try {
+            const deletedWord = await deleteWord(wordID);
+            handlers.handleWordDeleted(deletedWord);
         }
-        
-        const updatedChapterWords = words.filter(word => word.word_id !== wordID);
-        setWords(updatedChapterWords);
-
-        return deletedWord;
-    }
-
-
-    const onIncrementWordNumberInstances = async (wordID: number) => {
-        if (!words)
-            return;
-
-        const updatedWord = await incrementWordNumberInstances(wordID);
-        if (!updatedWord) {
-            alert('Failed to Increment Word\'s Number of Instances');
-            return;
+        catch (err) {
+            alert(err);
         }
-
-        const updatedChapterWords = words.map(word => {
-            if (word.word_id === wordID)
-                word.word_number_instances += 1;
-            return word;
-        });
-
-        setWords(updatedChapterWords);
-        return updatedWord;
     }
 
 
-    const onDecrementWordNumberInstances = async (wordID: number) => {
-        if (!words)
-            return;
-
-        const updatedWord = await decrementWordNumberInstances(wordID);
-        if (!updatedWord) {
-            alert('Failed to Increment Word\'s Number of Instances');
-            return;
+    const onIncrementWord = async (wordID: number) => {
+        try {
+            const updatedWord = await incrementWord(wordID);
+            handlers.handleWordIncremented(updatedWord);
         }
-
-        const updatedChapterWords = words.map(word => {
-            if (word.word_id === wordID)
-                word.word_number_instances -= 1;
-            return word;
-        });
-
-        setWords(updatedChapterWords);
-        return updatedWord;
+        catch (err) {
+            alert(err);
+        }
     }
 
 
-    const onSearchWord = async (word: string) => {
-        setWord(word);
-        setSearch(word);
+    const onDecrementWord = async (wordID: number) => {
+        try {
+            const updatedWord = await decrementWord(wordID);
+            handlers.handleWordDecremented(updatedWord);
+        }
+        catch (err) {
+            alert(err);
+        }
+    }    
 
-        // Get Entry
-        const entry = await getWordEntry(word);
-        setWordEntry(entry);
-    }
 
+    if (!data)
+        return <>Loading</>;
 
-    const onChapterUpdated = async (updatedChapter: ChapterType) => {
-        if (!chapter)
-            return;
-        setChapter({...chapter, ...updatedChapter});
-    }
-
-    if (!chapter || !words || !wordAccuracies)
-        return <></>;
-
+    
     return (
         <div>
             <div
@@ -222,48 +104,24 @@ export default function Page() {
                 <h3>Book and Chapter</h3>
                 <button
                     className="bg-red-500"
-                    onClick={() => {
-                        if (!chapter)
-                            return;
-                        onDeleteChapter(chapter.chapter_id);
-                    }}
+                    onClick={() => onDeleteChapter(data.chapter.chapter_id)}
                 >
                     Delete Chapter
                     <TrashIcon/>
                 </button>
                 <h3>
-                    {chapter.book_name} {'>'} ({chapter.chapter_number}) {chapter.chapter_title}
+                    {data.chapter.book_name} {'>'} ({data.chapter.chapter_number}) {data.chapter.chapter_title}
                 </h3>
             </div>
-            <section className="w-full px-4 py-4">
-                <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                    Words
-                </h3>
-                <div className="flex flex-wrap gap-8">
-                    <InputDropdown
-                        label="Sort Words"
-                        options={sortWords.sortOptions}
-                        value={[sortWords.sort]}
-                        onChange={(value: string) => sortWords.setSort(value)}
-                    />
-                    <div>
-                        {words.map((word, i) => (
-                            <Fragment key={i}>
-                                <p 
-                                    className="p-4 text-white bg-pink-500"
-                                >
-                                    {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordAccuracies[word.word[0]]}
-                                </p>
-                            </Fragment>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            <ShowWords
+                words={data.words}
+                decksGraded={data.decksGraded}
+            />
             <div
                 className="bg-blue-200"
             >
                 <h3>Words</h3>
-                {words.map((word, i) => (
+                {data.words.map((word, i) => (
                     <div key={i}>
                         <button
                             onClick={() => onDeleteWord(word.word_id)}
@@ -274,13 +132,13 @@ export default function Page() {
                             {word.word[0]}, {word.word[1]}
                         </p>
                         <button
-                            onClick={() => onDecrementWordNumberInstances(word.word_id)}
+                            onClick={() => onDecrementWord(word.word_id)}
                         >
                             <MinusIcon/>
                         </button>
                         {word.word_number_instances}
                         <button
-                            onClick={() => onIncrementWordNumberInstances(word.word_id)}
+                            onClick={() => onIncrementWord(word.word_id)}
                         >
                             <PlusIcon/>
                         </button>
@@ -288,76 +146,28 @@ export default function Page() {
                 ))}
             </div>
             <button
-                onClick={() => setShowUpdateChapter(true)}
+                onClick={() => setShow('Update Chapter')}
                 className="bg-pink-600"
             >
                 <SettingsIcon/>
             </button>
-            {(showUpdateChapter) &&
-                <div>
-                    <UpdateChapter
-                        chapter={chapter}
-                        onClose={() => setShowUpdateChapter(false)}
-                        onChapterUpdated={(updatedChapter: ChapterType) => onChapterUpdated(updatedChapter)}
-                    />
-                </div>
+            {show === 'Update Chapter' &&
+                <UpdateChapter
+                    chapter={data.chapter}
+                    onClose={() => setShow('')}
+                    onChapterUpdated={handlers.handleChapterUpdated}
+                />
             }
             <Button
-                label='Add Meaning'
-                onClick={() => setShowAddWord(true)}
+                label='Log Word'
+                onClick={() => setShow('Log Word')}
                 style="blue"
             />
-            {showAddWord &&
-                <div 
-                    className="bg-green-500"
-                >
-                    <div
-                        onClick={() => setShowAddWord(false)}
-                    >
-                        Close
-                    </div>
-                    <InputText
-                        label="Search Word"
-                        value={search}
-                        onChange={setSearch}
-                    />
-                    {searchSuggestions.map((value, i) => (
-                        <div
-                            key={i}
-                            onClick={() => {
-                                setSearch(value);
-                                onSearchWord(value);
-                            }}
-                        >
-                            {value}
-                        </div>
-                    ))}
-                    {(word && wordEntry) && 
-                        <>
-                            {typeof wordEntry[0] === "string" ?
-                                <>
-                                    <WordNotFound
-                                        word={word}
-                                        otherWords={wordEntry}
-                                        onClickWord={onSearchWord}
-                                    />
-                                </>
-                                :
-                                <>
-                                    <Word
-                                        word={word}
-                                        wordEntries={wordEntry}
-                                        onInsertWord={(word: string, wordDefinition: string) => {
-                                            if (!chapter)
-                                                return;
-                                            onInsertWord(chapter.chapter_id, word, wordDefinition);
-                                        }}
-                                    />
-                                </>
-                            }
-                        </>
-                    }
-                </div>
+            {show === 'Log Word' &&
+                <LogWord
+                    onClose={() => setShow('')}
+                    onCreateWord={onCreateWord}
+                />
             }
         </div>
     )
