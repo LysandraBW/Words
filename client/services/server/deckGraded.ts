@@ -1,39 +1,34 @@
-import { DeckType } from "./deck";
+import { DeckQuestionType, DeckType } from "./deck";
 
 
+export type DeckGradedQuestionType = DeckQuestionType & { choice: number; };
 export interface DeckGradedType {
     deck_graded_id: number;
     duration: number;
     number_correct: number;
     number_incorrect: number;
+    deck_questions: DeckGradedQuestionType[];
     deck_id: number;
-}
-
-
-export interface DeckGradedCardType {
-    choice: number;
-    deck_graded_id: number;
-    deck_card_id: number;
 }
 
 
 export type CreateDeckGradedType = Omit<DeckGradedType, "deck_graded_id">
 
 
-export async function insertDeckGraded(deck: CreateDeckGradedType, choices: [number, number][]) {
+export async function insertDeckGraded(deck: CreateDeckGradedType) {
     const response = await fetch('http://127.0.0.1:8000/decksGraded', {
         method: "POST",
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({...deck, choices})
+        body: JSON.stringify(deck)
     });
 
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: {deckGraded: DeckGradedType, deckGradedCard: DeckGradedCardType[]} | null = await response.json();
+    const data: DeckGradedType | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
 
@@ -67,7 +62,7 @@ export async function selectDeckGraded(deckGradedID: number) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: {deckGraded: DeckGradedType, deckGradedCards: (DeckGradedType & DeckGradedCardType)[]} | null = await response.json();
+    const data: DeckGradedType | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
 

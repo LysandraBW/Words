@@ -15,118 +15,168 @@ const ReaderSchema = z.object({
 
 
 export async function getReader(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
+    try {
+        const sessionID = await getCookie(req, "sessionID");
+        if (!sessionID)
+            return res.sendStatus(401);
 
-    const output = ReaderSchema.pick({ reader_id: true }).safeParse({
-        reader_id: await AuthorizeReaderBySession(sessionID)
-    });
+        const output = ReaderSchema.pick({ reader_id: true }).safeParse({
+            reader_id: await AuthorizeReaderBySession(sessionID)
+        });
 
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
+        if (!output.success) {
+            console.error(output.error);
+            return res.sendStatus(400);
+        }
+
+        const reader = await SelectReader(output.data.reader_id);
+        res.status(200).json(reader);
     }
-
-    const reader = await SelectReader(output.data.reader_id);
-    res.status(200).json(reader);
+    catch (error) {
+        console.error("Error");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return res.status(500);
+    }   
 }
 
 
-
 export async function signIn(req: Request, res: Response) {
-    const output = ReaderSchema.pick({ reader_email: true, reader_password: true }).safeParse({
-        reader_email: req.body.reader_email,
-        reader_password: req.body.reader_password
-    });
+    try {
+        const output = ReaderSchema.pick({ reader_email: true, reader_password: true }).safeParse({
+            reader_email: req.body.reader_email,
+            reader_password: req.body.reader_password
+        });
 
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
+        if (!output.success) {
+            console.error(output.error);
+            return res.sendStatus(400);
+        }
+
+        const sessionID = await SignInReader(output.data);
+        if (!sessionID)
+            return res.sendStatus(401);
+
+        await setCookie(res, "sessionID", sessionID);
+        res.sendStatus(200);
     }
-
-    const sessionID = await SignInReader(output.data);
-    if (!sessionID)
-        return res.sendStatus(401);
-
-    await setCookie(res, "sessionID", sessionID);
-    res.sendStatus(200);
+    catch (error) {
+        console.error("Error");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return res.status(500);
+    }
 }
 
 
 
 export async function signUp(req: Request, res: Response) {
-    const output = ReaderSchema.pick({ reader_name: true, reader_email: true, reader_password: true }).safeParse({
-        reader_name: req.body.reader_name,
-        reader_email: req.body.reader_email,
-        reader_password: req.body.reader_password
-    });
+    try {
+        const output = ReaderSchema.pick({ 
+            reader_name: true, 
+            reader_email: true, 
+            reader_password: true 
+        }).safeParse({
+            reader_name: req.body.reader_name,
+            reader_email: req.body.reader_email,
+            reader_password: req.body.reader_password
+        });
 
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
+        if (!output.success) {
+            console.error(output.error);
+            return res.sendStatus(400);
+        }
+
+        const sessionID = await SignUpReader(output.data);
+        if (!sessionID)
+            return res.sendStatus(400);
+
+        setCookie(res, "sessionID", sessionID);
+        res.sendStatus(200);
     }
-
-    const sessionID = await SignUpReader(output.data);
-    if (!sessionID)
-        return res.sendStatus(400);
-
-    setCookie(res, "sessionID", sessionID);
-    res.sendStatus(200);
+    catch (error) {
+        console.error("Error");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return res.status(500);
+    }
 }
 
 
 
 export async function signOut(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
-
-    delCookie(res, "sessionID");
-    res.sendStatus(200);
+    try {
+        const sessionID = await getCookie(req, "sessionID");
+        if (!sessionID)
+            return res.sendStatus(401);
+        delCookie(res, "sessionID");
+        res.sendStatus(200);
+    }
+    catch (error) {
+        console.error("Error");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return res.status(500);
+    }
 }
 
 
 
 export async function updateReader(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
+    try {
+        const sessionID = await getCookie(req, "sessionID");
+        if (!sessionID)
+            return res.sendStatus(401);
 
-    const output = nullableBy(ReaderSchema, ["reader_name", "reader_email", "reader_password", "reader_profile_image"]).safeParse({
-        reader_name: req.body.reader_name,
-        reader_email: req.body.reader_email,
-        reader_password: req.body.reader_password,
-        reader_profile_image: req.body.reader_profile_image,
-        reader_id: await AuthorizeReaderBySession(sessionID)
-    });
+        const output = nullableBy(ReaderSchema, ["reader_name", "reader_email", "reader_password", "reader_profile_image"]).safeParse({
+            reader_name: req.body.reader_name,
+            reader_email: req.body.reader_email,
+            reader_password: req.body.reader_password,
+            reader_profile_image: req.body.reader_profile_image,
+            reader_id: await AuthorizeReaderBySession(sessionID)
+        });
 
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
+        if (!output.success) {
+            console.error(output.error);
+            return res.sendStatus(400);
+        }
+
+        const readers = await UpdateReader(output.data);
+        return res.status(200).json(readers);
     }
-    
-    const readers = await UpdateReader(output.data);
-    return res.status(200).json(readers);
+    catch (error) {
+        console.error("Error");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return res.status(500);
+    }
 }
 
 
 
 export async function deleteReader(req: Request, res: Response) {
-    const sessionID = await getCookie(req, "sessionID");
-    if (!sessionID)
-        return res.sendStatus(401);
+    try {
+        const sessionID = await getCookie(req, "sessionID");
+        if (!sessionID)
+            return res.sendStatus(401);
 
-    const output = ReaderSchema.pick({ reader_id: true}).safeParse({
-        reader_id: await AuthorizeReaderBySession(sessionID)
-    });
+        const output = ReaderSchema.pick({ reader_id: true}).safeParse({
+            reader_id: await AuthorizeReaderBySession(sessionID)
+        });
 
-    if (!output.success) {
-        console.error(output.error);
-        return res.sendStatus(400);
+        if (!output.success) {
+            console.error(output.error);
+            return res.sendStatus(400);
+        }
+
+        delCookie(res, "sessionID");
+        await DeleteReader(output.data.reader_id);
+        return res.status(200);
     }
-
-    delCookie(res, "sessionID");
-    await DeleteReader(output.data.reader_id);
-    return res.status(200);
+    catch (error) {
+        console.error("Error");
+        if (process.env.ENV !== "production")
+            console.error(error);
+        return res.status(500);
+    }
 }

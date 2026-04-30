@@ -1,9 +1,10 @@
 import Button from "@/components/Button";
 import InputCheckboxes from "@/components/input/InputCheckbox/InputCheckboxes";
 import InputText from "@/components/input/InputText";
-import { BookType, selectBookChapters } from "@/services/server/book";
-import { ChapterType } from "@/services/server/chapter";
+import { BookType, selectBookChapters, selectBookWords } from "@/services/server/book";
+import { ChapterType, selectChapterWords } from "@/services/server/chapter";
 import { DeckType, updateDeck } from "@/services/server/deck"
+import { WordType } from "@/services/server/word";
 import { sameArrays, toggleValue } from "@/utilities/array";
 import { createForm, Form, getFormData, testForm, updateFormValue } from "@/utilities/form";
 import { useEffect, useState } from "react";
@@ -19,7 +20,7 @@ interface UpdateDeckProps {
 
 
 export default function UpdateDeck(props: UpdateDeckProps) {
-    const [bookToChapters, setBookToChapters] = useState<{[bookID: number]: ChapterType[]}>(); 
+    const [bookToChaptersToWords, setBookToChaptersToWords] = useState<{[bookID: number]: [ChapterType, WordType[]][]}>(); 
     const [form, setForm] = useState<Form<DeckType>>(createForm([
         {
             label: 'deck_name',
@@ -27,8 +28,8 @@ export default function UpdateDeck(props: UpdateDeckProps) {
             test: z.any()
         },
         {
-            label: 'deck_chapters',
-            value: props.deck.deck_chapters,
+            label: 'deck_words',
+            value: props.deck.deck_words,
             test: z.any()
         }
     ]));
@@ -37,16 +38,30 @@ export default function UpdateDeck(props: UpdateDeckProps) {
     useEffect(() => {
         const load = async () => {
             try {
-                setBookToChapters(
-                    Object.fromEntries(
-                        await Promise.all(props.books.map(async book => {
+                // Load Data
+                // Structure: [book, [chapter, [words]]]
+                const data: [number, [ChapterType, WordType[]][]][] = await Promise.all(props.books.map(async book => {
+                    return [
+                        book.book_id,
+                        await selectBookChapters(book.book_id).then(async chapters => await Promise.all(chapters.map(async chapter => {
                             return [
-                                book.book_id,
-                                await selectBookChapters(book.book_id)
-                            ];
-                        }))
-                    )
-                );
+                                chapter,
+                                await selectChapterWords(chapter.chapter_id)
+                            ]
+                        })))
+                    ];
+                }));
+
+                const booksToChaptersToWords: {[bookID: number]: [ChapterType, WordType[]][]} = {};
+                for (const [bookID, chaptersToWords] of data) {
+                    for (const [chapter, words] of chaptersToWords) {
+                        // Initialize Book Entry
+                        if (!(bookID in booksToChaptersToWords))
+                            booksToChaptersToWords[bookID] = [];
+                        booksToChaptersToWords[bookID].push([chapter, words]);
+                    }
+                }
+                setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {
                 alert(err);
@@ -62,12 +77,12 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                 throw new Error('Invalid Form');
 
             const deck = getFormData(form);
-            const chaptersNotUpdated = sameArrays(props.deck.deck_chapters, deck.deck_chapters);
+            const wordsNotUpdated = sameArrays(props.deck.deck_words, deck.deck_words);
             
             props.onDeckUpdated(await updateDeck({
                 deck_id: props.deck.deck_id,
                 deck_name: deck.deck_name,
-                deck_chapters: chaptersNotUpdated ? null : deck.deck_chapters
+                deck_words: wordsNotUpdated ? null : deck.deck_words
             }));
         }
         catch (err) {
@@ -79,13 +94,13 @@ export default function UpdateDeck(props: UpdateDeckProps) {
     const onToggleChapter = (chapterID: number) => {
         setForm(form => updateFormValue(
             form, 
-            'deck_chapters', 
-            toggleValue(chapterID, form.deck_chapters.value)
+            'deck_words', 
+            toggleValue(chapterID, form.deck_words.value)
         ));
     }
 
 
-    if (!bookToChapters)
+    if (!bookToChaptersToWords)
         return <>Loading</>;
 
 
@@ -102,14 +117,19 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                     className="flex flex-col gap-y-2"
                 >
                     <h3><b>{book.book_name}</b></h3>
-                    <InputCheckboxes
-                        value={form.deck_chapters.value}
-                        options={(bookToChapters[book.book_id] ?? []).map(chapter => ({
-                            value: chapter.chapter_id,
-                            textLabel: chapter.chapter_title
-                        }))}
-                        onChange={onToggleChapter}
-                    />
+                    {bookToChaptersToWords[book.book_id].map(([chapter, words], i) => (
+                        <div>
+                            {chapter.chapter_title}
+                            <InputCheckboxes
+                                value={form.deck_words.value}
+                                options={words.map(word => ({
+                                    value: word.word_id,
+                                    textLabel: word.word[0]
+                                }))}
+                                onChange={onToggleChapter}
+                            />
+                        </div>
+                    ))}
                 </div>
             ))}
             <Button

@@ -1,12 +1,10 @@
-import { DeckCardExtendedType } from "@/app/deck/shuffleCards";
-import { DeckCardType } from "@/services/server/deck";
+import { DeckType } from "@/services/server/deck";
 import clsx from "clsx";
 
 interface ProgressProps {
-    cards: DeckCardType[];
-    shuffledCards: DeckCardExtendedType[];
-    choices: {[index: number]: number};
+    numberQuestions: number;
     index: number;
+    choices: {[index: number]: number};
     onClickIndex: (index: number) => void;
 }
 
@@ -14,9 +12,9 @@ interface ProgressProps {
 export default function Progress(props: ProgressProps) {
     return (
         <div>
-            {[...Array(props.cards.length)].map((e, i) => {
-                const unanswered = props.choices[props.shuffledCards[i].deck_card_id] == null;
-                const correct = !unanswered && props.choices[props.shuffledCards[i].deck_card_id] === 0;
+            {[...Array(props.numberQuestions)].map((e, i) => {
+                const unanswered = props.choices[i] == null;
+                const correct = !unanswered && props.choices[i] === 0;
                 const incorrect = !unanswered && !correct;
 
                 return (

@@ -1,29 +1,28 @@
-import { DeckCardExtendedType } from "@/app/deck/shuffleCards";
-import { DeckCardType } from "@/services/server/deck";
+import { DeckExtendedType } from "@/app/deck/shuffleCards";
 import clsx from "clsx";
 
 
 interface QuestionProps {
-    card: DeckCardType;
-    shuffledCard: DeckCardExtendedType;
-    choices: {[index: number]: number};
-    selectChoice?: (choice: number) => void;
+    question: DeckExtendedType["deck_questions"][number];
+    choice: number | null | undefined;
+    onSelectChoice?: (choice: number) => void;
 }
 
 
 export default function Question(props: QuestionProps) {
-    const word = props.card.words[0][0];
-
+    const word = props.question.words.find(word => word[2] === 0);
+    if (!word)
+        return <></>;
 
     return (
         <div>
             <p>Select the Definition of Word: <b>{word}</b></p>
             <div className="grid grid-cols-2 grid-rows-2 gap-2">
-                {props.shuffledCard.words.map(([shuffledWord, shuffledWordDef, originalIndex], i) => {
-                    const answered = props.choices[props.shuffledCard.deck_card_id] != null;
+                {props.question.words.map(([shuffledWord, shuffledWordDef, originalIndex], i) => {
+                    const answered = props.choice != null;
                     const correct = answered && originalIndex === 0;
                     const incorrect = answered && originalIndex !== 0;
-                    const selected = props.choices[props.shuffledCard.deck_card_id] === originalIndex;
+                    const selected = props.choice === i;
 
                     return (
                         <button
@@ -36,9 +35,9 @@ export default function Question(props: QuestionProps) {
                             )}
                             onClick={() => {
                                 // No Function or Already Answered
-                                if (!props.selectChoice || props.choices[props.shuffledCard.deck_card_id] != null)
+                                if (!props.onSelectChoice || props.choice != null)
                                     return;
-                                props.selectChoice(originalIndex)
+                                props.onSelectChoice(originalIndex)
                             }}
                         >
                             <div>

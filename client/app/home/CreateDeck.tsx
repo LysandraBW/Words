@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import z from "zod";
 import InputCheckboxes from "@/components/input/InputCheckbox/InputCheckboxes";
 import { toggleValue } from "@/utilities/array";
-import { ChapterType } from "@/services/server/chapter";
+import { ChapterType, selectChapterWords } from "@/services/server/chapter";
+import { WordType } from "@/services/server/word";
 
 
 interface CreateDeckProps {
@@ -18,7 +19,7 @@ interface CreateDeckProps {
 
 
 export default function CreateDeck(props: CreateDeckProps) {
-    const [bookToChapters, setBookToChapters] = useState<{[bookID: number]: ChapterType[]}>(); 
+    const [bookToChaptersToWords, setBookToChaptersToWords] = useState<{[bookID: number]: [ChapterType, WordType[]][]}>(); 
     const [form, setForm] = useState<Form<CreateDeckType>>(createForm([
         {
             label: 'deck_name',
@@ -26,26 +27,40 @@ export default function CreateDeck(props: CreateDeckProps) {
             test: z.string().trim().min(1, "Must enter a name")
         },
         {
-            label: 'deck_chapters',
+            label: 'deck_words',
             value: [],
             test: z.array(z.number())
         }
     ]));
     
     
-    useEffect(() => {
+useEffect(() => {
         const load = async () => {
             try {
-                setBookToChapters(
-                    Object.fromEntries(
-                        await Promise.all(props.books.map(async book => {
+                // Load Data
+                // Structure: [book, [chapter, [words]]]
+                const data: [number, [ChapterType, WordType[]][]][] = await Promise.all(props.books.map(async book => {
+                    return [
+                        book.book_id,
+                        await selectBookChapters(book.book_id).then(async chapters => await Promise.all(chapters.map(async chapter => {
                             return [
-                                book.book_id,
-                                await selectBookChapters(book.book_id)
-                            ];
-                        }))
-                    )
-                );
+                                chapter,
+                                await selectChapterWords(chapter.chapter_id)
+                            ]
+                        })))
+                    ];
+                }));
+
+                const booksToChaptersToWords: {[bookID: number]: [ChapterType, WordType[]][]} = {};
+                for (const [bookID, chaptersToWords] of data) {
+                    for (const [chapter, words] of chaptersToWords) {
+                        // Initialize Book Entry
+                        if (!(bookID in booksToChaptersToWords))
+                            booksToChaptersToWords[bookID] = [];
+                        booksToChaptersToWords[bookID].push([chapter, words]);
+                    }
+                }
+                setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {
                 alert(err);
@@ -61,8 +76,8 @@ export default function CreateDeck(props: CreateDeckProps) {
                 throw new Error('Invalid Form');
 
             const deck = getFormData(form);
-            const output = await insertDeck(deck);
-            props.onDeckCreated(output.deck);
+            const inserted = await insertDeck(deck);
+            props.onDeckCreated(inserted);
         }
         catch (error) {
             alert(error);
@@ -73,13 +88,13 @@ export default function CreateDeck(props: CreateDeckProps) {
     const onToggleChapter = (chapterID: number) => {
         setForm(form => updateFormValue(
             form, 
-            'deck_chapters', 
-            toggleValue(chapterID, form.deck_chapters.value)
+            'deck_words', 
+            toggleValue(chapterID, form.deck_words.value)
         ));
     }
 
 
-    if (!bookToChapters)
+    if (!bookToChaptersToWords)
         return <>Loading</>;
 
 
@@ -90,24 +105,25 @@ export default function CreateDeck(props: CreateDeckProps) {
                 value={form.deck_name.value}
                 onChange={value => setForm(updateFormValue(form, 'deck_name', value))}
             />
-            {props.books.map((book) => (
+            {props.books.map((book, i) => (
                 <div 
-                    key={book.book_id}
+                    key={i}
                     className="flex flex-col gap-y-2"
                 >
-                    <h3>
-                        <b>
-                            {book.book_name}
-                        </b>
-                    </h3>
-                    <InputCheckboxes
-                        value={form.deck_chapters.value}
-                        options={(bookToChapters[book.book_id] ?? []).map(chapter => ({
-                            value: chapter.chapter_id,
-                            textLabel: chapter.chapter_title
-                        }))}
-                        onChange={onToggleChapter}
-                    />
+                    <h3><b>{book.book_name}</b></h3>
+                    {bookToChaptersToWords[book.book_id].map(([chapter, words], i) => (
+                        <div>
+                            {chapter.chapter_title}
+                            <InputCheckboxes
+                                value={form.deck_words.value}
+                                options={words.map(word => ({
+                                    value: word.word_id,
+                                    textLabel: word.word[0]
+                                }))}
+                                onChange={onToggleChapter}
+                            />
+                        </div>
+                    ))}
                 </div>
             ))}
             <Button

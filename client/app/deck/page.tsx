@@ -38,20 +38,13 @@ export default function Page() {
     }, []);
 
 
-    const handleDeckUpdated = (output: Awaited<ReturnType<typeof updateDeck>>) => {
+    const handleDeckUpdated = (deck: Awaited<ReturnType<typeof updateDeck>>) => {
         setData(data => {
             if (!data)
                 return data;
             return {
                 ...data,
-                deck: {
-                    ...output,
-                    deck: output.deck,
-                    deckCards: output.deckCards ? data.deck.deckCards.map(deckCard => ({
-                        ...deckCard,
-                        ...output.deckCards?.find(d => d.deck_card_id === deckCard.deck_card_id)
-                    })) : data.deck.deckCards
-                }   
+                deck
             }
         });
         setShow('');
@@ -65,30 +58,19 @@ export default function Page() {
             return {
                 ...data,
                 decksGraded: data.decksGraded.filter(deck => deck.deck_graded_id !== deletedDeckGraded.deck_graded_id),
-                decksGradedCards: Object.fromEntries(
-                    Object.entries(data.decksGradedCards).filter(entry => {
-                            return Number(entry[0]) !== deletedDeckGraded.deck_graded_id;
-                        })
-                    )
             }
         });
         setShow('');
     }
 
 
-    const handleDeckReloaded = (deckCards: Awaited<ReturnType<typeof reloadDeck>>) => {
+    const handleDeckReloaded = (deck: Awaited<ReturnType<typeof reloadDeck>>) => {
         setData(data => {
             if (!data)
                 return data;
             return {
                 ...data,
-                deck: {
-                    ...data.deck,
-                    deckCards: data.deck.deckCards.map(deckCard => ({
-                        ...deckCard,
-                        ...deckCards.find(d => d.deck_card_id === deckCard.deck_card_id)
-                    }))
-                }
+                deck
             }
         });
         setShow('');
@@ -117,7 +99,7 @@ export default function Page() {
     }
 
 
-    const handleDeckGradedCreated = (output: Awaited<ReturnType<typeof insertDeckGraded>>) => {
+    const handleDeckGradedCreated = (deckGraded: Awaited<ReturnType<typeof insertDeckGraded>>) => {
         setData(data => {
             if (!data)
                 return data;
@@ -126,14 +108,10 @@ export default function Page() {
                 decksGraded: [
                     ...data.decksGraded, 
                     {
-                        ...data.deck.deck, 
-                        ...output.deckGraded
+                        ...data.deck, 
+                        ...deckGraded
                     }
-                ],
-                decksGradedCards: {
-                    ...data.decksGradedCards, 
-                    [output.deckGraded.deck_graded_id]: output.deckGradedCard
-                }
+                ]
             }
         });
         setShow('');
@@ -163,14 +141,14 @@ export default function Page() {
     return (
         <div className="h-screen overflow-y-scroll">
             <div className="flex flex-col gap-2">
-                {data.deck.deck.deck_name}
+                {data.deck.deck_name}
                 <Button
                     label="Delete Deck"
-                    onClick={() => onDeleteDeck(data.deck.deck.deck_id)}
+                    onClick={() => onDeleteDeck(data.deck.deck_id)}
                 />
                 <Button
                     label="Reload Deck"
-                    onClick={async () => onReloadDeck(data.deck.deck.deck_id)}
+                    onClick={async () => onReloadDeck(data.deck.deck_id)}
                 />
                 <Button
                     label="Update Deck"
@@ -205,9 +183,7 @@ export default function Page() {
             />
             {typeof show !== "string" && (
                 <QuizGraded
-                    deckCards={data.deck.deckCards}
                     deckGraded={show}
-                    deckGradedCards={data.decksGradedCards[show.deck_graded_id]}
                     onClose={() => setShow('')}
                     onDelete={async () => onDeleteDeckGraded(show.deck_graded_id)}
                 />
@@ -215,14 +191,15 @@ export default function Page() {
             {show === 'Update Deck' &&
                 <UpdateDeck
                     books={data.books}
-                    deck={data.deck.deck}
+                    deck={data.deck}
                     onDeckUpdated={handleDeckUpdated}
                     onClose={() => setShow('')}
                 />
             }
             {show === 'Quiz' &&
                 <Quiz
-                    cards={data.deck.deckCards}
+                    deck={data.deck}
+                    onClose={() => setShow('')}
                     onQuizFinished={handleDeckGradedCreated}
                 />
             }

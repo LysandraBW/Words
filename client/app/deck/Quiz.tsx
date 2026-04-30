@@ -1,15 +1,16 @@
 import Button from "@/components/Button";
-import { DeckCardType } from "@/services/server/deck";
-import { insertDeckGraded } from "@/services/server/deckGraded";
+import { DeckGradedQuestionType, insertDeckGraded } from "@/services/server/deckGraded";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
-import { DeckCardExtendedType, shuffleCards } from "./shuffleCards";
+import { DeckExtendedType, shuffleCards } from "./shuffleCards";
 import Progress from "@/app/deck/Progress";
 import Question from "@/app/deck/Question";
+import { DeckType } from "@/services/server/deck";
 
 
 interface QuizProps {
-    cards: DeckCardType[];
+    deck: DeckType;
+    onClose: () => void;
     onQuizFinished: (deck: Awaited<ReturnType<typeof insertDeckGraded>>) => void;
 }
 
@@ -17,7 +18,7 @@ interface QuizProps {
 export default function Quiz(props: QuizProps) {
     const [index, setIndex] = useState(0);
     const [choices, setChoices] = useState<{[index: number]: number}>({});
-    const [shuffledCards, setShuffledCards] = useState<DeckCardExtendedType[]>();
+    const [shuffledCards, setShuffledCards] = useState<DeckExtendedType>();
 
 
     const {
@@ -28,29 +29,34 @@ export default function Quiz(props: QuizProps) {
     
 
     useEffect(() => {
-        setShuffledCards(shuffleCards(props.cards));
-    }, [props.cards]);
+        setShuffledCards(shuffleCards(props.deck));
+    }, [props.deck]);
 
 
     useEffect(() => {
-        if (!shuffledCards?.length)
+        if (!shuffledCards?.deck_questions.length)
             return;
         start();
     }, [shuffledCards]);
 
 
+    if (!props.deck.deck_questions.length || !shuffledCards)
+        return <></>;
+
+
     const selectChoice = (index: number, choice: number) => {
-        const deckCardID = props.cards[index].deck_card_id;
         const updatedChoices = {
             ...choices,
-            [deckCardID]: choice
+            [index]: choice
         }
         setChoices(updatedChoices);
 
         // Stop the Timer
         // If the user has answered all the questions (cards),
         // we stop the timer.
-        const isComplete = Object.values(updatedChoices).length === props.cards.length;
+        const numAnswered = Object.values(updatedChoices).length;
+        const numQuestions = props.deck.deck_questions.length;
+        const isComplete = numAnswered === numQuestions;
         if (isComplete)
             pause();
     }
@@ -58,25 +64,30 @@ export default function Quiz(props: QuizProps) {
     
     const onFinishQuiz = async (choices: {[index: number]: number}, duration: number) => {
         try {
-            if (Object.values(choices).length !== props.cards.length)
+            const numAnswered = Object.values(choices).length;
+            const numQuestions = props.deck.deck_questions.length;
+            if (numAnswered !== numQuestions)
                 throw new Error('Must Answer All Questions');
-
-            // Flatten Choices
-            const flatChoices = Object.entries(choices).map(choice => {
-                return [Number(choice[0]), Number(choice[1])]
-            }) as [number, number][];
+            
+            
+            const deckQuestions: DeckGradedQuestionType[] = props.deck.deck_questions.map((question, i) => {
+                return {
+                    ...question,
+                    choice: choices[i]
+                };
+            });
 
             // Find # Correct and # Incorrect
-            const choiceValues = props.cards.map(card => choices[card.deck_card_id]);
-            const numberCorrect = choiceValues.reduce((total, value) => value === 0 ? total + 1 : total, 0);
-            const numberIncorrect = choiceValues.length - numberCorrect;
+            const numberCorrect = deckQuestions.reduce((total, value) => value.choice === 0 ? total + 1 : total, 0);
+            const numberIncorrect = deckQuestions.length - numberCorrect;
 
             const output = await insertDeckGraded({
-                deck_id: props.cards[0].deck_id,
+                deck_id: props.deck.deck_id,
                 duration: duration,
                 number_correct: numberCorrect,
                 number_incorrect: numberIncorrect,
-            }, flatChoices);
+                deck_questions: deckQuestions
+            });
 
             props.onQuizFinished(output);
         }
@@ -86,21 +97,16 @@ export default function Quiz(props: QuizProps) {
     }
 
 
-    if (!props.cards.length || !shuffledCards)
-        return <></>
-
-
-    const notComplete = Object.values(choices).length !== props.cards.length;
-    const notAnswered = shuffledCards && choices[shuffledCards[index].deck_card_id] == null;
-    const lastCard = shuffledCards && index === shuffledCards.length - 1;
+    const notComplete = Object.values(choices).length !== props.deck.deck_questions.length;
+    const notAnswered = shuffledCards && choices[index] == null;
+    const lastCard = shuffledCards && index === shuffledCards.deck_questions.length - 1;
 
 
     return (
         <div>
             <h3>Quiz</h3>
             <Progress
-                cards={props.cards}
-                shuffledCards={shuffledCards}
+                numberQuestions={props.deck.deck_questions.length}
                 index={index}
                 onClickIndex={(i: number) => setIndex(i)}
                 choices={choices}
@@ -114,10 +120,9 @@ export default function Quiz(props: QuizProps) {
                 </span>
             </div>
             <Question
-                card={props.cards[index]}
-                shuffledCard={shuffledCards[index]}
-                choices={choices}
-                selectChoice={(choice: number) => selectChoice(index, choice)}
+                question={shuffledCards.deck_questions[index]}
+                choice={choices[index]}
+                onSelectChoice={(choice: number) => setChoices({...choices, [index]: choice})}
             />
             <Button
                 label="Back"

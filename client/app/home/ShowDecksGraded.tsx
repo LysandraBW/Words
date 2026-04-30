@@ -1,7 +1,5 @@
 import { useRouter } from "next/navigation";
 import { DeckGradedType } from "@/services/server/deckGraded";
-import { useEffect, useState } from "react";
-import { DeckType, selectDeck } from "@/services/server/deck";
 
 
 interface ShowDecksGradedProps {
@@ -11,34 +9,6 @@ interface ShowDecksGradedProps {
 
 export default function ShowDecksGraded(props: ShowDecksGradedProps) {
     const router = useRouter();
-    const [decks, setDecks] = useState<{[deckGradedID: number]: DeckType}>();
-
-
-    useEffect(() => {
-        const load = async () => {
-            try {
-                setDecks(
-                    Object.fromEntries(
-                        await Promise.all(props.decksGraded.map(async (deckGraded) => {
-                            const output = await selectDeck(deckGraded.deck_id);
-                            return [
-                                deckGraded.deck_graded_id, 
-                                output.deck
-                            ];
-                        }))
-                    )
-                );
-            }
-            catch (err) {
-                alert(err);
-            }
-        }
-        load();
-    }, []);
-
-
-    if (!decks)
-        return <>Loading</>;
 
 
     return (

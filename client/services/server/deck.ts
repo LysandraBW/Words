@@ -2,28 +2,28 @@ import { NullableBy } from "./types";
 import { WordType } from "./word";
 
 
+export type DeckQuestionType = {
+    type: string | null;
+    words: [string, string][];
+};
+
+
 export interface DeckType {
     deck_id: number;
     deck_name: string;
-    deck_chapters: number[];
+    deck_words: number[];
+    deck_questions: DeckQuestionType[];
     reader_id: string;
-}
-
-
-export interface DeckCardType {
-    deck_card_id: number;
-    deck_id: number;
-    words: [string, string][];
 }
 
 
 export type CreateDeckType = Pick<
     DeckType, 
-    "deck_name" | "deck_chapters"
+    "deck_name" | "deck_words"
 >;
 
 
-export type UpdateDeckType = Pick<DeckType, "deck_id"> & NullableBy<Pick<DeckType, "deck_name" | "deck_chapters">, "deck_name" | "deck_chapters">;
+export type UpdateDeckType = Pick<DeckType, "deck_id"> & NullableBy<Pick<DeckType, "deck_name" | "deck_words">, "deck_name" | "deck_words">;
 
 
 export async function insertDeck(deck: CreateDeckType) {
@@ -39,7 +39,7 @@ export async function insertDeck(deck: CreateDeckType) {
     if (response.status !== 200)
         throw new Error(`Failed to Insert Deck (${response.status})`);
 
-    const data: {deck: DeckType, deckCards: (DeckCardType)[]} | null = await response.json();
+    const data: DeckType | null = await response.json();
     if (!data)
         throw new Error('Failed to Insert Deck');
 
@@ -60,7 +60,7 @@ export async function updateDeck(deck: UpdateDeckType) {
     if (response.status !== 200)
         throw new Error(`Failed to Update Deck (${response.status})`);
 
-    const data: {deck: DeckType, deckCards?: (DeckCardType)[]} | null = await response.json();
+    const data: DeckType | null = await response.json();
     if (!data)
         throw new Error('Failed to Update Deck');
 
@@ -87,13 +87,14 @@ export async function deleteDeck(deckID: number) {
 
 export async function selectDeck(deckID: number) {
     const response = await fetch(`http://127.0.0.1:8000/decks/${deckID}`, {
+        method: "GET",
         credentials: "include"
     });
 
     if (response.status !== 200)
         throw new Error(`Failed to Select Deck (${response.status})`);
 
-    const data: {deck: DeckType, deckCards: (DeckType & DeckCardType)[]} | null = await response.json();
+    const data: DeckType | null = await response.json();
     if (!data)
         throw new Error('Failed to Select Deck');
 
@@ -110,7 +111,7 @@ export async function reloadDeck(deckID: number) {
     if (response.status !== 200)
         throw new Error(`Failed to Reload Deck (${response.status})`);
 
-    const data: (DeckCardType)[] | null = await response.json();
+    const data: DeckType | null = await response.json();
     if (!data)
         throw new Error('Failed to Reload Deck');
 
@@ -120,6 +121,7 @@ export async function reloadDeck(deckID: number) {
 
 export async function selectDecks() {
     const response = await fetch('http://127.0.0.1:8000/decks', {
+        method: "GET",
         credentials: "include"
     });
 
@@ -136,14 +138,14 @@ export async function selectDecks() {
 
 export async function selectDecksByBook(bookID: number) {
     const response = await fetch(`http://127.0.0.1:8000/books/${bookID}/decks`, {
-        method: "POST",
+        method: "GET",
         credentials: "include"
     });
 
     if (response.status !== 200)
         throw new Error(`Failed to Select Decks by Book (${response.status})`);
 
-    const data: DeckType[] | null = await response.json();
+    const data: DeckType | null = await response.json();
     if (!data)
         throw new Error('Failed to Select Decks by Book');
 
@@ -153,14 +155,14 @@ export async function selectDecksByBook(bookID: number) {
 
 export async function selectDecksByChapter(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/decks`, {
-        method: "POST",
+        method: "GET",
         credentials: "include"
     });
 
     if (response.status !== 200)
         throw new Error(`Failed to Select Decks by Chapter (${response.status})`);
 
-    const data: DeckType[] | null = await response.json();
+    const data: DeckType | null = await response.json();
     if (!data)
         throw new Error('Failed to Select Decks by Chapter');
 
@@ -180,6 +182,6 @@ export async function selectDeckWords(chapterID: number) {
     const data: WordType[] | null = await response.json();
     if (!data)
         throw new Error('Failed to Select Deck\'s Words');
-
+    
     return data;
 }

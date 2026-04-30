@@ -1,35 +1,41 @@
-import { DeckCardType } from "@/services/server/deck";
+import { DeckType } from "@/services/server/deck";
+import { DeckGradedType } from "@/services/server/deckGraded";
 
-export interface DeckCardExtendedType extends Omit<DeckCardType, "words"> {
+export type DeckExtendedType = Omit<DeckType | DeckGradedType, "deck_questions">  & {
     // We add a number in order to keep
     // track of the numbering as we shuffle
     // the words.
-    words: [string, string, number][];
+    deck_questions: (Omit<(DeckType | DeckGradedType)["deck_questions"][number], "words"> & {
+        words: [string, string, number][]
+    })[];
 }
 
 
-export function shuffleCards(deckCards: DeckCardType[]) {
-    const deckCardsExtended = [];
+export function shuffleCards(deck: DeckType | DeckGradedType): DeckExtendedType {
+    const questionsExtended: DeckExtendedType["deck_questions"] = [];
 
-    for (const card of deckCards) {
-        const shuffledIndices = [...Array(card.words.length)].map((e, i) => i);
+    for (const question of deck.deck_questions) {
+        const shuffledIndices = [...Array(question.words.length)].map((e, i) => i);
         shuffledIndices.sort(() => Math.random() - 0.5);
 
-        const shuffledWords: [string, string, number][] = [];
-        for (let i = 0; i < card.words.length; i++) {
+        const shuffledWords: DeckExtendedType["deck_questions"][number]["words"] = [];
+        for (let i = 0; i < question.words.length; i++) {
             const shuffledIndex = shuffledIndices[i];
             shuffledWords.push([
-                card.words[shuffledIndex][0], 
-                card.words[shuffledIndex][1], 
+                question.words[shuffledIndex][0], 
+                question.words[shuffledIndex][1], 
                 shuffledIndex
             ]);
         }
 
-        deckCardsExtended.push({
-            ...card,
+        questionsExtended.push({
+            ...question,
             words: shuffledWords
         });
     }
 
-    return deckCardsExtended;
+    return {
+        ...deck,
+        deck_questions: questionsExtended
+    };
 }

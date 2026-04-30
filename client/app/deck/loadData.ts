@@ -1,6 +1,6 @@
 import { selectBooks } from "@/services/server/book";
 import { selectDeck, selectDeckWords } from "@/services/server/deck";
-import { DeckGradedCardType, selectDeckGraded, selectDecksGradedByDeck } from "@/services/server/deckGraded";
+import { selectDecksGradedByDeck } from "@/services/server/deckGraded";
 
 
 export default async function loadData(deckID: number) {
@@ -23,16 +23,11 @@ export default async function loadData(deckID: number) {
         })()
     ]);
 
-    const decksGradedCards = Object.fromEntries(await Promise.all(decksGraded.map(async (deck) => {
-        const output = await selectDeckGraded(deck.deck_graded_id);
-        return [deck.deck_graded_id, output.deckGradedCards];
-    }))) as {[deckGradedID: number]: DeckGradedCardType[]};
-    
+
     return {
         books,
         deck,
         decksGraded,
-        decksGradedCards,
         words
     }
 }
