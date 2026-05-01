@@ -25,6 +25,7 @@
     "hnswlib-node": "^3.0.0",
     "jsonwebtoken": "^9.0.3",
     "lancedb": "^0.0.1",
+    "natural": "^8.1.1",
     "nodemon": "^3.1.14",
     "postgres": "^3.4.8",
     "redis": "^5.11.0",
@@ -35,6 +36,7 @@
     "wink-eng-lite-web-model": "^1.8.1",
     "wink-nlp": "^2.4.0",
     "wordnet": "^2.0.0",
+    "wordnet-db": "^3.1.14",
     "zod": "^4.3.6"
   },
   "devDependencies": {
