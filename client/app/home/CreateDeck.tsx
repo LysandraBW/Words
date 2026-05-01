@@ -34,7 +34,7 @@ export default function CreateDeck(props: CreateDeckProps) {
     ]));
     
     
-useEffect(() => {
+    useEffect(() => {
         const load = async () => {
             try {
                 // Load Data
@@ -53,13 +53,15 @@ useEffect(() => {
 
                 const booksToChaptersToWords: {[bookID: number]: [ChapterType, WordType[]][]} = {};
                 for (const [bookID, chaptersToWords] of data) {
+                    // Initialize Book Entry
+                    if (!(bookID in booksToChaptersToWords))
+                        booksToChaptersToWords[bookID] = [];
                     for (const [chapter, words] of chaptersToWords) {
-                        // Initialize Book Entry
-                        if (!(bookID in booksToChaptersToWords))
-                            booksToChaptersToWords[bookID] = [];
                         booksToChaptersToWords[bookID].push([chapter, words]);
                     }
                 }
+
+                console.log(booksToChaptersToWords);
                 setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {
@@ -110,10 +112,14 @@ useEffect(() => {
                     key={i}
                     className="flex flex-col gap-y-2"
                 >
-                    <h3><b>{book.book_name}</b></h3>
+                    <h3 className="text-white">
+                        <b>{book.book_name}</b>
+                    </h3>
                     {bookToChaptersToWords[book.book_id].map(([chapter, words], i) => (
-                        <div>
-                            {chapter.chapter_title}
+                        <div key={i}>
+                            <h4 className="text-gray-500">
+                                <b>{chapter.chapter_title}</b>
+                            </h4>
                             <InputCheckboxes
                                 value={form.deck_words.value}
                                 options={words.map(word => ({

@@ -18,7 +18,7 @@ interface QuizProps {
 export default function Quiz(props: QuizProps) {
     const [index, setIndex] = useState(0);
     const [choices, setChoices] = useState<{[index: number]: number}>({});
-    const [shuffledCards, setShuffledCards] = useState<DeckExtendedType>();
+    const [shuffledDeck, setShuffledDeck] = useState<DeckExtendedType>();
 
 
     const {
@@ -29,18 +29,19 @@ export default function Quiz(props: QuizProps) {
     
 
     useEffect(() => {
-        setShuffledCards(shuffleCards(props.deck));
+        const shuffledDeck = shuffleCards(props.deck);
+        setShuffledDeck(shuffledDeck);
     }, [props.deck]);
 
 
     useEffect(() => {
-        if (!shuffledCards?.deck_questions.length)
+        if (!shuffledDeck?.deck_questions.length)
             return;
         start();
-    }, [shuffledCards]);
+    }, [shuffledDeck]);
 
 
-    if (!props.deck.deck_questions.length || !shuffledCards)
+    if (!props.deck.deck_questions.length || !shuffledDeck)
         return <></>;
 
 
@@ -98,13 +99,14 @@ export default function Quiz(props: QuizProps) {
 
 
     const notComplete = Object.values(choices).length !== props.deck.deck_questions.length;
-    const notAnswered = shuffledCards && choices[index] == null;
-    const lastCard = shuffledCards && index === shuffledCards.deck_questions.length - 1;
+    const notAnswered = shuffledDeck && choices[index] == null;
+    const lastCard = shuffledDeck && index === shuffledDeck.deck_questions.length - 1;
 
 
     return (
         <div>
             <h3>Quiz</h3>
+            {JSON.stringify(choices)}
             <Progress
                 numberQuestions={props.deck.deck_questions.length}
                 index={index}
@@ -120,9 +122,9 @@ export default function Quiz(props: QuizProps) {
                 </span>
             </div>
             <Question
-                question={shuffledCards.deck_questions[index]}
+                question={shuffledDeck.deck_questions[index]}
                 choice={choices[index]}
-                onSelectChoice={(choice: number) => setChoices({...choices, [index]: choice})}
+                onSelectChoice={(choice: number) => selectChoice(index, choice)}
             />
             <Button
                 label="Back"

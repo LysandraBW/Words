@@ -20,7 +20,7 @@ export async function getSimilarWords(word: string, n: number = 20) {
 
 
 export async function getRandomWords(word: string = "", wordDefinition: string = "", n: number = 3): Promise<[string, string][]> {
-    const pool = await getSimilarWords(word, Math.max(20, n)) || words;
+    const pool = await getSimilarWords(word.toLowerCase(), Math.max(50, n)) || words;
     
     // Shuffle Indices
     const poolIndices = [...Array(pool.length)].map((e, i) => i);
@@ -46,7 +46,10 @@ export async function getRandomWords(word: string = "", wordDefinition: string =
                 url += `${randWord}?key=${process.env.MERRIAM_WEBSTER_API_KEY_DICTIONARY}`;
 
                 const data = await (await fetch(url)).json();
-                const defs = data.reduce((accumulator: any[], currentEntry: any) => [...accumulator, ...currentEntry.shortdef], []).filter((definition: string) => definition !== wordDefinition);
+                const defs = data[0].shortdef.filter((definition: string) => definition !== wordDefinition);
+                // Using all the definitions allows for the weirder sort
+                // to be introduced.
+                // const defs = data.reduce((accumulator: any[], currentEntry: any) => [...accumulator, ...currentEntry.shortdef], []).filter((definition: string) => definition !== wordDefinition);
 
                 if (!defs || !defs.length) {
                     offset += 1;

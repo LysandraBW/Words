@@ -37,7 +37,7 @@ export async function getDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const deck = await SelectDeck(output.data.deck_id, output.data.reader_id);
+        const [deck] = await SelectDeck(output.data.deck_id, output.data.reader_id);
         return res.status(200).json(deck);
     }
     catch (error) {
@@ -202,7 +202,7 @@ export async function createDeck(req: Request, res: Response) {
         if (!sessionID)
             return res.sendStatus(401);
 
-        const output = DeckSchema.omit({ deck_id: true }).safeParse({
+        const output = DeckSchema.omit({ deck_id: true, deck_questions: true }).safeParse({
             deck_name: req.body.deck_name,
             deck_words: req.body.deck_words,
             reader_id: await AuthorizeReaderBySession(sessionID)
@@ -213,7 +213,7 @@ export async function createDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
         
-        const deck = await InsertDeck(output.data);
+        const [deck] = await InsertDeck(output.data);
         return res.status(200).json(deck);
     }
     catch (error) {
@@ -231,7 +231,9 @@ export async function updateDeck(req: Request, res: Response) {
         if (!sessionID)
             return res.sendStatus(401);
 
-        const output = nullableBy(DeckSchema, ["deck_name", "deck_words"]).safeParse({
+        const output = nullableBy(DeckSchema, ["deck_name", "deck_words"]).omit({ 
+            deck_questions: true 
+        }).safeParse({
             deck_id: req.params.deck_id,
             deck_name: req.body.deck_name,
             deck_words: req.body.deck_words,
@@ -243,8 +245,8 @@ export async function updateDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
         
-        const books = await UpdateDeck(output.data);
-        return res.status(200).json(books);
+        const [deck] = await UpdateDeck(output.data);
+        return res.status(200).json(deck);
     }
     catch (error) {
         console.error("Error");
@@ -272,7 +274,7 @@ export async function deleteDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const deleted = await DeleteDeck(output.data.deck_id, output.data.reader_id);
+        const [deleted] = await DeleteDeck(output.data.deck_id, output.data.reader_id);
         return res.status(200).json(deleted);
     }
     catch (error) {
@@ -300,8 +302,8 @@ export async function reloadDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
         
-        const books = await UpdateQuestions(output.data.deck_id, output.data.reader_id);
-        return res.status(200).json(books);
+        const [deck] = await UpdateQuestions(output.data.deck_id, output.data.reader_id);
+        return res.status(200).json(deck);
     }
     catch (error) {
         console.error("Error");

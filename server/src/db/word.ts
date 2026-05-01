@@ -63,15 +63,11 @@ export async function SelectWordsFromDeck(deckID: number, readerID: string) {
     return await db<Word[]>`
         SELECT  Word.*
         FROM    Word
+        JOIN    Deck ON Word.word_id = ANY(Deck.deck_words)
         JOIN    Chapter ON Word.chapter_id = Chapter.chapter_id
         JOIN    Book    ON Book.book_id = Chapter.book_id 
-        WHERE   Book.reader_id = ${readerID} AND
-                EXISTS (
-                    SELECT  1
-                    FROM    Deck
-                    WHERE   Chapter.chapter_id = ANY(Deck.deck_chapters)
-                    LIMIT   1
-                )
+        WHERE   Deck.deck_id = ${deckID}  AND
+                Book.reader_id = ${readerID}
     `;
 }
 

@@ -15,11 +15,12 @@ interface UpdateDeckProps {
     deck: DeckType;
     books: BookType[];
     onClose: () => void;
-    onDeckUpdated: (deck: Awaited<ReturnType<typeof updateDeck>>) => void;
+    onDeckUpdated: (deck: Awaited<ReturnType<typeof updateDeck>>, words: WordType[]) => void;
 }
 
 
 export default function UpdateDeck(props: UpdateDeckProps) {
+    const [words, setWords] = useState<WordType[]>();
     const [bookToChaptersToWords, setBookToChaptersToWords] = useState<{[bookID: number]: [ChapterType, WordType[]][]}>(); 
     const [form, setForm] = useState<Form<DeckType>>(createForm([
         {
@@ -52,15 +53,18 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                     ];
                 }));
 
+                const words: WordType[] = [];
                 const booksToChaptersToWords: {[bookID: number]: [ChapterType, WordType[]][]} = {};
                 for (const [bookID, chaptersToWords] of data) {
-                    for (const [chapter, words] of chaptersToWords) {
-                        // Initialize Book Entry
-                        if (!(bookID in booksToChaptersToWords))
-                            booksToChaptersToWords[bookID] = [];
-                        booksToChaptersToWords[bookID].push([chapter, words]);
+                    // Initialize Book Entry
+                    if (!(bookID in booksToChaptersToWords))
+                        booksToChaptersToWords[bookID] = [];
+                    for (const [chapter, chapterWords] of chaptersToWords) {
+                        booksToChaptersToWords[bookID].push([chapter, chapterWords]);
+                        words.push(...chapterWords);
                     }
                 }
+                setWords(words);
                 setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {
@@ -71,19 +75,28 @@ export default function UpdateDeck(props: UpdateDeckProps) {
     }, [props.books]);
 
 
+    if (!words || !bookToChaptersToWords)
+        return <>Loading</>;
+
+
     const onUpdateDeck = async (form: Form<DeckType>) => {
         try {
             if (!testForm(form))
                 throw new Error('Invalid Form');
 
             const deck = getFormData(form);
-            const wordsNotUpdated = sameArrays(props.deck.deck_words, deck.deck_words);
-            
-            props.onDeckUpdated(await updateDeck({
+            const updatedDeck = await updateDeck({
                 deck_id: props.deck.deck_id,
                 deck_name: deck.deck_name,
-                deck_words: wordsNotUpdated ? null : deck.deck_words
-            }));
+                deck_words: sameArrays(props.deck.deck_words, deck.deck_words) ? null : deck.deck_words
+            });
+
+            // Updated Words
+            // We could just call the function to load all the words.
+            // But, I'd feel like that would be wasteful. We already
+            // have all the words!
+            const updatedWords = words.filter(word => deck.deck_words.includes(word.word_id));
+            props.onDeckUpdated(updatedDeck, updatedWords);
         }
         catch (err) {
             alert(err);
@@ -100,8 +113,7 @@ export default function UpdateDeck(props: UpdateDeckProps) {
     }
 
 
-    if (!bookToChaptersToWords)
-        return <>Loading</>;
+    
 
 
     return (
@@ -118,7 +130,7 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                 >
                     <h3><b>{book.book_name}</b></h3>
                     {bookToChaptersToWords[book.book_id].map(([chapter, words], i) => (
-                        <div>
+                        <div key={i}>
                             {chapter.chapter_title}
                             <InputCheckboxes
                                 value={form.deck_words.value}

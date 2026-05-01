@@ -16,13 +16,13 @@ export default function Question(props: QuestionProps) {
 
     return (
         <div>
-            <p>Select the Definition of Word: <b>{word}</b></p>
+            <p>Select the Definition of Word: <b>{word[0]}</b></p>
             <div className="grid grid-cols-2 grid-rows-2 gap-2">
                 {props.question.words.map(([shuffledWord, shuffledWordDef, originalIndex], i) => {
                     const answered = props.choice != null;
                     const correct = answered && originalIndex === 0;
                     const incorrect = answered && originalIndex !== 0;
-                    const selected = props.choice === i;
+                    const selected = props.choice === originalIndex;
 
                     return (
                         <button

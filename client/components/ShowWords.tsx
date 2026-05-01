@@ -23,7 +23,7 @@ export default function ShowWords(props: ShowWordsProps) {
             setWordsData(wordsData);
         }
         load();
-    }, []);
+    }, [props.words, props.decksGraded]);
 
 
     return (
@@ -44,7 +44,7 @@ export default function ShowWords(props: ShowWordsProps) {
                         <p 
                             className="p-4 text-white bg-pink-500"
                         >
-                            {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {wordsData ? wordsData[word.word[0]].accuracy : 'Null'}
+                            {word.word[0]}, {word.word_number_instances}, {word.created_at || 'Null'}, {word.last_seen || 'Null'}, {(wordsData && wordsData[word.word[0]]) ? wordsData[word.word[0]].accuracy : 'Null'}
                         </p>
                     </Fragment>
                 ))}

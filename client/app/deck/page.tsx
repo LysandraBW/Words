@@ -10,6 +10,7 @@ import { reloadDeck, deleteDeck, updateDeck } from "@/services/server/deck";
 import { DeckGradedType, deleteDeckGraded, insertDeckGraded } from "@/services/server/deckGraded";
 import loadData from "./loadData";
 import ShowWords from "@/components/ShowWords";
+import { WordType } from "@/services/server/word";
 
 
 export default function Page() {
@@ -38,13 +39,14 @@ export default function Page() {
     }, []);
 
 
-    const handleDeckUpdated = (deck: Awaited<ReturnType<typeof updateDeck>>) => {
+    const handleDeckUpdated = (deck: Awaited<ReturnType<typeof updateDeck>>, words: WordType[]) => {
         setData(data => {
             if (!data)
                 return data;
             return {
                 ...data,
-                deck
+                deck,
+                words
             }
         });
         setShow('');

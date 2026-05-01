@@ -87,7 +87,7 @@ export async function SelectDecksByChapters(chapterIDs: number[], readerID: stri
 }
 
 
-export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
+export async function InsertDeck(deck: Omit<Deck, "deck_id" | "deck_questions">) {
     const questions = await makeQuestions(deck.deck_words, deck.reader_id);
     return await db<Deck[]>`
         INSERT INTO Deck (
@@ -99,8 +99,8 @@ export async function InsertDeck(deck: Omit<Deck, "deck_id">) {
         VALUES (
             ${deck.deck_name},
             ${deck.deck_words},
-            ${deck.reader_id},
-            ${db.array(questions.map(q => db.json(q)))}
+            ${db.array(questions.map(q => db.json(q)))},
+            ${deck.reader_id}
         ) 
         RETURNING *
     `;
@@ -117,14 +117,13 @@ export async function DeleteDeck(deckID: number, readerID: string) {
 }
 
 
-export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_words">) {
+export async function UpdateDeck(deck: NullableBy<Deck, "deck_name" | "deck_words" | "deck_questions">) {
+    const questions = deck.deck_words != null ? await makeQuestions(deck.deck_words, deck.reader_id) : null;
     return await db<Deck[]>`
         UPDATE  Deck
         SET     deck_name = COALESCE(${deck.deck_name ?? null}, deck_name),
-                deck_words = COALESCE${deck.deck_words ?? null}, deck_words)
-                ${deck.deck_words != null && `, deck_questions = ${db.json({
-                    
-                })}`}
+                deck_words = COALESCE(${deck.deck_words ?? null}, deck_words),
+                deck_questions = COALESCE(${questions != null ? db.array(questions.map(q => db.json(q))) : null}, deck_questions)
         WHERE   deck_id = ${deck.deck_id} AND
                 reader_id = ${deck.reader_id}
         RETURNING *

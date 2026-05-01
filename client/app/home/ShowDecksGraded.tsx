@@ -21,6 +21,7 @@ export default function ShowDecksGraded(props: ShowDecksGradedProps) {
                     <button 
                         key={deck.deck_graded_id}
                         onClick={() => router.push(`/deck?deckID=${deck.deck_id}&deckGradedID=${deck.deck_graded_id}`)}
+                        className="text-white"
                     >
                         Duration: {deck.duration}ms
                         Score: {deck.number_correct}/{deck.number_correct+deck.number_incorrect}

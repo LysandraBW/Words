@@ -38,7 +38,7 @@ export async function getGradedDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const deck = await SelectGradedDeck(output.data.deck_graded_id, output.data.reader_id);
+        const [deck] = await SelectGradedDeck(output.data.deck_graded_id, output.data.reader_id);
         return res.status(200).json(deck); 
         
     }
@@ -200,7 +200,7 @@ export async function createGradedDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
         
-        const deck = await InsertGradedDeck(output.data, output.data.reader_id);
+        const [deck] = await InsertGradedDeck(output.data, output.data.reader_id);
         return res.status(200).json(deck);
     }
     catch (error) {
@@ -230,8 +230,8 @@ export async function deleteGradedDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const deleted = await DeleteGradedDeck(output.data.deck_graded_id, output.data.reader_id);
-        return res.status(200).json(deleted);
+        const [deck] = await DeleteGradedDeck(output.data.deck_graded_id, output.data.reader_id);
+        return res.status(200).json(deck);
     }
     catch (error) {
         console.error("Error");

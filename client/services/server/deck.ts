@@ -61,6 +61,7 @@ export async function updateDeck(deck: UpdateDeckType) {
         throw new Error(`Failed to Update Deck (${response.status})`);
 
     const data: DeckType | null = await response.json();
+    console.log(data);
     if (!data)
         throw new Error('Failed to Update Deck');
 

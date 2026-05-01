@@ -10,29 +10,6 @@ export interface WordData {
 
 
 export default async function getWordData(decksGraded: DeckGradedType[], wordLiterals?: string[]): Promise<{[word: string]: WordData}> {
-    console.log(decksGraded);
-
-    const data = await Promise.all(decksGraded.map(async (deck: any) => {
-        const fullDeck = await selectDeck(deck.deck_id);
-        if (!fullDeck)
-            throw new Error('Failed to Load Deck');
-
-        const fullDeckGraded = await selectDeckGraded(deck.deck_graded_id);
-        if (!fullDeckGraded)
-            throw new Error('Failed to Load Graded Deck');
-
-        return {
-            fullDeck, 
-            fullDeckGraded
-        };
-    }));
-
-    const fullDecksGraded = data.map(d => d.fullDeckGraded);
-    const fullDeckToDeckCards = Object.fromEntries(data.map(d => [d.fullDeck.deck.deck_id, d.fullDeck.deckCards]));
-
-    console.log(fullDecksGraded);
-    console.log(fullDeckToDeckCards);
-    
     // Initialize
     const words: {[word: string]: WordData} = {};
     if (wordLiterals) {
@@ -45,20 +22,10 @@ export default async function getWordData(decksGraded: DeckGradedType[], wordLit
         }
     }
 
-    for (const fullDeckGraded of fullDecksGraded) {
-        const deckID = fullDeckGraded.deckGraded.deck_id;
-        
-        for (const deckGradedCard of fullDeckGraded.deckGradedCards) {
-            const deckCards = fullDeckToDeckCards[deckID];
-            
-            // Find Card
-            // We need to find the card to find the word.
-            const deckCard = deckCards.find(deckCard => deckCard.deck_card_id === deckGradedCard.deck_card_id);
-            if (!deckCard) 
-                throw new Error('Failed to Find Deck Card');
-
+    for (const deck of decksGraded) {
+        for (const question of deck.deck_questions) {
             // Find Word
-            const word = deckCard.words[0][0];
+            const word = question.words[0][0];
 
             // Not Allowed
             if (wordLiterals && !wordLiterals.includes(word))
@@ -73,7 +40,7 @@ export default async function getWordData(decksGraded: DeckGradedType[], wordLit
             }
 
             words[word].count += 1;
-            if (deckGradedCard.choice === 0) 
+            if (question.choice === 0) 
                 words[word].correct += 1;
         }
     }

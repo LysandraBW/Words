@@ -22,7 +22,7 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
                 checked={props.checked}
                 onChange={onChange}
             />
-            <span>
+            <span className="text-red-500">
                 {props.label}
             </span>
         </label>
