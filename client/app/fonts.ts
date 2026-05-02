@@ -1,4 +1,4 @@
-import { Nanum_Pen_Script, Gamja_Flower, Playfair_Display } from 'next/font/google';
+import { Nanum_Pen_Script, Gamja_Flower, Playfair_Display, Pixelify_Sans } from 'next/font/google';
 import localFont from 'next/font/local'
 
 export const abcDiatype = localFont({
@@ -40,6 +40,11 @@ export const nanumPenScript = Nanum_Pen_Script({
 });
 
 export const gamjaFlower = Gamja_Flower({ 
+	subsets: ['latin'],
+	weight: ['400']
+});
+
+export const pixelifySans = Pixelify_Sans({ 
 	subsets: ['latin'],
 	weight: ['400']
 });

@@ -1,159 +1,94 @@
 import { Fragment, useEffect, useState } from "react";
 import FormattedText from "./FormattedText";
 import Labels from "./Labels";
-import { DotIcon } from "lucide-react";
+import { DotIcon, PointerIcon } from "lucide-react";
+import { DefiningText, ParenthesizedSequenceElement, Sense, TruncatedSense } from "@/services/words/getWordEntry";
 
 
-interface SenseProps {
-    senseType?: string;
-    senseData: {[k: string]: [string, any][]};
+interface ShowSenseProps {
+    sense: ParenthesizedSequenceElement;
 }
 
 
-export default function Sense(props: SenseProps) {
-    const [meaning, setMeaning] = useState("");
-    const [examples, setExamples] = useState<string[]>([]);
-    const [labels, setLabels] = useState<string[]>([]);
-
+export default function ShowSense(props: ShowSenseProps) {
+    const [senseLabel, senseData] = props.sense;
     // [[meaning, "..."], ["vis", "..."], [meaning, "..."]
     const [nodes, setNodes] = useState<[string, string][]>([]);
+    const [labels, setLabels] = useState<string[]>([]);
 
 
     useEffect(() => {
-        const data = props.senseType === "bs" ? props.senseData.sense : props.senseData as any;
-        const {meaning, examples, labels} = updateMeaningAndExample(data);
-        setLabels(labels);
-        setMeaning(meaning);
-        setExamples(examples);
-    }, [props.senseData]);
-
-
-    const updateMeaningAndExample = (data: {[k: string]: [string, any][]}) => {
-        let meaning = "";
-        let example = "";
-        let examples: string[] = [];
-        let labels: string[] = [];
-
-        const nodes: [string, string][] = [];
+        const data: Sense | TruncatedSense = senseLabel === "bs" ? senseData.sense : senseData;
         
+        const nodes: [string, string][] = [];
         // Meaning
-        if ("dt" in data) {
-            for (const [k, v] of data["dt"]) {
+        if (Object.hasOwn(data, 'dt')) {
+            for (const [k, v] of (data as any)['dt'] as DefiningText) {
                 if (k === "text") {
-                    meaning = v;
                     nodes.push(["meaning", v]);
                 }
                 else if (k === "vis") {
-                    for (const example of v) {
+                    for (const example of v)
                         nodes.push(["example", example["t"]]);
-                        examples.push(example["t"]);
-                    }
-                    example = examples[0];
                 }
             }
         }
 
         // Inflection
-        if ("ins" in data) {
+        if (Object.hasOwn(data, 'ins')) {
             let ifs: string[] = [];
             let ils: string[] = [];
             let ifcs: string[] = [];
 
-            for (const ins of data["ins"]) {
+            for (const ins of (data as any)['ins']) {
                 for (const tuple of [["if", ifs], ["il", ils], ["ifcs", ifcs]] as any) {
                     if (tuple[0] in ins)
                         tuple[1].push(ins[tuple[0]]);
                 }
             }
 
-            meaning = [...ifs, ...ils, ...ifcs].join(";");
+            const meaning = [...ifs, ...ils, ...ifcs].join(";");
             nodes.push(["meaning", meaning]);
         }
 
         // Labels
-        if ("sls" in data) {
+        let labels: string[] = [];
+        if ("sls" in data)
             labels = data["sls"] as any;
-        }
         
         setNodes(nodes);
-        return {
-            meaning,
-            example,
-            examples,
-            labels
-        }
-    }
+        setLabels(labels);
+    }, [props.sense]);
 
 
     return (
         <div>
-            {(!props.senseType || props.senseType === "sense" || props.senseType === "bs") &&
-                <>
-                    <Labels
-                        labels={labels}
-                    />
-                    {nodes?.map((node, i) => (
-                        <Fragment key={i}>
-                            {node[0] === "meaning" &&
-                                <FormattedText
-                                    text={node[1]}
-                                />
-                            }
-                            {node[0] === "example" &&
-                                <div 
-                                    className="flex"
-                                >
-                                    <DotIcon
-                                        size={18}
-                                        className="text-sm text-zinc-500"
-                                    />
-                                    <FormattedText
-                                        text={node[1]}
-                                        isExample
-                                    />
-                                </div>
-                            }
-                        </Fragment>
-                    ))}
-                    {/* <span>
-                        <Labels
-                            labels={labels}
-                        />
+            <Labels
+                labels={labels}
+            />
+            {nodes?.map((node, i) => (
+                <Fragment key={i}>
+                    {node[0] === "meaning" &&
                         <FormattedText
-                            text={meaning}
+                            text={node[1]}
                         />
-                    </span>
-                    <div>
-                        {examples.map((example, i) => (
-                            <div 
-                                key={i}
-                                className="flex"
-                            >
-                                <DotIcon
-                                    size={18}
-                                    className="text-sm text-zinc-500"
-                                />
-                                <FormattedText
-                                    text={example}
-                                    isExample
-                                />
-                            </div>
-                        ))}
-                    </div> */}
-                </>
-            }
-            {props.senseType === "sen" &&
-                <div
-                    className="flex"
-                >
-                    <FormattedText
-                        text={meaning}
-                    />
-                    <Labels
-                        labels={labels}
-                    />
-                </div>
-            }
+                    }
+                    {node[0] === "example" &&
+                        <div 
+                            className="grid grid-cols-[auto_1fr] items-center"
+                        >
+                            <PointerIcon
+                                size={18}
+                                className="text-xs text-zinc-500 mr-1"
+                            />
+                            <FormattedText
+                                text={node[1]}
+                                isExample
+                            />
+                        </div>
+                    }
+                </Fragment>
+            ))}
         </div>
     )
 }

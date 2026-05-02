@@ -1,194 +1,309 @@
 "use server";
 
-const key = process.env.NEXT_PUBLIC_MERRIAM_WEBSTER_API_KEY_DICTIONARY;
+// I was not doing a good job of
+// creating types, so I prompted
+// Claude and asked it to generate said
+// types. To do so, I passed in
+// the documentation I had been using:
+// https://dictionaryapi.com/products/json#sec-2.uros
 
+// I'll be checking to see whether the
+// generated types are incorrect by
+// using them.
 
-interface Pronounciation {
-    mw: string;
-    l: string;
-    l2: string;
-    pun: string;
-    sound: {
-        audio: string;
-        ref: null;
-        stat: null;
-    }
-}
-
-interface Variant {
-    vl: string;
-    va: string;
-}
-
-interface Inflection {
-    if: string;
-    ifc: string;
-    il: string;
-    prs: null;
-    spl: null
-}
-
-type AttributionQuote = {
-    auth: string;
-    source: string;
-    aqdate: string;
-    subsource: null;
-}
-
-interface VerbalIllustration {
-    t: string;
-    aq: AttributionQuote;
-}
-
-type RunIn = (
-    ['text', string] |
-    ['riw', {
-        'rie': string;
-        prs: Pronounciation[];
-        vrs: Variant[];
-    }]
-)
-
-type Sense = ['sense', {
-    // Sense Number
-    sn: string;
-    dt: (
-        ['text', string] |
-        ['vis', VerbalIllustration[]] |
-        ['ri', RunIn[]] |
-        ['bnw', {
-            'pname': string;
-            prs: Pronounciation[];
-        }] | 
-        ['ca', {
-            intro: string,
-            cats: {
-                cat: string;
-                catref: string;
-                pn: string;
-                prs: Pronounciation[];
-                psl: string;
-            }
-        }] |
-        ['snote', (
-            ['t', string]|
-            ['vis', VerbalIllustration[]]|
-            ['ri', RunIn[]]
-        )[]] |
-        ['uns', (
-            ['text', string]|
-            ['vis', VerbalIllustration[]]|
-            ['ri', RunIn[]]
-        )[]]
-    )[];
-    et: (
-        ['text', string] |
-        ['et_snote', ['t', string][]]
-    )[];
-    ins: Inflection[];
-    lbs: string[];
-    prs: Pronounciation[];
-    sdsense: Sense & {
-        sd: string;
-    }
-    sgram: string;
-    sls: string[];
-    vrs: Variant[];
-}];
-
-// Truncated Sense
-// "A truncated sense is a sense without a definition, and is used almost exclusively 
-// when two sense numbers are separated by a non-definition element."
-// Example: tab
-type TruncatedSense = ['sen', Partial<{
-    sn: string;
-    et: (
-        ['text', string] |
-        ['et_snote', ['t', string][]]
-    )[];
-    ins: Inflection[];
-    lbs: string[];
-    prs: Pronounciation[];
-    sdsense: Sense & {
-        sd: string;
-    }
-    sgram: string;
-    sls: string[];
-    vrs: Variant[];
-}>];
-
-// Binding Substitute
-// The binding substitute is a broad, general sense introducing a series of senses
-// that give more contextual and specific meanings.
-type BindingSubstitute = ['bs', Sense[1]];
-
-// Parenthesized Sense Sequence
-type ParenthesizedSenseSequence = ['pseq', (TruncatedSense|BindingSubstitute|Sense)[]];
-
-export type Entry = {
-    meta: {
-        id: string,
-        uuid: string,
-        sort: string,
-        src: string,
-        section: string,
-        stems: string[],
-        offensive: boolean
-    };
-    // Homograph
-    hom: number;
-    // Headword Information
-    hwi: {
-        hw: string;
-        // Pronounciations
-        prs: Array<Pronounciation>;
-        // Parenthesized Subject/Status Label
-        psl: string;
-    }
-    // Alternate Headwords
-    ahws: Array<{
-        hw: string;
-    }>;
-    // Variants
-    vrs: Array<Variant>;
-    // Functional Label
-    fl: string;
-    // General Labels
-    lbs: string[];
-    def: {
-        // Verb Divider
-        vd: string;
-        // Sense Sequence
-        sseq: (Sense|BindingSubstitute|ParenthesizedSenseSequence|TruncatedSense)[][];
-    }[];
-    uros: {
-        ure: string;
-        fl: string;
-        utxt: null;
-    }[]
-    date: string;
-    usages: {
-        pl: string;
-        pt: (
-            ['text', string] |
-            ['vis', VerbalIllustration] | 
-            ['uarefs', {
-                uaref: string
-            }[]]
-        )[];
-    }[];
-    syns: {
-        pl: string;
-        pt: (
-            ['text', string] |
-            ['vis', VerbalIllustration] | 
-            ['sarefs', string[]]
-        )[];
-    }[];
+export type Sound = {
+  audio: string;
+  ref?: string;
+  stat?: string;
 };
 
+export type Pronunciation = {
+  mw?: string;
+  l?: string;
+  l2?: string;
+  pun?: string;
+  sound?: Sound;
+};
 
-export default async function getWordEntries(word: string): Promise<any> {
+export type Variant = {
+  va: string;
+  vl?: string;
+  prs?: Pronounciations;
+  spl?: string;
+};
+
+export type Inflection = {
+  if?: string;
+  ifc?: string;
+  il?: string;
+  prs?: Pronounciations;
+  spl?: string;
+};
+
+export type Pronounciations = Pronunciation[];
+export type Variants = Variant[];
+export type Inflections = Inflection[];
+export type GeneralLabels = string[];
+export type SubjectStatusLabels = string[];
+
+export type CognateTarget = {
+  cxl?: string;
+  cxr?: string;
+  cxt: string;
+  cxn?: string;
+};
+
+export type CognateCrossReference = {
+  cxl?: string;
+  cxtis: CognateTarget[];
+};
+
+export type CognateCrossReferences = CognateCrossReference[];
+
+export type RunInWrap = {
+  rie: string;
+  prs?: Pronounciations;
+};
+
+export type RunInElement = ["riw", RunInWrap] | ["text", string];
+export type RunIn = ["ri", RunInElement[]];
+
+export type SubSource = {
+  source?: string;
+  aqdate?: string;
+};
+
+export type AttributeQuotation = {
+  auth?: string;
+  source?: string;
+  aqdate?: string;
+  subsource?: SubSource;
+};
+
+export type VerbalIllustrationData = {
+  t: string;
+  aq?: AttributeQuotation;
+};
+
+export type VerbalIllustration = ["vis", VerbalIllustrationData[]];
+
+export type CalledAlsoTarget = {
+  cat: string;
+  catref?: string;
+  pn?: string;
+  prs?: Pronounciations;
+  psl?: string;
+};
+export type CalledAlso = ["ca", { 
+    intro: string; 
+    cats: CalledAlsoTarget[] 
+}];
+
+export type BiographicalNameWrapData = {
+  pname?: string;
+  sname?: string;
+  altname?: string;
+  prs?: Pronounciations;
+};
+
+export type BiographicalNameWrap = ["bnw", BiographicalNameWrapData];
+
+export type SupplementalNoteData = (
+    ["t", string] |
+    RunIn |
+    VerbalIllustration
+);
+
+export type SupplementalNote = ["snote", SupplementalNoteData[]];
+
+export type UsageNoteData =
+  | ["text", string]
+  | RunIn
+  | VerbalIllustration;
+
+export type UsageNotes = ["uns", UsageNoteData[][]];
+
+type DefiningTextElement =
+  | ["text", string]
+  | VerbalIllustration
+  | RunIn
+  | CalledAlso
+  | BiographicalNameWrap
+  | SupplementalNote
+  | UsageNotes;
+
+export type DefiningText = DefiningTextElement[];
+
+export type DividedSense = {
+  sd: string;
+  dt: DefiningText;
+  et?: Etymology;
+  ins?: Inflections;
+  lbs?: GeneralLabels;
+  prs?: Pronounciations;
+  sgram?: string;
+  sls?: SubjectStatusLabels;
+  vrs?: Variants;
+};
+
+export type Sense = {
+  sn?: string;
+  dt: DefiningText;
+  et?: Etymology;
+  ins?: Inflections;
+  lbs?: GeneralLabels;
+  prs?: Pronounciations;
+  sdsense?: DividedSense;
+  sgram?: string;
+  sls?: SubjectStatusLabels;
+  vrs?: Variants;
+};
+
+export type TruncatedSense = {
+  sn?: string;
+  et?: Etymology;
+  ins?: Inflections;
+  lbs?: GeneralLabels;
+  prs?: Pronounciations;
+  sgram?: string;
+  sls?: SubjectStatusLabels;
+  vrs?: Variants;
+};
+
+export type BindingSubstitute = {
+  sense: Sense;
+};
+
+export type ParenthesizedSequenceElement = 
+    ["sense", Sense] | 
+    ["sen", TruncatedSense] | 
+    ["bs", BindingSubstitute];
+  
+export type SenseSequenceElement = (
+    ["sense", Sense] | 
+    ["sen", TruncatedSense] | 
+    ["bs", BindingSubstitute] | 
+    ["pseq", ParenthesizedSequenceElement[]]
+);
+export type SenseSequence = SenseSequenceElement[][];
+
+export type DefinitionData = {
+  vd?: string;
+  sls?: SubjectStatusLabels;
+  sseq: SenseSequence;
+};
+
+export type Definition = DefinitionData[];
+
+export type EtymologySupplementalNote = ["et_snote", [["t", string]]];
+export type EtymologyElement =
+  | ["text", string]
+  | EtymologySupplementalNote;
+
+export type Etymology = EtymologyElement[];
+
+export type UndefinedRunOnTextElement = VerbalIllustration | UsageNotes;
+export type UndefinedRunOn = {
+  ure: string;
+  fl: string;
+  prs?: Pronounciations;
+  psl?: string;
+  ins?: Inflections;
+  lbs?: GeneralLabels;
+  sls?: SubjectStatusLabels;
+  vrs?: Variants;
+  utxt?: UndefinedRunOnTextElement[];
+};
+export type UndefinedRunOns = UndefinedRunOn[];
+
+export type DefinedRunOn = {
+  drp: string;
+  def: Definition;
+  et?: Etymology;
+  lbs?: GeneralLabels;
+  prs?: Pronounciations;
+  psl?: string;
+  sls?: SubjectStatusLabels;
+  vrs?: Variants;
+};
+export type DefinedRunOns = DefinedRunOn[];
+
+export type Meta = {
+  id: string;
+  uuid: string;
+  sort: string;
+  src: string;
+  section: "alpha" | "biog" | "geog" | "fw&p";
+  stems: string[];
+  offensive: boolean;
+};
+
+export type HeadWordInformation = {
+  hw: string;
+  prs?: Pronounciations;
+};
+
+export type AltHeadWord = {
+  hw: string;
+  prs?: Pronounciations;
+  psl?: string;
+};
+
+export type UsageDiscussion = {
+  pl: string;
+  pt: (["text", string] | VerbalIllustration)[];
+  uarefs?: { uaref: string };
+};
+
+export type SynonymDiscussion = {
+  pl: string;
+  pt: (["text", string] | VerbalIllustration)[];
+  sarefs?: string[];
+};
+
+export type QuoteItem = {
+  t: string;
+  aq: AttributeQuotation;
+};
+
+export type Art = {
+  artid: string;
+  capt?: string;
+};
+
+export type Table = {
+  tableid: string;
+  displayname: string;
+};
+
+export type Entry = {
+  meta: Meta;
+  hom?: number;
+  hwi: HeadWordInformation;
+  ahws?: AltHeadWord[];
+  vrs?: Variants;
+  fl?: string;
+  lbs?: GeneralLabels;
+  sls?: SubjectStatusLabels;
+  ins?: Inflections;
+  cxs?: CognateCrossReferences;
+  def?: Definition;
+  uros?: UndefinedRunOns;
+  dros?: DefinedRunOns;
+  dxnls?: string[];
+  usages?: UsageDiscussion[];
+  syns?: SynonymDiscussion[];
+  quotes?: QuoteItem[];
+  art?: Art;
+  table?: Table;
+  et?: Etymology;
+  date?: string;
+  shortdef?: string[];
+};
+
+const key = process.env.NEXT_PUBLIC_MERRIAM_WEBSTER_API_KEY_DICTIONARY;
+
+export default async function getWordEntries(word: string): Promise<Entry[]> {
     let url = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/";
     url += `${word}?`;
     url += `key=${key}`;

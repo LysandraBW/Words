@@ -1,5 +1,7 @@
+import { Inflections } from "@/services/words/getWordEntry";
+
 interface InflectionProps {
-    ins: {[k: string]: any}[];
+    ins: Inflections;
 }
 
 export default function Inflection(props: InflectionProps) {
@@ -14,7 +16,7 @@ export default function Inflection(props: InflectionProps) {
                     {props.ins.map((inf, i) => (
                         <div 
                             key={i}
-                            className="flex gap-x-2 px-2 py-0.5 border border-zinc-800 rounded-md"
+                            className="flex gap-x-2 px-2 py-0.5 border border-zinc-700 rounded-md"
                         >
                             <span className="text-white tracking-wider text-lg font-medium italic">
                                 {inf.il}
