@@ -1,4 +1,5 @@
 import { BookType as BookType } from "@/services/server/book";
+import clsx from "clsx";
 import { CirclePlusIcon } from "lucide-react";
 
 interface BookProps {
@@ -11,13 +12,17 @@ export default function Book(props: Partial<BookProps>) {
     return (
         <button 
             onClick={props.onClick}
-            className="w-[96px] h-[128px] flex flex-col gap-y-2 justify-center items-center bg-zinc-900"
+            className={clsx(
+                "w-[96px] h-[128px] flex flex-col gap-y-2 justify-center items-center",
+                "bg-zinc-900 cursor-pointer",
+                props.isCreate && 'group'
+            )}
         >
             {/* Create Book Button */}
             {(!props.book && props.isCreate) &&
                 <CirclePlusIcon
                     size={24}
-                    className="text-white"
+                    className="text-zinc-700 group-hover:text-white"
                 />
             }
             {/* Book Button */}

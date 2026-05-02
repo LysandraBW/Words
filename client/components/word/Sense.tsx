@@ -1,43 +1,53 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import FormattedText from "./FormattedText";
 import Labels from "./Labels";
+import { DotIcon } from "lucide-react";
+
 
 interface SenseProps {
     senseType?: string;
     senseData: {[k: string]: [string, any][]};
 }
 
+
 export default function Sense(props: SenseProps) {
     const [meaning, setMeaning] = useState("");
     const [examples, setExamples] = useState<string[]>([]);
     const [labels, setLabels] = useState<string[]>([]);
 
+    // [[meaning, "..."], ["vis", "..."], [meaning, "..."]
+    const [nodes, setNodes] = useState<[string, string][]>([]);
+
+
     useEffect(() => {
-        const {
-            meaning,
-            examples,
-            labels
-        } = updateMeaningAndExample(props.senseData);
+        const data = props.senseType === "bs" ? props.senseData.sense : props.senseData as any;
+        const {meaning, examples, labels} = updateMeaningAndExample(data);
+        setLabels(labels);
         setMeaning(meaning);
         setExamples(examples);
-        setLabels(labels);
     }, [props.senseData]);
+
 
     const updateMeaningAndExample = (data: {[k: string]: [string, any][]}) => {
         let meaning = "";
         let example = "";
         let examples: string[] = [];
         let labels: string[] = [];
+
+        const nodes: [string, string][] = [];
         
         // Meaning
         if ("dt" in data) {
             for (const [k, v] of data["dt"]) {
                 if (k === "text") {
                     meaning = v;
+                    nodes.push(["meaning", v]);
                 }
                 else if (k === "vis") {
-                    for (const example of v)
+                    for (const example of v) {
+                        nodes.push(["example", example["t"]]);
                         examples.push(example["t"]);
+                    }
                     example = examples[0];
                 }
             }
@@ -57,6 +67,7 @@ export default function Sense(props: SenseProps) {
             }
 
             meaning = [...ifs, ...ils, ...ifcs].join(";");
+            nodes.push(["meaning", meaning]);
         }
 
         // Labels
@@ -64,6 +75,7 @@ export default function Sense(props: SenseProps) {
             labels = data["sls"] as any;
         }
         
+        setNodes(nodes);
         return {
             meaning,
             example,
@@ -72,34 +84,67 @@ export default function Sense(props: SenseProps) {
         }
     }
 
+
     return (
         <div>
-            {(!props.senseType || props.senseType === "sense") &&
+            {(!props.senseType || props.senseType === "sense" || props.senseType === "bs") &&
                 <>
-                    <div
-                        className="flex items-center"
-                    >
+                    <Labels
+                        labels={labels}
+                    />
+                    {nodes?.map((node, i) => (
+                        <Fragment key={i}>
+                            {node[0] === "meaning" &&
+                                <FormattedText
+                                    text={node[1]}
+                                />
+                            }
+                            {node[0] === "example" &&
+                                <div 
+                                    className="flex"
+                                >
+                                    <DotIcon
+                                        size={18}
+                                        className="text-sm text-zinc-500"
+                                    />
+                                    <FormattedText
+                                        text={node[1]}
+                                        isExample
+                                    />
+                                </div>
+                            }
+                        </Fragment>
+                    ))}
+                    {/* <span>
                         <Labels
                             labels={labels}
                         />
                         <FormattedText
                             text={meaning}
                         />
-                    </div>
+                    </span>
                     <div>
                         {examples.map((example, i) => (
-                            <div key={i}>
+                            <div 
+                                key={i}
+                                className="flex"
+                            >
+                                <DotIcon
+                                    size={18}
+                                    className="text-sm text-zinc-500"
+                                />
                                 <FormattedText
                                     text={example}
+                                    isExample
                                 />
                             </div>
                         ))}
-                    </div>
+                    </div> */}
                 </>
             }
             {props.senseType === "sen" &&
                 <div
-                    className="flex items-center"
+                    className="flex"
                 >
                     <FormattedText
                         text={meaning}

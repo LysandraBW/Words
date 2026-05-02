@@ -98,19 +98,21 @@ export default function Page() {
     
     return (
         <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-scroll">
-            <div className="flex col-start-2">
+            <div className="flex flex-col col-start-2">
+                <ShowBooks
+                    books={data.books}
+                    onCreateBook={() => setShow('Create Book')}
+                />
+                <Divider/>
                 <ShowWords
                     words={data.words}
                     decksGraded={data.decksGraded}
                 />
+                <Divider/>
                 <ShowDecks
                     decks={data.decks}
                     onCreateDeck={() => setShow('Create Deck')}
                     onDeleteDeck={onDeleteDeck}
-                />
-                <ShowBooks
-                    books={data.books}
-                    onCreateBook={() => setShow('Create Book')}
                 />
                 <ShowDecksGraded
                     decksGraded={data.decksGraded}
@@ -131,4 +133,9 @@ export default function Page() {
             </div>
         </div>
     )
+}
+
+
+function Divider() {
+    return <div className="w-full h-[1px] bg-zinc-900"/>
 }

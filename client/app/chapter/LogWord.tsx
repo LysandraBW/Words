@@ -2,7 +2,7 @@ import InputText from "@/components/input/InputText";
 import Word from "@/app/chapter/Word";
 import WordNotFound from "@/app/chapter/WordNotFound";
 import getAutoCompletion from "@/services/words/getAutoCompletion";
-import getWordEntry from "@/services/words/getWordEntry";
+import getWordEntries from "@/services/words/getWordEntry";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -40,7 +40,7 @@ export default function LogWord(props: LogWordProps) {
         setSearch(word);
 
         // Get Entry
-        const entry = await getWordEntry(word);
+        const entry = await getWordEntries(word);
         setWordEntry(entry);
     }
 

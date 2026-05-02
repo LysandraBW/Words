@@ -1,93 +1,119 @@
 import { WordType } from "@/services/server/word";
+import { WordData } from "@/utilities/wordData";
 import { useEffect, useState } from "react";
 
-export default function useSortWords(words: WordType[] | undefined | null, wordAccuracies?: {[word: string]: number} | undefined | null) {
+
+export const DESCENDING = 2;
+export const ASCENDING = 1;
+
+
+export default function useSortWords(words: WordType[] | undefined | null, wordsData?: {[word: string]: WordData} | undefined | null) {
     const [sort, setSort] = useState('');
+    const [search, setSearch] = useState('');
+
+    const [direction, setDirection] = useState<number>(ASCENDING);
     const [sortedWords, setSortedWords] = useState<WordType[]>();
 
-
-    const sortOptions = wordAccuracies ? [
+    const sortOptions = !wordsData ? [
         {
             value: 'count',
             textLabel: 'Count'
         },
         {
-            value: 'oldest',
-            textLabel: 'Oldest'
-        },
-        {
-            value: 'newest',
-            textLabel: 'Newest'
+            value: 'added',
+            textLabel: 'Added'
         },
         {
             value: 'seen',
             textLabel: 'Seen'
         },
-        {
-            value: 'bad',
-            textLabel: 'Bad'
-        },
-        {
-            value: 'good',
-            textLabel: 'Good'
-        }
     ] : [
         {
             value: 'count',
             textLabel: 'Count'
         },
         {
-            value: 'oldest',
-            textLabel: 'Oldest'
-        },
-        {
-            value: 'newest',
-            textLabel: 'Newest'
+            value: 'added',
+            textLabel: 'Added'
         },
         {
             value: 'seen',
             textLabel: 'Seen'
+        },
+        {
+            value: 'accuracy',
+            textLabel: 'Accuracy'
         }
-    ];
+    ]
+    
 
+    const sortWords = (sort: string, direction: number, words: WordType[], wordsData: {[word: string]: WordData} | undefined | null): WordType[] => {
+        let sortedWords: WordType[] = [];
 
-    const sortWords = (sort: string, words: WordType[], wordAccuracies: {[word: string]: number} | undefined | null): WordType[] => {
         if (sort === 'seen') {
-            return words.toSorted((a: WordType, b: WordType) => new Date(b.last_seen).getTime() - new Date(a.last_seen).getTime());
+            sortedWords = words.toSorted((a: WordType, b: WordType) => new Date(a.last_seen).getTime() - new Date(b.last_seen).getTime());
         }
         else if (sort === 'count') {
-            return words.toSorted((a: WordType, b: WordType) => b.word_number_instances - a.word_number_instances);
+            sortedWords = words.toSorted((a: WordType, b: WordType) => a.word_number_instances - b.word_number_instances);
         }
-        else if (sort === 'oldest') {
-            return words.toSorted((a: WordType, b: WordType) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        else if (sort === 'added') {
+            sortedWords = words.toSorted((a: WordType, b: WordType) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
         }
-        else if (sort === 'newest') {
-            return words.toSorted((a: WordType, b: WordType) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        }
-        else if (sort === 'bad' && wordAccuracies) {
-            return words.toSorted((a: WordType, b: WordType) => wordAccuracies[a.word[0]] - wordAccuracies[b.word[0]]);
-        }
-        else if (sort === 'good' && wordAccuracies) {
-            return words.toSorted((a: WordType, b: WordType) => wordAccuracies[b.word[0]] - wordAccuracies[a.word[0]]);
+        else if (sort === 'accuracy' && wordsData) {
+            sortedWords = words.toSorted((a: WordType, b: WordType) => wordsData[a.word[0]].accuracy - wordsData[b.word[0]].accuracy);
         }
         else {
             return words;
         }
+
+        if (direction === DESCENDING)
+            return sortedWords.reverse();
+        return sortedWords;
+    }
+
+
+    const searchWords = (search: string, words: WordType[]): WordType[] => {
+        const searchLower = search.toLowerCase();
+        return words.filter(w => w.word[0].toLowerCase().includes(searchLower)).sort((a, b) => {
+            const aStarts = a.word[0].toLowerCase().startsWith(searchLower);
+            const bStarts = b.word[0].toLowerCase().startsWith(searchLower);
+
+            if (aStarts && !bStarts) 
+                return -1;
+            if (!aStarts && bStarts) 
+                return 1;
+            return a.word[0].localeCompare(b.word[0]);
+        });
+    }
+
+
+    const nextDirection = (direction: number) => {
+        const next = direction + 1;
+        if (next >= 3)
+            return 0;
+        return next;
+        
     }
 
 
     useEffect(() => {
         if (!words)
             return;
-        const sortedWords = sortWords(sort, words, wordAccuracies);
+        const searchedWords = searchWords(search, words);
+        const sortedWords = sortWords(sort, direction, searchedWords, wordsData);
         setSortedWords(sortedWords);
-    }, [words, wordAccuracies, sort]);
+    }, [sort, search, direction, words, wordsData]);
 
 
     return {
         sort,
         setSort,
         sortedWords,
-        sortOptions
+        sortOptions,
+        search,
+        setSearch,
+        direction,
+        setDirection,
+        nextDirection
     }
 }

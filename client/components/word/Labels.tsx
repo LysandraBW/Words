@@ -1,14 +1,14 @@
 export default function Labels(props: {labels: string[]}) {
     return (
-        <div className="flex gap-x-5">
+        <>
             {props.labels.map((label, i) => (
                 <span
                     key={i}
-                    className="p-1 text-white bg-blue-500"
+                    className="px-1 py-0.5 text-sm text-zinc-500 font-medium bg-zinc-800 rounded-md"
                 >
                     {label}
                 </span>
             ))}
-        </div>
+        </>
     )
 }

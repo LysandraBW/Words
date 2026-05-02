@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import Button from "../../components/Button";
-import Inflection from "./word/Inflections";
-import Sense from "./word/Sense";
+import Inflection from "../../components/word/Inflections";
+import Sense from "../../components/word/Sense";
 import InputDropdown, { Option } from "../../components/input/InputDropdown";
 
 interface WordProps {

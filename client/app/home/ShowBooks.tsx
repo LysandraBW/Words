@@ -2,6 +2,8 @@ import { BookType } from "@/services/server/book"
 import Book from "./Book";
 import { useRouter } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";
+import clsx from "clsx";
+import { gamjaFlower } from "../fonts";
 
 
 interface ShowBooksProps {
@@ -15,11 +17,8 @@ export default function ShowBooks(props: ShowBooksProps) {
 
 
     return (
-        <section className="w-full px-4 py-4">
-            <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                Books
-            </h3>
-            <div className="flex flex-wrap gap-8">
+        <section className="w-full">
+            <div className="p-4 flex flex-wrap gap-4">
                 <Book
                     isCreate={true}
                     onClick={props.onCreateBook}

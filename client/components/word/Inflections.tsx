@@ -6,20 +6,20 @@ export default function Inflection(props: InflectionProps) {
     return (
         <>
             {props.ins.every(inf => !("il" in inf)) ? 
-                <div className="font-bold">
-                    {props.ins.map(inf => inf.if).join("; ")}
+                <div className="text-white tracking-wider text-lg font-medium">
+                    {props.ins.map(inf => inf.if).join("; ").replaceAll('*', '')}
                 </div>
                 :
                 <div className="flex gap-x-4">
                     {props.ins.map((inf, i) => (
                         <div 
                             key={i}
-                            className="flex gap-x-2 border border-gray-100 bg-gray-50"
+                            className="flex gap-x-2 px-2 py-0.5 border border-zinc-800 rounded-md"
                         >
-                            <span className="italic">
+                            <span className="text-white tracking-wider text-lg font-medium italic">
                                 {inf.il}
                             </span>
-                            <span className="font-bold">
+                            <span className="text-white tracking-wider text-lg font-medium">
                                 {inf.if}
                             </span>
                         </div>

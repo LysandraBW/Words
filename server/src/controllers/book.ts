@@ -25,6 +25,14 @@ const BookSchema = z.object({
         emptyStringToNull, 
         z.coerce.number().nullish()
     ),
+    background_color: z.preprocess(
+        emptyStringToNull, 
+        z.string().trim().min(1)
+    ),
+    foreground_color: z.preprocess(
+        emptyStringToNull, 
+        z.string().trim().min(1)
+    ),
     book_author: z.array(z.string()).nullish(),
     reader_id: z.uuidv7()
 });
@@ -225,6 +233,8 @@ export async function createBook(req: Request, res: Response) {
             book_name: req.body.book_name,
             book_cover_image: req.body.book_cover_image,
             book_background_image: req.body.book_background_image,
+            background_color: req.body.background_color,
+            foreground_color: req.body.foreground_color,
             book_year: req.body.book_year,
             book_author: req.body.book_author,
             reader_id: await AuthorizeReaderBySession(sessionID)
@@ -256,13 +266,15 @@ export async function updateBook(req: Request, res: Response) {
         if (!sessionID)
             return res.sendStatus(401);
         
-        const output = nullableBy(BookSchema, ["book_name", "book_author", "book_cover_image", "book_background_image", "book_year"]).safeParse({
+        const output = nullableBy(BookSchema, ["book_name", "book_author", "book_cover_image", "book_background_image", "book_year", "background_color", "foreground_color"]).safeParse({
             book_id: req.body.book_id,
             book_name: req.body.book_name,
             book_cover_image: req.body.book_cover_image,
             book_background_image: req.body.book_background_image,
             book_year: req.body.book_year,
             book_author: req.body.book_author,
+            background_color: req.body.background_color,
+            foreground_color: req.body.foreground_color,
             reader_id: await AuthorizeReaderBySession(sessionID)
         });
 

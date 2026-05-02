@@ -24,6 +24,7 @@ interface InputDropdownProps<V> {
     searchPlaceholder: string;
     onSearchChange: (debouncedSearch: string) => void;
     itemName: string;
+    wrapperClassName: string;
 }
 
 export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) {
@@ -46,7 +47,9 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
     }, [dropdownRef]);
 
     return (
-        <InputWrapper>
+        <InputWrapper 
+            className={props.wrapperClassName}
+        >
             <InputLabel
                 label={props.label}
             />
@@ -61,7 +64,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                             "w-full h-[36px] px-4 py-1",
                             "flex justify-between items-center",
                             "bg-zinc-900 rounded-md group",
-                            "cursor-pointer",
+                            "cursor-pointer hover:bg-zinc-800",
                             props.toggleClassName
                         )}
                     >
@@ -100,7 +103,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         className={clsx(
                             "absolute top-[calc(36px+4px)]",
                             "max-h-[256px] overflow-y-auto",
-                            "bg-zinc-900 rounded-md",
+                            "bg-zinc-900 border border-zinc-800 rounded-md",
                             props.optionClassName
                         )}
                     >
