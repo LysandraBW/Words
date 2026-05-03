@@ -20,6 +20,8 @@
     "react-dom": "19.2.3",
     "react-rnd": "^10.5.3",
     "react-timer-hook": "^4.0.5",
+    "react-tooltip": "^6.0.0",
+    "sonner": "^2.0.7",
     "use-debounce": "^10.1.0",
     "zod": "^4.3.6"
   },

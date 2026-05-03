@@ -14,8 +14,8 @@ export default function Book(props: Partial<BookProps>) {
             onClick={props.onClick}
             className={clsx(
                 "w-[96px] h-[128px] flex flex-col gap-y-2 justify-center items-center",
-                "bg-zinc-900 cursor-pointer",
-                props.isCreate && 'group'
+                "bg-zinc-900 border border-zinc-800 cursor-pointer rounded-md",
+                props.isCreate && 'group hover:bg-zinc-800'
             )}
         >
             {/* Create Book Button */}

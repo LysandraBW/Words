@@ -39,7 +39,7 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
                     "w-full min-h-[36px] max-h-[36px] h-[36px] px-4 py-1",
                     "flex gap-x-2 items-center",
                     "rounded-md outline-none",
-                    "bg-zinc-900 hover:bg-zinc-800 has-[:focus]:bg-zinc-800",
+                    "bg-zinc-900 hover:bg-zinc-800 has-[:focus]:bg-zinc-800 border border-zinc-800",
                     props.inputWrapperClassName
                 )}
             >

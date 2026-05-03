@@ -1,7 +1,7 @@
 import InputText from "@/components/input/InputText";
 import Word from "@/app/chapter/Word";
 import WordNotFound from "@/app/chapter/WordNotFound";
-import getAutoCompletion from "@/services/words/getAutoCompletion";
+import getSuggestions from "@/services/words/getAutoCompletion";
 import getWordEntries from "@/services/words/getWordEntry";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -30,7 +30,7 @@ export default function LogWord(props: LogWordProps) {
 
 
     const autoCompleteSearch = (search: string) => {
-        const suggestions = getAutoCompletion(search, 5);
+        const suggestions = getSuggestions(search, 5);
         setSearchSuggestions(suggestions);
     }
 

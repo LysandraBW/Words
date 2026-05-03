@@ -1,47 +1,47 @@
-import Button from "@/components/Button";
 import { DeckType } from "@/services/server/deck";
-import { ArrowUpRightFromSquareIcon, TrashIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { DeckGradedType } from "@/services/server/deckGraded";
+import clsx from "clsx";
+import { PlusCircle } from "lucide-react";
 import { Fragment } from "react/jsx-runtime";
+import Deck from "./Deck";
+
 
 interface ShowDeckProps {
     decks: DeckType[];
+    decksGraded: DeckGradedType[];
     onCreateDeck: () => void;
     onDeleteDeck: (deckID: number) => void;
 }
 
 
 export default function ShowDecks(props: ShowDeckProps) {
-    const router = useRouter();
-    
-    
     return (
-        <section className="w-full px-4 py-4">
-            <h3 className="mb-4 text-lg text-white font-medium tracking-tight">
-                Decks
-            </h3>
-            <div className="flex flex-wrap gap-8">
-                <Button
-                    label="Create Deck"
-                    onClick={props.onCreateDeck}
-                />
-                {props.decks.map((deck) => (
-                    <div 
-                        key={deck.deck_id}
-                        className="bg-white"
-                    >
-                        <ArrowUpRightFromSquareIcon
-                            onClick={() => router.push(`/deck?deckID=${deck.deck_id}`)}
-                        />
-                        <TrashIcon 
-                            onClick={() => props.onDeleteDeck(deck.deck_id)}
-                        />
-                        <p className="p-4 text-white bg-orange-500">
-                            {deck.deck_name}
-                        </p>
-                    </div>
-                ))}
-            </div>
+        <section className="w-full px-4 py-4 flex flex-wrap gap-4">
+            <button
+                className={clsx(
+                    "w-[316px] max-w-[316px] min-w-[316px] p-2",
+                    "flex flex-col gap-y-2",
+                    "overflow-hidden",
+                    "bg-zinc-900 border border-zinc-800 rounded-md group hover:bg-zinc-800 cursor-pointer"
+                )}
+                onClick={props.onCreateDeck}
+            >
+                <div className="h-full flex justify-center items-center">
+                    <PlusCircle
+                        size={24}
+                        className="text-zinc-700 group-hover:text-white"
+                    />
+                </div>
+            </button>
+            {props.decks.map((deck) => (
+                <Fragment key={deck.deck_id}>
+                    <Deck
+                        deck={deck}
+                        decksGraded={props.decksGraded.filter(d => d.deck_id === deck.deck_id)}
+                        onDeleteDeck={() => props.onDeleteDeck(deck.deck_id)}
+                    />
+                </Fragment>
+            ))}
         </section>
     )
 }

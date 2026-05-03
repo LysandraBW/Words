@@ -63,8 +63,9 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         className={clsx(
                             "w-full h-[36px] px-4 py-1",
                             "flex justify-between items-center",
-                            "bg-zinc-900 rounded-md group",
-                            "cursor-pointer hover:bg-zinc-800",
+                            "bg-zinc-900 rounded-md border border-zinc-800 group",
+                            "hover:bg-zinc-800",
+                            !props.search && "cursor-pointer",
                             props.toggleClassName
                         )}
                     >
@@ -76,10 +77,12 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         >
                             {props.toggleLabel}
                         </label>
-                        <ChevronsUpDown
-                            size={16}
-                            className="text-zinc-500"
-                        />
+                        {!props.search &&
+                            <ChevronsUpDown
+                                size={16}
+                                className="text-zinc-500"
+                            />
+                        }
                     </button>
                 }
                 {(props.search && open) &&
@@ -92,7 +95,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         className={clsx(
                             "w-full h-[36px] px-4 py-1",
                             "flex justify-between items-center",
-                            "bg-zinc-900 rounded-md outline-none focus:bg-zinc-800",
+                            "bg-zinc-900 rounded-md border border-zinc-800 outline-none focus:bg-zinc-800",
                             "text-sm text-zinc-400 tracking-wide focus:text-white",
                             props.toggleClassName
                         )}
@@ -101,7 +104,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                 {open &&
                     <div 
                         className={clsx(
-                            "absolute top-[calc(36px+4px)]",
+                            "absolute top-[calc(36px+4px)] z-50",
                             "max-h-[256px] overflow-y-auto",
                             "bg-zinc-900 border border-zinc-800 rounded-md",
                             props.optionClassName

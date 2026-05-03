@@ -11,7 +11,7 @@ interface ShowEntryProps {
     entry: Entry;
     entryNum: number;
     numEntries: number;
-    onOpen: (word: string) => void;
+    onOpenWord: (word: string) => void;
 }
 
 
@@ -30,12 +30,12 @@ function ScribbleTag(props: {text: string; className: string}) {
 }
 
 
-export const EntryHandlerContext = createContext<{show: (word: string) => void} | null>(null);
+export const EntryHandlerContext = createContext<{onOpenWord: (word: string) => void} | null>(null);
 
 
 export default function ShowEntry(props: ShowEntryProps) {
     return (
-        <EntryHandlerContext.Provider value={{show: props.onOpen}}>
+        <EntryHandlerContext.Provider value={{onOpenWord: props.onOpenWord}}>
             <div className="grid grid-cols-[auto_1fr]">
                 <Level
                     level={-1}

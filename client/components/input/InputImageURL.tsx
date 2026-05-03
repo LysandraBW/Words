@@ -4,14 +4,14 @@ import clsx from "clsx";
 
 export default function InputImageURL(props: Partial<InputTextProps>) {
     return (
-        <div className="grid grid-cols-[1fr_36px] gap-x-4 items-end">
+        <div className="grid grid-cols-[1fr_36px] gap-x-1 items-end">
             <InputText
                 label={props.label}
                 value={props.value}
                 placeholder={props.placeholder}
                 onChange={props.onChange}
             />
-            <div className="relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-zinc-900">
+            <div className="relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-zinc-900 border border-zinc-800">
                 {!props.value &&
                     <ImageIcon
                         size={16}

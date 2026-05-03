@@ -1,6 +1,6 @@
 import words from "an-array-of-english-words";
 
-export default function getAutoCompletion(value: string, size: number = 10) {
+export default function getSuggestions(value: string, size: number = 10) {
     if (value.length <= 0)
         return [];
     

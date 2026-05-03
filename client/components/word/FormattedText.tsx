@@ -142,9 +142,9 @@ export default function FormattedText(props: FormattedTextProps) {
                     <span
                         className="text-blue-500 font-bold uppercase hover:text-blue-400 cursor-pointer"
                         onClick={() => {
-                            if (!context?.show)
+                            if (!context?.onOpenWord)
                                 return;
-                            context.show(refWord);
+                            context.onOpenWord(refWord);
                         }}   
                     >
                         {refWord}
@@ -157,9 +157,9 @@ export default function FormattedText(props: FormattedTextProps) {
                     <span
                         className="text-blue-500 font-bold uppercase hover:text-blue-400 cursor-pointer"
                         onClick={() => {
-                            if (!context?.show)
+                            if (!context?.onOpenWord)
                                 return;
-                            context.show(refWord);
+                            context.onOpenWord(refWord);
                         }}
                     >
                         {refWord}
@@ -172,9 +172,9 @@ export default function FormattedText(props: FormattedTextProps) {
                     <span
                         className="text-blue-500 font-bold uppercase hover:text-blue-400 cursor-pointer"
                         onClick={() => {
-                            if (!context?.show)
+                            if (!context?.onOpenWord)
                                 return;
-                            context.show(refWord);
+                            context.onOpenWord(refWord);
                         }}
                     >
                         {refWord}

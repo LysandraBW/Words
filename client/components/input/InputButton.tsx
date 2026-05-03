@@ -53,7 +53,7 @@ export default function InputButton(props: Partial<InputButtonProps>) {
                 >
                     <span 
                         className={clsx(
-                            "text-center font-medium tracking-wide",
+                            "text-base text-center font-medium tracking-wide",
                             disabled && "text-zinc-600",
                             isBlack && "text-white",
                             isBlue && "text-white",
