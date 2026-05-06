@@ -103,29 +103,39 @@ export default function ShowWords(props: ShowWordsProps) {
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-1">
-                                <span className="py-1 px-2 flex items-center text-xs tracking-wide text-blue-500 bg-zinc-800 group-hover:bg-zinc-700 rounded-md">
-                                    Seen 
+                                <span 
+                                    className={clsx(
+                                        pixelifySans.className,
+                                        "py-1 px-2 flex items-center text-xs tracking-wide text-blue-500 bg-black/20 group-hover:bg-black/20 rounded-md"
+                                    )}
+                                >
+                                    {/* Seen */}
                                     <span
                                         className={clsx(
                                             pixelifySans.className,
-                                            'text-green-500 ml-1'
+                                            'text-green-500'
                                         )}
                                     >
                                         {word.word_number_instances}x
                                     </span>
                                 </span>
-                                <span className="py-1 px-2 text-xs tracking-wide text-blue-500 bg-zinc-800 group-hover:bg-zinc-700 rounded-md">
+                                <span 
+                                    className={clsx(
+                                        pixelifySans.className,
+                                        "py-1 px-2 text-xs tracking-wide text-blue-500 bg-black/20 group-hover:bg-black/20 rounded-md"
+                                    )}
+                                >
                                     {wordsData && (
                                         <span
                                             className={clsx(
                                                 pixelifySans.className,
-                                                'text-indigo-500 mr-1'
+                                                wordsData[word.word[0]].accuracy * 100 >= 76 ? 'text-green-500' : wordsData[word.word[0]].accuracy * 100 >= 60 ? 'text-yellow-400' : 'text-red-500'
                                             )}
                                         >
                                             {(wordsData[word.word[0]].accuracy * 100).toFixed(0)}%
                                         </span>
                                     )}
-                                    Accuracy
+                                    {/* Acc. */}
                                 </span>
                             </div>
                         </button>

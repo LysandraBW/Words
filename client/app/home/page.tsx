@@ -137,7 +137,7 @@ export default function Page() {
 
     
     return (
-        <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-auto relative">
+        <div className="w-full h-full grid grid-cols-[0px_1fr] bg-zinc-950 overflow-y-auto relative">
             <div className="flex flex-col col-start-2">
                 <SearchWords
                     onOpenWord={onOpenWord}

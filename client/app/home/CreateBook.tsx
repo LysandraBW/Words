@@ -103,6 +103,7 @@ export default function CreateBook(props: CreateBookProps) {
                     onInsert={(value) => setForm(updateFormValue(form, "book_author", addValue(value, form.book_author.value)))}
                     error={form.book_author.error}
                     inputClassName="!bg-zinc-700 hover:!bg-zinc-600"
+                    buttonClassName="!bg-zinc-700 !border-zinc-800"
                 />
                 <InputImageURL
                     label="Cover Image"

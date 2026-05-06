@@ -4,7 +4,7 @@ import getSuggestions from "@/services/words/getAutoCompletion";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { gamjaFlower, pixelifySans } from "../fonts";
-import { RegexIcon } from "lucide-react";
+import { RegexIcon, SearchIcon } from "lucide-react";
 
 interface SearchWordsProps {
     onOpenWord: (word: string) => void;
@@ -18,8 +18,8 @@ export default function SearchWords(props: SearchWordsProps) {
 
     return (
         <div className="p-4 flex text-red-500">
-            <div className="h-full px-4 flex items-center rounded-l-md bg-zinc-950 border border-zinc-800 border-r-0">
-                <RegexIcon
+            <div className="h-full px-4 flex items-center rounded-l-md bg-zinc-900 border border-zinc-800 border-r-0">
+                <SearchIcon
                     size={16}
                     className="text-zinc-300"
                 />

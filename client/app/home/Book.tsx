@@ -29,7 +29,7 @@ export default function Book(props: Partial<BookProps>) {
             {(props.book && props.book.book_cover_image) &&
                 <img
                     src={props.book.book_cover_image}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-center rounded-md"
                 />
             }
         </button>

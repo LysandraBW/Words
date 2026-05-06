@@ -51,7 +51,7 @@ export default function Deck(props: DeckProps) {
             <button
                 className={clsx(
                     "w-[316px] max-w-[316px] min-w-[316px] p-2",
-                    "grid grid-cols-3 gap-y-2",
+                    "flex justify-between gap-x-2",
                     "overflow-hidden",
                     "bg-zinc-900 border border-zinc-800 rounded-md group hover:bg-zinc-800 cursor-pointer"
                 )}
@@ -62,17 +62,29 @@ export default function Deck(props: DeckProps) {
                 }}
             >
                 <div className="col-start-2">
-                    <h6 className="font-medium text-zinc-300 text-sm tracking-wide uppercase text-center">
+                    <h6 className="font-medium text-zinc-300 text-sm tracking-wide capitalize text-left">
                         {props.deck.deck_name}
                     </h6>
-                    <p className="text-zinc-500 text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-2 text-center">
+                    {/* <p className="text-zinc-500 text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-2 text-left">
                         {props.deck.deck_words.length} Word{props.deck.deck_words.length === 1 ? '' : 's'}
-                    </p>
+                    </p> */}
+                    <span
+                        className={clsx(
+                            'block',
+                            pixelifySans.className, 
+                            "text-xs text-zinc-500",
+                            'tracking-wide'
+                        )}
+                    >
+                        {props.deck.deck_words.length} Word{props.deck.deck_words.length === 1 ? '' : 's'}, Done {props.decksGraded.length}x
+                    </span>
                 </div>
                 <div className="col-start-3 flex flex-col justify-center items-center">
                     <div className="flex items-center">
                         <span
                             className={clsx(
+                                'block',
+                                'text-xl',
                                 pixelifySans.className,
                                 change != null && change > 0 && "text-green-500",
                                 change != null && change < 0 && "text-red-500",
@@ -82,22 +94,17 @@ export default function Deck(props: DeckProps) {
                         >
                             {change}%
                         </span>
-                        {(change != null && change > 0) &&
-                            <MoveUpIcon
-                                size={14}
-                                className="text-green-500"
-                            />
-                        }
                     </div>
-                    <span
+                    {/* <span
                         className={clsx(
+                            'block',
                             pixelifySans.className, 
                             "text-xs text-zinc-500",
                             'tracking-wide'
                         )}
                     >
-                        {props.decksGraded.length}x
-                    </span>
+                        Done {props.decksGraded.length}x
+                    </span> */}
                 </div>
             </button>
             {/* Context Menu */}

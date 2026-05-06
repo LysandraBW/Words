@@ -14,6 +14,7 @@ interface InputTagsProps {
     onInsert: (value: string) => void;
     onDelete: (value: string) => void;
     inputClassName: string;
+    buttonClassName: string;
 }
 
 export default function InputTags(props: Partial<InputTagsProps>) {
@@ -53,7 +54,10 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                 />
                 <button
                     onClick={onClick}
-                    className="px-4 py-1 bg-zinc-900 rounded-r-md cursor-pointer group border border-zinc-800 border-l-0"
+                    className={clsx(
+                        "px-4 py-1 bg-zinc-900 rounded-r-md cursor-pointer group border border-zinc-700 border-l-0",
+                        props.buttonClassName
+                    )}
                 >
                     <CornerDownLeftIcon
                         size={16}
