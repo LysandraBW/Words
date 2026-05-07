@@ -10,7 +10,7 @@ export default function CloseButton(props: CloseButtonProps) {
             size={20}
             onClick={props.onClose}
             strokeWidth={1.5}
-            className="cursor-pointer text-zinc-500"
+            className="cursor-pointer text-neutral-500"
         />
     )
 }

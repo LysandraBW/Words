@@ -53,7 +53,7 @@ export default function Deck(props: DeckProps) {
                     "w-[316px] max-w-[316px] min-w-[316px] p-2",
                     "flex justify-between gap-x-2",
                     "overflow-hidden",
-                    "bg-zinc-900 border border-zinc-800 rounded-md group hover:bg-zinc-800 cursor-pointer"
+                    "bg-neutral-900 border border-neutral-800 rounded-md group hover:bg-neutral-800 cursor-pointer"
                 )}
                 onClick={() => router.push(`/deck?deckID=${props.deck.deck_id}`)}
                 onContextMenu={(e) => {
@@ -62,17 +62,17 @@ export default function Deck(props: DeckProps) {
                 }}
             >
                 <div className="col-start-2">
-                    <h6 className="font-medium text-zinc-300 text-sm tracking-wide capitalize text-left">
+                    <h6 className="font-medium text-neutral-500 text-sm tracking-wide capitalize text-left">
                         {props.deck.deck_name}
                     </h6>
-                    {/* <p className="text-zinc-500 text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-2 text-left">
+                    {/* <p className="text-neutral-500 text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-2 text-left">
                         {props.deck.deck_words.length} Word{props.deck.deck_words.length === 1 ? '' : 's'}
                     </p> */}
                     <span
                         className={clsx(
                             'block',
                             pixelifySans.className, 
-                            "text-xs text-zinc-500",
+                            "text-xs text-neutral-500",
                             'tracking-wide'
                         )}
                     >
@@ -88,7 +88,7 @@ export default function Deck(props: DeckProps) {
                                 pixelifySans.className,
                                 change != null && change > 0 && "text-green-500",
                                 change != null && change < 0 && "text-red-500",
-                                change != null && change === 0 && "text-zinc-500",
+                                change != null && change === 0 && "text-neutral-500",
                                 'tracking-wide'
                             )}
                         >
@@ -99,7 +99,7 @@ export default function Deck(props: DeckProps) {
                         className={clsx(
                             'block',
                             pixelifySans.className, 
-                            "text-xs text-zinc-500",
+                            "text-xs text-neutral-500",
                             'tracking-wide'
                         )}
                     >
@@ -116,20 +116,20 @@ export default function Deck(props: DeckProps) {
                         top: rightClick.y,
                         left: rightClick.x
                     }}
-                    className="min-w-[calc(16px*8)] bg-zinc-800 border border-zinc-700 rounded-md"
+                    className="min-w-[calc(16px*8)] bg-neutral-800 border border-neutral-700 rounded-md"
                 >
                     <button
                         onClick={(e) => {
                             e.preventDefault();
                             window.open(`/deck?deckID=${props.deck.deck_id}`, '_blank');
                         }}
-                        className="w-full p-1 flex items-center gap-x-2 border-b border-b-zinc-700 first:rounded-t-md last:rounded-b-md last:border-b-0 group cursor-pointer"
+                        className="w-full p-1 flex items-center gap-x-2 border-b border-b-neutral-700 first:rounded-t-md last:rounded-b-md last:border-b-0 group cursor-pointer"
                     >
                         <ArrowUpRightFromSquareIcon
                             size={16}
-                            className="text-zinc-500 group-hover:text-white relative top-[-1px]"
+                            className="text-neutral-500 group-hover:text-white relative top-[-1px]"
                         />
-                        <label className="text-zinc-500 text-sm tracking-wide group-hover:text-white">
+                        <label className="text-neutral-500 text-sm tracking-wide group-hover:text-white">
                             Open
                         </label>
                     </button>
@@ -138,13 +138,13 @@ export default function Deck(props: DeckProps) {
                             e.preventDefault();
                             props.onDeleteDeck();
                         }}
-                        className="w-full p-1 flex items-center gap-x-2 border-b border-b-zinc-700 first:rounded-t-md last:rounded-b-md last:border-b-0 group cursor-pointer"
+                        className="w-full p-1 flex items-center gap-x-2 border-b border-b-neutral-700 first:rounded-t-md last:rounded-b-md last:border-b-0 group cursor-pointer"
                     >
                         <Trash2Icon
                             size={16}
-                            className="text-zinc-500 group-hover:text-red-500 relative top-[-1px]"
+                            className="text-neutral-500 group-hover:text-red-500 relative top-[-1px]"
                         />
-                        <label className="text-zinc-500 text-sm tracking-wide group-hover:text-red-500">
+                        <label className="text-neutral-500 text-sm tracking-wide group-hover:text-red-500">
                             Delete
                         </label>
                     </button>

@@ -28,8 +28,8 @@ export default function InputButton(props: Partial<InputButtonProps>) {
             disabled={props.disabled}
             className={clsx(
                 "w-full h-[36px] p-[1px] rounded-md",
-                disabled && "bg-zinc-900 cursor-default",
-                isBlack && "bg-zinc-900",
+                disabled && "bg-neutral-900 cursor-default",
+                isBlack && "bg-neutral-900",
                 isBlue && "bg-blue-400",
             )}
         >
@@ -37,8 +37,8 @@ export default function InputButton(props: Partial<InputButtonProps>) {
                 className={clsx(
                     "w-full h-full p-[1px] pb-[0px]",
                     "rounded-[5px] bg-linear-to-b",
-                    disabled && "from-zinc-600 to-zinc-800",
-                    isBlack && "cursor-pointer from-zinc-600 to-zinc-950",
+                    disabled && "from-neutral-600 to-neutral-800",
+                    isBlack && "cursor-pointer from-neutral-600 to-neutral-950",
                     isBlue && "cursor-pointer from-blue-100 to-blue-600",
                 )}
             >
@@ -46,15 +46,15 @@ export default function InputButton(props: Partial<InputButtonProps>) {
                     className={clsx(
                         "w-full h-full flex justify-center items-center",
                         "rounded-[4px] bg-linear-to-b",
-                        disabled && "bg-zinc-900",
-                        isBlack && "cursor-pointer from-zinc-800 to-zinc-950 hover:from-zinc-900",
+                        disabled && "bg-neutral-900",
+                        isBlack && "cursor-pointer from-neutral-800 to-neutral-950 hover:from-neutral-900",
                         isBlue && "cursor-pointer from-blue-400 to-blue-500 hover:from-blue-500",
                     )}
                 >
                     <span 
                         className={clsx(
                             "text-base text-center font-medium tracking-wide",
-                            disabled && "text-zinc-600",
+                            disabled && "text-neutral-500",
                             isBlack && "text-white",
                             isBlue && "text-white",
                         )}

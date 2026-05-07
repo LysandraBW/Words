@@ -72,7 +72,7 @@ export default function ShowEntry(props: ShowEntryProps) {
                                 className="flex flex-col"
                             >
                                 {def.vd && 
-                                    <p className="block text-sm text-zinc-500 tracking-wide uppercase">
+                                    <p className="block text-sm text-neutral-500 tracking-wide uppercase">
                                         {def.vd}
                                     </p>
                                 }

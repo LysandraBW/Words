@@ -15,7 +15,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
     	<html 
 			lang="en"
 			className={clsx(
-				"w-screen min-w-screen max-w-screen h-screen",
+				"w-screen min-w-screen max-w-screen h-screen bg-black",
 				abcDiatype.className
 			)}
 		>

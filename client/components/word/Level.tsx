@@ -16,9 +16,9 @@ export default function Level(props: LevelProps) {
                 className={clsx(
                     "w-[1px] h-full",
                     "relative",
-                    props.level === -1 && "bg-zinc-400",
-                    props.level === 0 && "bg-zinc-500",
-                    props.level === 1 && "bg-zinc-600",
+                    props.level === -1 && "bg-neutral-400",
+                    props.level === 0 && "bg-neutral-500",
+                    props.level === 1 && "bg-neutral-600",
                 )}
             >
                 {props.long &&

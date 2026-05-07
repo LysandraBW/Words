@@ -45,23 +45,23 @@ export default function ShowWords(props: ShowWordsProps) {
     return (
         <section className="w-full max-h-[700px] flex">
             <div className="w-full">
-                <div className="w-fit m-4 mb-0 flex items-center bg-zinc-900 border-y border-zinc-800 rounded-md">
+                <div className="w-fit m-4 mb-0 flex items-center bg-neutral-900 border-y border-neutral-800 rounded-md">
                     <InputText
                         value={words.search}
                         onChange={words.setSearch}
                         placeholder="Search Words" 
                         wrapperClassName="w-fit"
-                        inputWrapperClassName="rounded-r-none border-y-0 border-r-0 border-l border-zinc-800"
+                        inputWrapperClassName="rounded-r-none border-y-0 border-r-0 border-l border-neutral-800"
                     />
                     <InputDropdown
                         options={words.sortOptions}
                         value={[words.sort]}
                         toggleLabel="Sort Words"
                         onChange={(value: string) => words.setSort(value)}
-                        toggleClassName="border-y-0  border-x border-x-zinc-800 pr-2 gap-x-4 rounded-none"
+                        toggleClassName="border-y-0  border-x border-x-neutral-800 pr-2 gap-x-4 rounded-none"
                     />
                     <button
-                        className="h-[36px] w-[36px] p-0.5 flex justify-center items-center -space-x-2 border-r border-zinc-800 hover:bg-zinc-800 cursor-pointer rounded-r-md"
+                        className="h-[36px] w-[36px] p-0.5 flex justify-center items-center -space-x-2 border-r border-neutral-800 hover:bg-neutral-800 cursor-pointer rounded-r-md"
                         onClick={() => words.setDirection(words.nextDirection(words.direction))}
                     >
                         <MoveUpIcon
@@ -69,7 +69,7 @@ export default function ShowWords(props: ShowWordsProps) {
                             strokeWidth={2}
                             className={clsx(
                                 words.direction === ASCENDING && '!text-green-500',
-                                "text-zinc-500 [transform:scaleY(0.8375)]"
+                                "text-neutral-500 [transform:scaleY(0.8375)]"
                             )}
                         />
                         <MoveDownIcon
@@ -77,7 +77,7 @@ export default function ShowWords(props: ShowWordsProps) {
                             strokeWidth={2}
                             className={clsx(
                                 words.direction === DESCENDING && '!text-green-500',
-                                "text-zinc-500 [transform:scaleY(0.8375)]"
+                                "text-neutral-500 [transform:scaleY(0.8375)]"
                             )}
                         />
                     </button>
@@ -90,15 +90,15 @@ export default function ShowWords(props: ShowWordsProps) {
                                 "h-[max(100%,100px)] p-2",
                                 "flex flex-col gap-y-2",
                                 "overflow-hidden",
-                                "bg-zinc-900 border border-zinc-800 rounded-md group hover:bg-zinc-800 cursor-pointer"
+                                "bg-neutral-900 border border-neutral-800 rounded-md group hover:bg-neutral-800 cursor-pointer"
                             )}
                             onClick={async () => props.onOpenWord(word.word[0])}
                         >
                             <div>
-                                <h6 className="h-[24px] w-[300px] font-medium text-zinc-300 text-sm tracking-wide capitalize text-left">
+                                <h6 className="h-[24px] w-[300px] font-medium text-neutral-500 text-sm tracking-wide capitalize text-left">
                                     {word.word[0]}
                                 </h6>
-                                <p className="w-[300px] max-w-[300px] text-zinc-500 text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-2 text-left">
+                                <p className="w-[300px] max-w-[300px] text-neutral-500 text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-2 text-left">
                                     {word.word[1]}
                                 </p>
                             </div>

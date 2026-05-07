@@ -22,14 +22,14 @@ export default function ShowDecks(props: ShowDeckProps) {
                     "w-[316px] max-w-[316px] min-w-[316px] p-2",
                     "flex flex-col gap-y-2",
                     "overflow-hidden",
-                    "bg-zinc-900 border border-zinc-800 rounded-md group hover:bg-zinc-800 cursor-pointer"
+                    "bg-neutral-900 border border-neutral-800 rounded-md group hover:bg-neutral-800 cursor-pointer"
                 )}
                 onClick={props.onCreateDeck}
             >
                 <div className="h-full flex justify-center items-center">
                     <PlusCircle
                         size={24}
-                        className="text-zinc-700 group-hover:text-white"
+                        className="text-neutral-500 group-hover:text-white"
                     />
                 </div>
             </button>

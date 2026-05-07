@@ -12,6 +12,7 @@ import ShowBooks from "./ShowBooks";
 import ShowDecksGraded from "./ShowDecksGraded";
 import SearchWords from "./SearchWords";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
+import UserContextProvider from "@/components/UserContextProvider";
 
 
 export interface BookToChapters {
@@ -137,52 +138,54 @@ export default function Page() {
 
     
     return (
-        <div className="w-full h-full grid grid-cols-[0px_1fr] bg-zinc-950 overflow-y-auto relative">
-            <div className="flex flex-col col-start-2">
-                <SearchWords
-                    onOpenWord={onOpenWord}
-                />
-                <Divider/>
-                <ShowBooks
-                    books={data.books}
-                    onCreateBook={() => setShow('Create Book')}
-                />
-                <Divider/>
-                <ShowWords
-                    words={data.words}
-                    decksGraded={data.decksGraded}
-                    onOpenWord={onOpenWord}
-                    onCloseWord={onCloseWord}
-                    onRaiseWord={onRaiseWord}
-                    lookup={lookup || null}
-                    setLookup={setLookup}
-                />
-                <Divider/>
-                <ShowDecks
-                    decks={data.decks}
-                    decksGraded={data.decksGraded}
-                    onCreateDeck={() => setShow('Create Deck')}
-                    onDeleteDeck={onDeleteDeck}
-                />
+        <UserContextProvider>
+            <div className="w-full h-full grid grid-cols-[0px_1fr] bg-black overflow-y-auto relative">
+                <div className="flex flex-col col-start-2">
+                    <SearchWords
+                        onOpenWord={onOpenWord}
+                    />
+                    <Divider/>
+                    {/* <ShowBooks
+                        books={data.books}
+                        onCreateBook={() => setShow('Create Book')}
+                    />
+                    <Divider/>
+                    <ShowWords
+                        words={data.words}
+                        decksGraded={data.decksGraded}
+                        onOpenWord={onOpenWord}
+                        onCloseWord={onCloseWord}
+                        onRaiseWord={onRaiseWord}
+                        lookup={lookup || null}
+                        setLookup={setLookup}
+                    />
+                    <Divider/>
+                    <ShowDecks
+                        decks={data.decks}
+                        decksGraded={data.decksGraded}
+                        onCreateDeck={() => setShow('Create Deck')}
+                        onDeleteDeck={onDeleteDeck}
+                    /> */}
+                </div>
+                {show === 'Create Deck' &&
+                    <CreateDeck
+                        books={data.books}
+                        onClose={() => setShow('')}
+                        onDeckCreated={handleDeckCreated}
+                    />
+                }
+                {show === 'Create Book' &&
+                    <CreateBook
+                        onClose={() => setShow('')}
+                        onBookCreated={handleBookCreated}
+                    />
+                }
             </div>
-            {show === 'Create Deck' &&
-                <CreateDeck
-                    books={data.books}
-                    onClose={() => setShow('')}
-                    onDeckCreated={handleDeckCreated}
-                />
-            }
-            {show === 'Create Book' &&
-                <CreateBook
-                    onClose={() => setShow('')}
-                    onBookCreated={handleBookCreated}
-                />
-            }
-        </div>
+        </UserContextProvider>
     )
 }
 
 
 function Divider() {
-    return <div className="w-full h-[1px] bg-zinc-900"/>
+    return <div className="w-full h-[1px] bg-neutral-900"/>
 }

@@ -26,7 +26,7 @@ export default function Progress(props: ProgressProps) {
                             props.index === i && "!bg-blue-500",
                             correct && "bg-green-500",
                             incorrect && "bg-red-500",
-                            unanswered && "bg-gray-500",
+                            unanswered && "bg-neutral-500",
                         )}
                     >
                         {i+1}

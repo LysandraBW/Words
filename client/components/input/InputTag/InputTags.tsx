@@ -47,21 +47,21 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                     placeholder={props.placeholder}
                     className={clsx(
                         "w-full min-h-[36px] max-h-[36px] h-[36px] px-4 py-1",
-                        "bg-zinc-900 rounded-l-md outline-none peer hover:bg-zinc-800 focus:bg-zinc-800 border border-zinc-800",
-                        "text-sm text-zinc-400 tracking-normal focus:text-white",
+                        "bg-neutral-900 rounded-l-md outline-none peer hover:bg-neutral-800 focus:bg-neutral-800 border border-neutral-800",
+                        "text-sm text-neutral-500 tracking-normal focus:text-white",
                         props.inputClassName
                     )}
                 />
                 <button
                     onClick={onClick}
                     className={clsx(
-                        "px-4 py-1 bg-zinc-900 rounded-r-md cursor-pointer group border border-zinc-700 border-l-0",
+                        "px-4 py-1 bg-neutral-900 rounded-r-md cursor-pointer group border border-neutral-700 border-l-0",
                         props.buttonClassName
                     )}
                 >
                     <CornerDownLeftIcon
                         size={16}
-                        className="text-zinc-500 group-hover:text-blue-500"
+                        className="text-neutral-500 group-hover:text-blue-500"
                     />
                 </button>
             </div>

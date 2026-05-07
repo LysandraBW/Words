@@ -10,7 +10,7 @@ export default function InputLabel(props: Partial<InputLabelProps>) {
         <>
             {props.label &&
                 <div className="flex items-start">
-                    <span className="text-sm text-zinc-500 tracking-wide">
+                    <span className="text-sm text-neutral-500 tracking-wide">
                         {props.label}
                     </span>
                     {props.required &&

@@ -3,7 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { ReaderType, selectReader } from "@/services/server/reader";
 
 
-const UserContext = createContext<Partial<{user: ReaderType}>>({});
+const UserContext = createContext<Partial<{user: ReaderType|null}>>({});
 
 
 export function useRootContext() {
@@ -17,7 +17,7 @@ export function useRootContext() {
 export default function UserContextProvider(props: {children: ReactNode}) {
     const router = useRouter();
     const pathName = usePathName();
-    const [user, setUser] = useState<ReaderType>();
+    const [user, setUser] = useState<ReaderType|null>();
 
     
     useEffect(() => {
@@ -27,11 +27,10 @@ export default function UserContextProvider(props: {children: ReactNode}) {
                 setUser(user);
             }
             catch (err) {
-                if (
-                    (pathName.startsWith('/signIn')) || 
-                    (pathName.startsWith('/signUp'))
-                )
+                if ((pathName.startsWith('/signIn')) || (pathName.startsWith('/signUp'))) {
+                    setUser(null);
                     return;
+                }
                 return router.push('/signIn');
             }
         }
@@ -41,7 +40,7 @@ export default function UserContextProvider(props: {children: ReactNode}) {
 
     return (
         <UserContext.Provider value={{user}}>
-            {props.children}
+            {user === undefined ? null : props.children}
         </UserContext.Provider>
     )
 }

@@ -8,8 +8,8 @@ export default function Labels(props: {labels: string[]}) {
                     key={i}
                     className={clsx(
                         "ml-0.5 px-1.5 py-0.5",
-                        "text-xs text-zinc-500 tracking-wide font-medium",
-                        "bg-zinc-700 rounded-md"
+                        "text-xs text-neutral-500 tracking-wide font-medium",
+                        "bg-neutral-700 rounded-md"
                     )}
                 >
                     {label}

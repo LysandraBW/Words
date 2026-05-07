@@ -159,7 +159,7 @@ export default function Page() {
                 {data.decksGraded.map(deckGraded => (
                     <div 
                         key={deckGraded.deck_graded_id}
-                        className="bg-gray-500"
+                        className="bg-neutral-500"
                     >
                         <TrashIcon
                             onClick={() => onDeleteDeckGraded(deckGraded.deck_graded_id)}

@@ -22,14 +22,14 @@ export default function InputImageURL(props: InputImageURLProps) {
             />
             <div 
                 className={clsx(
-                    "relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-zinc-900 border border-zinc-800",
+                    "relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800",
                     props.inputWrapperClassName
                 )}
             >
                 {!props.value &&
                     <ImageIcon
                         size={16}
-                        className="text-zinc-500"
+                        className="text-neutral-500"
                     />
                 }
                 {props.value &&
@@ -44,7 +44,7 @@ export default function InputImageURL(props: InputImageURLProps) {
                         className={clsx(
                             "absolute top-[-4px] right-[-4px] w-4 h-4",
                             "flex justify-center items-center",
-                            "bg-zinc-800 rounded-full group",
+                            "bg-neutral-800 rounded-full group",
                             "cursor-pointer",
                             props.buttonClassName
                         )}
@@ -53,7 +53,7 @@ export default function InputImageURL(props: InputImageURLProps) {
                             size={8}
                             strokeWidth={3}
                             className={clsx(
-                                "text-zinc-500 group-hover:text-red-500 cursor-pointer",
+                                "text-neutral-500 group-hover:text-red-500 cursor-pointer",
                                 props.buttonSVGClassName
                             )}
                         />

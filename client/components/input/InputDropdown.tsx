@@ -25,6 +25,10 @@ interface InputDropdownProps<V> {
     onSearchChange: (debouncedSearch: string) => void;
     itemName: string;
     wrapperClassName: string;
+    elementLeft: ReactNode;
+    elementRight: ReactNode;
+    elementNoResultsFound: ReactNode;
+    elementNeedSearch: ReactNode;
 }
 
 export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) {
@@ -55,24 +59,24 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
             />
             <div 
                 ref={dropdownRef}
-                className="relative"
+                className="relative flex"
             >
+                {props.elementLeft && props.elementLeft}
                 {(!props.search || (props.search && !open)) &&
                     <button
                         onClick={() => setOpen(true)}
                         className={clsx(
-                            "w-full h-[36px] px-4 py-1",
+                            "w-full h-[36px] max-h-[36px] min-h-[36px] px-4",
                             "flex justify-between items-center",
-                            "bg-zinc-900 rounded-md border border-zinc-800 group",
-                            "hover:bg-zinc-800",
+                            "rounded-md border border-neutral-800",
                             !props.search && "cursor-pointer",
                             props.toggleClassName
                         )}
                     >
                         <label 
                             className={clsx(
-                                "text-sm text-zinc-500 tracking-wide group-hover:text-white",
-                                "cursor-pointer"
+                                "text-sm text-neutral-500 tracking-wide",
+                                !props.search && "cursor-pointer",
                             )}
                         >
                             {props.toggleLabel}
@@ -80,7 +84,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         {!props.search &&
                             <ChevronsUpDown
                                 size={16}
-                                className="text-zinc-500"
+                                className="text-neutral-500"
                             />
                         }
                     </button>
@@ -93,40 +97,31 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={props.searchPlaceholder}
                         className={clsx(
-                            "w-full h-[36px] px-4 py-1",
+                            "w-full h-[36px] max-h-[36px] min-h-[36px] px-4",
                             "flex justify-between items-center",
-                            "bg-zinc-900 rounded-md border border-zinc-800 outline-none focus:bg-zinc-800",
-                            "text-sm text-zinc-400 tracking-wide focus:text-white",
+                            "rounded-md border border-neutral-800 outline-none",
+                            "text-sm text-neutral-500 tracking-wide focus:text-white placeholder:text-sm placeholder:text-neutral-500",
                             props.toggleClassName
                         )}
                     />
                 }
+                {props.elementRight && props.elementRight}
                 {open &&
                     <div 
                         className={clsx(
                             "absolute top-[calc(36px+4px)] z-50",
                             "max-h-[256px] overflow-y-auto",
-                            "bg-zinc-900 border border-zinc-800 rounded-md",
+                            "bg-black border border-neutral-800 rounded-md",
                             props.optionClassName
                         )}
                     >
-                        {(!props.options || !props.options.length) &&
-                            <div className="w-full h-full p-4 flex flex-col gap-y-0 justify-center items-center">
-                                <p className="text-sm text-zinc-400 tracking-wide font-medium">
-                                    {(props.search && !search) ?
-                                        `Search for ${props.itemName || 'Items'}`
-                                        :
-                                        "No Results"
-                                    }
-                                </p>
-                                {props.search &&
-                                    <p className="max-w-[400px] text-sm text-center text-zinc-500 tracking-wide">
-                                        {props.search ?
-                                            'To search, you must enter something.'
-                                            :
-                                            'There are no options to choose from.'
-                                        }
-                                    </p>
+                        {!props.options?.length &&
+                            <div className="w-full h-full p-8 flex flex-col gap-y-0 justify-center items-center">
+                                {(props.search || search) &&
+                                    props.elementNoResultsFound    
+                                }
+                                {(props.search && !search) &&
+                                    props.elementNeedSearch    
                                 }
                             </div>
                         }
@@ -137,8 +132,8 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                                 className={clsx(
                                     "p-2 overflow-x-clip",
                                     "grid grid-cols-[auto_16px] gap-x-4 items-center",
-                                    "bg-zinc-900 border-b border-b-zinc-800 last:border-b-0 text-white cursor-pointer",
-                                    "group hover:bg-zinc-800 hover:text-blue-400"
+                                    " border-b border-b-neutral-800 last:border-b-0 text-white cursor-pointer",
+                                    "group hover: hover:text-blue-400"
                                 )}
                             >
                                 <div className="text-inherit text-sm tracking-wide">

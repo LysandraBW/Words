@@ -117,7 +117,7 @@ export default function CreateDeck(props: CreateDeckProps) {
                     </h3>
                     {bookToChaptersToWords[book.book_id].map(([chapter, words], i) => (
                         <div key={i}>
-                            <h4 className="text-gray-500">
+                            <h4 className="text-neutral-500">
                                 <b>{chapter.chapter_title}</b>
                             </h4>
                             <InputCheckboxes

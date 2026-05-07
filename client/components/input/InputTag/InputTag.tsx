@@ -11,9 +11,9 @@ export default function InputTag(props: InputTagProps) {
         <span 
             className={clsx(
                 "px-2 py-0.5 flex items-center gap-x-1",
-                "text-xs text-zinc-400 tracking-wide font-medium",
-                "rounded-md bg-zinc-900",
-                "cursor-pointer hover:bg-zinc-900"
+                "text-xs text-neutral-500 tracking-wide font-medium",
+                "rounded-md bg-neutral-900",
+                "cursor-pointer hover:bg-neutral-900"
             )}
         >
             {props.tag}

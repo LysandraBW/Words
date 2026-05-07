@@ -14,15 +14,15 @@ export default function Book(props: Partial<BookProps>) {
             onClick={props.onClick}
             className={clsx(
                 "w-[96px] h-[128px] flex flex-col gap-y-2 justify-center items-center",
-                "bg-zinc-900 border border-zinc-800 cursor-pointer rounded-md",
-                props.isCreate && 'group hover:bg-zinc-800'
+                "bg-neutral-900 border border-neutral-800 cursor-pointer rounded-md",
+                props.isCreate && 'group hover:bg-neutral-800'
             )}
         >
             {/* Create Book Button */}
             {(!props.book && props.isCreate) &&
                 <CirclePlusIcon
                     size={24}
-                    className="text-zinc-700 group-hover:text-white"
+                    className="text-neutral-500 group-hover:text-white"
                 />
             }
             {/* Book Button */}

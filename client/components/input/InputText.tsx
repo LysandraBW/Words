@@ -39,7 +39,7 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
                     "w-full min-h-[36px] max-h-[36px] h-[36px] px-4 py-1",
                     "flex gap-x-2 items-center",
                     "rounded-md outline-none",
-                    "bg-zinc-900 hover:bg-zinc-800 has-[:focus]:bg-zinc-800 border border-zinc-800",
+                    "has-[:focus]:border-neutral-700 border border-neutral-800",
                     props.inputWrapperClassName
                 )}
             >
@@ -53,7 +53,7 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
                     className={clsx(
                         "w-full h-full",
                         "outline-none",
-                        "text-sm text-zinc-400 tracking-wide focus:text-white placeholder:text-zinc-500 placeholder:tracking-wide",
+                        "text-sm text-neutral-500 tracking-wide focus:text-white placeholder:text-neutral-500 placeholder:tracking-wide",
                         props.inputClassName
                     )}
                 />

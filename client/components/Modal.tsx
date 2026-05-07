@@ -10,7 +10,7 @@ interface ModalProps {
 
 export default function Modal(props: ModalProps) {
     return (
-        <div className="w-[480px] min-w-[480px] max-w-[480px] overflow-y-scroll bg-black border border-zinc-800">
+        <div className="w-[480px] min-w-[480px] max-w-[480px] overflow-y-scroll bg-black border border-neutral-800">
             <div className="w-full h-min pt-4 px-4 flex justify-end">
                 <CloseButton
                     onClose={props.onClose}
@@ -22,7 +22,7 @@ export default function Modal(props: ModalProps) {
                         {props.title}
                     </h3>
                     {props.description &&
-                        <p className="text-zinc-400 tracking-wide">
+                        <p className="text-neutral-500 tracking-wide">
                             {props.description}
                         </p>
                     }

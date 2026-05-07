@@ -29,9 +29,9 @@ export default function DraggableWord(props: DraggableWordProps) {
             }}
             
         >
-            <div className="h-full w-full flex flex-col border border-zinc-700 bg-zinc-800 overflow-y-auto shadow-lg">
-                <div className="w-full flex items-center justify-between sticky top-0 bg-zinc-800 z-10">
-                    <span className="p-2 text-xs text-zinc-500 uppercase font-bold tracking-wide">
+            <div className="h-full w-full flex flex-col border border-neutral-700 bg-neutral-800 overflow-y-auto shadow-lg">
+                <div className="w-full flex items-center justify-between sticky top-0 bg-neutral-800 z-10">
+                    <span className="p-2 text-xs text-neutral-500 uppercase font-bold tracking-wide">
                         {props.word}
                     </span>
                     <button 

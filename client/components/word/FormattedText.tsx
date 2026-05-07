@@ -113,7 +113,7 @@ export default function FormattedText(props: FormattedTextProps) {
                     <span 
                         className={clsx(
                             "text-base text-white tracking-wider",
-                            props.isExample && "!text-zinc-400 text-base"
+                            props.isExample && "!text-neutral-500 text-base"
                         )}
                     >
                         {textWithNoTokens}
@@ -191,7 +191,7 @@ export default function FormattedText(props: FormattedTextProps) {
                 <span 
                     className={clsx(
                         "text-base text-white tracking-wider",
-                        props.isExample && "!text-zinc-400 text-sm"
+                        props.isExample && "!text-neutral-500 text-sm"
                     )}
                 >
                     {text.slice(l, text.length).trim()}
@@ -206,7 +206,7 @@ export default function FormattedText(props: FormattedTextProps) {
         <span
             className={clsx(
                 "text-base text-white tracking-wider",
-                props.isExample && "!text-zinc-400 text-base"
+                props.isExample && "!text-neutral-500 text-base"
             )}
         >
             {nodes}

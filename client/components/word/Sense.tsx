@@ -79,7 +79,7 @@ export default function ShowSense(props: ShowSenseProps) {
                         >
                             <PointerIcon
                                 size={18}
-                                className="text-xs text-zinc-500 mr-1"
+                                className="text-xs text-neutral-500 mr-1"
                             />
                             <FormattedText
                                 text={node[1]}

@@ -60,7 +60,7 @@ export default function SearchBooks(props: SearchBooksProps) {
                         <span className="block truncate text-inherit group-hover:text-blue-400 text-sm font-medium">
                             {book.volumeInfo.title}
                         </span>
-                        <span className="block text-xs text-zinc-400">
+                        <span className="block text-xs text-neutral-500">
                             {book.volumeInfo.publishedDate || "No Date Listed"}, {book.volumeInfo.publisher || "No Publisher Listed"}
                         </span>
                     </div>
@@ -70,7 +70,7 @@ export default function SearchBooks(props: SearchBooksProps) {
             search={true}
             searchPlaceholder="Search"
             onSearchChange={onSearch}
-            toggleClassName="!bg-zinc-700"
+            toggleClassName="!bg-neutral-700"
         />
     )
 }

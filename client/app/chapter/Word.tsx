@@ -53,7 +53,7 @@ export default function Word(props: WordProps) {
             {props.wordEntries && props.wordEntries.filter((entry: any) => entry.def).map((entry: any, i: number) => (
                 <div 
                     key={i}
-                    className="mb-10 flex flex-col bg-gray-50"
+                    className="mb-10 flex flex-col bg-neutral-50"
                 >
                     <b>
                         {entry.meta.id.split(":")[0]}
@@ -67,7 +67,7 @@ export default function Word(props: WordProps) {
                     {entry.def.map((def: any, j: number) => (
                         <div 
                             key={j}
-                            className="pl-4 flex flex-col gap-y-4 bg-gray-50"
+                            className="pl-4 flex flex-col gap-y-4 bg-neutral-50"
                         >
                             {def.vd && def.vd}
                             {def.sls && def.sls.map((label: string, i: number) => (
@@ -78,7 +78,7 @@ export default function Word(props: WordProps) {
                             {def.sseq.map((seq: any, k: number) => (
                                 <div 
                                     key={k}
-                                    className="pl-4 flex flex-col gap-y-1 bg-gray-50"
+                                    className="pl-4 flex flex-col gap-y-1 bg-neutral-50"
                                 >
                                     {seq.map((sense: any, x: number) => (
                                         <div key={x}>
