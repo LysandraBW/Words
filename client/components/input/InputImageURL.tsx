@@ -18,12 +18,12 @@ export default function InputImageURL(props: InputImageURLProps) {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
                 inputClassName={props.inputClassName}
-                inputWrapperClassName={props.inputWrapperClassName}
+                inputBoxClassName={props.inputBoxClassName}
             />
             <div 
                 className={clsx(
                     "relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800",
-                    props.inputWrapperClassName
+                    props.inputBoxClassName
                 )}
             >
                 {!props.value &&

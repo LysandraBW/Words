@@ -50,8 +50,8 @@ export default function ShowWords(props: ShowWordsProps) {
                         value={words.search}
                         onChange={words.setSearch}
                         placeholder="Search Words" 
-                        wrapperClassName="w-fit"
-                        inputWrapperClassName="rounded-r-none border-y-0 border-r-0 border-l border-neutral-800"
+                        inputWrapperClassName="w-fit"
+                        inputBoxClassName="rounded-r-none border-y-0 border-r-0 border-l border-neutral-800"
                     />
                     <InputDropdown
                         options={words.sortOptions}

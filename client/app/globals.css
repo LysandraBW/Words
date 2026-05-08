@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+@layer components {
+    .input-box {
+        @apply 
+            w-full min-h-[40px] max-h-[40px] h-[40px] 
+            px-4 py-1
+            flex gap-x-2 items-center
+            border border-neutral-500/[0.25] rounded-md has-[:focus]:border-neutral-500/[0.50]
+    }
+
+    .input {
+        @apply 
+            w-full h-full
+            outline-none
+            text-sm text-white
+    }
+
+    .input-placeholder {
+        @apply
+            placeholder:text-neutral-500 
+            placeholder:tracking-wide
+    }
+
+    p, label, span {
+        @apply
+            text-neutral-500/75
+    }
+}

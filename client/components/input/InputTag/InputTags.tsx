@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import InputLabel from "../InputLabel";
-import InputLabelError from "../InputLabelError";
+import InputError from "../InputError";
 import InputWrapper from "../InputWrapper";
 import clsx from "clsx";
 import InputTag from "./InputTag";
@@ -81,8 +81,8 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                 </div>
             }
             {!!props.error?.length &&
-                <InputLabelError
-                    label={props.error}
+                <InputError
+                    error={props.error}
                 />
             }
         </InputWrapper>

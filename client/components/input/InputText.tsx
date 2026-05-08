@@ -1,21 +1,23 @@
 import { ChangeEvent, FocusEventHandler, ReactNode } from "react";
 import InputLabel, { InputLabelProps } from "./InputLabel";
-import InputLabelError from "./InputLabelError";
+import InputError from "./InputError";
 import InputWrapper from "./InputWrapper";
 import clsx from "clsx";
 
+
 export interface InputTextProps {
+    type: string;
     value: string;
     label: string;
+    placeholder: string;
     error: string;
     onBlur: FocusEventHandler<HTMLInputElement>;
     onChange: (value: string) => void;
+    elementLeft: ReactNode;
+    elementRight: ReactNode;
     inputClassName: string;
+    inputBoxClassName: string;
     inputWrapperClassName: string;
-    placeholder: string;
-    type: string;
-    wrapperClassName: string;
-    leftElement: ReactNode;
 }
 
 
@@ -26,24 +28,22 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
         props.onChange(event.target.value);
     }
 
+    
     return (
         <InputWrapper
-            className={props.wrapperClassName}
+            className={props.inputWrapperClassName}
         >
             <InputLabel
                 label={props.label}
                 required={props.required}
             />
-            <div
+            <div 
                 className={clsx(
-                    "w-full min-h-[36px] max-h-[36px] h-[36px] px-4 py-1",
-                    "flex gap-x-2 items-center",
-                    "rounded-md outline-none",
-                    "has-[:focus]:border-neutral-700 border border-neutral-800",
-                    props.inputWrapperClassName
+                    "input-box", 
+                    props.inputBoxClassName
                 )}
             >
-                {props.leftElement && props.leftElement}
+                {props.elementLeft && props.elementLeft}
                 <input
                     type={props.type}
                     value={props.value}
@@ -51,18 +51,15 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
                     onBlur={props.onBlur}
                     placeholder={props.placeholder}
                     className={clsx(
-                        "w-full h-full",
-                        "outline-none",
-                        "text-sm text-neutral-500 tracking-wide focus:text-white placeholder:text-neutral-500 placeholder:tracking-wide",
+                        "input input-placeholder", 
                         props.inputClassName
                     )}
                 />
+                {props.elementRight && props.elementRight}
             </div>
-            {!!props.error?.length &&
-                <InputLabelError
-                    label={props.error}
-                />
-            }
+            <InputError
+                error={props.error}
+            />
         </InputWrapper>
     )
 }

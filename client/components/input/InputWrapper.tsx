@@ -10,7 +10,7 @@ export default function InputWrapper(props: Partial<InputWrapperProps>) {
     return (
         <div 
             className={clsx(
-                "flex flex-col gap-y-1",
+                "flex flex-col gap-y-0.5",
                 props.className
             )}
         >

@@ -87,14 +87,14 @@ export default function CreateBook(props: CreateBookProps) {
                     onChange={(value) => setForm(updateFormValue(form, "book_name", value))}
                     required={true}
                     error={form.book_name.error}
-                    inputWrapperClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                 />
                 <InputText
                     label="Year Published"
                     value={form.book_year.value}
                     onChange={(value) => setForm(updateFormValue(form, "book_year", value))}
                     error={form.book_year.error}
-                    inputWrapperClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                 />
                 <InputTags
                     label="Author"
@@ -110,7 +110,7 @@ export default function CreateBook(props: CreateBookProps) {
                     value={form.book_cover_image.value || ""}
                     onChange={(value) => setForm(updateFormValue(form, "book_cover_image", value))}
                     error={form.book_cover_image.error}
-                    inputWrapperClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                     
             />
                 <InputImageURL
@@ -118,7 +118,7 @@ export default function CreateBook(props: CreateBookProps) {
                     value={form.book_background_image.value || ""}
                     onChange={(value) => setForm(updateFormValue(form, "book_background_image", value))}
                     error={form.book_background_image.error}
-                    inputWrapperClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                 />
                 <Button
                     label="Create Book"

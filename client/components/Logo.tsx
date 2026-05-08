@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { scribble } from "@/app/fonts";
+import { SmileIcon } from "lucide-react";
 
 interface LogoProps {
     spanClassName?: string;
@@ -7,29 +8,24 @@ interface LogoProps {
 
 export default function Logo(props: LogoProps) {
     return (
-        <span
-            className={clsx(
-                scribble.className,
-                "block h-min w-min",
-                "text-[32px] leading-[32px] select-none",
-                props.spanClassName
-            )}
+        <a 
+            href="/"
+            className="w-fit flex items-center gap-1"
         >
-            <span className='text-blue-500'>
-                W
+            <div className="w-4 h-4">
+                <SmileIcon
+                    strokeWidth={2.5}
+                    className="w-full h-full text-white"
+                />
+            </div>
+            <span 
+                className={clsx(
+                    "block text-xl text-white",
+                    scribble.className
+                )}
+            >
+                Words
             </span>
-            <span className='text-blue-500'>
-                o
-            </span>
-            <span className='text-blue-500'>
-                r
-            </span>
-            <span className='text-blue-500'>
-                d
-            </span>
-            <span className='text-blue-500'>
-                s
-            </span>
-        </span>
+        </a>
     )
 }
