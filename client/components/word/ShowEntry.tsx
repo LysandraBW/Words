@@ -1,6 +1,6 @@
 import { Definition, DefinitionData, Entry, SenseSequenceElement } from "@/services/words/getWordEntry";
 import Inflection from "./Inflections";
-import { gamjaFlower } from "@/app/fonts";
+import { scribble } from "@/app/fonts";
 import clsx from "clsx";
 import Level from "./Level";
 import { Fragment } from "react/jsx-runtime";
@@ -20,7 +20,7 @@ function ScribbleTag(props: {text: string; className: string}) {
         <span
             className={clsx(
                 "block px-2 py-0.5",
-                "text-lg text-blue-500", gamjaFlower.className,
+                "text-lg text-blue-500", scribble.className,
                 props.className, "rounded-md"
             )}
         >

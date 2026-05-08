@@ -39,7 +39,7 @@ export const nanumPenScript = Nanum_Pen_Script({
 	weight: ['400']
 });
 
-export const gamjaFlower = Gamja_Flower({ 
+export const scribble = Gamja_Flower({ 
 	subsets: ['latin'],
 	weight: ['400']
 });

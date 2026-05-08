@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { gamjaFlower } from "@/app/fonts";
+import { scribble } from "@/app/fonts";
 
 interface LogoProps {
     spanClassName?: string;
@@ -9,7 +9,7 @@ export default function Logo(props: LogoProps) {
     return (
         <span
             className={clsx(
-                gamjaFlower.className,
+                scribble.className,
                 "block h-min w-min",
                 "text-[32px] leading-[32px] select-none",
                 props.spanClassName

@@ -3,7 +3,7 @@ import Book from "./Book";
 import { useRouter } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";
 import clsx from "clsx";
-import { gamjaFlower } from "../fonts";
+import { scribble } from "../fonts";
 
 
 interface ShowBooksProps {
