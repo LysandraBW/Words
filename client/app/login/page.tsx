@@ -95,12 +95,12 @@ export default function Page() {
                     <div
                         ref={ref}
                         className={clsx(
-                            "invisible",
+                            // "invisible",
                             "row-start-2 row-span-1",
                             "w-[calc(100%+var(--width))]",
-                            "grid grid-rows-1 space-x-[-1*var(--width)]",
-                            "relative -left-[var(--width)]",
-                            "bg-black"
+                            "grid grid-rows-1 gap-x-4",
+                            "relative -left-[var(--width)]-",
+                            // "bg-black"
                         )}
                         style={{
                             "gridTemplateColumns": `repeat(${books.length},var(--width))`
