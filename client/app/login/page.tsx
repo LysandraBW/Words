@@ -99,7 +99,7 @@ export default function Page() {
                             "row-start-2 row-span-1",
                             "w-[calc(100%+var(--width))]",
                             "grid grid-rows-1 gap-x-4",
-                            "relative -left-[var(--width)]-",
+                            "relative -left-[var(--width)]-ok",
                             // "bg-black"
                         )}
                         style={{
