@@ -76,7 +76,8 @@ export default function Page() {
             </header>
             <form 
                 onSubmit={(e) => e.preventDefault()}
-                className="min-w-xs flex flex-col gap-y-6"
+                
+                
             >
                 <InputText
                     value={email}
