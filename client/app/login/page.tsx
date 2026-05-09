@@ -20,12 +20,14 @@ export default function Page() {
         if (!box)
             return;
 
+        const numBooks = books.length - 2;
+
         // Initialize
-        box.style.setProperty("--width", `${box.clientWidth / 18}px`);
+        box.style.setProperty("--width", `${box.clientWidth / numBooks}px`);
         box.classList.remove('invisible');
 
         // Update on Resize
-        const observer = new ResizeObserver(([entry]) => (entry?.target as any)?.style.setProperty("--width", `${entry.contentRect.width / 18}px`));
+        const observer = new ResizeObserver(([entry]) => (entry?.target as any)?.style.setProperty("--width", `${entry.contentRect.width / numBooks}px`));
         observer.observe(box);
         return observer.disconnect;
     }, [ref]);
@@ -37,14 +39,20 @@ export default function Page() {
                 <div 
                     className={clsx(
                         "relative",
-                        "w-full h-full flex flex-col justify-between overflow-clip",
-                        "bg-neutral-200 rounded-br-[200px]", 
+                        "w-full h-full grid grid-rows-[75%_calc(25%+50px)] grid-cols-1 justify-between overflow-clip",
+                        "bg-neutral-200 rounded-br-[200px]-", 
                         "cursor-[url('/images/handpointing.svg'),_pointer]"
                     )}
                 >
-                    <div className="h-3/4 flex flex-col justify-center items-center gap-y-6">
-                        <Noise/>
-                        <div className="relative z-100 p-2 bg-white/25 backdrop-blur-xs border border-white/[0.25] rounded-xl shadow-xs">
+                    <div className="row-start-1 row-span-1 flex flex-col justify-between items-center gap-y-6">
+                        <Noise
+                            color={books[bookIndex].color}
+                            darkerColor={books[bookIndex].darkerColor}
+                        />
+                        <div className="relative z-100 w-full p-6">
+                            <Logo/>
+                        </div>
+                        <div className="relative z-100 top-1/8 p-2 bg-white/75 backdrop-blur-xs border border-white/[0.25] rounded-xl shadow-xs">
                             <div 
                                 className={clsx(
                                     "relative z-100 min-w-md w-md max-w-md h-34 p-2",
@@ -87,11 +95,16 @@ export default function Page() {
                     <div
                         ref={ref}
                         className={clsx(
-                            "invisible w-[calc(100%+var(--width))] h-[calc(25%+50px)] flex grow relative top-[50px]",
-                            "grid grid-cols-[repeat(24,var(--width))] grid-rows-1 space-x-[-1*var(--width)]",
+                            "invisible",
+                            "row-start-2 row-span-1",
+                            "w-[calc(100%+var(--width))]",
+                            "grid grid-rows-1 space-x-[-1*var(--width)]",
                             "relative -left-[var(--width)]",
                             "bg-black"
                         )}
+                        style={{
+                            "gridTemplateColumns": `repeat(${books.length},var(--width))`
+                        }}
                     >
                         {books.map((book, i) => (
                             <div
@@ -107,6 +120,8 @@ export default function Page() {
                                     i={i}
                                     book={book}
                                     selected={i === bookIndex}
+                                    color={books[bookIndex].color}
+                                    darkerColor={books[bookIndex].darkerColor}
                                 />
                             </div>
                         ))}

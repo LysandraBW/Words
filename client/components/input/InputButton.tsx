@@ -23,7 +23,7 @@ export default function Button(props: Partial<ButtonProps>) {
                 "justify-center align-center",
                 "rounded-md",
                 props.disabled && "cursor-default bg-white",
-                !props.disabled && "cursor-pointer bg-blue-500 transition-transform duration-200 active:scale-97",
+                !props.disabled && "cursor-pointer bg-white transition-transform duration-200 active:scale-97",
                 props.outerClassName
             )}
         >
