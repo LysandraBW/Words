@@ -23,14 +23,14 @@ export default function Button(props: Partial<ButtonProps>) {
                 "justify-center align-center",
                 "rounded-md",
                 props.disabled && "cursor-default bg-white",
-                !props.disabled && "cursor-pointer bg-white transition-transform duration-200 active:scale-97",
+                !props.disabled && "cursor-pointer bg-blue-500 transition-transform duration-200 active:scale-97",
                 props.outerClassName
             )}
         >
            {props.iconL}
             <label 
                 className={clsx(
-                    "text-center text-sm font-bold",
+                    "text-center text-sm font-medium",
                     props.disabled && "cursor-default text-black",
                     !props.disabled && "cursor-pointer text-black",
                     props.labelClassName

@@ -3,167 +3,180 @@ import clsx from "clsx";
 import Logo from "@/components/Logo";
 import InputText from "@/components/input/InputText";
 import InputButton from "@/components/input/InputButton";
-import { useEffect, useRef, useState } from "react";
-import { BookType } from "./Book";
-import Book from "./Book";
-import Noise from "./Noise";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { books } from "./books";
+import { AnimatePresence, motion } from "framer-motion";
+import MovingColumn from "./MovingColumn";
 
 
 export default function Page() {
-    const ref = useRef(null);
-    const [bookIndex, setBookIndex] = useState(1);
+    const ref = useRef<HTMLDivElement>(null);
+    const [book, setBook] = useState<typeof books[number] | null>();
 
 
     useEffect(() => {
-        const box = ref.current as any;
-        if (!box)
+        if (!ref?.current)
             return;
 
-        const numBooks = books.length - 2;
+        const element = ref.current;
+        if (!element)
+            return
 
-        // Initialize
-        box.style.setProperty("--width", `${box.clientWidth / numBooks}px`);
-        box.classList.remove('invisible');
+        const update = () => {
+            const entry = ref.current;
+            if (!entry)
+                return;
 
-        // Update on Resize
-        const observer = new ResizeObserver(([entry]) => (entry?.target as any)?.style.setProperty("--width", `${entry.contentRect.width / numBooks}px`));
-        observer.observe(box);
-        return observer.disconnect;
+            const w = (entry.parentElement as any).offsetWidth;
+            const h = (entry.parentElement as any).offsetHeight;
+            const hypotenuse = Math.sqrt(w * w + h * h);
+            (entry as any).style.width = hypotenuse + 'px';
+            (entry as any).style.height = hypotenuse + 'px';
+        };
+
+        update();
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
     }, [ref]);
 
 
     return (
-        <div className="w-full h-full grid grid-cols-12 gap-x-6 gap-y-6">
-            <div className="col-start-1 col-span-7 row-start-1 bg-black">
-                <div 
-                    className={clsx(
-                        "relative",
-                        "w-full h-full grid grid-rows-[75%_calc(25%+50px)] grid-cols-1 justify-between overflow-clip",
-                        "bg-neutral-200 rounded-br-[200px]-", 
-                        "cursor-[url('/images/handpointing.svg'),_pointer]"
-                    )}
+        <div className="relative w-[calc(100vw-24px)] h-[calc(100vh-16px)] max-w-[calc(100vw-24px)] max-h-[calc(100vh-16px)] m-2 grid grid-cols-[60%_40%] gap-x-2">
+            <div className="relative w-full h-full max-w-full max-h-full min-w-0 min-h-0 bg-neutral-100 cursor-[url('/images/handpointing.svg'),_pointer]">
+                <div
+                    className="relative w-full h-full max-w-full max-h-full overflow-clip"
                 >
-                    <div className="row-start-1 row-span-1 flex flex-col justify-between items-center gap-y-6">
-                        <Noise
-                            color={books[bookIndex].color}
-                            darkerColor={books[bookIndex].darkerColor}
-                        />
-                        <div className="relative z-100 w-full p-6">
-                            <Logo/>
-                        </div>
-                        <div className="relative z-100 top-1/8 p-2 bg-white/75 backdrop-blur-xs border border-white/[0.25] rounded-xl shadow-xs">
-                            <div 
-                                className={clsx(
-                                    "relative z-100 min-w-md w-md max-w-md h-34 p-2",
-                                    "flex gap-x-2",
-                                    "overflow-hidden",
-                                    "bg-neutral-100 rounded-lg shadow-xs"
-                                )}
+                    <div 
+                        ref={ref}
+                        className="absolute flex gap-x-2 -rotate-z-35 rotate-x-45 origin-top-left -translate-x-2/3 translate-y-1/2 perspective-[900px] transform-3d"
+                    >
+                        {[...Array(20)].map((e, i) => (
+                            <Fragment key={i}>
+                                <MovingColumn
+                                    books={!books ? [null, null, null, null, null, null] : [...books, ...books].slice(i*6, (i+1)*6)}
+                                    reverse={i % 2 === 0}
+                                    colIdx={i}
+                                    numCols={20}
+                                    onClickBook={setBook}
+                                />
+                            </Fragment>
+                        ))}
+                    </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" className="absolute -top-0 right-0 w-8 h-8 rotate-270">
+                    <path d="M 0 10 L 10 10 L 10 0 A 10 10 10 0 1 0 10" className="fill-neutral-950"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" className="absolute -bottom-0 left-0 w-8 h-8 rotate-90">
+                    <path d="M 0 10 L 10 10 L 10 0 A 10 10 10 0 1 0 10" className="fill-neutral-950"/>
+                </svg>
+                <div className="absolute top-0 left-0 min-w-1/2 min-h-[248px] p-6 flex flex-col gap-y-6 bg-neutral-950 rounded-br-4xl cursor-default">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" className="absolute -top-0 -right-8 w-8 h-8 rotate-180">
+                        <path d="M 0 10 L 10 10 L 10 0 A 10 10 10 0 1 0 10" className="fill-neutral-950"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" className="absolute -bottom-8 -left-0 w-8 h-8 rotate-180">
+                        <path d="M 0 10 L 10 10 L 10 0 A 10 10 10 0 1 0 10" className="fill-neutral-950"/>
+                    </svg>
+                    <Logo/>
+                    <div className="flex grow items-end">
+                        <span className="text-4xl text-neutral-100 tracking-tight font-bold">
+                            Read.<br/>Remember.
+                        </span>
+                    </div>
+                </div>
+                <div className="absolute bottom-0 right-0 min-w-1/2 max-w-1/2 min-h-[200px] p-2 pr-0 pb-0 flex flex-col gap-y-6 bg-neutral-950 rounded-tl-4xl cursor-default">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" className="absolute -top-8 right-0 w-8 h-8">
+                        <path d="M 0 10 L 10 10 L 10 0 A 10 10 10 0 1 0 10" className="fill-neutral-950"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" className="absolute -bottom-0 -left-8 w-8 h-8 rotate-0">
+                        <path d="M 0 10 L 10 10 L 10 0 A 10 10 10 0 1 0 10" className="fill-neutral-950"/>
+                    </svg>
+                    <div className="relative w-full h-full flex grow rounded-3xl bg-neutral-100 overflow-clip">
+                        <AnimatePresence>
+                            <motion.div
+                                key={book?.title}
+                                initial={{ y: "100%" }}
+                                animate={{ y: 0 }}
+                                exit={{ y: "-100%" }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="absolute w-full h-full p-2 flex gap-x-2 overflow-clip"
                             >
                                 <div 
                                     className={clsx(
-                                        "relative",
-                                        "h-full aspect-1/1.5 bg-black rounded-md",
-                                        "bg-cover bg-center",
-                                        books[bookIndex].background
+                                        "h-full aspect-2/3 bg-cover bg-center rounded-2xl",
+                                        !book && "bg-neutral-300",
+                                        book && book.background
                                     )}
                                 />
-                                <div className="min-w-0 h-full flex flex-col overflow-hidden">
-                                    <span className="block text-xs tracking-wide">
-                                        Related to 
-                                        <span className="font-medium">
-                                            {' '} {books[bookIndex].title}
-                                        </span>
-                                    </span>
-                                    <div className="flex items-center gap-x-1">
-                                        <span className="block text-blue-500 font-bold">
-                                            {books[bookIndex].word}
-                                        </span>
-                                        <div className="w-1 h-1 relative top-[1px] bg-neutral-500"/>
-                                        <span className="block relative top-[1.5px] text-xs tracking-wide uppercase">
-                                            {books[bookIndex].speech}
-                                        </span>
-                                    </div>
-                                    <p className="max-w-xs text-sm overflow-hidden text-ellipsis line-clamp-3">
-                                        {books[bookIndex].definition}
-                                    </p>
+                                <div
+                                    className={clsx(
+                                        "w-full min-w-0 h-full flex flex-col justify-center px-2",
+                                        !book && "bg-neutral-300 text-neutral-300 select-none rounded-2xl"
+                                    )}
+                                >
+                                    {book &&
+                                        <>
+                                            <span className="block text-xs tracking-wide">
+                                                Related to 
+                                                <span className="font-medium">
+                                                    {' '}{book.author}{'\'s '}
+                                                </span>
+                                                <span className="font-medium italic">
+                                                    {book.title}
+                                                </span>
+                                            </span>
+                                            <div className="mb-1 flex flex-wrap items-center gap-x-1">
+                                                <span className="block text-xl text-blue-500 font-bold">
+                                                    {book.word}
+                                                </span>
+                                                <div className="flex items-center gap-x-1">
+                                                    <div className="w-1 h-1 relative top-[1.5px] bg-neutral-500"/>
+                                                    <span className="block relative top-[1.5px] text-xs tracking-wide uppercase">
+                                                        {book.speech}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <p className="text-sm overflow-hidden text-ellipsis line-clamp-5">
+                                                {book.definition}
+                                            </p>
+                                        </>
+                                    }
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        ref={ref}
-                        className={clsx(
-                            // "invisible",
-                            "row-start-2 row-span-1",
-                            "w-[calc(100%+var(--width))]",
-                            "grid grid-rows-1 gap-x-4",
-                            "relative -left-[var(--width)]-ok",
-                            // "bg-black"
-                        )}
-                        style={{
-                            "gridTemplateColumns": `repeat(${books.length},var(--width))`
-                        }}
-                    >
-                        {books.map((book, i) => (
-                            <div
-                                key={i}
-                                onClick={() => setBookIndex(i)}
-                                style={{
-                                    position: 'relative',
-                                    zIndex: i,
-                                    left: -i + 'px'
-                                }}
-                            >
-                                <Book
-                                    i={i}
-                                    book={book}
-                                    selected={i === bookIndex}
-                                    color={books[bookIndex].color}
-                                    darkerColor={books[bookIndex].darkerColor}
-                                />
-                            </div>
-                        ))}
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
                 </div>
             </div>
             <main
                 className={clsx(
-                    "m-6 ml-0",
-                    "col-start-8 col-span-5 row-start-1",
-                    "grid grid-rows-[auto_1fr] grid-cols-12",
-                    "gap-x-6 gap-y-6"
+                    "relative w-full",
+                    "flex flex-col justify-center items-center gap-y-12"
                 )}
             >
-                <Logo/>
-                <div className="row-start-2 col-start-4 col-span-6 min-w-3xs flex flex-col gap-y-12 justify-center mb-18">
-                    <header className="flex flex-col gap-y-1">
-                        <h1 className="text-3xl text-white text-center font-bold">
-                            Welcome Back
-                        </h1>
-                        <p className="text-sm text-center">
-                            Have you forgotten already?
-                        </p>
-                    </header>
-                    <form
-                        onSubmit={(e) => e.preventDefault()}
-                        className="flex flex-col gap-y-6"
-                    >
-                        <InputText
-                            value="abc@gmail.com"
-                            label="Email"
-                        />
-                        <InputText
-                            value="123"
-                            type="password"
-                            label="Password"
-                        />
-                        <InputButton
-                            label="Sign In"
-                        />
-                    </form>
-                </div>
+                <header className="max-w-2xs flex flex-col gap-y-1">
+                    <h1 className="text-3xl text-white text-center font-medium tracking-tight">
+                        Welcome Back
+                    </h1>
+                    <p className="text-sm text-center">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    </p>
+                </header>
+                <form
+                    onSubmit={(e) => e.preventDefault()}
+                    className="min-w-xs flex flex-col gap-y-6"
+                >
+                    <InputText
+                        value="abc@gmail.com"
+                        label="Email"
+                    />
+                    <InputText
+                        value="123"
+                        type="password"
+                        label="Password"
+                    />
+                    <InputButton
+                        label="Sign In"
+                    />
+                </form>
             </main>
         </div>
     )

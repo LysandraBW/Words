@@ -49,7 +49,7 @@ export const pixelifySans = Pixelify_Sans({
 	weight: ['400']
 });
 
-export const instrumentSerif = Source_Serif_4({
+export const instrumentSerif = Instrument_Serif({
 	subsets: ['latin'],
-	weight: ['400', '500', '600']
+	weight: ['400']
 })
