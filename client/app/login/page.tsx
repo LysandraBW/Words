@@ -53,7 +53,7 @@ export default function Page() {
                         {[...Array(20)].map((e, i) => (
                             <Fragment key={i}>
                                 <MovingColumn
-                                    books={!books ? [null, null, null, null, null, null] : [...books, ...books].slice(i*6, (i+1)*6)}
+                                    books={!books ? [null, null, null, null, null, null] : [...books, ...books, ...books, ...books, ...books, ...books].slice(i*6, (i+1)*6)}
                                     reverse={i % 2 === 0}
                                     colIdx={i}
                                     numCols={20}

@@ -9,16 +9,16 @@ export const books = [
         "definition": "The philosophical attempt to reconcile the existence of a benevolent God with the presence of suffering — Ivan's unanswerable argument against it forms the novel's moral and spiritual core.",
         "background": "bg-[url('/images/the-brothers-karamazov.jpg')]"
     },
-    {
-        "title": "Project Hail Mary",
-        "author": "Andy Weir",
-        "color": "#D4A017",
-        "darkerColor": "#AE8010",
-        "word": "astrophage",
-        "speech": "noun",
-        "definition": "Weir's coined term for the single-celled extraterrestrial organism feeding on solar energy — the novel's central threat and its most elegant narrative device, forcing an amnesiac scientist to rediscover the end of the world one clue at a time.",
-        "background": "bg-[url('/images/project-hail-mary.jpg')]"
-    },
+    // {
+    //     "title": "Project Hail Mary",
+    //     "author": "Andy Weir",
+    //     "color": "#D4A017",
+    //     "darkerColor": "#AE8010",
+    //     "word": "astrophage",
+    //     "speech": "noun",
+    //     "definition": "Weir's coined term for the single-celled extraterrestrial organism feeding on solar energy — the novel's central threat and its most elegant narrative device, forcing an amnesiac scientist to rediscover the end of the world one clue at a time.",
+    //     "background": "bg-[url('/images/project-hail-mary.jpg')]"
+    // },
     {
         "title": "Fahrenheit 451",
         "author": "Ray Bradbury",
@@ -131,14 +131,14 @@ export const books = [
         "definition": "Pertaining to the capacity of an individual to govern their own choices independent of external authority.",
         "background": "bg-[url('/images/jane-eyre.webp')]"
     },
-    {
-        "title": "The Secret History",
-        "author": "Donna Tartt",
-        "word": "bacchanalian",
-        "speech": "adjective",
-        "definition": "Marked by ecstatic excess, intoxication, and ritualistic abandon.",
-        "background": "bg-[url('/images/the-secret-history.jpg')]"
-    },
+    // {
+    //     "title": "The Secret History",
+    //     "author": "Donna Tartt",
+    //     "word": "bacchanalian",
+    //     "speech": "adjective",
+    //     "definition": "Marked by ecstatic excess, intoxication, and ritualistic abandon.",
+    //     "background": "bg-[url('/images/the-secret-history.jpg')]"
+    // },
     {
         "title": "Dracula",
         "author": "Bram Stoker",
@@ -505,43 +505,42 @@ export const books = [
         "definition": "Relating to a psychological disconnection from one's identity, reality, or actions — the condition that births the novel's central duality and its critique of masculine consumerism.",
         "background": "bg-[url('/images/fight-club.jpg')]"
     },
-    {
-        "title": "White Nights",
-        "author": "Fyodor Dostoevsky",
-        "color": "#1A1A2E",
-        "darkerColor": "#0D0D1C",
-        "word": "sonder",
-        "speech": "noun",
-        "definition": "The realization that every passerby possesses a life as vivid and emotionally complex as one's own, echoing the narrator's lonely romantic introspection.",
-        "background": "bg-[url('/images/white-nights.jpg')]"
-    },
-    {
-        "title": "Babel",
-        "author": "R.F. Kuang",
-        "color": "#C9A84C",
-        "darkerColor": "#A88A3A",
-        "word": "translational",
-        "speech": "adjective",
-        "definition": "Pertaining to the act of carrying meaning across languages, cultures, or power structures — and what is inevitably lost or weaponized in that transfer.",
-        "background": "bg-[url('/images/babel.jpg')]"
-    },
-    {
-        "title": "Paradise Lost",
-        "author": "John Milton",
-        "word": "pandemonium",
-        "speech": "noun",
-        "definition": "Chaotic uproar; originally Milton's name for the capital of Hell.",
-        "background": "bg-[url('/images/paradise-lost.jpg')]"
-    },
-    {
-        "title": "The Stranger",
-        "author": "Albert Camus",
-        "word": "absurdism",
-        "speech": "noun",
-        "definition": "The philosophical confrontation between humanity's search for meaning and the universe's indifference.",
-        "background": "bg-[url('/images/the-stranger.jpg')]"
-    },
-    
+    // {
+    //     "title": "White Nights",
+    //     "author": "Fyodor Dostoevsky",
+    //     "color": "#1A1A2E",
+    //     "darkerColor": "#0D0D1C",
+    //     "word": "sonder",
+    //     "speech": "noun",
+    //     "definition": "The realization that every passerby possesses a life as vivid and emotionally complex as one's own, echoing the narrator's lonely romantic introspection.",
+    //     "background": "bg-[url('/images/white-nights.jpg')]"
+    // },
+    // {
+    //     "title": "Babel",
+    //     "author": "R.F. Kuang",
+    //     "color": "#C9A84C",
+    //     "darkerColor": "#A88A3A",
+    //     "word": "translational",
+    //     "speech": "adjective",
+    //     "definition": "Pertaining to the act of carrying meaning across languages, cultures, or power structures — and what is inevitably lost or weaponized in that transfer.",
+    //     "background": "bg-[url('/images/babel.jpg')]"
+    // },
+    // {
+    //     "title": "Paradise Lost",
+    //     "author": "John Milton",
+    //     "word": "pandemonium",
+    //     "speech": "noun",
+    //     "definition": "Chaotic uproar; originally Milton's name for the capital of Hell.",
+    //     "background": "bg-[url('/images/paradise-lost.jpg')]"
+    // },
+    // {
+    //     "title": "The Stranger",
+    //     "author": "Albert Camus",
+    //     "word": "absurdism",
+    //     "speech": "noun",
+    //     "definition": "The philosophical confrontation between humanity's search for meaning and the universe's indifference.",
+    //     "background": "bg-[url('/images/the-stranger.jpg')]"
+    // },
     {
         "title": "Das Kapital",
         "author": "Karl Marx",
