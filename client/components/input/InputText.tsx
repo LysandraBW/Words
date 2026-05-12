@@ -39,8 +39,7 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
             />
             <div 
                 className={clsx(
-                    "input-box", 
-                    // "has-[:focus]:border-blue-500/[0.75] has-[:focus]:ring-2 has-[:focus]:ring-blue-500/[0.125]",
+                    "input-box",
                     props.inputBoxClassName
                 )}
             >

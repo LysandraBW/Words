@@ -174,7 +174,7 @@ export default function Page() {
                         label="Password"
                     />
                     <InputButton
-                        label="Sign In"
+                        label="Log In"
                     />
                 </form>
             </main>

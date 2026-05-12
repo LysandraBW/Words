@@ -9,16 +9,32 @@ export const books = [
         "definition": "The philosophical attempt to reconcile the existence of a benevolent God with the presence of suffering — Ivan's unanswerable argument against it forms the novel's moral and spiritual core.",
         "background": "bg-[url('/images/the-brothers-karamazov.jpg')]"
     },
-    // {
-    //     "title": "Project Hail Mary",
-    //     "author": "Andy Weir",
-    //     "color": "#D4A017",
-    //     "darkerColor": "#AE8010",
-    //     "word": "astrophage",
-    //     "speech": "noun",
-    //     "definition": "Weir's coined term for the single-celled extraterrestrial organism feeding on solar energy — the novel's central threat and its most elegant narrative device, forcing an amnesiac scientist to rediscover the end of the world one clue at a time.",
-    //     "background": "bg-[url('/images/project-hail-mary.jpg')]"
-    // },
+    {
+        title: "The Name of the Rose",
+        author: "Umberto Eco",
+        word: "palimpsest",
+        speech: "noun",
+        definition: "A manuscript from which earlier writing has been scraped but not fully erased — Eco uses it as both literal object and metaphor for a culture built atop layers of suppressed knowledge.",
+        background: "bg-[url('/images/the-name-of-the-rose.jpg')]"
+    },
+    {
+        title: "Invisible Cities",
+        author: "Italo Calvino",
+        word: "apophenia",
+        speech: "noun",
+        definition: "The perception of meaningful patterns in unrelated phenomena — every city Marco Polo describes may be Venice, and the reader cannot tell whether the pattern is found or imposed.",
+        background: "bg-[url('/images/invisible-cities.jpg')]"
+    },
+    {
+        "title": "Project Hail Mary",
+        "author": "Andy Weir",
+        "color": "#D4A017",
+        "darkerColor": "#AE8010",
+        "word": "astrophage",
+        "speech": "noun",
+        "definition": "Weir's coined term for the single-celled extraterrestrial organism feeding on solar energy — the novel's central threat and its most elegant narrative device, forcing an amnesiac scientist to rediscover the end of the world one clue at a time.",
+        "background": "bg-[url('/images/project-hail-mary.jpg')]"
+    },
     {
         "title": "Fahrenheit 451",
         "author": "Ray Bradbury",
@@ -45,14 +61,38 @@ export const books = [
         "definition": "Describing a regression from complexity to simplicity or primitiveness, especially in social or moral structures.",
         "background": "bg-[url('/images/lord-of-the-flies.jpg')]"
     },
-    // {
-    //     "title": "The Idiot",
-    //     "author": "Fyodor Dostoevsky",
-    //     "word": "guilelessness",
-    //     "speech": "noun",
-    //     "definition": "Radical sincerity or innocence unprotected by social cunning.",
-    //     "background": "bg-[url('/images/the-idiot.jpg')]"
-    // },
+    {
+        "title": "Slaughterhouse-Five",
+        "author": "Kurt Vonnegut",
+        "word": "unstuck",
+        "speech": "adjective",
+        "definition": "Detached from linear time and forced to experience moments of life nonsequentially.",
+        "background": "bg-[url('/images/slaughterhouse-five.jpg')]"
+    },
+    {
+        "title": "Coraline",
+        "author": "Neil Gaiman",
+        "word": "uncanniness",
+        "speech": "noun",
+        "definition": "The unsettling sensation produced by something simultaneously familiar and alien.",
+        "background": "bg-[url('/images/coraline.jpg')]"
+    },
+    {
+        "title": "The Idiot",
+        "author": "Fyodor Dostoevsky",
+        "word": "guilelessness",
+        "speech": "noun",
+        "definition": "Radical sincerity or innocence unprotected by social cunning.",
+        "background": "bg-[url('/images/the-idiot.jpg')]"
+    },
+    {
+        "title": "The Count of Monte Cristo",
+        "author": "Alexandre Dumas",
+        "word": "implacability",
+        "speech": "noun",
+        "definition": "The quality of being relentless, unforgiving, and impossible to appease.",
+        "background": "bg-[url('/images/the-count-of-monte-cristo.webp')]"
+    },
     {
         "title": "The Alchemist",
         "author": "Paulo Coelho",
@@ -145,7 +185,7 @@ export const books = [
         "word": "atavism",
         "speech": "noun",
         "definition": "The reemergence of primitive instincts or ancestral traits beneath civilization.",
-        "background": "bg-[url('/images/dracula.avif')]"
+        "background": "bg-[url('/images/dracula.jpg')]"
     },
     {
         "title": "Kafka on the Shore",
@@ -164,6 +204,22 @@ export const books = [
         "background": "bg-[url('/images/persepolis.jpg')]"
     },
     {
+        "title": "The Jungle Book",
+        "author": "Rudyard Kipling",
+        "word": "pack-law",
+        "speech": "noun",
+        "definition": "The strict code of conduct governing the jungle’s social order — Kipling’s principle that survival depends on loyalty, hierarchy, and obedience to the rules of one’s community, whether wolf pack or human society.",
+        "background": "bg-[url('/images/the-jungle-book.jpg')]"
+    },
+    {
+        title: "Kokoro",
+        author: "Natsume Soseki",
+        word: "egoism",
+        speech: "noun",
+        definition: "Not mere selfishness but the Meiji-era philosophical crisis of radical individualism — Sensei's isolation is the tragedy of a man who embraced Western selfhood and found it incompatible with the ability to love.",
+        background: "bg-[url('/images/kokoro.jpg')]"
+    },
+    {
         "title": "Middlemarch",
         "author": "George Eliot",
         "color": "#8A9E5B",
@@ -174,12 +230,36 @@ export const books = [
         "background": "bg-[url('/images/middlemarch.jpg')]"
     },
     {
-        "title": "A Brief History of Seven Killings",
-        "author": "Marlon James",
-        "word": "polyphonic",
-        "speech": "adjective",
-        "definition": "Containing multiple distinct voices, perspectives, or narrative consciousnesses.",
-        "background": "bg-[url('/images/a-brief-history-of-seven-killings.jpg')]"
+        title: "The Buried Giant",
+        author: "Kazuo Ishiguro",
+        word: "suppression",
+        speech: "noun",
+        definition: "The collective forgetting of traumatic historical events through an almost willed amnesia — Ishiguro renders it literal with the mist, asking whether peace between peoples sometimes depends on not remembering.",
+        background: "bg-[url('/images/the-buried-giant.jpg')]"
+    },
+    {
+        "title": "The Hole",
+        "author": "Hiroko Oyamada",
+        "word": "ontological slippage",
+        "speech": "noun",
+        "definition": "A subtle collapse in the stability of reality where the ordinary becomes unfamiliar and meaning begins to detach from physical space — reflecting Oyamada’s exploration of domestic life warped by quiet, inexplicable distortions and psychological drift.",
+        "background": "bg-[url('/images/the-hole.avif')]"
+    },
+    // {
+    //     "title": "A Brief History of Seven Killings",
+    //     "author": "Marlon James",
+    //     "word": "polyphonic",
+    //     "speech": "adjective",
+    //     "definition": "Containing multiple distinct voices, perspectives, or narrative consciousnesses.",
+    //     "background": "bg-[url('/images/a-brief-history-of-seven-killings.jpg')]"
+    // },
+    {
+        title: "Midnight's Children",
+        author: "Salman Rushdie",
+        word: "polyphony",
+        speech: "noun",
+        definition: "The simultaneous presence of multiple distinct voices, perspectives, and registers within a single narrative — Rushdie orchestrates an entire nation's worth of them, making Saleem's story inseparable from the cacophony of post-independence India itself.",
+        background: "bg-[url('/images/midnights-children.jpg')]"
     },
     {
         "title": "Frankenstein",
@@ -219,16 +299,16 @@ export const books = [
         "definition": "Reverting to primitive instincts or ancestral patterns of behavior.",
         "background": "bg-[url('/images/heart-of-darkness.jpg')]"
     },
-    {
-        "title": "One Hundred Years of Solitude",
-        "author": "Gabriel García Márquez",
-        "color": "#3D8B37",
-        "darkerColor": "#2C6E28",
-        "word": "cyclical",
-        "speech": "adjective",
-        "definition": "Returning perpetually to the same point of origin — the Buendía family's inability to escape their own patterns of solitude, obsession, and forgetting across seven generations.",
-        "background": "bg-[url('/images/one-hundred-years-of-solitude.jpg')]"
-    },
+    // {
+    //     "title": "One Hundred Years of Solitude",
+    //     "author": "Gabriel García Márquez",
+    //     "color": "#3D8B37",
+    //     "darkerColor": "#2C6E28",
+    //     "word": "cyclical",
+    //     "speech": "adjective",
+    //     "definition": "Returning perpetually to the same point of origin — the Buendía family's inability to escape their own patterns of solitude, obsession, and forgetting across seven generations.",
+    //     "background": "bg-[url('/images/one-hundred-years-of-solitude.jpg')]"
+    // },
     {
         "title": "Wide Sargasso Sea",
         "author": "Jean Rhys",
@@ -255,14 +335,14 @@ export const books = [
         "definition": "The condition of sustaining multiple incompatible interpretations simultaneously.",
         "background": "bg-[url('/images/the-turn-of-the-screw.jpg')]"
     },
-    {
-        "title": "The God of Small Things",
-        "author": "Arundhati Roy",
-        "word": "transgression",
-        "speech": "noun",
-        "definition": "The violation of deeply entrenched social, familial, or caste boundaries.",
-        "background": "bg-[url('/images/the-god-of-small-things.jpg')]"
-    },
+    // {
+    //     "title": "The God of Small Things",
+    //     "author": "Arundhati Roy",
+    //     "word": "transgression",
+    //     "speech": "noun",
+    //     "definition": "The violation of deeply entrenched social, familial, or caste boundaries.",
+    //     "background": "bg-[url('/images/the-god-of-small-things.jpg')]"
+    // },
     {
         "title": "Hamlet",
         "author": "William Shakespeare",
@@ -299,16 +379,16 @@ export const books = [
         "definition": "The intrusion of dream logic and subconscious symbolism into ordinary reality.",
         "background": "bg-[url('/images/the-wind-up-bird-chronicle.png')]"
     },
-    {
-        "title": "The Sound of Waves",
-        "author": "Yukio Mishima",
-        "color": "#1DA8A0",
-        "darkerColor": "#128880",
-        "word": "pastoral",
-        "speech": "adjective",
-        "definition": "Evoking the simplicity and moral clarity of rural life — Mishima deploys the classical mode with deliberate innocence, making the island itself a character resistant to modern corruption.",
-        "background": "bg-[url('/images/the-sound-of-waves.jpg')]"
-    },
+    // {
+    //     "title": "The Sound of Waves",
+    //     "author": "Yukio Mishima",
+    //     "color": "#1DA8A0",
+    //     "darkerColor": "#128880",
+    //     "word": "pastoral",
+    //     "speech": "adjective",
+    //     "definition": "Evoking the simplicity and moral clarity of rural life — Mishima deploys the classical mode with deliberate innocence, making the island itself a character resistant to modern corruption.",
+    //     "background": "bg-[url('/images/the-sound-of-waves.jpg')]"
+    // },
     {
         "title": "Invisible Man",
         "author": "Ralph Ellison",
@@ -345,14 +425,14 @@ export const books = [
         "definition": "The fleeting and transient quality of human moments, perceptions, and relationships.",
         "background": "bg-[url('/images/to-the-lighthouse.jpg')]"
     },
-    {
-        "title": "Life of Pi",
-        "author": "Yann Martel",
-        "word": "syncretic",
-        "speech": "adjective",
-        "definition": "Combining disparate religious or philosophical systems into a unified worldview.",
-        "background": "bg-[url('/images/life-of-pi.jpg')]"
-    },
+    // {
+    //     "title": "Life of Pi",
+    //     "author": "Yann Martel",
+    //     "word": "syncretic",
+    //     "speech": "adjective",
+    //     "definition": "Combining disparate religious or philosophical systems into a unified worldview.",
+    //     "background": "bg-[url('/images/life-of-pi.jpg')]"
+    // },
     {
         "title": "Monkey Beach",
         "author": "Eden Robinson",
@@ -388,6 +468,30 @@ export const books = [
         "background": "bg-[url('/images/half-of-a-yellow-sun.jpg')]"
     },
     {
+        title: "Anna Karenina",
+        author: "Leo Tolstoy",
+        word: "mésalliance",
+        speech: "noun",
+        definition: "A marriage or relationship considered socially or morally unsuitable — Tolstoy deploys it structurally, showing how every character who defies the sanctioned order is crushed not by fate but by the collective gaze of society.",
+        background: "bg-[url('/images/anna-karenina.jpg')]"
+    },
+    {
+        title: "Dead Souls",
+        author: "Nikolai Gogol",
+        word: "chicanery",
+        speech: "noun",
+        definition: "The use of trickery or deception to achieve one's ends — Chichikov's scheme to buy the legal records of dead serfs is Gogol's perfect vehicle for exposing an entire society built on paperwork, pretension, and moral vacancy.",
+        background: "bg-[url('/images/dead-souls.jpg')]"
+    },
+    {
+        title: "Madame Bovary",
+        author: "Gustave Flaubert",
+        word: "bovarysme",
+        speech: "noun",
+        definition: "The tendency to perceive oneself as more romantic and exceptional than one actually is — coined directly from this novel, it names Emma's fatal habit of mistaking her desires for destiny.",
+        background: "bg-[url('/images/madame-bovary.jpg')]"
+    },
+    {
         "title": "Moby Dick",
         "author": "Herman Melville",
         "color": "#7A9BBF",
@@ -398,12 +502,52 @@ export const books = [
         "background": "bg-[url('/images/moby-dick.jpg')]"
     },
     {
+        "title": "The Waves",
+        "author": "Virginia Woolf",
+        "word": "intersubjectivity",
+        "speech": "noun",
+        "definition": "The interconnected sharing and shaping of consciousness between individuals.",
+        "background": "bg-[url('/images/the-waves.webp')]"
+    },
+    {
+        "title": "The Silmarillion",
+        "author": "J.R.R. Tolkien",
+        "word": "cosmogonic",
+        "speech": "adjective",
+        "definition": "Relating to the origin and creation of the universe or cosmic order.",
+        "background": "bg-[url('/images/the-silmarillion.jpg')]"
+    },
+    {
+        "title": "Siddhartha",
+        "author": "Hermann Hesse",
+        "word": "nonduality",
+        "speech": "noun",
+        "definition": "A spiritual state in which distinctions between self and world dissolve into unity.",
+        "background": "bg-[url('/images/siddhartha.jpg')]"
+    },
+    {
+        "title": "Cloud Atlas",
+        "author": "David Mitchell",
+        "word": "metempsychosis",
+        "speech": "noun",
+        "definition": "The transmigration of a soul or consciousness across different bodies or lifetimes.",
+        "background": "bg-[url('/images/cloud-atlas.jpg')]"
+    },
+    {
         "title": "Infinite Jest",
         "author": "David Foster Wallace",
         "word": "hedonic saturation",
         "speech": "noun",
         "definition": "A state in which endless pleasure consumption destroys the ability to desire meaningfully.",
         "background": "bg-[url('/images/infinite-jest.jpg')]"
+    },
+    {
+        "title": "A Wizard of Earthsea",
+        "author": "Ursula K. Le Guin",
+        "word": "true-name",
+        "speech": "noun",
+        "definition": "A secret name believed to contain the essence and power of a being.",
+        "background": "bg-[url('/images/a-wizard-of-earth-sea.jpg')]"
     },
     {
         "title": "Misery",
@@ -416,12 +560,28 @@ export const books = [
         "background": "bg-[url('/images/misery.jpg')]"
     },
     {
+        "title": "The Midnight Library",
+        "author": "Matt Haig",
+        "word": "counterfactual",
+        "speech": "adjective",
+        "definition": "Relating to imagined alternatives to events that actually occurred.",
+        "background": "bg-[url('/images/the-midnight-library.jpg')]"
+    },
+    {
         "title": "War and Peace",
         "author": "Leo Tolstoy",
         "word": "historicism",
         "speech": "noun",
         "definition": "The belief that historical events arise from vast collective forces rather than heroic individuals.",
         "background": "bg-[url('/images/war-and-peace.webp')]"
+    },
+    {
+        "title": "My Name Is Red",
+        "author": "Orhan Pamuk",
+        "word": "miniaturist",
+        "speech": "noun",
+        "definition": "An artist who creates finely detailed miniature paintings, especially in the Ottoman and Persian traditions.",
+        "background": "bg-[url('/images/my-name-is-red.jpg')]"
     },
     // {
     //     "title": "Midnight's Children",
@@ -450,15 +610,63 @@ export const books = [
         "background": "bg-[url('/images/the-scarlet-letter.jpg')]"
     },
     {
-        "title": "The Catcher in the Rye",
-        "author": "J.D. Salinger",
-        "color": "#E8194B",
-        "darkerColor": "#C01038",
-        "word": "liminality",
-        "speech": "noun",
-        "definition": "The state of being in-between stages or identities, reflecting adolescent transition and psychological instability.",
-        "background": "bg-[url('/images/the-catcher-in-the-rye.png')]"
+        title: "Hard-Boiled Wonderland and the End of the World",
+        author: "Haruki Murakami",
+        word: "encephalic",
+        speech: "adjective",
+        definition: "Relating to the brain and its internal processes — Murakami literalizes it, turning the protagonist's own skull into a landscape someone else has been secretly inhabiting.",
+        background: "bg-[url('/images/hard-boiled-egg.jpg')]"
     },
+    {
+        title: "The Magic Mountain",
+        author: "Thomas Mann",
+        word: "enervation",
+        speech: "noun",
+        definition: "A gradual draining of energy, will, and purpose — Mann uses the sanatorium's languid rhythms to embody Europe's civilizational exhaustion on the eve of catastrophe.",
+        background: "bg-[url('/images/the-magic-mountain.jpg')]"
+    },
+    {
+        title: "Steppenwolf",
+        author: "Hermann Hesse",
+        word: "bifurcation",
+        speech: "noun",
+        definition: "A splitting into two irreconcilable branches — Harry Haller's bourgeois respectability and wolfish alienation cannot be synthesized, only endured as a permanent internal fracture.",
+        background: "bg-[url('/images/steppenwolf.jpg')]"
+    },
+    {
+        title: "Doctor Zhivago",
+        author: "Boris Pasternak",
+        word: "apoliticism",
+        speech: "noun",
+        definition: "A deliberate withdrawal from ideology and collective history in favor of private life and lyric beauty — the stance that makes Zhivago both sympathetic and historically doomed.",
+        background: "bg-[url('/images/doctor-zhivago.jpg')]"
+    },
+    {
+        title: "Catch-22",
+        author: "Joseph Heller",
+        word: "tautology",
+        speech: "noun",
+        definition: "A statement that is true by virtue of its own logical structure, making it impossible to falsify — the eponymous rule is its purest literary expression, a loop that devours anyone who enters it.",
+        background: "bg-[url('/images/catch-22.jpg')]"
+    },
+    {
+        title: "Arrival",
+        author: "Ted Chiang",
+        word: "sapir-whorf hypothesis",
+        speech: "noun",
+        definition: "The linguistic theory that the structure of a language shapes and constrains the thoughts of its speakers — Chiang takes it to its most radical conclusion, imagining a language that doesn't just color perception but restructures the experience of time itself.",
+        background: "bg-[url('/images/arrival.jpg')]"
+    },
+    // {
+    //     "title": "The Catcher in the Rye",
+    //     "author": "J.D. Salinger",
+    //     "color": "#E8194B",
+    //     "darkerColor": "#C01038",
+    //     "word": "liminality",
+    //     "speech": "noun",
+    //     "definition": "The state of being in-between stages or identities, reflecting adolescent transition and psychological instability.",
+    //     "background": "bg-[url('/images/the-catcher-in-the-rye.png')]"
+    // },
     {
         "title": "1984",
         "author": "George Orwell",
@@ -505,16 +713,16 @@ export const books = [
         "definition": "Relating to a psychological disconnection from one's identity, reality, or actions — the condition that births the novel's central duality and its critique of masculine consumerism.",
         "background": "bg-[url('/images/fight-club.jpg')]"
     },
-    // {
-    //     "title": "White Nights",
-    //     "author": "Fyodor Dostoevsky",
-    //     "color": "#1A1A2E",
-    //     "darkerColor": "#0D0D1C",
-    //     "word": "sonder",
-    //     "speech": "noun",
-    //     "definition": "The realization that every passerby possesses a life as vivid and emotionally complex as one's own, echoing the narrator's lonely romantic introspection.",
-    //     "background": "bg-[url('/images/white-nights.jpg')]"
-    // },
+    {
+        "title": "White Nights",
+        "author": "Fyodor Dostoevsky",
+        "color": "#1A1A2E",
+        "darkerColor": "#0D0D1C",
+        "word": "sonder",
+        "speech": "noun",
+        "definition": "The realization that every passerby possesses a life as vivid and emotionally complex as one's own, echoing the narrator's lonely romantic introspection.",
+        "background": "bg-[url('/images/white-nights.jpg')]"
+    },
     // {
     //     "title": "Babel",
     //     "author": "R.F. Kuang",
@@ -575,12 +783,20 @@ export const books = [
     //     "definition": "Violent conflict driven by rigid religious or communal divisions.",
     //     "background": "bg-[url('/images/train-to-pakistan.jpg')]"
     // },
-    // {
-    //     "title": "So Long a Letter",
-    //     "author": "Mariama Bâ",
-    //     "word": "polygamous",
-    //     "speech": "adjective",
-    //     "definition": "Relating to a marital system in which one person has multiple spouses simultaneously.",
-    //     "background": "bg-[url('/images/so-long-a-letter.jpg')]"
-    // },
+    {
+        "title": "So Long a Letter",
+        "author": "Mariama Bâ",
+        "word": "polygamous",
+        "speech": "adjective",
+        "definition": "Relating to a marital system in which one person has multiple spouses simultaneously.",
+        "background": "bg-[url('/images/so-long-a-letter.jpg')]"
+    },
+    {
+        "title": "The Dispossessed",
+        "author": "Ursula K. Le Guin",
+        "word": "anarchosyndicalism",
+        "speech": "noun",
+        "definition": "A political philosophy advocating decentralized worker-controlled societies without hierarchical authority.",
+        "background": "bg-[url('/images/the-dispossessed.jpg')]"
+    },
 ]

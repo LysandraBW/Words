@@ -16,29 +16,33 @@ interface ButtonProps {
 export default function Button(props: Partial<ButtonProps>) {
     return (
         <button
-            onClick={props.onClick}
             disabled={props.disabled}
-            className={clsx(
-                "w-full h-[40px] min-h-[40px] max-h-[40px] px-4",
-                "justify-center align-center",
-                "rounded-md",
-                props.disabled && "cursor-default bg-white",
-                !props.disabled && "cursor-pointer bg-blue-500 transition-transform duration-200 active:scale-97",
-                props.outerClassName
-            )}
+            onClick={props.onClick}
+            className="flex justify-center items-center border border-blue-600 p-[1px] bg-gradient-to-b from-blue-400 to-blue-600 rounded-[8px]"
         >
-           {props.iconL}
-            <label 
+            <div
                 className={clsx(
-                    "text-center text-sm font-medium",
-                    props.disabled && "cursor-default text-black",
-                    !props.disabled && "cursor-pointer text-black",
-                    props.labelClassName
+                    "w-full h-[40px] min-h-[40px] max-h-[40px] px-4",
+                    "flex flex-col justify-center items-center",
+                    "rounded-md",
+                    props.disabled && "cursor-default bg-white",
+                    !props.disabled && "cursor-pointer bg-gradient-to-b from-blue-500 from-50% to-blue-600 transition-transform duration-200 active:scale-97",
+                    props.outerClassName
                 )}
             >
-                {props.label}
-            </label>
-            {props.iconR}
+            {props.iconL}
+                <label 
+                    className={clsx(
+                        "text-center text-sm font-medium",
+                        props.disabled && "cursor-default text-black",
+                        !props.disabled && "cursor-pointer text-white",
+                        props.labelClassName
+                    )}
+                >
+                    {props.label}
+                </label>
+                {props.iconR}
+            </div>
         </button>
     )
 }
