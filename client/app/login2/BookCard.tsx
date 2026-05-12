@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { books } from "./books";
 import clsx from "clsx";
+import { AudioLines, AudioLinesIcon, EarIcon, Volume2Icon } from "lucide-react";
 
 interface BookCardProps {
     book: typeof books[number] | null;
@@ -24,14 +25,7 @@ export default function BookCard(props: BookCardProps) {
                         "bg-neutral-300 bg-cover bg-center rounded-2xl",
                         props.book && props.book.background
                     )}
-                >
-                    {/* {props.book &&
-                        <img 
-                            src={props.book.background.slice(9, -3)}
-                            className="w-full h-auto max-h-full rounded-2xl bg-cover bg-center"
-                        />
-                    } */}
-                </div>
+                />
                 <div
                     className="w-full min-w-0 h-full flex flex-col"
                 >
@@ -62,10 +56,10 @@ export default function BookCard(props: BookCardProps) {
                                 </span>
                             </span>
                             <div className="mb-3 flex flex-col gap-x-2">
-                                <span className="block text-xl text-blue-500 font-bold">
+                                <span className="block text-xl text-blue-500 font-bold text-pretty wrap-anywhere">
                                     {props.book.word}
                                 </span>
-                                <span className="block relative top-[1.5px] w-fit px-2 py-0.5 bg-blue-200 rounded-md text-blue-500/50 text-xs tracking-wide font-medium">
+                                <span className="block relative top-[1.5px] w-fit px-2 py-0.5 bg-blue-200 rounded-md text-blue-500/75 text-xs tracking-wide font-medium">
                                     {props.book.speech}
                                 </span>
                             </div>
@@ -75,10 +69,35 @@ export default function BookCard(props: BookCardProps) {
                         </>
                     }
                 </div>
-                <div className={clsx(
-                    "bg-neutral-200 w-1/4 h-full rounded-2xl",
-                    props.book && 'invisible'
-                )}/>
+                <div 
+                    className={clsx(
+                        "w-1/4 h-full",
+                        "p-2 bg-neutral-200 rounded-2xl",
+                        props.book && "ml-2 hover:scale-97 transition-all"
+                    )}
+                >
+                    {props.book && 
+                        <>
+                            <button 
+                                onClick={() => {
+                                    if (!props.book)
+                                        return;
+                                    const utterance = new SpeechSynthesisUtterance(props.book.word);
+                                    window.speechSynthesis.speak(utterance);
+                                }}
+                                className="w-full h-full flex flex-col justify-center items-center gap-y-2"
+                            >
+                                <Volume2Icon
+                                    size={20}
+                                    className="text-neutral-500/50"
+                                />
+                                <label className="text-xs text-neutral-500/50 font-bold tracking-wide">
+                                    PLAY
+                                </label>
+                            </button>
+                        </>
+                    }
+                </div>
             </motion.div>
         </AnimatePresence>
     )

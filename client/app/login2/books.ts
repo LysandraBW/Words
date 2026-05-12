@@ -102,16 +102,6 @@ export const books = [
     "background": "bg-[url('/images/the-picture-of-dorian-gray.webp')]"
   },
   {
-    "title": "Lord of the Flies",
-    "author": "William Golding",
-    "color": "#E8411A",
-    "darkerColor": "#C03010",
-    "word": "devolutionary",
-    "speech": "adjective",
-    "definition": "Describing a regression from complexity to simplicity or primitiveness, especially in social or moral structures.",
-    "background": "bg-[url('/images/lord-of-the-flies.jpg')]"
-  },
-  {
     "title": "Brave New World",
     "author": "Aldous Huxley",
     "color": "#1B8BB5",
@@ -120,6 +110,16 @@ export const books = [
     "speech": "adjective",
     "definition": "Describing a state altered by artificial euphoria or chemical escapism, as in the novel's use of soma to suppress discomfort or dissent.",
     "background": "bg-[url('/images/brave-new-world.webp')]"
+  },
+  {
+    "title": "Lord of the Flies",
+    "author": "William Golding",
+    "color": "#E8411A",
+    "darkerColor": "#C03010",
+    "word": "devolutionary",
+    "speech": "adjective",
+    "definition": "Describing a regression from complexity to simplicity or primitiveness, especially in social or moral structures.",
+    "background": "bg-[url('/images/lord-of-the-flies.jpg')]"
   },
   {
     "title": "The Alchemist",
@@ -250,16 +250,6 @@ export const books = [
     "background": "bg-[url('/images/the-hole.avif')]"
   },
   {
-    "title": "Frankenstein",
-    "author": "Mary Shelley",
-    "color": "#39D353",
-    "darkerColor": "#28B040",
-    "word": "transgressive",
-    "speech": "adjective",
-    "definition": "Crossing established moral, natural, or social boundaries, especially in pursuit of forbidden knowledge or creation.",
-    "background": "bg-[url('/images/frankenstein.jpg')]"
-  },
-  {
     "title": "Things Fall Apart",
     "author": "Chinua Achebe",
     "color": "#C67C3A",
@@ -286,6 +276,16 @@ export const books = [
     "background": "bg-[url('/images/madame-bovary.jpg')]"
   },
   {
+    "title": "Frankenstein",
+    "author": "Mary Shelley",
+    "color": "#39D353",
+    "darkerColor": "#28B040",
+    "word": "transgressive",
+    "speech": "adjective",
+    "definition": "Crossing established moral, natural, or social boundaries, especially in pursuit of forbidden knowledge or creation.",
+    "background": "bg-[url('/images/frankenstein.jpg')]"
+  },
+  {
     "title": "Hard-Boiled Wonderland and the End of the World",
     "author": "Haruki Murakami",
     "word": "encephalic",
@@ -304,16 +304,6 @@ export const books = [
     "background": "bg-[url('/images/hamlet.webp')]"
   },
   {
-    "title": "The Odyssey",
-    "author": "Homer",
-    "color": "#3B8C84",
-    "darkerColor": "#2A6E68",
-    "word": "teleological",
-    "speech": "adjective",
-    "definition": "Describing actions or narratives directed toward an ultimate purpose or end goal, especially in epic journeys.",
-    "background": "bg-[url('/images/the-odyssey.jpg')]"
-  },
-  {
     "title": "Siddhartha",
     "author": "Hermann Hesse",
     "word": "nonduality",
@@ -322,12 +312,14 @@ export const books = [
     "background": "bg-[url('/images/siddhartha.jpg')]"
   },
   {
-    "title": "Dead Souls",
-    "author": "Nikolai Gogol",
-    "word": "chicanery",
-    "speech": "noun",
-    "definition": "The use of trickery or deception to achieve one's ends — Chichikov's scheme to buy the legal records of dead serfs is Gogol's perfect vehicle for exposing an entire society built on paperwork, pretension, and moral vacancy.",
-    "background": "bg-[url('/images/dead-souls.jpg')]"
+    "title": "The Odyssey",
+    "author": "Homer",
+    "color": "#3B8C84",
+    "darkerColor": "#2A6E68",
+    "word": "teleological",
+    "speech": "adjective",
+    "definition": "Describing actions or narratives directed toward an ultimate purpose or end goal, especially in epic journeys.",
+    "background": "bg-[url('/images/the-odyssey.jpg')]"
   },
   {
     "title": "Wuthering Heights",
@@ -346,6 +338,14 @@ export const books = [
     "speech": "noun",
     "definition": "The belief that historical events arise from vast collective forces rather than heroic individuals.",
     "background": "bg-[url('/images/war-and-peace.webp')]"
+  },
+  {
+    "title": "Dead Souls",
+    "author": "Nikolai Gogol",
+    "word": "chicanery",
+    "speech": "noun",
+    "definition": "The use of trickery or deception to achieve one's ends — Chichikov's scheme to buy the legal records of dead serfs is Gogol's perfect vehicle for exposing an entire society built on paperwork, pretension, and moral vacancy.",
+    "background": "bg-[url('/images/dead-souls.jpg')]"
   },
   {
     "title": "Moby Dick",
@@ -483,14 +483,14 @@ export const books = [
     "definition": "The linguistic theory that the structure of a language shapes and constrains the thoughts of its speakers — Chiang takes it to its most radical conclusion, imagining a language that doesn't just color perception but restructures the experience of time itself.",
     "background": "bg-[url('/images/arrival.jpg')]"
   },
-  // {
-  //   "title": "Midnight's Children",
-  //   "author": "Salman Rushdie",
-  //   "word": "polyphony",
-  //   "speech": "noun",
-  //   "definition": "The simultaneous presence of multiple distinct voices, perspectives, and registers within a single narrative — Rushdie orchestrates an entire nation's worth of them, making Saleem's story inseparable from the cacophony of post-independence India itself.",
-  //   "background": "bg-[url('/images/midnights-children.jpg')]"
-  // },
+  {
+    "title": "Catch-22",
+    "author": "Joseph Heller",
+    "word": "tautology",
+    "speech": "noun",
+    "definition": "A statement that is true by virtue of its own logical structure, making it impossible to falsify — the eponymous rule is its purest literary expression, a loop that devours anyone who enters it.",
+    "background": "bg-[url('/images/catch-22.jpg')]"
+  },
   {
     "title": "Misery",
     "author": "Stephen King",
@@ -500,14 +500,6 @@ export const books = [
     "speech": "noun",
     "definition": "The act of gaining another's favor or attention through calculated manipulation — Annie Wilkes elevates it to its most terrifying form, disguising obsession as devotion and imprisonment as care.",
     "background": "bg-[url('/images/misery.jpg')]"
-  },
-  {
-    "title": "Catch-22",
-    "author": "Joseph Heller",
-    "word": "tautology",
-    "speech": "noun",
-    "definition": "A statement that is true by virtue of its own logical structure, making it impossible to falsify — the eponymous rule is its purest literary expression, a loop that devours anyone who enters it.",
-    "background": "bg-[url('/images/catch-22.jpg')]"
   },
   {
     "title": "The Midnight Library",
