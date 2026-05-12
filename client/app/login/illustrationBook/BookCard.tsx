@@ -91,8 +91,8 @@ export default function BookCard(props: BookCardProps) {
                                     size={20}
                                     className="text-neutral-500/75"
                                 />
-                                <label className="text-xs text-neutral-500/75 font-bold tracking-wide">
-                                    PLAY
+                                <label className="text-xs text-neutral-500/75 font-medium tracking-wide">
+                                    Play
                                 </label>
                             </button>
                         </>
