@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { books } from "../login/books";
+import { books } from "./books";
 import Tilt from 'react-parallax-tilt';
 import { PinIcon, StarIcon } from "lucide-react";
 

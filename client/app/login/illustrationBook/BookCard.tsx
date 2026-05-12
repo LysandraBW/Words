@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { books } from "./books";
+import { books } from "../books";
 import clsx from "clsx";
 import { AudioLines, AudioLinesIcon, EarIcon, Volume2Icon } from "lucide-react";
 
@@ -51,7 +51,7 @@ export default function BookCard(props: BookCardProps) {
                                 <span className="block">
                                     {props.book.author}
                                 </span>
-                                <span className="block font-medium text-neutral-500">
+                                <span className="block font-medium">
                                     {props.book.title}
                                 </span>
                             </span>
@@ -89,9 +89,9 @@ export default function BookCard(props: BookCardProps) {
                             >
                                 <Volume2Icon
                                     size={20}
-                                    className="text-neutral-500/50"
+                                    className="text-neutral-500/75"
                                 />
-                                <label className="text-xs text-neutral-500/50 font-bold tracking-wide">
+                                <label className="text-xs text-neutral-500/75 font-bold tracking-wide">
                                     PLAY
                                 </label>
                             </button>
