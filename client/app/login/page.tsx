@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import BookIllustration from "./illustrationBook/BookIllustration";
 
 
 export default function Page() {
@@ -18,6 +19,10 @@ export default function Page() {
                 <SignUp
                     onSelectView={setPage}
                 />
+            }
+            {page === "signIn" ?
+                <BookIllustration/> :
+                <BookIllustration/>
             }
         </div>
     )

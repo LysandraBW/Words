@@ -5,7 +5,8 @@ interface SignUpProps {
 
 export default function SignUp(props: SignUpProps) {
     return (
-        <>
-        </>
+        <main>
+            
+        </main>
     )
 }

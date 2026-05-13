@@ -40,7 +40,7 @@ export default function BookIllustration() {
                     <HeroCard/>
                 </div>
             </div>
-            <div className="relative w-full h-full p-2 flex flex-col gap-y-2 bg-neutral-100 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
+            <div className="relative w-full h-full p-2 flex flex-col gap-y-2 bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
                 {[...Array(3)].map((e, i) => (
                     <Fragment key={i}>
                         <MovingRow
