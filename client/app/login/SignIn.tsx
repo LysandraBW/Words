@@ -1,41 +1,45 @@
-import { useRouter } from "next/navigation";
-import PageToggle from "./PageToggle";
-import { useState } from "react";
-import { createForm, Form, testForm, updateFormValue } from "@/utilities/form";
-import z from "zod";
-import InputText from "@/components/input/InputText";
 import InputButton from "@/components/input/InputButton";
+import InputText from "@/components/input/InputText";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import z from "zod";
+import { createForm, Form, testForm, updateFormValue } from "@/utilities/form";
+import { signIn } from "@/services/server/reader";
+import PageToggle from "./PageToggle";
 
 
-interface SignUpProps {
+interface SignInProps {
     page: string;
     onClickPage: (page: string) => void;
 }
 
 
-export default function SignUp(props: SignUpProps) {
+export default function SignIn(props: SignInProps) {
     const router = useRouter();
     const [form, setForm] = useState(createForm([
         {
-            label: 'name',
-            test: z.string().trim().min(1, "Must enter a name")
-        },
-        {
             label: 'email',
+            value: 'abc@mail.com',
             test: z.string().trim().min(1, "Must enter an email")
         },
         {
             label: 'password',
+            value: '123',
             test: z.string().min(1, "Must enter a password")
         }
     ]));
-    
-    const onSignUp = async (form: Form<{name: string; email: string; password: string}>) => {
+
+
+    const onLogin = async (form: Form<{email: string; password: string}>) => {
         try {
             if (!testForm(form))
                 throw new Error('Invalid Fields');
             
-            const data = false;
+            const data = await signIn(
+                form.email.value, 
+                form.password.value
+            );
+
             if (!data) 
                 throw new Error("Failed");
 
@@ -56,7 +60,7 @@ export default function SignUp(props: SignUpProps) {
                 />
                 <header className="max-w-2xs flex flex-col gap-y-1">
                     <h1 className="text-3xl text-neutral-100 text-center font-medium tracking-tight">
-                        Nice to Meet You
+                        Welcome Back
                     </h1>
                     <p className="text-sm text-center">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -67,12 +71,6 @@ export default function SignUp(props: SignUpProps) {
                 onSubmit={(e) => e.preventDefault()}
                 className="max-lg:w-full max-lg:max-w-sm lg:min-w-xs flex flex-col gap-y-6"
             >
-                <InputText
-                    label="Name"
-                    value={form.name.value}
-                    error={form.name.error}
-                    onChange={value => setForm(updateFormValue(form, 'name', value))}
-                />
                 <InputText
                     label="Email"
                     value={form.email.value}
@@ -88,8 +86,8 @@ export default function SignUp(props: SignUpProps) {
                 />
                 <div className="flex flex-col gap-y-3">
                     <InputButton
-                        label="Sign Up"
-                        onClick={() => onSignUp(form)}
+                        label="Log In"
+                        onClick={() => onLogin(form)}
                     />
                 </div>
             </form>

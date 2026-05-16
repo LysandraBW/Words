@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { books } from "../books";
+import { books } from "../../books";
 import Tilt from 'react-parallax-tilt';
 
 
@@ -19,7 +19,7 @@ export default function MovingRowElement(props: MovingRowElementProps) {
             glareColor="#ffffff"
             glarePosition="bottom"
             glareBorderRadius="0.75rem"
-            style={{"clip-path": "inset(0 0 0 0 1rem)"} as any}
+            style={{"clipPath": "inset(0 0 0 0 1rem)"} as any}
             className="relative w-[var(--w)] min-w-[var(--w)] h-full rounded-2xl overflow-hidden"
         >
             <div

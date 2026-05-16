@@ -1,12 +1,13 @@
 import { Fragment } from "react/jsx-runtime";
-import { books } from "../books";
-import BookCard from "./BookCard";
+import { books } from "../../books";
+import Word from "./Word";
 import Curve from "./Curve";
-import HeroCard from "./HeroCard";
+import HeroCard from "./Tagline";
 import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";
 
-export default function BookIllustration() {
+
+export default function BookPanel() {
     const [book, setBook] = useState<typeof books[number] | null>(null);
     const [userSelected, setUserSelected] = useState(false);
 
@@ -26,7 +27,7 @@ export default function BookIllustration() {
 
     
     return (
-        <div className="max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
+        <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
             <div className="absolute top-0 right-0 z-100 w-[calc(50%-12px)] h-[calc(50%-5px)] mr-2 mt-2 flex flex-col items-center justify-center gap-y-4 bg-neutral-800 rounded-bl-4xl rounded-tr-2xl">
                 <Curve
                     className="absolute top-0 -left-6 w-6 h-6 rotate-270"
@@ -70,7 +71,7 @@ export default function BookIllustration() {
                     pathClassName="fill-neutral-800"
                 />
                 <div className="relative w-full h-full bg-neutral-100 rounded-3xl overflow-clip">
-                    <BookCard
+                    <Word
                         book={book}
                     />
                 </div>

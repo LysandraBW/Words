@@ -1,14 +1,15 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { books } from "../books";
+import { books } from "../../books";
 import clsx from "clsx";
-import { AudioLines, AudioLinesIcon, EarIcon, Volume2Icon } from "lucide-react";
+import { Volume2Icon } from "lucide-react";
+
 
 interface BookCardProps {
     book: typeof books[number] | null;
 }
 
 
-export default function BookCard(props: BookCardProps) {
+export default function Word(props: BookCardProps) {
     return (
         <AnimatePresence>
             <motion.div

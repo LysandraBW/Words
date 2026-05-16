@@ -16,8 +16,8 @@ export default function PageToggle(props: PageToggleProps) {
         <div className="w-min p-1 flex gap-x-1 bg-neutral-900 border border-neutral-800 rounded-[9px]">
             <button 
                 className={clsx(
-                    "px-2 py-0.5 flex items-center gap-x-1",
-                    signIn && "bg-neutral-800 rounded-md shadow",
+                    "px-2 py-0.5 flex items-center gap-x-1 rounded-md",
+                    signIn && "bg-neutral-800 shadow",
                     !signIn && "hover:bg-neutral-950"
                 )}
                 onClick={() => props.onClickPage("signIn")}
@@ -42,7 +42,7 @@ export default function PageToggle(props: PageToggleProps) {
             <button 
                 className={clsx(
                     "px-2 py-0.5 flex items-center gap-x-1 rounded-md hover:bg-neutral-950",
-                    signUp && "bg-neutral-800 rounded-md shadow",
+                    signUp && "bg-neutral-800 shadow",
                     !signUp && "hover:bg-neutral-950"
                 )}
                 onClick={() => props.onClickPage("signUp")}

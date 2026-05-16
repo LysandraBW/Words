@@ -19,7 +19,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 				abcDiatype.className
 			)}
 		>
-			<body className="w-full h-full overflow-hidden">
+			<body className="w-full h-full">
 				{children}
 			</body>
     	</html>
