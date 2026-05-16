@@ -27,21 +27,22 @@ export default function QuizPanel() {
                         style={{'--w': '275px', '--h': '125px'} as any} 
                         className="relative w-full h-full p-6 flex flex-col justify-center items-center gap-4 overflow-clip"
                     >
-                        <div className="relative z-50 h-min flex justify-center">
-                            <div className="relative w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md overflow-clip">
-                                <span className="relative z-100 text-xl text-neutral-100/75 font-medium">
-                                    {books[book].word}
+                        <div className="relative z-50 h-[var(--h)] flex justify-center items-center">
+                            <span className="relative z-100 text-2xl text-neutral-100/55 text-center font-medium">
+                                Define 
+                                <span className="ml-1 text-neutral-100">
+                                    {books[book].word.at(0)?.toUpperCase() + books[book].word.slice(1)}
                                 </span>
-                            </div>
+                            </span>
                         </div>
                         <div className="relative z-50 h-min flex justify-center gap-x-4">
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md">
+                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
                                 <span className="text-sm text-neutral-500 text-center tracking-wide">
                                     {/* {books[(book+0)%(books.length)].definition} */}
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </span>
                             </div>
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md">
+                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
                                 <span className="text-sm text-neutral-500 text-center tracking-wide">
                                     {/* {books[(book+1)%(books.length)].definition} */}
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -49,13 +50,13 @@ export default function QuizPanel() {
                             </div>
                         </div>
                         <div className="relative z-50 h-min flex justify-center gap-x-4">
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md">
+                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
                                 <span className="text-sm text-neutral-500 text-center tracking-wide">
                                     {/* {books[(book+2)%(books.length)].definition} */}
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </span>
                             </div>
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md">
+                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
                                 <span className="text-sm text-neutral-500 text-center tracking-wide">
                                     {/* {books[(book+3)%(books.length)].definition} */}
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
