@@ -1,7 +1,7 @@
 import "./globals.css";
 import clsx from "clsx";
 import type { Metadata } from "next";
-import { abcDiatype } from "@/app/fonts";
+import { abcDiatype, nunito } from "@/app/fonts";
 
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 			lang="en"
 			className={clsx(
 				"w-screen min-w-screen max-w-screen h-screen bg-neutral-950",
-				abcDiatype.className
+				nunito.className
 			)}
 		>
 			<body className="w-full h-full">

@@ -1,4 +1,4 @@
-import { Nanum_Pen_Script, Gamja_Flower, Playfair_Display, Pixelify_Sans, Instrument_Serif, Source_Serif_4 } from 'next/font/google';
+import { Nanum_Pen_Script, Gamja_Flower, Playfair_Display, Pixelify_Sans, Instrument_Serif, Source_Serif_4, Nunito } from 'next/font/google';
 import localFont from 'next/font/local'
 
 export const abcDiatype = localFont({
@@ -52,4 +52,9 @@ export const pixelifySans = Pixelify_Sans({
 export const instrumentSerif = Instrument_Serif({
 	subsets: ['latin'],
 	weight: ['400']
-})
+});
+
+export const nunito = Nunito({
+	subsets: ['latin'],
+	weight: ['500', '600', '700', '800']
+});

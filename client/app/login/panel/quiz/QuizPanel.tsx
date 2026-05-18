@@ -1,67 +1,92 @@
-import { AudioLinesIcon, ClockIcon, PauseIcon, Volume2Icon, XIcon } from "lucide-react";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { books } from "../../books";
+import Choice from "./Choice";
+import { nunito } from "@/app/fonts";
 
 export default function QuizPanel() {
-    const [book, setBook] = useState<number>(0);
-    const [quiz, setQuiz] = useState(false);
+    const [questions, setQuestions] = useState<(typeof books[number])[]>();
+    const [questionIndex, setQuestionIndex] = useState(-1);
+    const [choices, setChoices] = useState<(number|null)[]>([null, null, null, null, null]);
+
+
+    useEffect(() => {
+        const shuffle = [...Array(books.length)].map((e, i) => i).sort(() => Math.random() - 0.5).slice(0, 5);
+        const questions = shuffle.map(i => books[i]);
+        setQuestions(questions);
+        setQuestionIndex(0);
+    }, []);
+
+
+    const selectChoice = (choiceIndex: number) => {
+        const updatedChoices = [...choices];
+        updatedChoices[questionIndex] = choiceIndex;
+        setChoices(updatedChoices);
+    }
+
 
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
             <div className="w-full h-full flex flex-col bg-neutral-900 rounded-3xl">
-                <div className="w-full h-12 px-4 py-4 flex items-center gap-x-2 border-b border-b-neutral-800 rounded-t-3xl">
-                    <div className="w-3 h-3 aspect-square bg-green-500 rounded-full"/>
-                    <div className="w-3 h-3 aspect-square bg-red-500 rounded-full"/>
-                    <div className="w-3 h-3 aspect-square bg-neutral-800 rounded-full"/>
-                    <div className="w-3 h-3 aspect-square bg-neutral-800 rounded-full"/>
+                <div className="w-full h-12 px-4 py-4 flex items-center gap-x-2 rounded-t-3xl">
+                    <div className="w-3 h-3 aspect-square bg-green-500 rounded-full">
+                    </div>
+                    <div className="w-3 h-3 aspect-square bg-red-500 rounded-full">
+                    </div>
+                    <div className="w-3 h-3 aspect-square bg-neutral-800 rounded-full">
+                    </div>
+                    <div className="w-3 h-3 aspect-square bg-neutral-800 rounded-full">
+                    </div>
                     <div className="w-full h-3 bg-neutral-800 rounded-full">
                         <div className="w-1/2 h-full bg-blue-500 rounded-full"/>
                     </div>
-                    <XIcon
-                        strokeWidth={3}
-                        className="w-4 h-4 text-neutral-800"
-                    />
                 </div>
                 <div className="w-full flex flex-col grow justify-center">
-                    <div
-                        style={{'--w': '275px', '--h': '125px'} as any} 
-                        className="relative w-full h-full p-6 flex flex-col justify-center items-center gap-4 overflow-clip"
-                    >
-                        <div className="relative z-50 h-[var(--h)] flex justify-center items-center">
-                            <span className="relative z-100 text-2xl text-neutral-100/55 text-center font-medium">
-                                Define 
-                                <span className="ml-1 text-neutral-100">
-                                    {books[book].word.at(0)?.toUpperCase() + books[book].word.slice(1)}
-                                </span>
-                            </span>
-                        </div>
-                        <div className="relative z-50 h-min flex justify-center gap-x-4">
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
-                                <span className="text-sm text-neutral-500 text-center tracking-wide">
-                                    {/* {books[(book+0)%(books.length)].definition} */}
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </span>
-                            </div>
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
-                                <span className="text-sm text-neutral-500 text-center tracking-wide">
-                                    {/* {books[(book+1)%(books.length)].definition} */}
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </span>
+                    <div className="w-full h-full pb-4 flex flex-col gap-4">
+                        <div className="w-full min-h-1/2 flex flex-col justify-center items-center bg-neutral-950">
+                            <div className="w-min flex flex-col gap-y-1">
+                                {(questions && questionIndex !== -1) &&
+                                    <>
+                                        <span className={`block w-min px-1 py-0.5 bg-neutral-800 rounded-md text-xs font-bold tracking-wide whitespace-nowrap ${nunito.className}`}>
+                                            {questionIndex+1}/{questions?.length}
+                                        </span>
+                                        <span className="block text-2xl font-medium whitespace-nowrap">
+                                            Define
+                                            <span className="ml-1.5 text-neutral-100">
+                                                {/* Capitalize */}
+                                                {[...questions[questionIndex].word].map((c, i, arr) => (i === 0 || (i > 0 && (arr[i-1] === " " || arr[i-1] === "-"))) ? c.toUpperCase() : c.toLowerCase())}
+                                            </span>
+                                        </span>
+                                    </>
+                                }
                             </div>
                         </div>
-                        <div className="relative z-50 h-min flex justify-center gap-x-4">
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
-                                <span className="text-sm text-neutral-500 text-center tracking-wide">
-                                    {/* {books[(book+2)%(books.length)].definition} */}
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </span>
-                            </div>
-                            <div className="w-[var(--w)] h-[var(--h)] p-2 flex justify-center items-center bg-neutral-800 border border-neutral-700/50 rounded-xl shadow-md cursor-pointer hover:scale-97 hover:bg-neutral-800/90 transition-all">
-                                <span className="text-sm text-neutral-500 text-center tracking-wide">
-                                    {/* {books[(book+3)%(books.length)].definition} */}
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                </span>
-                            </div>
+                        <div className="w-full h-full px-4 flex justify-center gap-x-4">
+                            <Choice
+                                onClick={() => selectChoice(0)}
+                                content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                flag={choices[0] !== null ? true : null}
+                                selected={choices[0] === 0}
+                            />
+                            <Choice
+                                onClick={() => selectChoice(1)}
+                                content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                flag={choices[0] !== null ? false : null}
+                                selected={choices[0] === 1}
+                            />
+                        </div>
+                        <div className="w-full h-full px-4 flex justify-center gap-x-4">
+                            <Choice
+                                onClick={() => selectChoice(2)}
+                                content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                flag={choices[0] !== null ? false : null}
+                                selected={choices[0] === 2}
+                            />
+                            <Choice
+                                onClick={() => selectChoice(3)}
+                                content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                flag={choices[0] !== null ? false : null}
+                                selected={choices[0] === 3}
+                            />
                         </div>
                     </div>
                 </div>

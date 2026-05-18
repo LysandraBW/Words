@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
-button, button * {
+button {
     cursor: pointer;
+}
+
+button * {
+    cursor: inherit;
 }
 
 @layer components {
