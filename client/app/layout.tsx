@@ -16,7 +16,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 			lang="en"
 			className={clsx(
 				"w-screen min-w-screen max-w-screen h-screen bg-neutral-950",
-				nunito.className
+				abcDiatype.className
 			)}
 		>
 			<body className="w-full h-full">

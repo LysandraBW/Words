@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { books } from "../../books";
 import Choice from "./Choice";
 import { nunito } from "@/app/fonts";
+import { CircleQuestionMark, Clock4Icon, LayoutGridIcon, TargetIcon } from "lucide-react";
 
 export default function QuizPanel() {
     const [questions, setQuestions] = useState<(typeof books[number])[]>();
@@ -42,21 +43,20 @@ export default function QuizPanel() {
                 </div>
                 <div className="w-full flex flex-col grow justify-center">
                     <div className="w-full h-full pb-4 flex flex-col gap-4">
-                        <div className="w-full min-h-1/2 flex flex-col justify-center items-center bg-neutral-950">
-                            <div className="w-min flex flex-col gap-y-1">
+                        <div className="w-full min-h-1/2 p-1 flex flex-col bg-blue-500">
+                            <div className="p-1 w-full flex gap-1 border border-blue-600 rounded-lg shadow-xs">
+                                <span className={`block w-min px-1 py-0.5 flex items-center gap-1 border border-blue-600 rounded-md shadow-xs text-xs text-blue-200 font-medium tracking-wide whitespace-nowrap`}>
+                                    <Clock4Icon size={12}/> 00:00:00s
+                                </span>
+                                <span className={`block w-min px-1 py-0.5 flex items-center gap-1 border border-blue-600 rounded-md shadow-xs text-xs text-blue-200 font-medium tracking-wide whitespace-nowrap`}>
+                                    <CircleQuestionMark size={12}/> {questionIndex+1} out of {questions?.length}
+                                </span>
+                            </div>
+                            <div className="flex flex-col grow items-center justify-center">
                                 {(questions && questionIndex !== -1) &&
-                                    <>
-                                        <span className={`block w-min px-1 py-0.5 bg-neutral-800 rounded-md text-xs font-bold tracking-wide whitespace-nowrap ${nunito.className}`}>
-                                            {questionIndex+1}/{questions?.length}
-                                        </span>
-                                        <span className="block text-2xl font-medium whitespace-nowrap">
-                                            Define
-                                            <span className="ml-1.5 text-neutral-100">
-                                                {/* Capitalize */}
-                                                {[...questions[questionIndex].word].map((c, i, arr) => (i === 0 || (i > 0 && (arr[i-1] === " " || arr[i-1] === "-"))) ? c.toUpperCase() : c.toLowerCase())}
-                                            </span>
-                                        </span>
-                                    </>
+                                    <span className="block text-3xl text-neutral-100 font-semibold whitespace-nowrap">
+                                        {[...questions[questionIndex].word].map((c, i, arr) => (i === 0 || (i > 0 && (arr[i-1] === " " || arr[i-1] === "-"))) ? c.toLowerCase() : c.toLowerCase())}
+                                    </span>
                                 }
                             </div>
                         </div>
@@ -66,12 +66,14 @@ export default function QuizPanel() {
                                 content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                                 flag={choices[0] !== null ? true : null}
                                 selected={choices[0] === 0}
+                                answered={choices[0] !==  null}
                             />
                             <Choice
                                 onClick={() => selectChoice(1)}
                                 content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                                 flag={choices[0] !== null ? false : null}
                                 selected={choices[0] === 1}
+                                answered={choices[0] !==  null}
                             />
                         </div>
                         <div className="w-full h-full px-4 flex justify-center gap-x-4">
@@ -80,12 +82,14 @@ export default function QuizPanel() {
                                 content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                                 flag={choices[0] !== null ? false : null}
                                 selected={choices[0] === 2}
+                                answered={choices[0] !==  null}
                             />
                             <Choice
                                 onClick={() => selectChoice(3)}
                                 content="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                                 flag={choices[0] !== null ? false : null}
                                 selected={choices[0] === 3}
+                                answered={choices[0] !==  null}
                             />
                         </div>
                     </div>
