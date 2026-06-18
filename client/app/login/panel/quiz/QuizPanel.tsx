@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { books } from "../../books";
 import Choice from "./Choice";
 import { nunito } from "@/app/fonts";
 import { CircleQuestionMark, Clock4Icon, LayoutGridIcon, TargetIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import Circle from "./Circle";
 
 export default function QuizPanel() {
     const [questions, setQuestions] = useState<(typeof books[number])[]>();
@@ -27,39 +29,51 @@ export default function QuizPanel() {
 
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 flex flex-col bg-neutral-800 rounded-4xl">
-            <div className="absolute top-0 left-0 w-full h-full overflow-clip bg-white rounded-4xl">
-                {[...Array(40)].map((e, i) => (
-                    <svg 
-                        key={i}
-                        xmlns="http://www.w3.org/2000/svg" 
-                        // viewBox="0 0 48 48" 
-                        viewBox="0 0 150 150"
-                        // viewBox="0 0 96 48" 
-                        // preserveAspectRatio="none" 
-                        className="absolute block overflow-visible"
-                        style={{
-                            top: `${(i-20)*32}px`,
-                            left: `${(i-20)*32}px`,
-                            width: `calc(100% - ${(i-20)*64}px)`,
-                            height: `calc(100% - ${(i-20)*64}px)`
-                        }}
-                    >
-                        <path 
-                            d="M 75 75 m 75 0 a 75 75 0 1 0 -150 0 a 75 75 0 1 0 150 0"
-                            // d="M 0 4 A 4 4 0 0 1 4 0 H 44 A 4 4 0 0 1 48 4 V 44 A 4 4 0 0 1 44 48 H 4 A 4 4 0 0 1 0 44 V 4" 
-                            // d="M 0 4 A 4 4 0 0 1 4 0 H 92 A 4 4 0 0 1 96 4 V 44 A 4 4 0 0 1 92 48 H 4 A 4 4 0 0 1 0 44 V 4"
-                            // d="M 0 1 A 1 1 0 0 1 1 0 H 95 A 1 1 0 0 1 96 1 V 47 A 1 1 0 0 1 95 48 H 1 A 1 1 0 0 1 0 47 V 1"
-                            // d="M 0 4 A 4 4 0 0 1 4 0 H 92 A 4 4 0 0 1 96 4 V 44 A 4 4 0 0 1 92 48 H 4 A 4 4 0 0 1 0 44 V 4"
-                            // d="M 0 2 A 2 2 0 0 1 2 0 H 94 A 2 2 0 0 1 96 2 V 46 A 2 2 0 0 1 94 48 H 2 A 2 2 0 0 1 0 46 V 2"
-                            vectorEffect="non-scaling-stroke"
-                            stroke="#262626" 
-                            strokeWidth={10} 
-                            fill="none"
+            <div className="absolute top-0 left-0 w-full h-full overflow-clip bg-neutral-900 rounded-4xl">
+                
+                {[...Array(22)].map((e, i) => (
+                    <Fragment key={i}>
+                        <Circle
+                            i={i - 10}
                         />
-                    </svg>
+                    </Fragment>
+                    // <motion.svg 
+                    //     key={i}
+                    //     xmlns="http://www.w3.org/2000/svg"
+                    //     viewBox="0 0 150 150"
+                    //     className="absolute block overflow-visible drop-shadow-md"
+                    //     style={{
+                    //         top: `${(i-20)*32}px`,
+                    //         left: `${(i-20)*32}px`,
+                    //         width: `calc(100% - ${(i-20)*64}px)`,
+                    //         height: `calc(100% - ${(i-20)*64}px)`,
+                    //         // transform: `rotate(${(i % 2 === 0 ? 1 : -1)*6}deg)`
+                    //     }}
+                    //     // initial={{ rotate: (i % 2 === 0 ? 1 : -1)*6 }}
+                    //     // animate={{ rotate: -(i % 2 === 0 ? 1 : -1)*6 }}
+                    //     initial={{ rotate: 0 }}
+                    //     animate={{ rotate: 0 + 360 }}
+                    //     transition={{ 
+                    //         duration: 5, 
+                    //         repeat: Infinity, 
+                    //         ease: "linear"
+                    //         // repeatType: "reverse"
+                    //     }}
+                    // >
+                    //     <path 
+                    //         // d="M 75 75 m 75 0 a 75 75 0 1 0 -150 0 a 75 75 0 1 0 150 0"
+                    //         d="M 0 60 A 75 75 0 0 1 75 0 A 75 75 0 0 1 150 60 M 150 90 A 75 75 0 0 1 75 150 A 75 75 0 0 1 0 90 M 0 90"
+                    //         // d="M 0 75 A 75 75 0 0 1 75 0 A 75 75 0 0 1 150 75 M 150 90 A 75 75 0 0 1 75 165 A 75 75 0 0 1 0 90 M 0 90"
+                    //         vectorEffect="non-scaling-stroke"
+                    //         stroke="#262626" 
+                    //         strokeWidth={15} 
+                    //         strokeLinecap="round"
+                    //         fill="none"
+                    //     />
+                    // </motion.svg>
                 ))}
             </div>
-            <div className="relative z-100 w-full h-full flex items-center justify-center">
+            {/* <div className="relative z-100 w-full h-full flex items-center justify-center">
                 <div className="w-1/2 flex flex-col bg-neutral-900 rounded-3xl ring-6 ring-neutral-950/60">
                     <div className="w-full h-12 px-4 py-4 flex items-center gap-x-2 rounded-t-3xl">
                         <div className="w-3 h-3 aspect-square bg-green-500 rounded-full">
@@ -128,7 +142,7 @@ export default function QuizPanel() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
