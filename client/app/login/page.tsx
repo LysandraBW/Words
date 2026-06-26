@@ -2,14 +2,14 @@
 import { useState } from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import BookPanel from "./panel/book/BookPanel";
-import QuizPanel from "./panel/quiz/QuizPanel";
+import PanelWord from "./panel/book/PanelWord";
+import QuizPanel from "./panel/book/PanelQuiz";
 import PageToggle from "./PageToggle";
 import motion from "framer-motion";
 
 
 export default function Page() {
-    const [page, setPage] = useState("signIn");    
+    const [page, setPage] = useState("signUp");    
 
     
     return (
@@ -27,7 +27,7 @@ export default function Page() {
                 }
             </main>
             {page === "signIn" ?
-                <BookPanel/> :
+                <PanelWord/> :
                 <QuizPanel/>
             }
         </div>

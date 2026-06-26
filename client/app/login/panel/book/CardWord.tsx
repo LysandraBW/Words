@@ -4,12 +4,12 @@ import clsx from "clsx";
 import { Volume2Icon } from "lucide-react";
 
 
-interface BookCardProps {
+interface CardWordProps {
     book: typeof books[number] | null;
 }
 
 
-export default function Word(props: BookCardProps) {
+export default function CardWord(props: CardWordProps) {
     return (
         <AnimatePresence>
             <motion.div
@@ -36,10 +36,10 @@ export default function Word(props: BookCardProps) {
                                 className="w-full h-3 mb-4 bg-neutral-200 rounded-md"
                             />
                             <div
-                                className="w-1/2 h-4 mb-2 bg-blue-500 rounded-md"
+                                className="w-1/2 h-4 mb-2 bg-neutral-500 rounded-md"
                             />
                             <div
-                                className="w-8 h-3 mb-4 bg-blue-200 rounded-md"
+                                className="w-8 h-3 mb-4 bg-neutral-200 rounded-md"
                             />
                             <div
                                 className="w-full grow bg-neutral-300 rounded-xl"
@@ -57,10 +57,10 @@ export default function Word(props: BookCardProps) {
                                 </span>
                             </span>
                             <div className="mb-3 flex flex-col gap-x-2">
-                                <span className="block text-xl text-blue-500 font-bold text-pretty wrap-anywhere">
+                                <span className="block text-xl text-neutral-700 font-bold text-pretty wrap-anywhere">
                                     {props.book.word}
                                 </span>
-                                <span className="block relative top-[1.5px] w-fit px-2 pb-0.5 bg-blue-200 rounded-md text-blue-500/75 text-xs tracking-wide font-medium">
+                                <span className="block relative top-[1.5px] w-fit px-2 pb-0.5 bg-neutral-200 rounded-md text-neutral-500/75 text-xs tracking-wide font-medium">
                                     {props.book.speech}
                                 </span>
                             </div>

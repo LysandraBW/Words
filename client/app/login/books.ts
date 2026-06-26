@@ -601,7 +601,7 @@ export const books = [
     "word": "social invisibility",
     "speech": "noun",
     "definition": "Being ignored or erased by dominant cultural structures despite physical presence.",
-    "background": "bg-[url('/images/invisible-man.jpg')]"
+    "background": "bg-[url('/images/the-invisible-man.jpg')]"
   },
   {
     "title": "Kokoro",

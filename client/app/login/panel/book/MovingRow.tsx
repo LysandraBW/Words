@@ -10,8 +10,8 @@ interface MovingRowProps {
     cols: number;
     reverse: boolean;
     books: (typeof books[number] | null)[];
-    selectedBook: typeof books[number] | null;
-    onSelectBook: (book: typeof books[number]) => void;
+    selectedBook?: typeof books[number] | null;
+    onSelectBook?: (book: typeof books[number]) => void;
 }
 
 
@@ -23,12 +23,12 @@ export default function MovingRow(props: MovingRowProps) {
     const distanceToTravel = `calc(-${buckets * 100}% - ${buckets * 8}px)`;
     
 
-    // useEffect(() => {
-    //     animation.current = animate(scope.current,
-    //         { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
-    //         { duration: 100, ease: "linear", repeat: Infinity }
-    //     );
-    // }, []);
+    useEffect(() => {
+        animation.current = animate(scope.current,
+            { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
+            { duration: 50, ease: "linear", repeat: Infinity }
+        );
+    }, []);
 
 
     return (

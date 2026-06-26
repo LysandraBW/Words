@@ -6,7 +6,7 @@ import Tilt from 'react-parallax-tilt';
 interface MovingRowElementProps {
     selected: boolean;
     book: (typeof books[number] | null);
-    onClickBook: (book: typeof books[number]) => void;
+    onClickBook?: (book: typeof books[number]) => void;
 }
 
 
@@ -23,13 +23,13 @@ export default function MovingRowElement(props: MovingRowElementProps) {
             className="relative w-[var(--w)] min-w-[var(--w)] h-full rounded-2xl overflow-hidden"
         >
             <div
-                onClick={() => props.book && props.onClickBook(props.book)}
+                onClick={() => props.book && props.onClickBook && props.onClickBook(props.book)}
                 className={clsx(
                     "relative w-full h-full",
                     "flex justify-center items-center"
                 )}
             >
-                <div className="absolute top-0 left-0 z-50 w-full h-full bg-neutral-950"/>
+                <div className={`absolute top-0 left-0 z-50 w-[200%] h-[200%] ${props.book?.background} blur`}/>
                 <img
                     src={props.book?.background.slice(9, -3)}
                     className="relative z-75 h-full"

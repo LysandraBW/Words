@@ -1,27 +1,14 @@
 import { Fragment } from "react/jsx-runtime";
 import { books } from "../../books";
-import Word from "./Word";
-import Curve from "./Curve";
-import HeroCard from "./Tagline";
+import CardWord from "./CardWord";
 import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";
+import Curve from "./Curve";
 
 
-export default function BookPanel() {
+export default function PanelWord() {
     const [book, setBook] = useState<typeof books[number] | null>(null);
     const [userSelected, setUserSelected] = useState(false);
-
-    const [questions, setQuestions] = useState<(typeof books[number])[]>();
-    const [questionIndex, setQuestionIndex] = useState(-1);
-    const [choices, setChoices] = useState<(number|null)[]>([null, null, null, null, null]);
-
-
-    useEffect(() => {
-        const shuffle = [...Array(books.length)].map((e, i) => i).sort(() => Math.random() - 0.5).slice(0, 5);
-        const questions = shuffle.map(i => books[i]);
-        setQuestions(questions);
-        setQuestionIndex(0);
-    }, []);
 
 
     useEffect(() => {
@@ -37,13 +24,6 @@ export default function BookPanel() {
         return () => clearInterval(id);
     }, [userSelected]); 
 
-    
-    const selectChoice = (choiceIndex: number) => {
-        const updatedChoices = [...choices];
-        updatedChoices[questionIndex] = choiceIndex;
-        setChoices(updatedChoices);
-    }
-
 
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
@@ -57,7 +37,6 @@ export default function BookPanel() {
                     pathClassName="fill-neutral-800"
                 />
                 <div className="relative w-full h-full rounded-tr-3xl rounded-bl-3xl overflow-clip">
-                    <HeroCard/>
                 </div>
             </div>
             <div className="relative w-full h-full p-2 flex flex-col gap-y-2 bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
@@ -90,7 +69,7 @@ export default function BookPanel() {
                     pathClassName="fill-neutral-800"
                 />
                 <div className="relative w-full h-full bg-neutral-100 rounded-3xl overflow-clip">
-                    <Word
+                    <CardWord
                         book={book}
                     />
                 </div>
