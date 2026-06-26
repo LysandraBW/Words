@@ -1,6 +1,5 @@
-import clsx from "clsx";
-import { books } from "../../books";
-import { distance, useAnimate } from "framer-motion";
+import { books } from "../books";
+import { useAnimate } from "framer-motion";
 import { Fragment, useEffect, useRef } from "react";
 import MovingRowElement from "./MovingRowElement";
 

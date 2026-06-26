@@ -1,5 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
-import { books } from "../../books";
+import { books } from "../books";
 import CardWord from "./CardWord";
 import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";

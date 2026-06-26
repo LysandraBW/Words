@@ -1,10 +1,9 @@
 import { Fragment } from "react/jsx-runtime";
-import { books } from "../../books";
+import { books } from "../books";
 import CardQuiz from "./CardQuiz";
 import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";
 import Curve from "./Curve";
-import { shuffle } from "@/utilities/array";
 
 
 export interface Question {

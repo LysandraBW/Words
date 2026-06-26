@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { books } from "../../books";
+import { books } from "../books";
 import Tilt from 'react-parallax-tilt';
 
 
@@ -29,7 +29,7 @@ export default function MovingRowElement(props: MovingRowElementProps) {
                     "flex justify-center items-center"
                 )}
             >
-                <div className={`absolute top-0 left-0 z-50 w-[200%] h-[200%] ${props.book?.background} blur`}/>
+                <div className={`absolute -top-1/2 -left-1/2 z-50 w-[200%] h-[200%] ${props.book?.background} blur saturate-120`}/>
                 <img
                     src={props.book?.background.slice(9, -3)}
                     className="relative z-75 h-full"
