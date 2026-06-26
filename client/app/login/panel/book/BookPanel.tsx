@@ -11,6 +11,18 @@ export default function BookPanel() {
     const [book, setBook] = useState<typeof books[number] | null>(null);
     const [userSelected, setUserSelected] = useState(false);
 
+    const [questions, setQuestions] = useState<(typeof books[number])[]>();
+    const [questionIndex, setQuestionIndex] = useState(-1);
+    const [choices, setChoices] = useState<(number|null)[]>([null, null, null, null, null]);
+
+
+    useEffect(() => {
+        const shuffle = [...Array(books.length)].map((e, i) => i).sort(() => Math.random() - 0.5).slice(0, 5);
+        const questions = shuffle.map(i => books[i]);
+        setQuestions(questions);
+        setQuestionIndex(0);
+    }, []);
+
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -26,9 +38,16 @@ export default function BookPanel() {
     }, [userSelected]); 
 
     
+    const selectChoice = (choiceIndex: number) => {
+        const updatedChoices = [...choices];
+        updatedChoices[questionIndex] = choiceIndex;
+        setChoices(updatedChoices);
+    }
+
+
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
-            <div className="absolute top-0 right-0 z-100 w-[calc(50%-12px)] h-[calc(50%-5px)] mr-2 mt-2 flex flex-col items-center justify-center gap-y-4 bg-neutral-800 rounded-bl-4xl rounded-tr-2xl">
+            <div className="absolute top-0 right-0 z-100 w-[calc(50%-12px)] h-[calc(45%-5px)] mr-2 mt-2 flex flex-col items-center justify-center gap-y-4 bg-neutral-800 rounded-bl-4xl rounded-tr-2xl">
                 <Curve
                     className="absolute top-0 -left-6 w-6 h-6 rotate-270"
                     pathClassName="fill-neutral-800"

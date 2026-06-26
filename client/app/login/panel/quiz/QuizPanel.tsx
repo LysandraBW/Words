@@ -30,51 +30,44 @@ export default function QuizPanel() {
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 flex flex-col bg-neutral-800 rounded-4xl">
             <div className="absolute top-0 left-0 w-full h-full overflow-clip bg-neutral-900 rounded-4xl">
-                
-                {[...Array(22)].map((e, i) => (
-                    <Fragment key={i}>
-                        <Circle
-                            i={i - 10}
-                        />
-                    </Fragment>
-                    // <motion.svg 
-                    //     key={i}
-                    //     xmlns="http://www.w3.org/2000/svg"
-                    //     viewBox="0 0 150 150"
-                    //     className="absolute block overflow-visible drop-shadow-md"
-                    //     style={{
-                    //         top: `${(i-20)*32}px`,
-                    //         left: `${(i-20)*32}px`,
-                    //         width: `calc(100% - ${(i-20)*64}px)`,
-                    //         height: `calc(100% - ${(i-20)*64}px)`,
-                    //         // transform: `rotate(${(i % 2 === 0 ? 1 : -1)*6}deg)`
-                    //     }}
-                    //     // initial={{ rotate: (i % 2 === 0 ? 1 : -1)*6 }}
-                    //     // animate={{ rotate: -(i % 2 === 0 ? 1 : -1)*6 }}
-                    //     initial={{ rotate: 0 }}
-                    //     animate={{ rotate: 0 + 360 }}
-                    //     transition={{ 
-                    //         duration: 5, 
-                    //         repeat: Infinity, 
-                    //         ease: "linear"
-                    //         // repeatType: "reverse"
-                    //     }}
-                    // >
-                    //     <path 
-                    //         // d="M 75 75 m 75 0 a 75 75 0 1 0 -150 0 a 75 75 0 1 0 150 0"
-                    //         d="M 0 60 A 75 75 0 0 1 75 0 A 75 75 0 0 1 150 60 M 150 90 A 75 75 0 0 1 75 150 A 75 75 0 0 1 0 90 M 0 90"
-                    //         // d="M 0 75 A 75 75 0 0 1 75 0 A 75 75 0 0 1 150 75 M 150 90 A 75 75 0 0 1 75 165 A 75 75 0 0 1 0 90 M 0 90"
-                    //         vectorEffect="non-scaling-stroke"
-                    //         stroke="#262626" 
-                    //         strokeWidth={15} 
-                    //         strokeLinecap="round"
-                    //         fill="none"
-                    //     />
-                    // </motion.svg>
-                ))}
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 150 150"
+                    className="absolute top-0 left-0 w-full h-full block overflow-visible"
+                    preserveAspectRatio="xMidYMid slice"
+                >
+                    <defs>
+                        <mask 
+                            id="swirls"
+                            x="0"
+                            y="0"
+                            width="150"
+                            height="150"
+                        >
+                            <rect width="150" height="150" fill="black"/>
+                            {[...Array(25)].map((e, i) => (
+                                <Fragment key={i}>
+                                    <Circle
+                                        i={i - 10}
+                                        size={25}
+                                    />
+                                </Fragment>
+                            ))}
+                        </mask>
+                    </defs>
+                    <image
+                        href="https://images.pexels.com/photos/16452613/pexels-photo-16452613.jpeg"
+                        x="0"
+                        y="0"
+                        width="100%"
+                        height="100%"
+                        preserveAspectRatio="xMidYMid slice"
+                        mask="url(#swirls)"
+                    />
+                </svg>
             </div>
-            {/* <div className="relative z-100 w-full h-full flex items-center justify-center">
-                <div className="w-1/2 flex flex-col bg-neutral-900 rounded-3xl ring-6 ring-neutral-950/60">
+            <div className="relative z-100 w-full h-full flex items-center justify-center">
+                <div className="w-[524px] flex flex-col bg-neutral-900 rounded-3xl ring-6 ring-neutral-800">
                     <div className="w-full h-12 px-4 py-4 flex items-center gap-x-2 rounded-t-3xl">
                         <div className="w-3 h-3 aspect-square bg-green-500 rounded-full">
                         </div>
@@ -90,18 +83,18 @@ export default function QuizPanel() {
                     </div>
                     <div className="w-full flex flex-col grow justify-center">
                         <div className="w-full h-full pb-4 flex flex-col gap-4">
-                            <div className="w-full min-h-1/2 p-1 flex flex-col bg-blue-500">
-                                <div className="p-1 w-full flex gap-1 border border-blue-600 rounded-lg shadow-xs">
-                                    <span className={`block w-min px-1 py-0.5 flex items-center gap-1 border border-blue-600 rounded-md shadow-xs text-xs text-blue-200 font-medium tracking-wide whitespace-nowrap`}>
+                            <div className="w-full min-h-1/2 p-1 flex flex-col bg-neutral-300">
+                                <div className="p-1 w-full flex gap-1 bg-neutral-300 border border-neutral-200 rounded-lg shadow-xs">
+                                    <span className={`block w-min px-1 py-0.5 flex items-center gap-1 border border-neutral-200 rounded-md shadow-xs text-xs text-neutral-400 font-medium tracking-wide whitespace-nowrap`}>
                                         <Clock4Icon size={12}/> 00:00:00s
                                     </span>
-                                    <span className={`block w-min px-1 py-0.5 flex items-center gap-1 border border-blue-600 rounded-md shadow-xs text-xs text-blue-200 font-medium tracking-wide whitespace-nowrap`}>
+                                    <span className={`block w-min px-1 py-0.5 flex items-center gap-1 border border-neutral-200 rounded-md shadow-xs text-xs text-neutral-400 font-medium tracking-wide whitespace-nowrap`}>
                                         <CircleQuestionMark size={12}/> {questionIndex+1} out of {questions?.length}
                                     </span>
                                 </div>
                                 <div className="min-h-[78px] flex flex-col grow items-center justify-center">
                                     {(questions && questionIndex !== -1) &&
-                                        <span className="block text-2xl text-neutral-100 font-semibold whitespace-nowrap">
+                                        <span className="block text-2xl text-neutral-800 font-semibold whitespace-nowrap">
                                             {[...questions[questionIndex].word].map((c, i, arr) => (i === 0 || (i > 0 && (arr[i-1] === " " || arr[i-1] === "-"))) ? c.toLowerCase() : c.toLowerCase())}
                                         </span>
                                     }
@@ -142,7 +135,7 @@ export default function QuizPanel() {
                         </div>
                     </div>
                 </div>
-            </div> */}
+            </div>
         </div>
     )
 }

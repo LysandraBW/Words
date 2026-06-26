@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { books } from "./books";
+import { books } from "../../books";
 import { distance, useAnimate } from "framer-motion";
 import { Fragment, useEffect, useRef } from "react";
 import MovingRowElement from "./MovingRowElement";
@@ -23,12 +23,12 @@ export default function MovingRow(props: MovingRowProps) {
     const distanceToTravel = `calc(-${buckets * 100}% - ${buckets * 8}px)`;
     
 
-    useEffect(() => {
-        animation.current = animate(scope.current,
-            { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
-            { duration: 100, ease: "linear", repeat: Infinity }
-        );
-    }, []);
+    // useEffect(() => {
+    //     animation.current = animate(scope.current,
+    //         { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
+    //         { duration: 100, ease: "linear", repeat: Infinity }
+    //     );
+    // }, []);
 
 
     return (

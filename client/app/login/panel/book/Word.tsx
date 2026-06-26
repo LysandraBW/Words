@@ -50,7 +50,7 @@ export default function Word(props: BookCardProps) {
                         <>
                             <span className="block mb-1 text-xs tracking-wide">
                                 <span className="block">
-                                    {props.book.author}
+                                    {props.book.author}'s
                                 </span>
                                 <span className="block font-medium">
                                     {props.book.title}
@@ -60,11 +60,11 @@ export default function Word(props: BookCardProps) {
                                 <span className="block text-xl text-blue-500 font-bold text-pretty wrap-anywhere">
                                     {props.book.word}
                                 </span>
-                                <span className="block relative top-[1.5px] w-fit px-2 py-0.5 bg-blue-200 rounded-md text-blue-500/75 text-xs tracking-wide font-medium">
+                                <span className="block relative top-[1.5px] w-fit px-2 pb-0.5 bg-blue-200 rounded-md text-blue-500/75 text-xs tracking-wide font-medium">
                                     {props.book.speech}
                                 </span>
                             </div>
-                            <p className="text-sm overflow-hidden text-ellipsis line-clamp-4">
+                            <p className="text-base tracking-wide overflow-hidden text-ellipsis line-clamp-4">
                                 {props.book.definition}
                             </p>
                         </>

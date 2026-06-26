@@ -15,41 +15,34 @@ export default function Choice(props: ChoiceProps) {
         <button 
             onClick={props.onClick}
             className={clsx(
-                "relative w-full h-full p-2 grid grid-cols-[auto_1fr] justify-center rounded-xl shadow-md",
-                "border border-neutral-800 hover:scale-97 hover:shadow-xs transition-all",
-                (props.selected && props.flag === true) && "!cursor-default bg-green-500/1 border !border-green-500/40",
-                (props.selected && props.flag === false) && "!cursor-default bg-red-500/1 border !border-red-500/40"
+                "relative w-full h-full p-2 grid grid-cols-[auto_1fr] gap-x-2 justify-center bg-neutral-200 rounded-xl [&:nth-child(3)]:rounded-bl-2xl overflow-clip",
+                "hover:scale-97 transition-all",
+                props.answered && "!cursor-default"
             )}
         >
-            <div className={clsx(
-                "w-4 h-4 flex justify-center items-center rounded-full",
-                "bg-neutral-900 border border-neutral-700/50",
-                (props.answered && props.flag === true) && "!bg-green-500 !border-green-500/30",
-                (props.answered && props.flag === false) && "!bg-red-500 !border-red-500/30",
-            )}>
+            <div 
+                className={clsx(
+                    "w-4 h-4 flex justify-center items-center bg-neutral-300 rounded-full",
+                    (props.answered && props.flag === true) && "!bg-blue-500",
+                    (props.answered && props.flag === false) && "!bg-red-600",
+                )}
+            >
                 {(props.answered && props.flag === true) &&
                     <CheckIcon
                         size={8}
                         strokeWidth={5}
-                        className="stroke-green-800"
+                        className="stroke-neutral-100"
                     />
                 }
                 {(props.answered && props.flag === false) &&
                     <XIcon
                         size={8}
                         strokeWidth={5}
-                        className="stroke-red-800"
+                        className="stroke-neutral-100"
                     />
                 }
             </div>
-            <span 
-                className={clsx(
-                    "self-center text-sm text-neutral-500/75 text-center tracking-wide",
-                    (props.selected && props.flag === true) && "!text-green-400/75",
-                    (props.selected && props.flag === false) && "!text-red-400/75",
-
-                )}
-            >
+            <span className="pr-2 self-center text-base text-neutral-500/75 text-center font-medium tracking-wide">
                 {props.content}
             </span>
         </button>
