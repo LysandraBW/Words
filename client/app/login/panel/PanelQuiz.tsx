@@ -4,6 +4,7 @@ import CardQuiz from "./CardQuiz";
 import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";
 import Curve from "./Curve";
+import { nanumPenScript } from "@/app/fonts";
 
 
 export interface Question {
@@ -45,20 +46,6 @@ export default function PanelQuiz() {
         setQuestionIndex(0);
     }, []);
 
-
-    // useEffect(() => {
-    //     const id = setInterval(() => {
-    //         if (!questions)
-    //             return;
-    //         // Source - https://stackoverflow.com/a/1527834
-    //         // Posted by Darin Dimitrov
-    //         // Retrieved 2026-05-11, License - CC BY-SA 2.5
-    //         const n = Math.floor(Math.random() * (questions.length - 1));
-    //         setQuestionIndex(n);
-    //     }, 15 * 1000);
-    //     return () => clearInterval(id);
-    // }, [questions?.length]);
-
     
     const selectChoice = (choiceIndex: number) => {
         if (!questions)
@@ -86,7 +73,7 @@ export default function PanelQuiz() {
 
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
-            <div className="absolute top-0 right-0 z-100 w-[calc(50%-12px)] h-[calc(45%-5px)] mr-2 mt-2 flex flex-col items-center justify-center gap-y-4 bg-neutral-800 rounded-bl-4xl rounded-tr-2xl">
+            <div className="absolute top-0 right-0 z-100 w-[calc(50%-12px)] h-[calc(45%-5px)] mr-2 mt-2 flex flex-col items-center justify-center gap-y-4 bg-transparent rounded-bl-4xl rounded-tr-2xl">
                 <Curve
                     className="absolute top-0 -left-6 w-6 h-6 rotate-270"
                     pathClassName="fill-neutral-800"
@@ -96,7 +83,19 @@ export default function PanelQuiz() {
                     pathClassName="fill-neutral-800"
                 />
                 <div className="relative w-full h-full rounded-tr-3xl rounded-bl-3xl overflow-clip">
-                    {/* Needs Something */}
+                    <svg
+                        width="100%"
+                        height="100%"
+                    >
+                        <rect width="100%" height="100%" x="0" y="0" fillOpacity={1} mask="url(#knockout-text)" className="fill-neutral-800"/>
+                        <mask id="knockout-text">
+                            <rect width="100%" height="100%" fill="#fff" x="0" y="0"/>
+                            <rect width="96%" height="95%" fill="none" stroke="#000" strokeWidth={5} x="3%" y="1%" rx={16}/>
+                            <text x="50%" y="50%" fill="#000" textAnchor="middle" dominantBaseline="middle" className={nanumPenScript.className} fontSize={128} fontWeight={500}>WORDS</text>
+                            <text x="85%" y="30%" fill="#000" textAnchor="middle" dominantBaseline="middle" className={nanumPenScript.className} fontSize={24} fontWeight={500}>TM</text>
+                        </mask>
+                        <text x="50%" y="70%" fill="#525252" textAnchor="middle" dominantBaseline="middle" className={nanumPenScript.className} fontSize={24} fontWeight={500}>Worlds Within Words</text>                    
+                    </svg>
                 </div>
             </div>
             <div className="relative w-full h-full p-2 flex flex-col gap-y-2 bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">

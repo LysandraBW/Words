@@ -20,7 +20,7 @@ export default function MovingRowElement(props: MovingRowElementProps) {
             glarePosition="bottom"
             glareBorderRadius="0.75rem"
             style={{"clipPath": "inset(0 0 0 0 1rem)"} as any}
-            className="relative w-[var(--w)] min-w-[var(--w)] h-full rounded-2xl overflow-hidden"
+            className="relative w-[var(--w)] min-w-[var(--w)] h-full rounded-lg overflow-hidden"
         >
             <div
                 onClick={() => props.book && props.onClickBook && props.onClickBook(props.book)}

@@ -59,7 +59,7 @@ export default function CardQuiz(props: CardQuizProps) {
                                             />
                                         </button>
                                     </div>
-                                    <span className="max-w-[320px] text-base text-neutral-700 font-semibold text-center tracking-wide">
+                                    <span className="max-w-[320px] text-base text-neutral-700 font-medium text-center tracking-wide">
                                         {props.question.label.toLowerCase().slice(0, -1)}
                                     </span>
                                 </div>

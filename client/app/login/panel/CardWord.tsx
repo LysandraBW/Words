@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { books } from "../../books";
+import { books } from "../books";
 import clsx from "clsx";
 import { Volume2Icon } from "lucide-react";
 
