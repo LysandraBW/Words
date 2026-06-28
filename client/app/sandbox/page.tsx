@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { books } from "../login/books"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { shuffle } from "@/utilities/array";
 
 export default function Page() {
     const [sortedBooks, setSortedBooks] = useState([...books]);
@@ -29,19 +30,28 @@ export default function Page() {
     }
 
     useEffect(() => {
+        const updatedSortedBooks = [...sortedBooks];
+        shuffle(updatedSortedBooks);
+        // setSortedBooks(updatedSortedBooks);
+    }, []);
+
+    useEffect(() => {
         console.log(sortedBooks);
     }, [sortedBooks]);
 
     return (
-        <div className="w-screen max-w-screen grid grid-cols-20 gap-4 gap-y-8 overflow-x-clip">
+        <div className="grid grid-cols-6 overflow-x-clip">
             {sortedBooks.map((book, i) => (
                 <div 
                     key={book.title}
-                    className="w-full aspect-1/2 flex flex-col items-center gap-2 overflow-clip"
+                    className="w-full aspect-1/2 flex flex-col items-center gap-0 overflow-clip"
                 >
                     <div 
                         tabIndex={0}
-                        className={`w-full aspect-1/2 bg-center bg-contain bg-no-repeat ${book.background} focus:border focus:border-blue-500`}
+                        style={{
+                            backgroundImage: `url(${book.background})`
+                        }}
+                        className={`w-full aspect-1/2 bg-center bg-cover object-contain bg-no-repeat focus:border focus:border-blue-500`}
                         onKeyDown={(e) => {
                             if (e.key === "ArrowLeft") {
                                 moveLeft(i);
@@ -51,7 +61,7 @@ export default function Page() {
                             }
                         }}
                     />
-                    <div className="flex gap-4">
+                    {/* <div className="flex gap-4">
                         <button 
                             onClick={() => moveLeft(i)}
                             className="p-1 bg-neutral-100 rounded-sm"
@@ -72,7 +82,7 @@ export default function Page() {
                                 className="stroke-blue-500"
                             />
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             ))}
         </div>

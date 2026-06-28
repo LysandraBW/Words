@@ -25,7 +25,7 @@ export default function MovingRow(props: MovingRowProps) {
     useEffect(() => {
         animation.current = animate(scope.current,
             { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
-            { duration: 50, ease: "linear", repeat: Infinity }
+            { duration: 100, ease: "linear", repeat: Infinity }
         );
     }, []);
 
@@ -34,8 +34,16 @@ export default function MovingRow(props: MovingRowProps) {
         <div
             style={{ '--colH': `calc((100% - ${8 * (props.rows - 1)}px) / ${props.rows})` } as any}
             className="h-[var(--colH)] min-h-[var(--colH)] max-h-[var(--colH)] w-full"
-            onMouseEnter={() => animation.current?.pause()}
-            onMouseLeave={() => animation.current?.play()}
+            onMouseEnter={() => {
+                if (!animation.current)
+                    return;
+                animation.current.speed = 0.5;
+            }}
+            onMouseLeave={() => {
+                 if (!animation.current)
+                    return;
+                animation.current.speed = 1;
+            }}
         >
             <div
                 ref={scope}

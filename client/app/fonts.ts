@@ -1,4 +1,4 @@
-import { Nanum_Pen_Script, Gamja_Flower, Playfair_Display, Pixelify_Sans, Instrument_Serif, Source_Serif_4, Nunito } from 'next/font/google';
+import { Nanum_Pen_Script, Gamja_Flower, Playfair_Display, Pixelify_Sans, Instrument_Serif, Source_Serif_4, Nunito, Kablammo, Gluten, DynaPuff, Sniglet } from 'next/font/google';
 import localFont from 'next/font/local'
 
 export const abcDiatype = localFont({
@@ -57,4 +57,24 @@ export const instrumentSerif = Instrument_Serif({
 export const nunito = Nunito({
 	subsets: ['latin'],
 	weight: ['500', '600', '700', '800']
+});
+
+export const kablammoFont = Kablammo({
+	subsets: ['latin'],
+	weight: ['400']
+});
+
+export const glutenFont = Gluten({
+	subsets: ['latin'],
+	weight: ['400', '500', '600', '700', '800']
+});
+
+export const dynaPuffFont = DynaPuff({
+	subsets: ['latin'],
+	weight: ['400', '500', '600', '700']
+});
+
+export const snigletFont = Sniglet({
+	subsets: ['latin'],
+	weight: ['400', '800']
 });

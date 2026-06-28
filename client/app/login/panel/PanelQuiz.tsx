@@ -4,7 +4,9 @@ import CardQuiz from "./CardQuiz";
 import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";
 import Curve from "./Curve";
-import { nanumPenScript } from "@/app/fonts";
+import { shuffle } from "@/utilities/array";
+import { dynaPuffFont, kablammoFont, nanumPenScript } from "@/app/fonts";
+import MovingBooks from "./MovingBooks";
 
 
 export interface Question {
@@ -72,51 +74,55 @@ export default function PanelQuiz() {
 
 
     return (
-        <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl">
-            <div className="absolute top-0 right-0 z-100 w-[calc(50%-12px)] h-[calc(45%-5px)] mr-2 mt-2 flex flex-col items-center justify-center gap-y-4 bg-transparent rounded-bl-4xl rounded-tr-2xl">
+        <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl overflow-hidden">
+            <div className="absolute top-2 right-2 z-100 w-[128px] h-[52px] bg-transparent">
                 <Curve
-                    className="absolute top-0 -left-6 w-6 h-6 rotate-270"
+                    className="absolute top-0 -left-6 w-6 h-6 -rotate-90"
                     pathClassName="fill-neutral-800"
                 />
                 <Curve
-                    className="absolute -bottom-6 right-0 w-6 h-6 rotate-270"
+                    className="absolute -bottom-6 right-0 w-6 h-6 -rotate-90"
                     pathClassName="fill-neutral-800"
                 />
-                <div className="relative w-full h-full rounded-tr-3xl rounded-bl-3xl overflow-clip">
-                    <svg
-                        width="100%"
-                        height="100%"
-                    >
-                        <rect width="100%" height="100%" x="0" y="0" fillOpacity={1} mask="url(#knockout-text)" className="fill-neutral-800"/>
-                        <mask id="knockout-text">
-                            <rect width="100%" height="100%" fill="#fff" x="0" y="0"/>
-                            <rect width="96%" height="95%" fill="none" stroke="#000" strokeWidth={5} x="3%" y="1%" rx={16}/>
-                            <text x="50%" y="50%" fill="#000" textAnchor="middle" dominantBaseline="middle" className={nanumPenScript.className} fontSize={128} fontWeight={500}>WORDS</text>
-                            <text x="85%" y="30%" fill="#000" textAnchor="middle" dominantBaseline="middle" className={nanumPenScript.className} fontSize={24} fontWeight={500}>TM</text>
-                        </mask>
-                        <text x="50%" y="70%" fill="#525252" textAnchor="middle" dominantBaseline="middle" className={nanumPenScript.className} fontSize={24} fontWeight={500}>Worlds Within Words</text>                    
-                    </svg>
-                </div>
+                <svg
+                    width="100%"
+                    height="100%"
+                    className="rounded-bl-4xl backdrop-blur-sm"
+                >
+                    <rect width="100%" height="100%" x="0" y="0" fillOpacity={1} mask="url(#knockout-text)" className="fill-neutral-800"/>
+                    <mask id="knockout-text">
+                        <rect width="100%" height="100%" fill="#fff" x="0" y="0"/>
+                        <text 
+                            x="50%" 
+                            y="45%" 
+                            fill="#000" 
+                            textAnchor="middle" 
+                            dominantBaseline="middle" 
+                            letterSpacing={"-3px"} 
+                            className={`${dynaPuffFont.className}`} 
+                            fontSize={32} 
+                            fontWeight={400}
+                            style={{ 
+                                transformBox: 'fill-box', 
+                                transformOrigin: 'center',
+                                transform: 'scaleY(1)'
+                            }}
+                        >
+                            WORDS
+                        </text>
+                    </mask>
+                </svg>
             </div>
-            <div className="relative w-full h-full p-2 flex flex-col gap-y-2 bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
-                {[...Array(3)].map((e, i) => (
-                    <Fragment key={i}>
-                        <MovingRow
-                            rows={3}
-                            cols={6}
-                            books={books.slice(i*26, (i+1)*26)}
-                            reverse={i % 2 === 0}
-                        />
-                    </Fragment>
-                ))}
+            <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
+                <MovingBooks/>
             </div>
-            <div className="absolute bottom-0 left-0 w-[calc(50%-12px)] h-[calc(33%-5px)] ml-2 mb-2 p-2 pb-0 pl-0 bg-neutral-800 rounded-tr-4xl rounded-bl-2xl">
+            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] ml-2 mb-2 p-2 pb-0 bg-neutral-800 rounded-t-4xl rounded-b-0">
+                <Curve
+                    className="absolute bottom-0 -left-6 w-6 h-6 rotate-0"
+                    pathClassName="fill-neutral-800"
+                />
                 <Curve
                     className="absolute bottom-0 -right-6 w-6 h-6 rotate-90"
-                    pathClassName="fill-neutral-800"
-                />
-                <Curve
-                    className="absolute -top-6 left-0 w-6 h-6 rotate-90"
                     pathClassName="fill-neutral-800"
                 />
                 <div className="relative w-full h-full bg-neutral-100 rounded-3xl overflow-clip">
