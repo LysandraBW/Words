@@ -14,8 +14,6 @@ export default function Page() {
         const updatedSortedBooks = [...sortedBooks];
         const j = i - 1;
         [updatedSortedBooks[i], updatedSortedBooks[j]] = [updatedSortedBooks[j], updatedSortedBooks[i]];
-        console.log(sortedBooks);
-        console.log(updatedSortedBooks);
         setSortedBooks(updatedSortedBooks);
     }
 
@@ -28,16 +26,7 @@ export default function Page() {
         [updatedSortedBooks[i], updatedSortedBooks[j]] = [updatedSortedBooks[j], updatedSortedBooks[i]];
         setSortedBooks(updatedSortedBooks);
     }
-
-    useEffect(() => {
-        const updatedSortedBooks = [...sortedBooks];
-        shuffle(updatedSortedBooks);
-        // setSortedBooks(updatedSortedBooks);
-    }, []);
-
-    useEffect(() => {
-        console.log(sortedBooks);
-    }, [sortedBooks]);
+    
 
     return (
         <div className="grid grid-cols-6 overflow-x-clip">

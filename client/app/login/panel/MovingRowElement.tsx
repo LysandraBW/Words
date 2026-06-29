@@ -44,7 +44,7 @@ export default function MovingRowElement(props: MovingRowElementProps) {
                 <div
                     className={clsx(
                         `absolute top-0 left-0 z-90 w-full h-full bg-black/50 hover:bg-black/0 transition-all`,
-                        props.isSelected && "bg-black/0"
+                        props.isSelected && "!bg-black/0"
                     )}
                 />
                 <img

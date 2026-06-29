@@ -61,7 +61,7 @@ export default function CreateDeck(props: CreateDeckProps) {
                     }
                 }
 
-                console.log(booksToChaptersToWords);
+                // console.log(booksToChaptersToWords);
                 setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {

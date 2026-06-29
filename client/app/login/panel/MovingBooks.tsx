@@ -42,8 +42,7 @@ export default function MovingBooks(props: MovingBooksProps) {
     useEffect(() => {
         if ((!visibleBooks.size || intervalRef.current) && (visibleBooks.has(selectedBook?.title || "")))
             return;
-
-        console.log('Start', visibleBooks);
+        
         startBookCycle(visibleBooks);
     }, [visibleBooks]);
 
@@ -100,12 +99,9 @@ export default function MovingBooks(props: MovingBooksProps) {
     }
 
     const selectBook = (visibleBooks: Set<string>) => {
-        console.log(2, visibleBooks)
         const bookTitles = [...visibleBooks];
         const nextBookTitle = bookTitles[Math.floor(Math.random() * bookTitles.length)];
         const nextBook = books.find(book => book.title === nextBookTitle) || null;
-        
-        console.log(nextBookTitle)
         setSelectedBook(nextBook);
     }
 
