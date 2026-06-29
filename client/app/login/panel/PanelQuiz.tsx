@@ -1,15 +1,13 @@
-import { Fragment } from "react/jsx-runtime";
-import { books } from "../books";
+import { Book, books } from "../books";
 import CardQuiz from "./CardQuiz";
-import MovingRow from "./MovingRow";
 import { useEffect, useState } from "react";
 import Curve from "./Curve";
-import { shuffle } from "@/utilities/array";
-import { dynaPuffFont, kablammoFont, nanumPenScript } from "@/app/fonts";
+import { dynaPuffFont } from "@/app/fonts";
 import MovingBooks from "./MovingBooks";
 
 
 export interface Question {
+    title: string;
     label: string;
     options: string[];
     correctOptionIndex: number;
@@ -37,6 +35,7 @@ export default function PanelQuiz() {
             options.splice(correctOptionIndex, 0, book.word);
 
             questions.push({
+                title: book.title,
                 label: book.definition,
                 options: options,
                 correctOptionIndex: correctOptionIndex,
@@ -60,7 +59,9 @@ export default function PanelQuiz() {
     const prevQuestion = () => {
         if (!questions)
             return;
-        setQuestionIndex(questionIndex === questions.length - 1 ? questions.length - 1 : questionIndex - 1);
+
+        const prevQuestionIndex = questionIndex === questions.length - 1 ? questions.length - 1 : questionIndex - 1;
+        setQuestionIndex(prevQuestionIndex);
     }
 
 
@@ -114,7 +115,14 @@ export default function PanelQuiz() {
                 </svg>
             </div>
             <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
-                <MovingBooks/>
+                <MovingBooks
+                    onBookSelected={(book: Book) => {
+                        if (!questions)
+                            return;
+                        const questionIndex = questions.findIndex(question => question.title === book.title);
+                        setQuestionIndex(questionIndex);
+                    }}
+                />
             </div>
             <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] ml-2 mb-2 p-2 pb-0 bg-neutral-800 rounded-t-4xl rounded-b-0">
                 <Curve

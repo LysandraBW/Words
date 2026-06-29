@@ -576,20 +576,20 @@ export const books = [
         "background": "/images/the-idiot.jpg"
     },
     {
-        "title": "Coraline",
-        "author": "Neil Gaiman",
-        "word": "uncanniness",
-        "speech": "noun",
-        "definition": "The unsettling sensation produced by something simultaneously familiar and alien.",
-        "background": "/images/coraline.jpg"
-    },
-    {
         "title": "The Brothers Karamazov",
         "author": "Fyodor Dostoevsky",
         "word": "theodicy",
         "speech": "noun",
         "definition": "The attempt to reconcile a benevolent God with the existence of suffering.",
         "background": "/images/the-brothers-karamazov-2.jpg"
+    },
+    {
+        "title": "Coraline",
+        "author": "Neil Gaiman",
+        "word": "uncanniness",
+        "speech": "noun",
+        "definition": "The unsettling sensation produced by something simultaneously familiar and alien.",
+        "background": "/images/coraline.jpg"
     },
     {
         "title": "Pride and Prejudice",
@@ -679,4 +679,7 @@ export const books = [
         "definition": "The slow, patient process of bonding through mutual responsibility and care.",
         "background": "/images/the-little-prince.jpg"
     }
-]
+];
+
+export type Book = typeof books[number];
+export type BookTitle = string;

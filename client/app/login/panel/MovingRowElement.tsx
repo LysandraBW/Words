@@ -1,12 +1,14 @@
 import clsx from "clsx";
-import { books } from "../books";
+import { Book } from "../books";
 import Tilt from 'react-parallax-tilt';
 
 
 interface MovingRowElementProps {
-    selected: boolean;
-    book: (typeof books[number] | null);
-    onClickBook?: (book: typeof books[number]) => void;
+    book: Book;
+    bookRefCallback: any;
+    isSelected: boolean;
+    isDuplicate: boolean;
+    onClickBook: (book: Book) => void;
 }
 
 
@@ -23,7 +25,13 @@ export default function MovingRowElement(props: MovingRowElementProps) {
             className="relative w-[var(--w)] min-w-[var(--w)] h-full overflow-hidden hover:z-100 book"
         >
             <div
-                onClick={() => props.book && props.onClickBook && props.onClickBook(props.book)}
+                ref={props.bookRefCallback}
+                data-title={!props.isDuplicate ? props.book?.title : ""}
+                onClick={() => {
+                    if (!props.book || !props.onClickBook)
+                        return;
+                    props.onClickBook(props.book);
+                }}
                 className={clsx(
                     "relative w-full h-full",
                     "flex justify-center items-center"
@@ -36,12 +44,15 @@ export default function MovingRowElement(props: MovingRowElementProps) {
                 <div
                     className={clsx(
                         `absolute top-0 left-0 z-90 w-full h-full bg-black/50 hover:bg-black/0 transition-all`,
-                        props.selected && "bg-black/0"
+                        props.isSelected && "bg-black/0"
                     )}
                 />
                 <img
                     src={props.book?.background}
-                    className="relative z-75 h-full"
+                    className={clsx(
+                        "relative z-75 h-full",
+                        props.book?.title === "Heart of Darkness" && "w-full object-center object-cover"
+                    )}
                 />
             </div>
         </Tilt>
