@@ -88,7 +88,7 @@ export default function PanelQuiz() {
                 <svg
                     width="100%"
                     height="100%"
-                    className="rounded-bl-4xl backdrop-blur-sm"
+                    className="rounded-bl-4xl backdrop-blur-sm saturate-200"
                 >
                     <rect width="100%" height="100%" x="0" y="0" fillOpacity={1} mask="url(#knockout-text)" className="fill-neutral-800"/>
                     <mask id="knockout-text">

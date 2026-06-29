@@ -26,7 +26,7 @@ export default function MovingRow(props: MovingRowProps) {
     useEffect(() => {
         animationRef.current = animate(scope.current,
             { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
-            { duration: 100, ease: "linear", repeat: Infinity }
+            { duration: 200, ease: "linear", repeat: Infinity }
         );
     }, []);
 
