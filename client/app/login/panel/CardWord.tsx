@@ -6,12 +6,16 @@ import { Volume2Icon } from "lucide-react";
 
 interface CardWordProps {
     book: typeof books[number] | null;
+    pauseInterval: () => void;
+    startInterval: () => void;
 }
 
 
 export default function CardWord(props: CardWordProps) {
     return (
-        <AnimatePresence>
+        <AnimatePresence
+            initial={false}
+        >
             <motion.div
                 key={props.book?.title || ''}
                 initial={{ y: "100%" }}
@@ -23,9 +27,16 @@ export default function CardWord(props: CardWordProps) {
                 <div
                     className={clsx(
                         "h-full aspect-2/3",
-                        "bg-neutral-300 bg-cover bg-center rounded-2xl",
+                        "bg-neutral-800 bg-cover bg-center rounded-2xl",
                         props.book && props.book.background
                     )}
+                    style={props.book ? {
+                        background: `url(${props.book?.background})`,
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover'
+                    } : {}}
+                    onMouseEnter={props.pauseInterval}
+                    onMouseLeave={props.startInterval}
                 />
                 <div
                     className="w-full min-w-0 h-full flex flex-col"
@@ -33,16 +44,16 @@ export default function CardWord(props: CardWordProps) {
                     {!props.book &&
                         <>
                             <div
-                                className="w-full h-3 mb-4 bg-neutral-200 rounded-md"
+                                className="w-full h-3 mb-4 bg-neutral-700 rounded-md"
                             />
                             <div
                                 className="w-1/2 h-4 mb-2 bg-neutral-500 rounded-md"
                             />
                             <div
-                                className="w-8 h-3 mb-4 bg-neutral-200 rounded-md"
+                                className="w-8 h-3 mb-4 bg-neutral-700 rounded-md"
                             />
                             <div
-                                className="w-full grow bg-neutral-300 rounded-xl"
+                                className="w-full grow bg-neutral-800 rounded-xl"
                             />
                         </>
                     }
@@ -57,10 +68,10 @@ export default function CardWord(props: CardWordProps) {
                                 </span>
                             </span>
                             <div className="mb-3 flex flex-col gap-x-2">
-                                <span className="block text-xl text-neutral-700 font-bold text-pretty wrap-anywhere">
+                                <span className="block text-xl text-neutral-500 font-bold text-pretty wrap-anywhere">
                                     {props.book.word}
                                 </span>
-                                <span className="block relative top-[1.5px] w-fit px-2 pb-0.5 bg-neutral-200 rounded-md text-neutral-500/75 text-xs tracking-wide font-medium">
+                                <span className="block relative top-[1.5px] w-fit px-2 pb-0.5 bg-neutral-700 rounded-md text-neutral-500/75 text-xs tracking-wide font-medium">
                                     {props.book.speech}
                                 </span>
                             </div>
@@ -73,7 +84,7 @@ export default function CardWord(props: CardWordProps) {
                 <div 
                     className={clsx(
                         "w-1/4 h-full",
-                        "p-2 bg-neutral-200 rounded-2xl",
+                        "p-2 bg-neutral-800 rounded-2xl",
                         props.book && "ml-2 hover:scale-97 transition-all"
                     )}
                 >
@@ -92,8 +103,8 @@ export default function CardWord(props: CardWordProps) {
                                     size={20}
                                     className="text-neutral-500/75"
                                 />
-                                <label className="text-xs text-neutral-500/75 font-medium tracking-wide">
-                                    Play
+                                <label className="text-xs text-neutral-500/75 font-semibold tracking-wide">
+                                    PLAY
                                 </label>
                             </button>
                         </>

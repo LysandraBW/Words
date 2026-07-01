@@ -660,7 +660,7 @@ export const books = [
         "author": "H.P. Lovecraft",
         "word": "eldritch",
         "speech": "adjective",
-        "definition": "Strange and sinister in a way that seems supernatural or otherworldly; eerie and uncanny.",
+        "definition": "Strange and sinister in a way that seems supernatural or otherworldly.",
         "background": "/images/the-call-of-cthulhu.webp"
     },
     {

@@ -8,8 +8,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 interface CardQuizProps {
     question: Question | null;
     selectChoice: ((choiceIndex: number) => void) | null;
-    onPrevQuestion: () => void;
-    onNextQuestion: () => void;
+    pauseInterval: () => void;
+    startInterval: () => void;
 }
 
 
@@ -17,49 +17,31 @@ export default function CardQuiz(props: CardQuizProps) {
     const answered = props.question && props.question.selectedOptionIndex !== -1;
 
     return (
-        <AnimatePresence>
+        <AnimatePresence
+            initial={false}
+        >
             <motion.div
                 key={props.question?.label || ''}
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 exit={{ y: "-100%" }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="absolute top-0 left-0 w-full h-full p-2 flex gap-x-2 overflow-clip"
+                className="absolute top-0 left-0 w-full h-full p-2 flex gap-x-2 bg-neutral-900 overflow-clip"
             >
-                <div className="absolute top-0 left-0 w-full h-full grid grid-rows-1 overflow-clip">
+                <div 
+                    className="absolute top-0 left-0 w-full h-full grid grid-rows-1 bg-neutral-900 overflow-clip"
+                    onMouseEnter={props.pauseInterval}
+                    onMouseLeave={props.startInterval}    
+                >
                     <div className="w-full h-full p-2 flex flex-col gap-y-2">
-                        <div className="flex flex-col grow items-center justify-center bg-neutral-100 rounded-2xl overflow-clip">
+                        <div className="flex flex-col grow items-center justify-center rounded-2xl overflow-clip">
                             {!props.question &&
-                                <div className="w-full h-full bg-neutral-200">
+                                <div className="w-full h-full bg-neutral-800">
                                 </div>
                             }
                             {props.question &&
-                                <div className="relative w-full h-full flex justify-center items-center bg-neutral-200">
-                                    <div className="absolute top-2 left-2">
-                                        <button 
-                                            className="p-1 bg-neutral-300 rounded-xl"
-                                            onClick={props.onPrevQuestion}    
-                                        >
-                                            <ArrowLeftIcon
-                                                size={12}
-                                                strokeWidth={3}
-                                                className="stroke-neutral-500"
-                                            />
-                                        </button>
-                                    </div>
-                                    <div className="absolute top-2 right-2">
-                                        <button 
-                                            className="p-1 bg-neutral-300 rounded-xl"
-                                            onClick={props.onNextQuestion}
-                                        >
-                                            <ArrowRightIcon
-                                                size={12}
-                                                strokeWidth={3}
-                                                className="stroke-neutral-500"
-                                            />
-                                        </button>
-                                    </div>
-                                    <span className="max-w-[320px] text-base text-neutral-700 font-medium text-center tracking-wide">
+                                <div className="relative w-full h-full flex justify-center items-center bg-neutral-800">
+                                    <span className="max-w-[320px] text-base/5 text-neutral-500 font-medium text-center tracking-wide">
                                         {props.question.label.toLowerCase().slice(0, -1)}
                                     </span>
                                 </div>
@@ -71,7 +53,7 @@ export default function CardQuiz(props: CardQuizProps) {
                                     {[...Array(4)].map((e, i) => (
                                         <div
                                             key={i}
-                                            className="w-full h-full bg-neutral-200 rounded-2xl"
+                                            className="w-full h-full bg-neutral-800 rounded-2xl"
                                         />
                                     ))}
                                 </>

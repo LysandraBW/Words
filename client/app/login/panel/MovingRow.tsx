@@ -11,7 +11,7 @@ interface MovingRowProps {
     books: Book[];
     selectedBook: Book | null;
     onSelectBook: (book: Book) => void;
-    bookRefCallback: any;
+    addBookReference: (bookTitle: string, bookElement: HTMLElement) => void;
 }
 
 
@@ -56,7 +56,7 @@ export default function MovingRow(props: MovingRowProps) {
                         <MovingRowElement
                             book={book}
                             onClickBook={props.onSelectBook}
-                            bookRefCallback={props.bookRefCallback}
+                            addBookReference={props.addBookReference}
                             isSelected={props.selectedBook === book}
                             isDuplicate={i >= props.books.length}
                         />

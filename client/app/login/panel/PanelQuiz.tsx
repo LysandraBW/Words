@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Curve from "./Curve";
 import { dynaPuffFont } from "@/app/fonts";
 import MovingBooks from "./MovingBooks";
+import Logo from "./Logo";
 
 
 export interface Question {
@@ -18,6 +19,7 @@ export interface Question {
 export default function PanelQuiz() {
     const [questions, setQuestions] = useState<Question[]>();
     const [questionIndex, setQuestionIndex] = useState(-1);
+    const [intervalState, setIntervalState] = useState("");
 
 
     useEffect(() => {
@@ -25,13 +27,14 @@ export default function PanelQuiz() {
         for (const book of books) {
             const optionIndices = new Set<number>();
             while (optionIndices.size < 3) {
-                const optionIndex = Math.round(Math.random() * (books.length - 1));
-                if (optionIndices.has(optionIndex))
+                const optionIndex = Math.floor(Math.random() * books.length);
+                if (optionIndices.has(optionIndex) || books[optionIndex].title === book.title)
                     continue;
                 optionIndices.add(optionIndex);
             }
+
             const options = [...optionIndices].map((i: number) => books[i].word);
-            const correctOptionIndex = Math.round(Math.random() * 3);
+            const correctOptionIndex = Math.floor(Math.random() * 4);
             options.splice(correctOptionIndex, 0, book.word);
 
             questions.push({
@@ -85,37 +88,11 @@ export default function PanelQuiz() {
                     className="absolute -bottom-6 right-0 w-6 h-6 -rotate-90"
                     pathClassName="fill-neutral-800"
                 />
-                <svg
-                    width="100%"
-                    height="100%"
-                    className="rounded-bl-4xl backdrop-blur-sm saturate-200"
-                >
-                    <rect width="100%" height="100%" x="0" y="0" fillOpacity={1} mask="url(#knockout-text)" className="fill-neutral-800"/>
-                    <mask id="knockout-text">
-                        <rect width="100%" height="100%" fill="#fff" x="0" y="0"/>
-                        <text 
-                            x="50%" 
-                            y="45%" 
-                            fill="#000" 
-                            textAnchor="middle" 
-                            dominantBaseline="middle" 
-                            letterSpacing={"-3px"} 
-                            className={`${dynaPuffFont.className}`} 
-                            fontSize={32} 
-                            fontWeight={400}
-                            style={{ 
-                                transformBox: 'fill-box', 
-                                transformOrigin: 'center',
-                                transform: 'scaleY(1)'
-                            }}
-                        >
-                            WORDS
-                        </text>
-                    </mask>
-                </svg>
+                <Logo/>
             </div>
             <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
                 <MovingBooks
+                    state={intervalState}
                     onBookSelected={(book: Book) => {
                         if (!questions)
                             return;
@@ -133,13 +110,15 @@ export default function PanelQuiz() {
                     className="absolute bottom-0 -right-6 w-6 h-6 rotate-90"
                     pathClassName="fill-neutral-800"
                 />
-                <div className="relative w-full h-full bg-neutral-100 rounded-3xl overflow-clip">
-                    <CardQuiz
-                        question={(!questions || questionIndex === -1) ? null : questions[questionIndex]}
-                        selectChoice={(!questions || questionIndex === -1) ? null : selectChoice}
-                        onPrevQuestion={prevQuestion}
-                        onNextQuestion={nextQuestion}
-                    />
+                <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip">
+                    {(questions && questionIndex !== -1) &&
+                        <CardQuiz
+                            question={(!questions || questionIndex === -1) ? null : questions[questionIndex]}
+                            selectChoice={(!questions || questionIndex === -1) ? null : selectChoice}
+                            pauseInterval={() => setIntervalState("STOP")}
+                            startInterval={() => setIntervalState("CONT")}
+                        />
+                    }
                 </div>
             </div>
         </div>

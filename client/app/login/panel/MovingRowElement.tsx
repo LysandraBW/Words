@@ -1,11 +1,12 @@
 import clsx from "clsx";
 import { Book } from "../books";
 import Tilt from 'react-parallax-tilt';
+import { useEffect, useRef } from "react";
 
 
 interface MovingRowElementProps {
     book: Book;
-    bookRefCallback: any;
+    addBookReference: (bookTitle: string, bookElement: HTMLElement) => void;
     isSelected: boolean;
     isDuplicate: boolean;
     onClickBook: (book: Book) => void;
@@ -13,6 +14,16 @@ interface MovingRowElementProps {
 
 
 export default function MovingRowElement(props: MovingRowElementProps) {
+    const bookRef = useRef<HTMLDivElement|null>(null);
+
+
+    useEffect(() => {
+        if (props.isDuplicate || !bookRef.current)
+            return;
+        props.addBookReference(props.book.title, bookRef.current);
+    }, [bookRef.current]);
+
+
     return (
         <Tilt 
             scale={1.05}
@@ -25,7 +36,7 @@ export default function MovingRowElement(props: MovingRowElementProps) {
             className="relative w-[var(--w)] min-w-[var(--w)] h-full overflow-hidden hover:z-100 book"
         >
             <div
-                ref={props.bookRefCallback}
+                ref={bookRef}
                 data-title={!props.isDuplicate ? props.book?.title : ""}
                 onClick={() => {
                     if (!props.book || !props.onClickBook)
@@ -38,12 +49,8 @@ export default function MovingRowElement(props: MovingRowElementProps) {
                 )}
             >
                 <div
-                    style={{ background: `url(${props.book?.background})` }} 
-                    className={`absolute -top-1/2 -left-1/2 z-50 w-[200%] h-[200%] blur-lg`}
-                />
-                <div
                     className={clsx(
-                        `absolute top-0 left-0 z-90 w-full h-full bg-black/50 hover:bg-black/0 transition-all`,
+                        `absolute top-0 left-0 z-90 w-full h-full bg-black/75 hover:bg-black/0 transition-all`,
                         props.isSelected && "!bg-black/0"
                     )}
                 />
