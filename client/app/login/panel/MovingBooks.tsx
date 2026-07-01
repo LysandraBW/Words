@@ -28,6 +28,20 @@ export default function MovingBooks(props: MovingBooksProps) {
             const rowIndex = i % rows;
             bookRows[rowIndex].push(books[i]);
         }
+        const bookRowsCopy = bookRows.map((e, i) => [...e]);
+        
+        for (let i = 0; i < bookRows.length; i++) {
+            let j = i + 1;
+            while (j !== i) {
+                if (j >= bookRows.length) {
+                    j = 0;
+                    continue;
+                }
+                bookRows[i] = [...bookRowsCopy[i], ...bookRowsCopy[j]];
+                j += 1;
+            }
+        }
+
         setBookRows(bookRows);
     }, []);
     
