@@ -96,6 +96,14 @@ export const books = [
         "background": "/images/the-trial.jpg"
     },
     {
+        "title": "The Secret Adversary",
+        "author": "Agatha Christie",
+        "word": "espionage",
+        "speech": "noun",
+        "definition": "The practice of spying or using spies, typically by governments to obtain political and military secrets.",
+        "background": "/images/the-secret-adversary.webp"
+    },
+    {
         "title": "The Alchemist",
         "author": "Paulo Coelho",
         "word": "omens",
@@ -136,14 +144,6 @@ export const books = [
         "background": "/images/things-fall-apart.webp"
     },
     {
-        "title": "The Master and Margarita",
-        "author": "Mikhail Bulgakov",
-        "word": "diabolical",
-        "speech": "adjective",
-        "definition": "Possessing a mischievous, infernal, or supernatural malevolence.",
-        "background": "/images/the-master-and-margarita.webp"
-    },
-    {
         "title": "Doctor Zhivago",
         "author": "Boris Pasternak",
         "word": "apoliticism",
@@ -152,12 +152,28 @@ export const books = [
         "background": "/images/doctor-zhivago.jpg"
     },
     {
-        "title": "The Jungle Book",
-        "author": "Rudyard Kipling",
-        "word": "pack-law",
+        "title": "The Master and Margarita",
+        "author": "Mikhail Bulgakov",
+        "word": "diabolical",
+        "speech": "adjective",
+        "definition": "Possessing a mischievous, infernal, or supernatural malevolence.",
+        "background": "/images/the-master-and-margarita.webp"
+    },
+    {
+        "title": "On the Calculation of Volume",
+        "author": "Solvej Balle",
+        "word": "temporality",
         "speech": "noun",
-        "definition": "A strict code governing social order through loyalty, hierarchy, and obedience.",
-        "background": "/images/the-jungle-book.jpg"
+        "definition": "The nature of time, explored through a woman trapped repeating a single November day.",
+        "background": "/images/on-the-calculation-of-volume-i.jpg"
+    },
+    {
+        "title": "Intermezzo",
+        "author": "Sally Rooney",
+        "word": "grief",
+        "speech": "noun",
+        "definition": "Deep sorrow following a loss, shaping the complex relationships between two grieving brothers.",
+        "background": "/images/intermezzo.jpg"
     },
     {
         "title": "Martyr!",
@@ -174,6 +190,14 @@ export const books = [
         "speech": "noun",
         "definition": "The status of a thane, symbolizing feudal power and its instability.",
         "background": "/images/macbeth.webp"
+    },
+    {
+        "title": "The Blue Castle",
+        "author": "L.M. Montgomery",
+        "word": "liberation",
+        "speech": "noun",
+        "definition": "The act of gaining freedom from an overbearing family after receiving a terminal diagnosis.",
+        "background": "/images/the-blue-castle.jpg"
     },
     {
         "title": "Jane Eyre",
@@ -224,12 +248,36 @@ export const books = [
         "background": "/images/the-hole.avif"
     },
     {
+        "title": "Kristin Lavransdatter",
+        "author": "Sigrid Undset",
+        "word": "piety",
+        "speech": "noun",
+        "definition": "Religious devotion that constantly clashes with earthly passion in medieval Norway.",
+        "background": "/images/kristin-lavransdatter.jpg"
+    },
+    {
         "title": "Pedro Páramo",
         "author": "Juan Rulfo",
         "word": "necropolitan",
         "speech": "adjective",
         "definition": "Characterized by the coexistence of the living and the dead in one space.",
         "background": "/images/pedro-paramo.png"
+    },
+    {
+        "title": "Norwegian Wood",
+        "author": "Haruki Murakami",
+        "word": "melancholy",
+        "speech": "noun",
+        "definition": "A deep, pensive sadness permeating a young man's memories of love and loss.",
+        "background": "/images/norwegian-wood.jpg"
+    },
+    {
+        "title": "The Mysterious Affair at Styles",
+        "author": "Agatha Christie",
+        "word": "deduction",
+        "speech": "noun",
+        "definition": "The deriving of a conclusion by reasoning, specifically in solving a crime using logic and minutiae.",
+        "background": "/images/the-mysterious-affair-at-styles.jpg"
     },
     {
         "title": "Lord of the Flies",
@@ -254,6 +302,14 @@ export const books = [
         "speech": "adjective",
         "definition": "Absorbed and accepted as one's own, used especially of external standards of beauty or worth that cause self-hatred.",
         "background": "/images/the-bluest-eye.jpg"
+    },
+    {
+        "title": "Normal People",
+        "author": "Sally Rooney",
+        "word": "intimacy",
+        "speech": "noun",
+        "definition": "The profound, complicated emotional closeness shared by two people over several formative years.",
+        "background": "/images/normal-people.jpg"
     },
     {
         "title": "White Nights",
@@ -320,28 +376,12 @@ export const books = [
         "background": "/images/the-invisible-man.jpg"
     },
     {
-        "title": "Wuthering Heights",
-        "author": "Emily Brontë",
-        "word": "sublimation",
-        "speech": "noun",
-        "definition": "Transforming unacceptable impulses into socially acceptable or artistic expression.",
-        "background": "/images/wuthering-heights.jpg"
-    },
-    {
         "title": "A Wizard of Earthsea",
         "author": "Ursula K. Le Guin",
         "word": "true-name",
         "speech": "noun",
         "definition": "A secret name believed to contain the essence and power of a being.",
         "background": "/images/a-wizard-of-earth-sea.jpg"
-    },
-    {
-        "title": "The Waves",
-        "author": "Virginia Woolf",
-        "word": "intersubjectivity",
-        "speech": "noun",
-        "definition": "The interconnected sharing and shaping of consciousness between individuals.",
-        "background": "/images/the-waves.webp"
     },
     {
         "title": "Stories of Your Life and Others",
@@ -358,6 +398,14 @@ export const books = [
         "speech": "noun",
         "definition": "The intrusion of dream logic and subconscious symbolism into ordinary reality.",
         "background": "/images/the-wind-up-bird-chronicle.jpg"
+    },
+    {
+        "title": "Great Expectations",
+        "author": "Charles Dickens",
+        "word": "gentility",
+        "speech": "noun",
+        "definition": "The superficial social status of a gentleman, bought at the cost of true moral worth.",
+        "background": "/images/great-expectations.webp"
     },
     {
         "title": "The Left Hand of Darkness",
@@ -440,12 +488,20 @@ export const books = [
         "background": "/images/kitchen.jpg"
     },
     {
-        "title": "The Picture of Dorian Gray",
-        "author": "Oscar Wilde",
-        "word": "decadence",
+        "title": "The Tartar Steppe",
+        "author": "Dino Buzzati",
+        "word": "existential",
+        "speech": "adjective",
+        "definition": "Relating to human existence, highlighting the futility of waiting for a glorious battle.",
+        "background": "/images/the-tartar-steppe.jpg"
+    },
+    {
+        "title": "No Longer Human",
+        "author": "Osamu Dazai",
+        "word": "alienation",
         "speech": "noun",
-        "definition": "Excessive indulgence in aesthetic pleasure accompanied by moral deterioration.",
-        "background": "/images/the-picture-of-dorian-gray.webp"
+        "definition": "The profound isolation felt by an individual unable to comprehend or connect with humanity.",
+        "background": "/images/no-longer-human.jpg"
     },
     {
         "title": "My Name Is Red",
@@ -512,6 +568,14 @@ export const books = [
         "background": "/images/hard-boiled-egg.jpg"
     },
     {
+        "title": "The Strange Case of Dr Jekyll and Mr Hyde",
+        "author": "Robert Louis Stevenson",
+        "word": "duality",
+        "speech": "noun",
+        "definition": "The inner conflict between the honorable self and the hidden, monstrous dark side.",
+        "background": "/images/the-strange-case-of-dr-jekyll-and-mr-hyde.webp"
+    },
+    {
         "title": "The Dispossessed",
         "author": "Ursula K. Le Guin",
         "word": "anarchosyndicalism",
@@ -536,6 +600,22 @@ export const books = [
         "background": "/images/american-psycho.jpg"
     },
     {
+        "title": "The Melancholy of Resistance",
+        "author": "László Krasznahorkai",
+        "word": "apocalypse",
+        "speech": "noun",
+        "definition": "The surreal, chaotic collapse of social order in a small, tense Hungarian town.",
+        "background": "/images/the-melancholy-of-resistance.jpg"
+    },
+    {
+        "title": "David Copperfield",
+        "author": "Charles Dickens",
+        "word": "resilience",
+        "speech": "noun",
+        "definition": "The capacity to recover from hardship, guiding an orphan through poverty to literary success.",
+        "background": "/images/david-copperfield.avif"
+    },
+    {
         "title": "Madame Bovary",
         "author": "Gustave Flaubert",
         "word": "bovarysme",
@@ -544,28 +624,20 @@ export const books = [
         "background": "/images/madame-bovary.webp"
     },
     {
+        "title": "The Picture of Dorian Gray",
+        "author": "Oscar Wilde",
+        "word": "decadence",
+        "speech": "noun",
+        "definition": "Excessive indulgence in aesthetic pleasure accompanied by moral deterioration.",
+        "background": "/images/the-picture-of-dorian-gray.avif"
+    },
+    {
         "title": "The Odyssey",
         "author": "Homer",
         "word": "teleological",
         "speech": "adjective",
         "definition": "Describing actions or narratives directed toward an ultimate purpose or goal.",
         "background": "/images/odyssey.jpg"
-    },
-    {
-        "title": "The Name of the Rose",
-        "author": "Umberto Eco",
-        "word": "palimpsest",
-        "speech": "noun",
-        "definition": "A manuscript with earlier writing scraped away but not fully erased.",
-        "background": "/images/the-name-of-the-rose.jpg"
-    },
-    {
-        "title": "The Count of Monte Cristo",
-        "author": "Alexandre Dumas",
-        "word": "implacability",
-        "speech": "noun",
-        "definition": "The quality of being relentless, unforgiving, and impossible to appease.",
-        "background": "/images/the-count-of-monte-cristo.webp"
     },
     {
         "title": "The Idiot",
@@ -616,6 +688,14 @@ export const books = [
         "background": "/images/war-and-peace.webp"
     },
     {
+        "title": "The Castle of Otranto",
+        "author": "Horace Walpole",
+        "word": "gothic",
+        "speech": "adjective",
+        "definition": "Characterized by gloomy, supernatural elements that haunt a doomed family line within a castle.",
+        "background": "/images/the-castle-of-otranto.jpg"
+    },
+    {
         "title": "Moby Dick",
         "author": "Herman Melville",
         "word": "obsessional",
@@ -656,6 +736,14 @@ export const books = [
         "background": "/images/bleak-house.jpg"
     },
     {
+        "title": "The Art of War",
+        "author": "Sun Tzu",
+        "word": "strategy",
+        "speech": "noun",
+        "definition": "A plan of action or policy designed to achieve a major or overall aim, especially in war or competition.",
+        "background": "/images/the-art-of-war.jpg"
+    },
+    {
         "title": "The Call of Cthulhu",
         "author": "H.P. Lovecraft",
         "word": "eldritch",
@@ -672,14 +760,30 @@ export const books = [
         "background": "/images/human-acts.jpg"
     },
     {
-        "title": "The Little Prince",
-        "author": "Antoine de Saint-Exupéry",
-        "word": "apprivoisement",
+        "title": "The Count of Monte Cristo",
+        "author": "Alexandre Dumas",
+        "word": "implacability",
         "speech": "noun",
-        "definition": "The slow, patient process of bonding through mutual responsibility and care.",
-        "background": "/images/the-little-prince.jpg"
+        "definition": "The quality of being relentless, unforgiving, and impossible to appease.",
+        "background": "/images/the-count-of-monte-cristo.jpg"
+    },
+    {
+        "title": "The Discovery of Heaven",
+        "author": "Harry Mulisch",
+        "word": "providence",
+        "speech": "noun",
+        "definition": "Divine guidance directing human lives to orchestrate the return of the Ten Commandments.",
+        "background": "/images/the-discovery-of-heaven.jpg"
+    },
+    {
+        "title": "The Secret History",
+        "author": "Donna Tartt",
+        "word": "bacchanal",
+        "speech": "noun",
+        "definition": "A wild, uninhibited party that triggers a dark descent into murder for elite students.",
+        "background": "/images/the-secret-history.jpg"
     }
-];
+]
 
 export type Book = typeof books[number];
 export type BookTitle = string;

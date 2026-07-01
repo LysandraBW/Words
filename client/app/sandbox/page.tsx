@@ -7,6 +7,10 @@ import { shuffle } from "@/utilities/array";
 export default function Page() {
     const [sortedBooks, setSortedBooks] = useState([...books]);
 
+    useEffect(() => {
+        console.log(sortedBooks);
+    }, [sortedBooks]);
+
     const moveLeft = (i: number) => {
         if (i === 0)
             return;

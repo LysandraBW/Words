@@ -75,7 +75,7 @@ export default function CardWord(props: CardWordProps) {
                                     {props.book.speech}
                                 </span>
                             </div>
-                            <p className="text-base tracking-wide overflow-hidden text-ellipsis line-clamp-4">
+                            <p className="text-sm tracking-wide overflow-hidden text-ellipsis line-clamp-4">
                                 {props.book.definition}
                             </p>
                         </>
