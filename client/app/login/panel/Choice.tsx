@@ -16,16 +16,16 @@ export default function Choice(props: ChoiceProps) {
         <button 
             onClick={props.onClick}
             className={clsx(
-                "w-full h-full p-2 grid grid-cols-[auto_1fr] gap-x-2 bg-neutral-800 rounded-2xl overflow-clip",
+                "w-full h-full p-2 grid grid-cols-[auto_1fr] gap-x-2 bg-neutral-900 border border-neutral-800 rounded-2xl shadow",
                 "hover:scale-97 transition-all",
                 props.answered && "!cursor-default"
             )}
         >
             <div 
                 className={clsx(
-                    "w-4 h-4 flex justify-center items-center bg-neutral-700 rounded-full",
-                    (props.answered && props.flag === true) && "!bg-blue-500",
-                    (props.answered && props.flag === false) && "!bg-red-500",
+                    "w-3 h-3 flex justify-center items-center bg-neutral-800 border border-neutral-700 rounded-full shadow",
+                    (props.answered && props.flag === true) && "!bg-blue-500 !border-blue-500",
+                    (props.answered && props.flag === false) && "!bg-red-500 !border-red-500",
                 )}
             >
                 {(props.answered && props.flag === true) &&

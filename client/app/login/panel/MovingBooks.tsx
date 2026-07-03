@@ -131,7 +131,7 @@ export default function MovingBooks(props: MovingBooksProps) {
     return (
         <div
             ref={booksContainerRef}
-            className="relative w-full h-full flex flex-col gap-y-2 bg-neutral-900 overflow-clip"
+            className="relative w-full h-full p-2 flex flex-col gap-y-2 bg-neutral-950 overflow-clip"
         >
             {bookRows.map((booksInRow, i) => (
                 <Fragment key={i}>

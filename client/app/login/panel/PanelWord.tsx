@@ -30,7 +30,7 @@ export default function PanelWord() {
                     onBookSelected={setBook}
                 />
             </div>
-            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] ml-2 mb-2 p-2 pb-0 bg-neutral-800 rounded-t-4xl rounded-b-0">
+            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] ml-2- mb-2 p-2 pb-0 bg-neutral-800 rounded-t-4xl rounded-b-0">
                 <Curve
                     className="absolute bottom-0 -left-6 w-6 h-6 rotate-0"
                     pathClassName="fill-neutral-800"

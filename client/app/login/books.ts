@@ -80,6 +80,14 @@ export const books = [
         "background": "/images/slaughterhouse-five.jpg"
     },
     {
+        "title": "Fight Club",
+        "author": "Chuck Palahniuk",
+        "word": "dissociative",
+        "speech": "adjective",
+        "definition": "Describing psychological disconnection from one's identity, reality, or actions.",
+        "background": "/images/fight-club.jpg"
+    },
+    {
         "title": "Half of a Yellow Sun",
         "author": "Chimamanda Ngozi Adichie",
         "word": "secessionist",
@@ -94,6 +102,14 @@ export const books = [
         "speech": "noun",
         "definition": "Opaque institutional systems that become irrational and impossible to navigate.",
         "background": "/images/the-trial.jpg"
+    },
+    {
+        "title": "Klara and the Sun",
+        "author": "Kazuo Ishiguro",
+        "word": "devotion",
+        "speech": "noun",
+        "definition": "A steadfast loyalty or love, given freely and without demand for return.",
+        "background": "/images/klara-and-the-sun.jpg"
     },
     {
         "title": "The Secret Adversary",
@@ -184,6 +200,14 @@ export const books = [
         "background": "/images/martyr.jpg"
     },
     {
+        "title": "The Remains of the Day",
+        "author": "Kazuo Ishiguro",
+        "word": "repression",
+        "speech": "noun",
+        "definition": "The suppression of one's own feelings, often at great personal cost.",
+        "background": "/images/the-remains-of-the-day.jpg"
+    },
+    {
         "title": "Macbeth",
         "author": "William Shakespeare",
         "word": "thanehood",
@@ -192,12 +216,12 @@ export const books = [
         "background": "/images/macbeth.webp"
     },
     {
-        "title": "The Blue Castle",
-        "author": "L.M. Montgomery",
-        "word": "liberation",
+        "title": "Yesteryear",
+        "author": "Caro Claire Burke",
+        "word": "artifice",
         "speech": "noun",
-        "definition": "The act of gaining freedom from an overbearing family after receiving a terminal diagnosis.",
-        "background": "/images/the-blue-castle.jpg"
+        "definition": "Clever deception; a constructed image meant to conceal the truth.",
+        "background": "/images/yesteryear.jpg"
     },
     {
         "title": "Jane Eyre",
@@ -206,14 +230,6 @@ export const books = [
         "speech": "adjective",
         "definition": "Pertaining to an individual's capacity to govern their choices independently.",
         "background": "/images/jane-eyre.jpg"
-    },
-    {
-        "title": "The Magic Mountain",
-        "author": "Thomas Mann",
-        "word": "enervation",
-        "speech": "noun",
-        "definition": "A gradual draining of energy, will, and purpose.",
-        "background": "/images/the-magic-mountain.jpg"
     },
     {
         "title": "One Hundred Years of Solitude",
@@ -304,12 +320,28 @@ export const books = [
         "background": "/images/the-bluest-eye.jpg"
     },
     {
+        "title": "The Blue Castle",
+        "author": "L.M. Montgomery",
+        "word": "liberation",
+        "speech": "noun",
+        "definition": "The act of gaining freedom from an overbearing family after receiving a terminal diagnosis.",
+        "background": "/images/the-blue-castle.jpg"
+    },
+    {
         "title": "Normal People",
         "author": "Sally Rooney",
         "word": "intimacy",
         "speech": "noun",
         "definition": "The profound, complicated emotional closeness shared by two people over several formative years.",
         "background": "/images/normal-people.jpg"
+    },
+    {
+        "title": "Great Expectations",
+        "author": "Charles Dickens",
+        "word": "gentility",
+        "speech": "noun",
+        "definition": "The superficial social status of a gentleman, bought at the cost of true moral worth.",
+        "background": "/images/great-expectations.jpg"
     },
     {
         "title": "White Nights",
@@ -328,20 +360,20 @@ export const books = [
         "background": "/images/kokoro.jpg"
     },
     {
-        "title": "The Silmarillion",
-        "author": "J.R.R. Tolkien",
-        "word": "cosmogonic",
-        "speech": "adjective",
-        "definition": "Relating to the origin and creation of the universe or cosmic order.",
-        "background": "/images/the-silmarillion.jpg"
-    },
-    {
         "title": "Cloud Atlas",
         "author": "David Mitchell",
         "word": "metempsychosis",
         "speech": "noun",
         "definition": "The transmigration of a soul or consciousness across different bodies or lifetimes.",
         "background": "/images/cloud-atlas.jpg"
+    },
+    {
+        "title": "The Silmarillion",
+        "author": "J.R.R. Tolkien",
+        "word": "cosmogonic",
+        "speech": "adjective",
+        "definition": "Relating to the origin and creation of the universe or cosmic order.",
+        "background": "/images/the-silmarillion.jpg"
     },
     {
         "title": "Infinite Jest",
@@ -358,14 +390,6 @@ export const books = [
         "speech": "noun",
         "definition": "The fleeting, transient quality of human moments, perceptions, and relationships.",
         "background": "/images/to-the-lighthouse.jpg"
-    },
-    {
-        "title": "Siddhartha",
-        "author": "Hermann Hesse",
-        "word": "nonduality",
-        "speech": "noun",
-        "definition": "A spiritual state in which distinctions between self and world dissolve.",
-        "background": "/images/siddhartha.jpg"
     },
     {
         "title": "Invisible Man",
@@ -390,22 +414,6 @@ export const books = [
         "speech": "noun",
         "definition": "The theory that a language's structure shapes and constrains its speakers' thoughts.",
         "background": "/images/story-of-your-life-and-others.jpg"
-    },
-    {
-        "title": "The Wind-Up Bird Chronicle",
-        "author": "Haruki Murakami",
-        "word": "surrealism",
-        "speech": "noun",
-        "definition": "The intrusion of dream logic and subconscious symbolism into ordinary reality.",
-        "background": "/images/the-wind-up-bird-chronicle.jpg"
-    },
-    {
-        "title": "Great Expectations",
-        "author": "Charles Dickens",
-        "word": "gentility",
-        "speech": "noun",
-        "definition": "The superficial social status of a gentleman, bought at the cost of true moral worth.",
-        "background": "/images/great-expectations.webp"
     },
     {
         "title": "The Left Hand of Darkness",
@@ -448,6 +456,14 @@ export const books = [
         "background": "/images/the-midnight-library.jpg"
     },
     {
+        "title": "Station Eleven",
+        "author": "Emily St. John Mandel",
+        "word": "ephemeral",
+        "speech": "adjective",
+        "definition": "Lasting only a short time; fleeting, like the world before collapse.",
+        "background": "/images/station-eleven.jpg"
+    },
+    {
         "title": "Wide Sargasso Sea",
         "author": "Jean Rhys",
         "word": "creolization",
@@ -488,12 +504,12 @@ export const books = [
         "background": "/images/kitchen.jpg"
     },
     {
-        "title": "The Tartar Steppe",
-        "author": "Dino Buzzati",
-        "word": "existential",
-        "speech": "adjective",
-        "definition": "Relating to human existence, highlighting the futility of waiting for a glorious battle.",
-        "background": "/images/the-tartar-steppe.jpg"
+        "title": "The Bell Jar",
+        "author": "Sylvia Plath",
+        "word": "stasis",
+        "speech": "noun",
+        "definition": "A state of suffocating stillness; feeling trapped.",
+        "background": "/images/the-bell-jar.webp"
     },
     {
         "title": "No Longer Human",
@@ -512,6 +528,14 @@ export const books = [
         "background": "/images/my-name-is-red.jpg"
     },
     {
+        "title": "Siddhartha",
+        "author": "Hermann Hesse",
+        "word": "nonduality",
+        "speech": "noun",
+        "definition": "A spiritual state in which distinctions between self and world dissolve.",
+        "background": "/images/siddhartha.jpg"
+    },
+    {
         "title": "Beloved",
         "author": "Toni Morrison",
         "word": "rememory",
@@ -520,12 +544,20 @@ export const books = [
         "background": "/images/beloved.jpg"
     },
     {
-        "title": "Fight Club",
-        "author": "Chuck Palahniuk",
-        "word": "dissociative",
+        "title": "Bleak House",
+        "author": "Charles Dickens",
+        "word": "interminable",
         "speech": "adjective",
-        "definition": "Describing psychological disconnection from one's identity, reality, or actions.",
-        "background": "/images/fight-club.jpg"
+        "definition": "Endless or seemingly without resolution, as of a legal or bureaucratic process that consumes lives.",
+        "background": "/images/bleak-house.jpg"
+    },
+    {
+        "title": "Zone One",
+        "author": "Colson Whitehead",
+        "word": "attrition",
+        "speech": "noun",
+        "definition": "A gradual wearing down of strength or resolve through constant struggle.",
+        "background": "/images/zone-one.webp"
     },
     {
         "title": "Kafka on the Shore",
@@ -592,6 +624,22 @@ export const books = [
         "background": "/images/don-quixote.jpg"
     },
     {
+        "title": "Madame Bovary",
+        "author": "Gustave Flaubert",
+        "word": "bovarysme",
+        "speech": "noun",
+        "definition": "The tendency to perceive oneself as more romantic and exceptional than reality.",
+        "background": "/images/madame-bovary.jpg"
+    },
+    {
+        "title": "The Brothers Karamazov",
+        "author": "Fyodor Dostoevsky",
+        "word": "theodicy",
+        "speech": "noun",
+        "definition": "The attempt to reconcile a benevolent God with the existence of suffering.",
+        "background": "/images/the-brothers-karamazov-2.jpg"
+    },
+    {
         "title": "American Psycho",
         "author": "Bret Easton Ellis",
         "word": "simulacrum",
@@ -608,28 +656,20 @@ export const books = [
         "background": "/images/the-melancholy-of-resistance.jpg"
     },
     {
-        "title": "David Copperfield",
-        "author": "Charles Dickens",
-        "word": "resilience",
-        "speech": "noun",
-        "definition": "The capacity to recover from hardship, guiding an orphan through poverty to literary success.",
-        "background": "/images/david-copperfield.avif"
-    },
-    {
-        "title": "Madame Bovary",
-        "author": "Gustave Flaubert",
-        "word": "bovarysme",
-        "speech": "noun",
-        "definition": "The tendency to perceive oneself as more romantic and exceptional than reality.",
-        "background": "/images/madame-bovary.webp"
-    },
-    {
         "title": "The Picture of Dorian Gray",
         "author": "Oscar Wilde",
         "word": "decadence",
         "speech": "noun",
         "definition": "Excessive indulgence in aesthetic pleasure accompanied by moral deterioration.",
         "background": "/images/the-picture-of-dorian-gray.avif"
+    },
+    {
+        "title": "David Copperfield",
+        "author": "Charles Dickens",
+        "word": "resilience",
+        "speech": "noun",
+        "definition": "The capacity to recover from hardship, guiding an orphan through poverty to literary success.",
+        "background": "/images/david-copperfield.avif"
     },
     {
         "title": "The Odyssey",
@@ -646,14 +686,6 @@ export const books = [
         "speech": "noun",
         "definition": "Radical sincerity or innocence unprotected by social cunning.",
         "background": "/images/the-idiot.jpg"
-    },
-    {
-        "title": "The Brothers Karamazov",
-        "author": "Fyodor Dostoevsky",
-        "word": "theodicy",
-        "speech": "noun",
-        "definition": "The attempt to reconcile a benevolent God with the existence of suffering.",
-        "background": "/images/the-brothers-karamazov-2.jpg"
     },
     {
         "title": "Coraline",
@@ -728,14 +760,6 @@ export const books = [
         "background": "/images/the-stoner.jpg"
     },
     {
-        "title": "Bleak House",
-        "author": "Charles Dickens",
-        "word": "interminable",
-        "speech": "adjective",
-        "definition": "Endless or seemingly without resolution, as of a legal or bureaucratic process that consumes lives.",
-        "background": "/images/bleak-house.jpg"
-    },
-    {
         "title": "The Art of War",
         "author": "Sun Tzu",
         "word": "strategy",
@@ -758,6 +782,30 @@ export const books = [
         "speech": "noun",
         "definition": "An act of extreme cruelty or violence, especially one committed against civilians or the powerless.",
         "background": "/images/human-acts.jpg"
+    },
+    {
+        "title": "American War",
+        "author": "Omar El Akkad",
+        "word": "partisan",
+        "speech": "noun",
+        "definition": "A committed fighter for a cause, often shaped more by loyalty than reason.",
+        "background": "/images/american-war.jpg"
+    },
+    {
+        "title": "A Little Life",
+        "author": "Hanya Yanagihara",
+        "word": "self-abnegation",
+        "speech": "noun",
+        "definition": "The denial of one's own needs, often mistaken for love.",
+        "background": "/images/a-little-life.jpg"
+    },
+    {
+        "title": "Oryx and Crake",
+        "author": "Margaret Atwood",
+        "word": "hubris",
+        "speech": "noun",
+        "definition": "Excessive pride or ambition that blinds a person to the consequences of their actions.",
+        "background": "/images/oryx-and-crake.jpg"
     },
     {
         "title": "The Count of Monte Cristo",

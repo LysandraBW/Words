@@ -23,12 +23,12 @@ export default function MovingRow(props: MovingRowProps) {
     const distanceToTravel = `calc(-${buckets * 100}% - ${buckets * 8}px)`;
     
 
-    useEffect(() => {
-        animationRef.current = animate(scope.current,
-            { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
-            { duration: 120, ease: "linear", repeat: Infinity }
-        );
-    }, []);
+    // useEffect(() => {
+    //     animationRef.current = animate(scope.current,
+    //         { x: false ? [distanceToTravel, "0%"] : ["0%", distanceToTravel] },
+    //         { duration: 100, ease: "linear", repeat: Infinity }
+    //     );
+    // }, []);
 
 
     return (

@@ -2,7 +2,6 @@ import { Book, books } from "../books";
 import CardQuiz from "./CardQuiz";
 import { useEffect, useState } from "react";
 import Curve from "./Curve";
-import { dynaPuffFont } from "@/app/fonts";
 import MovingBooks from "./MovingBooks";
 import Logo from "./Logo";
 
@@ -59,34 +58,16 @@ export default function PanelQuiz() {
     }
 
 
-    const prevQuestion = () => {
-        if (!questions)
-            return;
-
-        const prevQuestionIndex = questionIndex === questions.length - 1 ? questions.length - 1 : questionIndex - 1;
-        setQuestionIndex(prevQuestionIndex);
-    }
-
-
-    const nextQuestion = () => {
-        if (!questions)
-            return;
-
-        const nextQuestionIndex = (questionIndex + 1) % questions.length;
-        setQuestionIndex(nextQuestionIndex);
-    }
-
-
     return (
-        <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-800 rounded-4xl overflow-hidden">
+        <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-900 rounded-4xl overflow-hidden">
             <div className="absolute top-2 right-2 z-100 w-[128px] h-[52px] bg-transparent">
                 <Curve
                     className="absolute top-0 -left-6 w-6 h-6 -rotate-90"
-                    pathClassName="fill-neutral-800"
+                    pathClassName="fill-neutral-900"
                 />
                 <Curve
                     className="absolute -bottom-6 right-0 w-6 h-6 -rotate-90"
-                    pathClassName="fill-neutral-800"
+                    pathClassName="fill-neutral-900"
                 />
                 <Logo/>
             </div>
@@ -101,16 +82,24 @@ export default function PanelQuiz() {
                     }}
                 />
             </div>
-            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] ml-2 mb-2 p-2 pb-0 bg-neutral-800 rounded-t-4xl rounded-b-0">
+            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] mb-2 pb-0 rounded-t-4xl rounded-b-0">
                 <Curve
-                    className="absolute bottom-0 -left-6 w-6 h-6 rotate-0"
-                    pathClassName="fill-neutral-800"
+                    className="absolute bottom-0 -left-8 w-6 h-6 rotate-0"
+                    pathClassName="fill-neutral-900"
                 />
                 <Curve
-                    className="absolute bottom-0 -right-6 w-6 h-6 rotate-90"
-                    pathClassName="fill-neutral-800"
+                    className="absolute bottom-0 -left-2 w-6 h-6 rotate-90"
+                    pathClassName="fill-neutral-900"
                 />
-                <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip">
+                <Curve
+                    className="absolute bottom-0 -right-8 w-6 h-6 rotate-90"
+                    pathClassName="fill-neutral-900"
+                />
+                <Curve
+                    className="absolute bottom-0 -right-2 w-6 h-6 rotate-0"
+                    pathClassName="fill-neutral-900"
+                />
+                <div className="relative w-full h-full  ring-[8px] ring-neutral-900 rounded-3xl overflow-clip">
                     {(questions && questionIndex !== -1) &&
                         <CardQuiz
                             question={(!questions || questionIndex === -1) ? null : questions[questionIndex]}
