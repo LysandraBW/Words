@@ -34,7 +34,7 @@ const BookSchema = z.object({
         z.string().trim().min(1)
     ),
     book_author: z.array(z.string()).nullish(),
-    reader_id: z.uuidv7()
+    reader_id: z.string()
 });
 
 

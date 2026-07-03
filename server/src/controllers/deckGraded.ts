@@ -18,7 +18,7 @@ export const DeckGradedSchema = z.object({
         choice: z.coerce.number().min(0)
     })),
     deck_id: z.coerce.number(),
-    reader_id: z.uuidv7()
+    reader_id: z.string()
 });
 
 

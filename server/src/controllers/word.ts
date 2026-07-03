@@ -10,7 +10,7 @@ const wordSchema = z.object({
     chapter_id: z.coerce.number(),
     word: z.tuple([z.string(), z.string()]),
     word_number_instances: z.coerce.number(),
-    reader_id: z.uuidv7(),
+    reader_id: z.string(),
 });
 
 

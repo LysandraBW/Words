@@ -6,7 +6,7 @@ import { nullableBy } from '../utilities/types.js';
 
 
 const ReaderSchema = z.object({
-    reader_id: z.uuidv7(),
+    reader_id: z.string(),
     reader_name: z.string(),
     reader_email: z.email(),
     reader_password: z.string(),

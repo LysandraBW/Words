@@ -29,7 +29,7 @@ export async function AuthenticateReaderByLogin(reader: Pick<Reader, "reader_ema
         SELECT  reader_id 
         FROM    Reader 
         WHERE   reader_email = ${reader.reader_email} AND
-                reader_password = crypt(${reader.reader_password}, gen_salt(\'bf\'))
+                reader_password = crypt(${reader.reader_password}, reader_password)
         LIMIT   1;
     `;
     return row?.reader_id || '';
@@ -38,10 +38,10 @@ export async function AuthenticateReaderByLogin(reader: Pick<Reader, "reader_ema
 
 export async function InsertSession(readerID: string): Promise<string> {
     const [row] = await db`
-        INSERT INTO reader_session (reader_id)
-        VALUES (${readerID})
+        INSERT INTO reader_session (reader_id, creation_date)
+        VALUES (${readerID}, NOW())
         ON CONFLICT (reader_id) DO UPDATE
-        SET reader_id = EXCLUDED.reader_id
+        SET reader_id = EXCLUDED.reader_id, creation_date = EXCLUDED.creation_date
         RETURNING *
     `;
     return row?.session_id || '';

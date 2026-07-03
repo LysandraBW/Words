@@ -14,7 +14,7 @@ const ChapterSchema = z.object({
     chapter_title: z.string(),
     chapter_number: z.coerce.number(),
     book_id: z.coerce.number(),
-    reader_id: z.uuidv7()
+    reader_id: z.string()
 });
 
 

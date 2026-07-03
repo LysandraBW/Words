@@ -17,7 +17,7 @@ export const DeckSchema = z.object({
         type: z.string().nullable(),
         words: z.array(z.tuple([z.string().trim().min(1), z.string().trim().min(1)]))
     })),
-    reader_id: z.uuidv7()
+    reader_id: z.string()
 });
 
 
