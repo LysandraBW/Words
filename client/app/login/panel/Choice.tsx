@@ -44,7 +44,7 @@ export default function Choice(props: ChoiceProps) {
                 }
             </div>
             <div className="w-full h-full pr-2.5 flex items-center justify-center">
-                <span className="text-sm text-neutral-500 text-center tracking-wide whitespace-nowrap">
+                <span className="text-sm text-neutral-400 text-center tracking-wide whitespace-nowrap">
                     {props.content}
                 </span>
             </div>

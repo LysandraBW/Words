@@ -29,7 +29,7 @@ export default function CardQuiz(props: CardQuizProps) {
                 className="absolute top-0 left-0 w-full h-full p-2 flex gap-x-2 rounded-3xl overflow-clip"
             >
                 <div 
-                    className="absolute top-0 left-0 w-full h-full grid grid-rows-1 bg-neutral-950/85 rounded-3xl backdrop-blur-sm saturate-200 overflow-clip"
+                    className="absolute top-0 left-0 w-full h-full grid grid-rows-1 rounded-3xl overflow-clip"
                     onMouseEnter={props.pauseInterval}
                     onMouseLeave={props.startInterval}    
                 >
@@ -41,7 +41,7 @@ export default function CardQuiz(props: CardQuizProps) {
                             }
                             {props.question &&
                                 <div className="relative w-full h-full flex justify-center items-center grow bg-neutral-900 border border-neutral-800 rounded-2xl shadow-sm">
-                                    <span className="max-w-[320px] text-sm/5 text-neutral-500/75 text-center tracking-wide">
+                                    <span className="max-w-[320px] text-sm/5 text-neutral-400 text-center tracking-wide">
                                         {props.question.label.toLowerCase().slice(0, -1)}
                                     </span>
                                 </div>

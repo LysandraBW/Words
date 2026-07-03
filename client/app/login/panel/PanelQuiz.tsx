@@ -82,24 +82,24 @@ export default function PanelQuiz() {
                     }}
                 />
             </div>
-            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] mb-2 pb-0 rounded-t-4xl rounded-b-0">
+            <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] mb-2 p-0 pb-0 border-[8px] border-neutral-900 rounded-4xl">
                 <Curve
-                    className="absolute bottom-0 -left-8 w-6 h-6 rotate-0"
+                    className="absolute -bottom-2 -left-10 w-8 h-8 rotate-0"
                     pathClassName="fill-neutral-900"
                 />
                 <Curve
-                    className="absolute bottom-0 -left-2 w-6 h-6 rotate-90"
+                    className="absolute -bottom-2 -left-2 w-8 h-8 rotate-90"
                     pathClassName="fill-neutral-900"
                 />
                 <Curve
-                    className="absolute bottom-0 -right-8 w-6 h-6 rotate-90"
+                    className="absolute -bottom-2 -right-10 w-8 h-8 rotate-90"
                     pathClassName="fill-neutral-900"
                 />
                 <Curve
-                    className="absolute bottom-0 -right-2 w-6 h-6 rotate-0"
+                    className="absolute -bottom-2 -right-2 w-8 h-8 rotate-0"
                     pathClassName="fill-neutral-900"
                 />
-                <div className="relative w-full h-full  ring-[8px] ring-neutral-900 rounded-3xl overflow-clip">
+                <div className="relative w-full h-full ring-2 ring-neutral-900 bg-neutral-950/85 backdrop-blur-lg saturate-300 backdrop-brightness-200 rounded-[22px] overflow-clip">
                     {(questions && questionIndex !== -1) &&
                         <CardQuiz
                             question={(!questions || questionIndex === -1) ? null : questions[questionIndex]}

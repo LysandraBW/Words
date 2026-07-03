@@ -144,6 +144,14 @@ export const books = [
         "background": "/images/dune.jpg"
     },
     {
+        "title": "Disgrace",
+        "author": "J.M. Coetzee",
+        "word": "atonement",
+        "speech": "noun",
+        "definition": "The act of making amends for wrongdoing, often incomplete and imperfectly earned.",
+        "background": "/images/disgrace.jpg"
+    },
+    {
         "title": "The Sun Also Rises",
         "author": "Ernest Hemingway",
         "word": "disillusionment",
@@ -158,14 +166,6 @@ export const books = [
         "speech": "noun",
         "definition": "The breakdown of social cohesion and identity under colonial pressure.",
         "background": "/images/things-fall-apart.webp"
-    },
-    {
-        "title": "Doctor Zhivago",
-        "author": "Boris Pasternak",
-        "word": "apoliticism",
-        "speech": "noun",
-        "definition": "Deliberate withdrawal from ideology in favor of private life and beauty.",
-        "background": "/images/doctor-zhivago.jpg"
     },
     {
         "title": "The Master and Margarita",
@@ -192,12 +192,12 @@ export const books = [
         "background": "/images/intermezzo.jpg"
     },
     {
-        "title": "Martyr!",
-        "author": "Kaveh Akbar",
-        "word": "martyrdom",
+        "title": "Yesteryear",
+        "author": "Caro Claire Burke",
+        "word": "artifice",
         "speech": "noun",
-        "definition": "The suffering of death on account of adherence to a cause and especially to one's religious faith.",
-        "background": "/images/martyr.jpg"
+        "definition": "Clever deception; a constructed image meant to conceal the truth.",
+        "background": "/images/yesteryear.jpg"
     },
     {
         "title": "The Remains of the Day",
@@ -208,6 +208,14 @@ export const books = [
         "background": "/images/the-remains-of-the-day.jpg"
     },
     {
+        "title": "Martyr!",
+        "author": "Kaveh Akbar",
+        "word": "martyrdom",
+        "speech": "noun",
+        "definition": "The suffering of death on account of adherence to a cause and especially to one's religious faith.",
+        "background": "/images/martyr.jpg"
+    },
+    {
         "title": "Macbeth",
         "author": "William Shakespeare",
         "word": "thanehood",
@@ -216,20 +224,20 @@ export const books = [
         "background": "/images/macbeth.webp"
     },
     {
-        "title": "Yesteryear",
-        "author": "Caro Claire Burke",
-        "word": "artifice",
+        "title": "Doctor Zhivago",
+        "author": "Boris Pasternak",
+        "word": "apoliticism",
         "speech": "noun",
-        "definition": "Clever deception; a constructed image meant to conceal the truth.",
-        "background": "/images/yesteryear.jpg"
+        "definition": "Deliberate withdrawal from ideology in favor of private life and beauty.",
+        "background": "/images/doctor-zhivago.jpg"
     },
     {
-        "title": "Jane Eyre",
-        "author": "Charlotte Brontë",
-        "word": "self-determinative",
-        "speech": "adjective",
-        "definition": "Pertaining to an individual's capacity to govern their choices independently.",
-        "background": "/images/jane-eyre.jpg"
+        "title": "Kristin Lavransdatter",
+        "author": "Sigrid Undset",
+        "word": "piety",
+        "speech": "noun",
+        "definition": "Religious devotion that constantly clashes with earthly passion in medieval Norway.",
+        "background": "/images/kristin-lavransdatter.jpg"
     },
     {
         "title": "One Hundred Years of Solitude",
@@ -262,14 +270,6 @@ export const books = [
         "speech": "noun",
         "definition": "A subtle collapse in reality where the ordinary becomes inexplicably unfamiliar.",
         "background": "/images/the-hole.avif"
-    },
-    {
-        "title": "Kristin Lavransdatter",
-        "author": "Sigrid Undset",
-        "word": "piety",
-        "speech": "noun",
-        "definition": "Religious devotion that constantly clashes with earthly passion in medieval Norway.",
-        "background": "/images/kristin-lavransdatter.jpg"
     },
     {
         "title": "Pedro Páramo",
@@ -336,6 +336,22 @@ export const books = [
         "background": "/images/normal-people.jpg"
     },
     {
+        "title": "The Transit of Venus",
+        "author": "Shirley Hazzard",
+        "word": "contingency",
+        "speech": "noun",
+        "definition": "A chance event whose unforeseen consequences quietly determine the course of a life.",
+        "background": "/images/the-transit-of-venus.jpg"
+    },
+    {
+        "title": "Howards End",
+        "author": "E.M. Forster",
+        "word": "inheritance",
+        "speech": "noun",
+        "definition": "That which is passed down between people or classes, whether by right or by circumstance.",
+        "background": "/images/howards-end.jpg"
+    },
+    {
         "title": "Great Expectations",
         "author": "Charles Dickens",
         "word": "gentility",
@@ -376,20 +392,20 @@ export const books = [
         "background": "/images/the-silmarillion.jpg"
     },
     {
+        "title": "A Farewell to Arms",
+        "author": "Ernest Hemingway",
+        "word": "stoicism",
+        "speech": "noun",
+        "definition": "The endurance of pain or hardship without complaint or visible emotion.",
+        "background": "/images/a-farewell-to-arms.jpg"
+    },
+    {
         "title": "Infinite Jest",
         "author": "David Foster Wallace",
         "word": "hedonic saturation",
         "speech": "noun",
         "definition": "A state where endless pleasure consumption destroys the ability to desire meaningfully.",
         "background": "/images/infinite-jest.jpg"
-    },
-    {
-        "title": "To the Lighthouse",
-        "author": "Virginia Woolf",
-        "word": "ephemerality",
-        "speech": "noun",
-        "definition": "The fleeting, transient quality of human moments, perceptions, and relationships.",
-        "background": "/images/to-the-lighthouse.jpg"
     },
     {
         "title": "Invisible Man",
@@ -400,20 +416,20 @@ export const books = [
         "background": "/images/the-invisible-man.jpg"
     },
     {
+        "title": "To the Lighthouse",
+        "author": "Virginia Woolf",
+        "word": "ephemerality",
+        "speech": "noun",
+        "definition": "The fleeting, transient quality of human moments, perceptions, and relationships.",
+        "background": "/images/to-the-lighthouse.jpg"
+    },
+    {
         "title": "A Wizard of Earthsea",
         "author": "Ursula K. Le Guin",
         "word": "true-name",
         "speech": "noun",
         "definition": "A secret name believed to contain the essence and power of a being.",
         "background": "/images/a-wizard-of-earth-sea.jpg"
-    },
-    {
-        "title": "Stories of Your Life and Others",
-        "author": "Ted Chiang",
-        "word": "sapir-whorf hypothesis",
-        "speech": "noun",
-        "definition": "The theory that a language's structure shapes and constrains its speakers' thoughts.",
-        "background": "/images/story-of-your-life-and-others.jpg"
     },
     {
         "title": "The Left Hand of Darkness",
@@ -438,6 +454,14 @@ export const books = [
         "speech": "noun",
         "definition": "A statement true by its own logic, making it impossible to falsify or escape.",
         "background": "/images/catch-22.jpg"
+    },
+    {
+        "title": "Stories of Your Life and Others",
+        "author": "Ted Chiang",
+        "word": "sapir-whorf hypothesis",
+        "speech": "noun",
+        "definition": "The theory that a language's structure shapes and constrains its speakers' thoughts.",
+        "background": "/images/story-of-your-life-and-others.jpg"
     },
     {
         "title": "Monkey Beach",
@@ -592,6 +616,14 @@ export const books = [
         "background": "/images/steppenwolf.jpg"
     },
     {
+        "title": "The Prime of Miss Jean Brodie",
+        "author": "Muriel Spark",
+        "word": "coterie",
+        "speech": "noun",
+        "definition": "A small, exclusive group bound together by loyalty to a charismatic leader.",
+        "background": "/images/the-prime-of-miss-jean-brodie.jpg"
+    },
+    {
         "title": "Hard-Boiled Wonderland and the End of the World",
         "author": "Haruki Murakami",
         "word": "encephalic",
@@ -696,6 +728,14 @@ export const books = [
         "background": "/images/coraline.jpg"
     },
     {
+        "title": "Vanity Fair",
+        "author": "William Makepeace Thackeray",
+        "word": "opportunism",
+        "speech": "noun",
+        "definition": "The practice of seizing advantage from circumstances, often without regard for principle.",
+        "background": "/images/vanity-fair.jpg"
+    },
+    {
         "title": "Pride and Prejudice",
         "author": "Jane Austen",
         "word": "fastidiousness",
@@ -742,6 +782,14 @@ export const books = [
         "speech": "noun",
         "definition": "The condition of sustaining multiple incompatible interpretations simultaneously.",
         "background": "/images/the-turn-of-the-screw.jpg"
+    },
+    {
+        "title": "Their Eyes Were Watching God",
+        "author": "Zora Neale Hurston",
+        "word": "autonomy",
+        "speech": "noun",
+        "definition": "The freedom to live and choose according to one's own will.",
+        "background": "/images/their-eyes-were-watching-god.jpg"
     },
     {
         "title": "Dead Souls",

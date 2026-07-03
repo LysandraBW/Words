@@ -5,7 +5,7 @@ export default function Logo() {
         <svg
             width="100%"
             height="100%"
-            className="rounded-bl-4xl backdrop-blur-sm saturate-200"
+            className="rounded-bl-4xl backdrop-blur-sm saturate-300 backdrop-brightness-125"
         >
             <rect width="100%" height="100%" x="0" y="0" fillOpacity={1} mask="url(#knockout-text)" className="fill-neutral-900"/>
             <mask id="knockout-text">

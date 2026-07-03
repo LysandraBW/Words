@@ -4,7 +4,7 @@ import Tilt from 'react-parallax-tilt';
 import { useEffect, useRef } from "react";
 
 
-interface MovingElementRowProps {
+interface MovingElementProps {
     book: Book;
     addBookReference: (bookTitle: string, bookElement: HTMLElement) => void;
     isSelected: boolean;
@@ -13,7 +13,7 @@ interface MovingElementRowProps {
 }
 
 
-export default function MovingRowElement(props: MovingElementRowProps) {
+export default function MovingColElement(props: MovingElementProps) {
     const bookRef = useRef<HTMLDivElement|null>(null);
 
 
@@ -32,8 +32,12 @@ export default function MovingRowElement(props: MovingElementRowProps) {
             glareColor="#ffffff"
             glarePosition="bottom"
             glareBorderRadius="0.75rem"
-            style={{"clipPath": "inset(0 0 0 0 1rem)"} as any}
-            className="relative w-[var(--w)] min-w-[var(--w)] h-full border border-neutral-900 rounded-2xl overflow-hidden hover:z-100 shadow-md"
+            style={{
+                "clipPath": "inset(0 0 0 0 1rem)",
+                'contentVisibility': 'auto',
+                'containIntrinsicSize': 'var(--colW) var(--h)'
+            } as any}
+            className="relative h-[var(--h)] min-h-[var(--h)] w-full border border-neutral-900 rounded-2xl overflow-hidden hover:z-100 shadow-md"
         >
             <div
                 ref={bookRef}
@@ -50,7 +54,7 @@ export default function MovingRowElement(props: MovingElementRowProps) {
             >
                 <div
                     className={clsx(
-                        `absolute top-0 left-0 z-90 w-full h-full bg-black/75 hover:bg-black/0 transition-all`,
+                        `absolute top-0 left-0 z-90 w-full h-full bg-black/75- hover:bg-black/0 transition-all`,
                         props.isSelected && "!bg-black/0"
                     )}
                 />

@@ -33,7 +33,7 @@ export default function Page() {
     
 
     return (
-        <div className="grid grid-cols-6 overflow-x-clip">
+        <div className="grid grid-cols-5 overflow-x-clip">
             {sortedBooks.map((book, i) => (
                 <div 
                     key={book.title}
