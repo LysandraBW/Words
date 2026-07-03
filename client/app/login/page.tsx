@@ -9,7 +9,7 @@ import motion from "framer-motion";
 
 
 export default function Page() {
-    const [page, setPage] = useState("signIn");    
+    const [page, setPage] = useState("signUp");    
 
     
     return (

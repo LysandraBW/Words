@@ -16,6 +16,7 @@ export interface Question {
 
 
 export default function PanelQuiz() {
+    const [book, setBook] = useState<Book | null>(null);
     const [questions, setQuestions] = useState<Question[]>();
     const [questionIndex, setQuestionIndex] = useState(-1);
     const [intervalState, setIntervalState] = useState("");
@@ -23,6 +24,7 @@ export default function PanelQuiz() {
 
     useEffect(() => {
         const questions: Question[] = [];
+       
         for (const book of books) {
             const optionIndices = new Set<number>();
             while (optionIndices.size < 3) {
@@ -44,13 +46,22 @@ export default function PanelQuiz() {
                 selectedOptionIndex: -1
             });
         }
-        
+     
         setQuestions(questions);
         setQuestionIndex(0);
     }, []);
 
     
+    useEffect(() => {
+        if (!questions || !book)
+            return;
+        const questionIndex = questions.findIndex(question => question.title === book.title);
+        setQuestionIndex(questionIndex);
+    }, [book]);
+
+
     const selectChoice = (choiceIndex: number) => {
+        console.log(2)
         if (!questions)
             return;
         const updatedQuestions = [...questions].map((e, i) => i === questionIndex ? {...e, selectedOptionIndex: choiceIndex} : e);
@@ -73,13 +84,9 @@ export default function PanelQuiz() {
             </div>
             <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
                 <MovingBooks
-                    state={intervalState}
-                    onBookSelected={(book: Book) => {
-                        if (!questions)
-                            return;
-                        const questionIndex = questions.findIndex(question => question.title === book.title);
-                        setQuestionIndex(questionIndex);
-                    }}
+                    selectedBook={book}
+                    onBookSelected={setBook}
+                    intervalState={intervalState}
                 />
             </div>
             <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] mb-2 p-0 pb-0 border-[8px] border-neutral-900 rounded-4xl">

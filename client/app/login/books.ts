@@ -1,5 +1,13 @@
 export const books = [
     {
+        "title": "Dracula",
+        "author": "Bram Stoker",
+        "word": "atavism",
+        "speech": "noun",
+        "definition": "The reemergence of primitive instincts or ancestral traits beneath civilization.",
+        "background": "/images/dracula.jpg"
+    },
+    {
         "title": "1984",
         "author": "George Orwell",
         "word": "epistemic",
@@ -32,20 +40,20 @@ export const books = [
         "background": "/images/brave-new-world.jpg"
     },
     {
-        "title": "Fahrenheit 451",
-        "author": "Ray Bradbury",
-        "word": "anti-intellectualism",
-        "speech": "noun",
-        "definition": "Hostility toward critical thought, literature, and intellectual inquiry.",
-        "background": "/images/fahrenheit-451.jpg"
-    },
-    {
         "title": "Das Kapital",
         "author": "Karl Marx",
         "word": "reification",
         "speech": "noun",
         "definition": "When human relationships are transformed into seemingly objective, independent things.",
         "background": "/images/das-kapital.jpg"
+    },
+    {
+        "title": "Fahrenheit 451",
+        "author": "Ray Bradbury",
+        "word": "anti-intellectualism",
+        "speech": "noun",
+        "definition": "Hostility toward critical thought, literature, and intellectual inquiry.",
+        "background": "/images/fahrenheit-451.jpg"
     },
     {
         "title": "The Scarlet Letter",
@@ -56,12 +64,12 @@ export const books = [
         "background": "/images/the-scarlet-letter.webp"
     },
     {
-        "title": "Dracula",
-        "author": "Bram Stoker",
-        "word": "atavism",
-        "speech": "noun",
-        "definition": "The reemergence of primitive instincts or ancestral traits beneath civilization.",
-        "background": "/images/dracula.jpg"
+        "title": "The Leopard",
+        "author": "Giuseppe Tomasi di Lampedusa",
+        "word": "moribund",
+        "speech": "adjective",
+        "definition": "In terminal decline; lacking vitality or the vigor for continued existence, as of a dying institution or way of life.",
+        "background": "/images/the-leopard.jpg"
     },
     {
         "title": "The Handmaid's Tale",
@@ -80,20 +88,20 @@ export const books = [
         "background": "/images/slaughterhouse-five.jpg"
     },
     {
-        "title": "Fight Club",
-        "author": "Chuck Palahniuk",
-        "word": "dissociative",
+        "title": "The Call of Cthulhu",
+        "author": "H.P. Lovecraft",
+        "word": "eldritch",
         "speech": "adjective",
-        "definition": "Describing psychological disconnection from one's identity, reality, or actions.",
-        "background": "/images/fight-club.jpg"
+        "definition": "Strange and sinister in a way that seems supernatural or otherworldly.",
+        "background": "/images/the-call-of-cthulhu.webp"
     },
     {
-        "title": "Half of a Yellow Sun",
-        "author": "Chimamanda Ngozi Adichie",
-        "word": "secessionist",
-        "speech": "adjective",
-        "definition": "Relating to a region's attempt to break away and form an independent state.",
-        "background": "/images/half-of-a-yellow-sun.jpg"
+        "title": "The Secret Adversary",
+        "author": "Agatha Christie",
+        "word": "espionage",
+        "speech": "noun",
+        "definition": "The practice of spying or using spies, typically by governments to obtain political and military secrets.",
+        "background": "/images/the-secret-adversary.webp"
     },
     {
         "title": "The Trial",
@@ -112,14 +120,6 @@ export const books = [
         "background": "/images/klara-and-the-sun.jpg"
     },
     {
-        "title": "The Secret Adversary",
-        "author": "Agatha Christie",
-        "word": "espionage",
-        "speech": "noun",
-        "definition": "The practice of spying or using spies, typically by governments to obtain political and military secrets.",
-        "background": "/images/the-secret-adversary.webp"
-    },
-    {
         "title": "The Alchemist",
         "author": "Paulo Coelho",
         "word": "omens",
@@ -136,12 +136,12 @@ export const books = [
         "background": "/images/so-long-a-letter.jpg"
     },
     {
-        "title": "Dune",
-        "author": "Frank Herbert",
-        "word": "prescience",
-        "speech": "noun",
-        "definition": "Foreknowledge of future events, especially as a destabilizing political burden.",
-        "background": "/images/dune.jpg"
+        "title": "Bliss Montage",
+        "author": "Ling Ma",
+        "word": "liminal",
+        "speech": "adjective",
+        "definition": "Occupying a position at, or on both sides of, a boundary or threshold; relating to a transitional or in-between stage.",
+        "background": "/images/bliss-montage.avif"
     },
     {
         "title": "Disgrace",
@@ -152,76 +152,28 @@ export const books = [
         "background": "/images/disgrace.jpg"
     },
     {
-        "title": "The Sun Also Rises",
-        "author": "Ernest Hemingway",
-        "word": "disillusionment",
-        "speech": "noun",
-        "definition": "The collapse of belief in previously trusted ideals after collective trauma.",
-        "background": "/images/the-sun-also-rises.jpg"
-    },
-    {
-        "title": "Things Fall Apart",
-        "author": "Chinua Achebe",
-        "word": "disintegration",
-        "speech": "noun",
-        "definition": "The breakdown of social cohesion and identity under colonial pressure.",
-        "background": "/images/things-fall-apart.webp"
-    },
-    {
-        "title": "The Master and Margarita",
-        "author": "Mikhail Bulgakov",
-        "word": "diabolical",
+        "title": "The Captain and the Glory",
+        "author": "Dave Eggers",
+        "word": "farcical",
         "speech": "adjective",
-        "definition": "Possessing a mischievous, infernal, or supernatural malevolence.",
-        "background": "/images/the-master-and-margarita.webp"
+        "definition": "Relating to or resembling farce, especially because of absurd or ridiculous aspects.",
+        "background": "/images/the-captain-and-the-glory.jpg"
     },
     {
-        "title": "On the Calculation of Volume",
-        "author": "Solvej Balle",
-        "word": "temporality",
-        "speech": "noun",
-        "definition": "The nature of time, explored through a woman trapped repeating a single November day.",
-        "background": "/images/on-the-calculation-of-volume-i.jpg"
+        "title": "Paradise",
+        "author": "Abdulrazak Gurnah",
+        "word": "Edenic",
+        "speech": "adjective",
+        "definition": "Relating to or resembling the Garden of Eden; blissfully innocent and unspoiled, often ironically before a fall from that state.",
+        "background": "/images/paradise.jpg"
     },
     {
-        "title": "Intermezzo",
-        "author": "Sally Rooney",
-        "word": "grief",
-        "speech": "noun",
-        "definition": "Deep sorrow following a loss, shaping the complex relationships between two grieving brothers.",
-        "background": "/images/intermezzo.jpg"
-    },
-    {
-        "title": "Yesteryear",
-        "author": "Caro Claire Burke",
-        "word": "artifice",
-        "speech": "noun",
-        "definition": "Clever deception; a constructed image meant to conceal the truth.",
-        "background": "/images/yesteryear.jpg"
-    },
-    {
-        "title": "The Remains of the Day",
-        "author": "Kazuo Ishiguro",
-        "word": "repression",
-        "speech": "noun",
-        "definition": "The suppression of one's own feelings, often at great personal cost.",
-        "background": "/images/the-remains-of-the-day.jpg"
-    },
-    {
-        "title": "Martyr!",
-        "author": "Kaveh Akbar",
-        "word": "martyrdom",
-        "speech": "noun",
-        "definition": "The suffering of death on account of adherence to a cause and especially to one's religious faith.",
-        "background": "/images/martyr.jpg"
-    },
-    {
-        "title": "Macbeth",
-        "author": "William Shakespeare",
-        "word": "thanehood",
-        "speech": "noun",
-        "definition": "The status of a thane, symbolizing feudal power and its instability.",
-        "background": "/images/macbeth.webp"
+        "title": "Thrilling Tales of Modern Men",
+        "author": "Danny McBride",
+        "word": "fragile",
+        "speech": "adjective",
+        "definition": "Easily damaged or shattered; here, describing an emotional or psychological state that is delicate and prone to collapse under pressure.",
+        "background": "/images/thrilling-tales-of-modern-men.jpg"
     },
     {
         "title": "Doctor Zhivago",
@@ -232,6 +184,62 @@ export const books = [
         "background": "/images/doctor-zhivago.jpg"
     },
     {
+        "title": "On the Calculation of Volume",
+        "author": "Solvej Balle",
+        "word": "temporality",
+        "speech": "noun",
+        "definition": "The nature of time, explored through a woman trapped repeating a single November day.",
+        "background": "/images/on-the-calculation-of-volume-i.jpg"
+    },
+    {
+        "title": "Butter",
+        "author": "Asako Yuzuki",
+        "word": "transgressive",
+        "speech": "adjective",
+        "definition": "Departing from accepted social norms or moral boundaries, often provocatively so.",
+        "background": "/images/butter.jpg"
+    },
+    {
+        "title": "Intermezzo",
+        "author": "Sally Rooney",
+        "word": "grief",
+        "speech": "noun",
+        "definition": "Deep sorrow following a loss, shaping the complex relationships between two grieving brothers.",
+        "background": "/images/intermezzo.jpg"
+    },
+    {
+        "title": "Happy",
+        "author": "Celina Baljeet Basra",
+        "word": "sanguine",
+        "speech": "adjective",
+        "definition": "Optimistic or positive, especially in a difficult or discouraging situation.",
+        "background": "/images/happy.jpg"
+    },
+    {
+        "title": "Yesteryear",
+        "author": "Caro Claire Burke",
+        "word": "artifice",
+        "speech": "noun",
+        "definition": "Clever deception; a constructed image meant to conceal the truth.",
+        "background": "/images/yesteryear.jpg"
+    },
+    {
+        "title": "Martyr!",
+        "author": "Kaveh Akbar",
+        "word": "martyrdom",
+        "speech": "noun",
+        "definition": "The suffering of death on account of adherence to a cause and especially to one's religious faith.",
+        "background": "/images/martyr.jpg"
+    },
+    {
+        "title": "The Remains of the Day",
+        "author": "Kazuo Ishiguro",
+        "word": "repression",
+        "speech": "noun",
+        "definition": "The suppression of one's own feelings, often at great personal cost.",
+        "background": "/images/the-remains-of-the-day.jpg"
+    },
+    {
         "title": "Kristin Lavransdatter",
         "author": "Sigrid Undset",
         "word": "piety",
@@ -240,12 +248,12 @@ export const books = [
         "background": "/images/kristin-lavransdatter.jpg"
     },
     {
-        "title": "One Hundred Years of Solitude",
-        "author": "Gabriel García Márquez",
-        "word": "cyclical",
+        "title": "Heart of Darkness",
+        "author": "Joseph Conrad",
+        "word": "atavistic",
         "speech": "adjective",
-        "definition": "Recurring in repeated patterns or cycles, with history and fate folding back on themselves endlessly.",
-        "background": "/images/one-hundred-years-of-solitude.jpg"
+        "definition": "Reverting to primitive instincts or ancestral patterns of behavior.",
+        "background": "/images/heart-of-darkness.jpg"
     },
     {
         "title": "Middlemarch",
@@ -264,6 +272,14 @@ export const books = [
         "background": "/images/the-buried-giant.jpg"
     },
     {
+        "title": "The Transit of Venus",
+        "author": "Shirley Hazzard",
+        "word": "contingency",
+        "speech": "noun",
+        "definition": "A chance event whose unforeseen consequences quietly determine the course of a life.",
+        "background": "/images/the-transit-of-venus.jpg"
+    },
+    {
         "title": "The Hole",
         "author": "Hiroko Oyamada",
         "word": "ontological slippage",
@@ -272,28 +288,12 @@ export const books = [
         "background": "/images/the-hole.avif"
     },
     {
-        "title": "Pedro Páramo",
-        "author": "Juan Rulfo",
-        "word": "necropolitan",
+        "title": "One Hundred Years of Solitude",
+        "author": "Gabriel García Márquez",
+        "word": "cyclical",
         "speech": "adjective",
-        "definition": "Characterized by the coexistence of the living and the dead in one space.",
-        "background": "/images/pedro-paramo.png"
-    },
-    {
-        "title": "Norwegian Wood",
-        "author": "Haruki Murakami",
-        "word": "melancholy",
-        "speech": "noun",
-        "definition": "A deep, pensive sadness permeating a young man's memories of love and loss.",
-        "background": "/images/norwegian-wood.jpg"
-    },
-    {
-        "title": "The Mysterious Affair at Styles",
-        "author": "Agatha Christie",
-        "word": "deduction",
-        "speech": "noun",
-        "definition": "The deriving of a conclusion by reasoning, specifically in solving a crime using logic and minutiae.",
-        "background": "/images/the-mysterious-affair-at-styles.jpg"
+        "definition": "Recurring in repeated patterns or cycles, with history and fate folding back on themselves endlessly.",
+        "background": "/images/one-hundred-years-of-solitude.jpg"
     },
     {
         "title": "Lord of the Flies",
@@ -320,12 +320,20 @@ export const books = [
         "background": "/images/the-bluest-eye.jpg"
     },
     {
-        "title": "The Blue Castle",
-        "author": "L.M. Montgomery",
-        "word": "liberation",
+        "title": "Howards End",
+        "author": "E.M. Forster",
+        "word": "inheritance",
         "speech": "noun",
-        "definition": "The act of gaining freedom from an overbearing family after receiving a terminal diagnosis.",
-        "background": "/images/the-blue-castle.jpg"
+        "definition": "That which is passed down between people or classes, whether by right or by circumstance.",
+        "background": "/images/howards-end.jpg"
+    },
+    {
+        "title": "The Hounding",
+        "author": "Xenobe Purvis",
+        "word": "calumny",
+        "speech": "noun",
+        "definition": "The making of false and defamatory statements in order to damage someone's reputation; slander.",
+        "background": "/images/the-hounding.jpg"
     },
     {
         "title": "Normal People",
@@ -334,22 +342,6 @@ export const books = [
         "speech": "noun",
         "definition": "The profound, complicated emotional closeness shared by two people over several formative years.",
         "background": "/images/normal-people.jpg"
-    },
-    {
-        "title": "The Transit of Venus",
-        "author": "Shirley Hazzard",
-        "word": "contingency",
-        "speech": "noun",
-        "definition": "A chance event whose unforeseen consequences quietly determine the course of a life.",
-        "background": "/images/the-transit-of-venus.jpg"
-    },
-    {
-        "title": "Howards End",
-        "author": "E.M. Forster",
-        "word": "inheritance",
-        "speech": "noun",
-        "definition": "That which is passed down between people or classes, whether by right or by circumstance.",
-        "background": "/images/howards-end.jpg"
     },
     {
         "title": "Great Expectations",
@@ -376,14 +368,6 @@ export const books = [
         "background": "/images/kokoro.jpg"
     },
     {
-        "title": "Cloud Atlas",
-        "author": "David Mitchell",
-        "word": "metempsychosis",
-        "speech": "noun",
-        "definition": "The transmigration of a soul or consciousness across different bodies or lifetimes.",
-        "background": "/images/cloud-atlas.jpg"
-    },
-    {
         "title": "The Silmarillion",
         "author": "J.R.R. Tolkien",
         "word": "cosmogonic",
@@ -392,12 +376,28 @@ export const books = [
         "background": "/images/the-silmarillion.jpg"
     },
     {
+        "title": "Pool House",
+        "author": "Mary H.K. Choi",
+        "word": "purgatorial",
+        "speech": "adjective",
+        "definition": "Suspended in a state of waiting or mild suffering, neither settled nor free, as one endures before any real change or release arrives.",
+        "background": "/images/pool-house.avif"
+    },
+    {
         "title": "A Farewell to Arms",
         "author": "Ernest Hemingway",
         "word": "stoicism",
         "speech": "noun",
         "definition": "The endurance of pain or hardship without complaint or visible emotion.",
         "background": "/images/a-farewell-to-arms.jpg"
+    },
+    {
+        "title": "The Shampoo Effect",
+        "author": "Jenny Jackson",
+        "word": "residue",
+        "speech": "noun",
+        "definition": "A trace of someone or something left behind that refuses to fully wash away, lingering in feeling long after the presence itself is gone.",
+        "background": "/images/the-shampoo-effect.jpg"
     },
     {
         "title": "Infinite Jest",
@@ -424,20 +424,28 @@ export const books = [
         "background": "/images/to-the-lighthouse.jpg"
     },
     {
-        "title": "A Wizard of Earthsea",
-        "author": "Ursula K. Le Guin",
-        "word": "true-name",
-        "speech": "noun",
-        "definition": "A secret name believed to contain the essence and power of a being.",
-        "background": "/images/a-wizard-of-earth-sea.jpg"
+        "title": "Dad Had a Bad Day",
+        "author": "Ashton Politanoff",
+        "word": "solipsistic",
+        "speech": "adjective",
+        "definition": "Characterized by excessive preoccupation with one's own feelings, desires, and self, often to the exclusion of others' needs.",
+        "background": "/images/dad-had-a-bad-day.jpg"
     },
     {
-        "title": "The Left Hand of Darkness",
-        "author": "Ursula K. Le Guin",
-        "word": "androgyny",
+        "title": "The Blue Castle",
+        "author": "L.M. Montgomery",
+        "word": "liberation",
         "speech": "noun",
-        "definition": "The blending or transcendence of conventional male and female characteristics.",
-        "background": "/images/the-left-hand-of-darkness-2.jpg"
+        "definition": "The act of gaining freedom from an overbearing family after receiving a terminal diagnosis.",
+        "background": "/images/the-blue-castle.jpg"
+    },
+    {
+        "title": "The World After Rain",
+        "author": "Canisia Lubrin",
+        "word": "elegiac",
+        "speech": "adjective",
+        "definition": "Relating to or characteristic of an elegy; expressing sorrowful, wistful remembrance.",
+        "background": "/images/the-world-after-rain.jpg"
     },
     {
         "title": "Misery",
@@ -456,22 +464,6 @@ export const books = [
         "background": "/images/catch-22.jpg"
     },
     {
-        "title": "Stories of Your Life and Others",
-        "author": "Ted Chiang",
-        "word": "sapir-whorf hypothesis",
-        "speech": "noun",
-        "definition": "The theory that a language's structure shapes and constrains its speakers' thoughts.",
-        "background": "/images/story-of-your-life-and-others.jpg"
-    },
-    {
-        "title": "Monkey Beach",
-        "author": "Eden Robinson",
-        "word": "animistic",
-        "speech": "adjective",
-        "definition": "Relating to the belief that spiritual consciousness inhabits animals and natural forces.",
-        "background": "/images/monkey-beach.jpg"
-    },
-    {
         "title": "The Midnight Library",
         "author": "Matt Haig",
         "word": "counterfactual",
@@ -488,12 +480,12 @@ export const books = [
         "background": "/images/station-eleven.jpg"
     },
     {
-        "title": "Wide Sargasso Sea",
-        "author": "Jean Rhys",
-        "word": "creolization",
-        "speech": "noun",
-        "definition": "The cultural and linguistic blending that emerges through colonial contact.",
-        "background": "/images/wide-sargasso-sea.jpg"
+        "title": "The Master and Margarita",
+        "author": "Mikhail Bulgakov",
+        "word": "diabolical",
+        "speech": "adjective",
+        "definition": "Possessing a mischievous, infernal, or supernatural malevolence.",
+        "background": "/images/the-master-and-margarita.jpg"
     },
     {
         "title": "Never Let Me Go",
@@ -502,22 +494,6 @@ export const books = [
         "speech": "adjective",
         "definition": "Disposed to accept without resistance, even when faced with profound injustice or loss.",
         "background": "/images/never-let-me-go.jpg"
-    },
-    {
-        "title": "Heart of Darkness",
-        "author": "Joseph Conrad",
-        "word": "atavistic",
-        "speech": "adjective",
-        "definition": "Reverting to primitive instincts or ancestral patterns of behavior.",
-        "background": "/images/heart-of-darkness.jpg"
-    },
-    {
-        "title": "Anna Karenina",
-        "author": "Leo Tolstoy",
-        "word": "mésalliance",
-        "speech": "noun",
-        "definition": "A relationship considered socially or morally unsuitable by those around it.",
-        "background": "/images/anna-karenina.jpg"
     },
     {
         "title": "Kitchen",
@@ -568,20 +544,28 @@ export const books = [
         "background": "/images/beloved.jpg"
     },
     {
-        "title": "Bleak House",
-        "author": "Charles Dickens",
-        "word": "interminable",
-        "speech": "adjective",
-        "definition": "Endless or seemingly without resolution, as of a legal or bureaucratic process that consumes lives.",
-        "background": "/images/bleak-house.jpg"
-    },
-    {
         "title": "Zone One",
         "author": "Colson Whitehead",
         "word": "attrition",
         "speech": "noun",
         "definition": "A gradual wearing down of strength or resolve through constant struggle.",
         "background": "/images/zone-one.webp"
+    },
+    {
+        "title": "The Sun Also Rises",
+        "author": "Ernest Hemingway",
+        "word": "disillusionment",
+        "speech": "noun",
+        "definition": "The collapse of belief in previously trusted ideals after collective trauma.",
+        "background": "/images/the-sun-also-rises.jpg"
+    },
+    {
+        "title": "I Deliver Parcels in Beijing",
+        "author": "Hu Anyan",
+        "word": "Sisyphean",
+        "speech": "adjective",
+        "definition": "Denoting a task or activity that is laborious, endless, and ultimately futile.",
+        "background": "/images/i-deliver-parcels-in-beijing.jpg"
     },
     {
         "title": "Kafka on the Shore",
@@ -606,6 +590,14 @@ export const books = [
         "speech": "noun",
         "definition": "The supernatural ability to perceive events beyond ordinary sensory awareness.",
         "background": "/images/the-house-of-the-spirits.jpg"
+    },
+    {
+        "title": "Latitudes of Longing",
+        "author": "Shubhangi Swarup",
+        "word": "telluric",
+        "speech": "adjective",
+        "definition": "Of or relating to the earth or soil; earthy.",
+        "background": "/images/latitudes-of-longitude.jpg"
     },
     {
         "title": "Steppenwolf",
@@ -648,28 +640,20 @@ export const books = [
         "background": "/images/the-dispossessed.jpg"
     },
     {
-        "title": "Don Quixote",
-        "author": "Miguel de Cervantes",
-        "word": "quixotic",
-        "speech": "adjective",
-        "definition": "Exceedingly idealistic, unrealistic, and impractical in the pursuit of noble ideals.",
-        "background": "/images/don-quixote.jpg"
+        "title": "Oryx and Crake",
+        "author": "Margaret Atwood",
+        "word": "hubris",
+        "speech": "noun",
+        "definition": "Excessive pride or ambition that blinds a person to the consequences of their actions.",
+        "background": "/images/oryx-and-crake.jpg"
     },
     {
-        "title": "Madame Bovary",
-        "author": "Gustave Flaubert",
-        "word": "bovarysme",
+        "title": "The Count of Monte Cristo",
+        "author": "Alexandre Dumas",
+        "word": "implacability",
         "speech": "noun",
-        "definition": "The tendency to perceive oneself as more romantic and exceptional than reality.",
-        "background": "/images/madame-bovary.jpg"
-    },
-    {
-        "title": "The Brothers Karamazov",
-        "author": "Fyodor Dostoevsky",
-        "word": "theodicy",
-        "speech": "noun",
-        "definition": "The attempt to reconcile a benevolent God with the existence of suffering.",
-        "background": "/images/the-brothers-karamazov-2.jpg"
+        "definition": "The quality of being relentless, unforgiving, and impossible to appease.",
+        "background": "/images/the-count-of-monte-cristo.jpg"
     },
     {
         "title": "American Psycho",
@@ -776,14 +760,6 @@ export const books = [
         "background": "/images/moby-dick.avif"
     },
     {
-        "title": "The Turn of the Screw",
-        "author": "Henry James",
-        "word": "ambiguity",
-        "speech": "noun",
-        "definition": "The condition of sustaining multiple incompatible interpretations simultaneously.",
-        "background": "/images/the-turn-of-the-screw.jpg"
-    },
-    {
         "title": "Their Eyes Were Watching God",
         "author": "Zora Neale Hurston",
         "word": "autonomy",
@@ -792,12 +768,20 @@ export const books = [
         "background": "/images/their-eyes-were-watching-god.jpg"
     },
     {
-        "title": "Dead Souls",
-        "author": "Nikolai Gogol",
-        "word": "chicanery",
+        "title": "Madame Bovary",
+        "author": "Gustave Flaubert",
+        "word": "bovarysme",
         "speech": "noun",
-        "definition": "The use of trickery or deception to achieve one's ends.",
-        "background": "/images/dead-souls.jpg"
+        "definition": "The tendency to perceive oneself as more romantic and exceptional than reality.",
+        "background": "/images/madame-bovary.png"
+    },
+    {
+        "title": "The Doloriad",
+        "author": "Missouri Williams",
+        "word": "abject",
+        "speech": "adjective",
+        "definition": "Experienced or present to the maximum degree, typically used of something unpleasant; utterly degraded or wretched.",
+        "background": "/images/the-doloriad.jpg"
     },
     {
         "title": "Stoner",
@@ -808,28 +792,20 @@ export const books = [
         "background": "/images/the-stoner.jpg"
     },
     {
-        "title": "The Art of War",
-        "author": "Sun Tzu",
-        "word": "strategy",
+        "title": "A Little Life",
+        "author": "Hanya Yanagihara",
+        "word": "self-abnegation",
         "speech": "noun",
-        "definition": "A plan of action or policy designed to achieve a major or overall aim, especially in war or competition.",
-        "background": "/images/the-art-of-war.jpg"
+        "definition": "The denial of one's own needs, often mistaken for love.",
+        "background": "/images/a-little-life.jpg"
     },
     {
-        "title": "The Call of Cthulhu",
-        "author": "H.P. Lovecraft",
-        "word": "eldritch",
+        "title": "Crisis Actor",
+        "author": "Declan Ryan",
+        "word": "rueful",
         "speech": "adjective",
-        "definition": "Strange and sinister in a way that seems supernatural or otherworldly.",
-        "background": "/images/the-call-of-cthulhu.webp"
-    },
-    {
-        "title": "Human Acts",
-        "author": "Han Kang",
-        "word": "atrocity",
-        "speech": "noun",
-        "definition": "An act of extreme cruelty or violence, especially one committed against civilians or the powerless.",
-        "background": "/images/human-acts.jpg"
+        "definition": "Expressing sorrow or regret, often tinged with wry, self-aware humor.",
+        "background": "/images/crisis-actor.jpg"
     },
     {
         "title": "American War",
@@ -840,28 +816,12 @@ export const books = [
         "background": "/images/american-war.jpg"
     },
     {
-        "title": "A Little Life",
-        "author": "Hanya Yanagihara",
-        "word": "self-abnegation",
+        "title": "Dead Souls",
+        "author": "Nikolai Gogol",
+        "word": "chicanery",
         "speech": "noun",
-        "definition": "The denial of one's own needs, often mistaken for love.",
-        "background": "/images/a-little-life.jpg"
-    },
-    {
-        "title": "Oryx and Crake",
-        "author": "Margaret Atwood",
-        "word": "hubris",
-        "speech": "noun",
-        "definition": "Excessive pride or ambition that blinds a person to the consequences of their actions.",
-        "background": "/images/oryx-and-crake.jpg"
-    },
-    {
-        "title": "The Count of Monte Cristo",
-        "author": "Alexandre Dumas",
-        "word": "implacability",
-        "speech": "noun",
-        "definition": "The quality of being relentless, unforgiving, and impossible to appease.",
-        "background": "/images/the-count-of-monte-cristo.jpg"
+        "definition": "The use of trickery or deception to achieve one's ends.",
+        "background": "/images/dead-souls.jpg"
     },
     {
         "title": "The Discovery of Heaven",

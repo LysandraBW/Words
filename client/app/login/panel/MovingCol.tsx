@@ -1,16 +1,14 @@
 import { Book } from "../books";
 import { useAnimate } from "framer-motion";
 import { Fragment, useEffect, useRef } from "react";
-import MovingRowElement from "./MovingRowElement";
 import MovingColElement from "./MovingColElement";
 
 
 interface MovingColProps {
     rows: number;
     cols: number;
-    reverse: boolean;
     books: Book[];
-    selectedBookRef: Book | null;
+    selectedBook: Book | null;
     onSelectBook: (book: Book) => void;
     addBookReference: (bookTitle: string, bookElement: HTMLElement) => void;
 }
@@ -58,10 +56,10 @@ export default function MovingCol(props: MovingColProps) {
                     <Fragment key={i}>
                         <MovingColElement
                             book={book}
+                            isSelected={props.selectedBook === book}
+                            isDuplicate={i >= props.books.length}
                             onClickBook={props.onSelectBook}
                             addBookReference={props.addBookReference}
-                            isSelected={props.selectedBookRef === book}
-                            isDuplicate={i >= props.books.length}
                         />
                     </Fragment>
                 ))}

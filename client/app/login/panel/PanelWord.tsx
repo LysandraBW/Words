@@ -1,6 +1,6 @@
 import { Book } from "../books";
 import CardWord from "./CardWord";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Curve from "./Curve";
 import MovingBooks from "./MovingBooks";
 import Logo from "./Logo";
@@ -11,9 +11,6 @@ export default function PanelWord() {
     const [intervalState, setIntervalState] = useState("");
 
 
-    useEffect(() => {
-        console.log(book);
-    }, [book])
     return (
         <div className="sticky top-0 max-lg:hidden relative w-full h-full p-2 bg-neutral-900 rounded-4xl overflow-hidden">
             <div className="absolute top-2 right-2 z-100 w-[128px] h-[52px] bg-transparent">
@@ -29,8 +26,9 @@ export default function PanelWord() {
             </div>
             <div className="relative w-full h-full bg-neutral-900 rounded-3xl overflow-clip cursor-[url('/images/handpointing.svg'),_pointer]">
                 <MovingBooks
-                    state={intervalState}
+                    selectedBook={book}
                     onBookSelected={setBook}
+                    intervalState={intervalState}
                 />
             </div>
             <div className="absolute bottom-0 [--w:min(50%,500px)] left-[calc(50%-calc(var(--w)/2))] w-[var(--w)] h-[calc(33%-5px)] mb-2 p-0 pb-0 border-[8px] border-neutral-900 rounded-4xl">
