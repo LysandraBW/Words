@@ -14,7 +14,6 @@ export default function SearchWords(props: SearchWordsProps) {
 
     return (
         <div className="p-8 flex">
-            
             <InputDropdown
                 value={[selected]}
                 options={suggestions.map(suggestion => ({
@@ -25,7 +24,7 @@ export default function SearchWords(props: SearchWordsProps) {
                 onChange={(value: string) => props.onOpenWord(value)}
                 wrapperClassName="w-full"
                 toggleClassName="rounded-l-none border-l-0 pl-4"
-                optionClassName="w-full"
+                optionContainerClassName="w-full"
                 itemName="Words"
                 toggleLabel="Search Merriam-Webster"
                 search

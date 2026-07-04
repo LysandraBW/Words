@@ -18,11 +18,15 @@ interface InputDropdownProps<V> {
     options: Option<V>[];
     onChange: (value: V) => void;
     toggleLabel: string;
+    toggleLabelClassName: string;
     toggleClassName: string;
+    optionsContainerClassName: string;
+    optionContainerClassName: string;
     optionClassName: string;
     search: boolean;
     searchPlaceholder: string;
     onSearchChange: (debouncedSearch: string) => void;
+    onClose: () => void;
     itemName: string;
     wrapperClassName: string;
     elementLeft: ReactNode;
@@ -45,8 +49,10 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
 
     useEffect(() => {
         document.addEventListener('mousedown', (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node))
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setOpen(false);
+                setSearch("")
+            }
         });
     }, [dropdownRef]);
 
@@ -59,7 +65,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
             />
             <div 
                 ref={dropdownRef}
-                className="relative flex"
+                className="relative flex grow"
             >
                 {props.elementLeft && props.elementLeft}
                 {(!props.search || (props.search && !open)) &&
@@ -75,8 +81,9 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                     >
                         <label 
                             className={clsx(
-                                "text-sm text-neutral-500 tracking-wide",
+                                "text-sm",
                                 !props.search && "cursor-pointer",
+                                props.toggleLabelClassName
                             )}
                         >
                             {props.toggleLabel}
@@ -109,15 +116,15 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                 {open &&
                     <div 
                         className={clsx(
-                            "absolute top-[calc(36px+4px)] z-50",
+                            "absolute top-[calc(36px+8px)] z-50",
                             "max-h-[256px] overflow-y-auto",
-                            "bg-black border border-neutral-800 rounded-md",
-                            props.optionClassName
+                            "bg-neutral-900 border border-neutral-800 rounded-md",
+                            props.optionsContainerClassName
                         )}
                     >
                         {!props.options?.length &&
                             <div className="w-full h-full p-8 flex flex-col gap-y-0 justify-center items-center">
-                                {(props.search || search) &&
+                                {(props.search && search) &&
                                     props.elementNoResultsFound    
                                 }
                                 {(props.search && !search) &&
@@ -132,11 +139,17 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                                 className={clsx(
                                     "p-2 overflow-x-clip",
                                     "grid grid-cols-[auto_16px] gap-x-4 items-center",
-                                    " border-b border-b-neutral-800 last:border-b-0 text-white cursor-pointer",
-                                    "group hover: hover:text-blue-400"
+                                    "border-b border-b-neutral-800 last:border-b-0 text-white cursor-pointer",
+                                    "group hover:bg-neutral-700",
+                                    props.optionContainerClassName
                                 )}
                             >
-                                <div className="text-inherit text-sm tracking-wide">
+                                <div 
+                                    className={clsx(
+                                        "text-inherit text-sm tracking-wide",
+                                        props.optionClassName
+                                    )}
+                                >
                                     {option.optionLabel || option.textLabel}
                                 </div>
                                 {props.value?.includes(option.value) &&

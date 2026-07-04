@@ -145,7 +145,7 @@ export default function Page() {
                         onOpenWord={onOpenWord}
                     />
                     <Divider/>
-                    {/* <ShowBooks
+                    <ShowBooks
                         books={data.books}
                         onCreateBook={() => setShow('Create Book')}
                     />
@@ -165,7 +165,7 @@ export default function Page() {
                         decksGraded={data.decksGraded}
                         onCreateDeck={() => setShow('Create Deck')}
                         onDeleteDeck={onDeleteDeck}
-                    /> */}
+                    />
                 </div>
                 {show === 'Create Deck' &&
                     <CreateDeck

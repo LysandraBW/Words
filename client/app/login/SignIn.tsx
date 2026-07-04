@@ -19,7 +19,7 @@ export default function SignIn(props: SignInProps) {
     const [form, setForm] = useState(createForm([
         {
             label: 'email',
-            value: 'abc@mail.com',
+            value: 'abc@gmail.com',
             test: z.string().trim().min(1, "Must enter an email")
         },
         {
