@@ -21,7 +21,7 @@ button * {
         @apply 
             w-full h-full
             outline-none
-            text-sm text-white
+            text-sm text-neutral-200
     }
 
     .input-placeholder {

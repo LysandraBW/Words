@@ -21,7 +21,7 @@ export default function SearchWords(props: SearchWordsProps) {
                     textLabel: suggestion,
                     optionLabel: (
                         <div className="flex items-center">
-                            <span className="relative z-100 min-w-[32px] aspect-square mr-2 flex justify-center items-center bg-neutral-900/50 border border-neutral-700 rounded-md shadow  text-xs text-center font-medium group-hover:!text-neutral-400">
+                            <span className="relative z-100 min-w-[32px] aspect-square mr-2 flex justify-center items-center bg-neutral-900/50 border border-neutral-700 rounded-md  text-xs text-center font-medium group-hover:!text-neutral-400">
                                 {i+1}
                             </span>
                             {suggestion}
@@ -30,9 +30,9 @@ export default function SearchWords(props: SearchWordsProps) {
                 }))}
                 onSearchChange={(value: string) => setSuggestions(getSuggestions(value))}
                 onChange={(value: string) => props.onOpenWord(value)}
-                wrapperClassName="w-full !h-full !min-h-full rounded-md shadow"
+                wrapperClassName="w-full !h-full !min-h-full rounded-md"
                 toggleClassName="!h-full !min-h-full pl-4 bg-neutral-800 border-l-0 !border-neutral-700 !rounded-r-lg rounded-l-none !text-base placeholder:!text-base placeholder:!tracking-normal"
-                optionsContainerClassName="!w-full !bg-neutral-800 !border-neutral-700 !shadow-lg !rounded-lg"
+                optionsContainerClassName="!w-full !bg-neutral-800 !border-neutral-700 !rounded-lg"
                 optionContainerClassName="!py-2 !border-b !border-b-neutral-700 last:!border-b-0 group hover:!bg-neutral-900"
                 optionClassName="!text-neutral-500/75 !text-base group-hover:!text-neutral-400 tracking-wide"
                 itemName="Words"

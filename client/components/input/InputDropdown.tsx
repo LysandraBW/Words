@@ -29,6 +29,7 @@ interface InputDropdownProps<V> {
     onClose: () => void;
     itemName: string;
     wrapperClassName: string;
+    boxClassName: string;
     elementLeft: ReactNode;
     elementRight: ReactNode;
     elementNoResultsFound: ReactNode;
@@ -65,7 +66,10 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
             />
             <div 
                 ref={dropdownRef}
-                className="relative flex grow"
+                className={clsx(
+                    "relative flex grow",
+                    props.boxClassName
+                )}
             >
                 {props.elementLeft && props.elementLeft}
                 {(!props.search || (props.search && !open)) &&
@@ -91,6 +95,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         {!props.search &&
                             <ChevronsUpDown
                                 size={16}
+                                    strokeWidth={1.5}
                                 className="text-neutral-500"
                             />
                         }
