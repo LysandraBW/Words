@@ -26,7 +26,7 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
             /> */}
             <div
                 className={clsx(
-                    "w-[18px] h-[18px] bg-white border border-black",
+                    "!w-[14px] !h-[14px] rounded-sm !bg-neutral-800 border !border-neutral-600 shadow-md",
                     props.inputClassName
                 )}
             />

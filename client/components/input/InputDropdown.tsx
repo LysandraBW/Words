@@ -124,11 +124,19 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                             "absolute top-[calc(36px+8px)] z-50",
                             "max-h-[256px] overflow-y-auto",
                             "bg-neutral-900 border border-neutral-800 rounded-md",
-                            props.optionsContainerClassName
+                            props.optionsContainerClassName,
+                            (props.search && search && !props.elementNoResultsFound) && "!invisible",
+                            (props.search && !search && !props.elementNeedSearch) && "!invisible"
                         )}
                     >
                         {!props.options?.length &&
-                            <div className="w-full h-full p-8 flex flex-col gap-y-0 justify-center items-center">
+                            <div 
+                                className={clsx(
+                                    "w-full h-full p-8 flex flex-col gap-y-0 justify-center items-center",
+                                    (props.search && search && !props.elementNoResultsFound) && "!invisible",
+                                    (props.search && !search && !props.elementNeedSearch) && "!invisible"
+                                )}
+                            >
                                 {(props.search && search) &&
                                     props.elementNoResultsFound    
                                 }

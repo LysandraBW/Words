@@ -31,13 +31,13 @@ export default function SearchWords(props: SearchWordsProps) {
                 onSearchChange={(value: string) => setSuggestions(getSuggestions(value))}
                 onChange={(value: string) => props.onOpenWord(value)}
                 wrapperClassName="w-full !h-full !min-h-full rounded-md"
-                toggleClassName="!h-full !min-h-full pl-4 bg-neutral-800 border-l-0 !border-neutral-700 !rounded-r-lg rounded-l-none !text-base placeholder:!text-base placeholder:!tracking-normal"
+                toggleClassName="!h-full !min-h-full pl-4 bg-neutral-800 border-l-0 !border-neutral-700 !rounded-r-lg rounded-l-none !text-base placeholder:!text-sm placeholder:!tracking-normal"
                 optionsContainerClassName="!w-full !bg-neutral-800 !border-neutral-700 !rounded-lg"
                 optionContainerClassName="!py-2 !border-b !border-b-neutral-700 last:!border-b-0 group hover:!bg-neutral-900"
-                optionClassName="!text-neutral-500/75 !text-base group-hover:!text-neutral-400 tracking-wide"
+                optionClassName="!text-neutral-500/75 !text-sm group-hover:!text-neutral-400 tracking-wide"
                 itemName="Words"
                 toggleLabel="Search Merriam-Webster"
-                toggleLabelClassName="!text-base"
+                toggleLabelClassName="!text-sm"
                 search
                 searchPlaceholder="Search Merriam-Webster"
                 
@@ -49,16 +49,16 @@ export default function SearchWords(props: SearchWordsProps) {
                         />
                     </div>
                 )}
-                elementNeedSearch={(
-                    <div className="flex flex-col items-center">
-                        <h6 className="text-neutral-500 font-medium">
-                            Search Merriam-Webster
-                        </h6>
-                        <p className="mt-1 max-w-[256px] text-center">
-                            You'll need to start searching for a word to find a match.
-                        </p>
-                    </div>
-                )}
+                // elementNeedSearch={(
+                //     <div className="flex flex-col items-center">
+                //         <h6 className="text-neutral-500 font-medium">
+                //             Search Merriam-Webster
+                //         </h6>
+                //         <p className="mt-1 max-w-[256px] text-center">
+                //             You'll need to start searching for a word to find a match.
+                //         </p>
+                //     </div>
+                // )}
                 elementNoResultsFound={(
                     <div className="flex flex-col items-center">
                         <h6 className="text-neutral-500 font-medium">
