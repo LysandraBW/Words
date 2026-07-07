@@ -4,18 +4,19 @@ import { useEffect, useState } from "react";
 export const ASCENDING = true;
 export const DESCENDING = false;
 
-interface Parameters<ObjectType> {
-    objects: ObjectType[]; 
+interface Parameters<ObjectType extends {[k: string]: any}> {
+    objects: ObjectType[];
     pageSize?: number;
+    getObjectValueCallback?: (key: string, object: ObjectType) => string;
 }
 
-export default function useFilterObjects<ObjectType>(params: Parameters<ObjectType>) {
+export default function useFilterObjects<ObjectType extends {[k: string]: any}>(params: Parameters<ObjectType>) {
     // Sort
-    const [sortKey, setSortKey] = useState<keyof ObjectType>();
+    const [sortKey, setSortKey] = useState<string>();
     const [sortDirection, setSortDirection] = useState<boolean|null>(null);
     
     // Search
-    const [searchKey, setSearchKey] = useState<keyof ObjectType>();
+    const [searchKey, setSearchKey] = useState<string>();
     const [search, setSearch] = useState("");
 
     // Filtered Objects
@@ -24,20 +25,28 @@ export default function useFilterObjects<ObjectType>(params: Parameters<ObjectTy
     // Page
     const pageSize = params.pageSize ?? 10; 
     const [pageIndex, setPageIndex] = useState(0);
-    const lastPageIndex = (filteredObjects.length / pageSize) - 1;
+    const lastPageIndex = Math.ceil(filteredObjects.length / pageSize) - 1;
 
-    const sortObjects = (sortKey: keyof ObjectType, sortDirection: boolean | null, objects: ObjectType[]) => {
-        const sorted: ObjectType[] = objects.toSorted((a: ObjectType, b: ObjectType) => String(a[sortKey]).localeCompare(String(b[sortKey])));
+    const getObjectValue = (key: string, object: ObjectType) => {
+        if (key in object)
+            return String(object[key]);
+        if (params.getObjectValueCallback)
+            return params.getObjectValueCallback(key, object)
+        return "";
+    }
+
+    const sortObjects = (sortKey: string, sortDirection: boolean | null, objects: ObjectType[]) => {
+        const sorted: ObjectType[] = objects.toSorted((a: ObjectType, b: ObjectType) => getObjectValue(sortKey, a).localeCompare(getObjectValue(sortKey, b)));
         if (sortDirection === DESCENDING)
             return sorted.reverse();
         return sorted;
     }
 
-    const searchObjects = (searchKey: keyof ObjectType, search: string, objects: ObjectType[]) => {
+    const searchObjects = (searchKey: string, search: string, objects: ObjectType[]) => {
         const searchLowered = search.toLowerCase();
-        return objects.filter(object => String(object[searchKey]).toLowerCase().includes(searchLowered)).sort((a, b) => {
-            const aValue = String(a[searchKey]).toLowerCase();
-            const bValue = String(b[searchKey]).toLowerCase();
+        return objects.filter(object => getObjectValue(searchKey, object).toLowerCase().includes(searchLowered)).sort((a, b) => {
+            const aValue = getObjectValue(searchKey, a).toLowerCase();
+            const bValue = getObjectValue(searchKey, b).toLowerCase();
             const aStarts = aValue.startsWith(searchLowered);
             const bStarts = bValue.startsWith(searchLowered);
 
@@ -87,6 +96,13 @@ export default function useFilterObjects<ObjectType>(params: Parameters<ObjectTy
         }
     }
 
+    const goToPageStr = (pageNumber: string) => {
+        pageNumber = pageNumber.trim();
+        if (!/^[0-9]+$/.test(pageNumber))
+            return;
+        goToPage(parseInt(pageNumber));
+    }
+
     useEffect(() => {
         if (!params.objects.length) {
             setFilteredObjects([]);
@@ -122,6 +138,7 @@ export default function useFilterObjects<ObjectType>(params: Parameters<ObjectTy
         goToPrevPage,
         goToNextPage,
         goToPage,
+        goToPageStr,
         filteredObjects
     }
 }

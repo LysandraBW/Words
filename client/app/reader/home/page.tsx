@@ -3,12 +3,12 @@ import loadData from "@/app/home/loadData";
 import InputCheckbox from "@/components/input/InputCheckbox/InputCheckbox";
 import InputDropdown from "@/components/input/InputDropdown";
 import InputText from "@/components/input/InputText";
-import useFilterObjects from "@/hooks/useFilterObject";
+import useFilterObjects, { ASCENDING, DESCENDING } from "@/hooks/useFilterObject";
 import { BookType } from "@/services/server/book";
 import { DeckType, deleteDeck } from "@/services/server/deck";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import clsx from "clsx";
-import { BookIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, ClipboardIcon, LayoutGridIcon, LayoutListIcon, LibraryIcon, MinusIcon, NotepadText, TrashIcon, WholeWordIcon } from "lucide-react";
+import { BookIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, ClipboardIcon, LayoutGridIcon, LayoutListIcon, LibraryIcon, MinusIcon, MoveDownIcon, MoveUpIcon, NotepadText, TrashIcon, WholeWordIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Option } from "@/components/input/InputDropdown";
 
@@ -23,8 +23,20 @@ export default function Page() {
     const [wordLookup, setWordLookup] = useState<{[word: string]: {entries: Entry[], z: number}}|null>();
 
 
-    const filterBooks = useFilterObjects({ objects: data?.books ||  []});
-    const bookSearchOptions: Option<keyof BookType>[] = [
+    const filterBooks = useFilterObjects({ 
+        objects: data?.books ||  [],
+        getObjectValueCallback: (k, o) => {
+            if (k === "all")
+                return o.book_name + " " + o.book_author;
+            return "";
+        }
+    });
+
+    const bookSearchOptions: Option<string>[] = [
+        {
+            value: "all",
+            textLabel: "All"
+        },
         {
             value: "book_name",
             textLabel: "Name"
@@ -34,6 +46,7 @@ export default function Page() {
             textLabel: "Author"
         }
     ]
+
     const bookSortOptions: Option<keyof BookType>[] = [
         {
             value: "book_name",
@@ -48,6 +61,14 @@ export default function Page() {
             textLabel: "Year"
         }
     ]
+
+
+    const [pageIndexValue, setPageIndexValue] = useState("");
+
+    useEffect(() => {
+        setPageIndexValue(String(filterBooks.pageIndex + 1))
+    }, [filterBooks.pageIndex]);
+
 
     useEffect(() => {
         const load = async () => {
@@ -210,9 +231,9 @@ export default function Page() {
                 {/* Action Bar */}
                 <div className="h-fit m-2 mb-0 px-2 grid grid-rows-1 grid-cols-[min-content_min-content_1fr_min-content_min-content] gap-x-2 items-center bg-neutral-900 border border-neutral-800 rounded-t-lg">
                     <div className="w-min py-2 flex justify-center items-center bg-neutral-900 rounded-l-lg">
-                        <div className="!w-[26px] !h-[26px] flex justify-center items-center !bg-neutral-800 border !border-neutral-700 !rounded-md shadow-sm">
+                        <div className="!w-[26px] !h-[26px] flex justify-center items-center !bg-neutral-800- border- !border-neutral-700 !rounded-md shadow-sm-">
                             <InputCheckbox
-                                inputClassName="!w-[14px] !h-[14px] rounded-sm !bg-neutral-800 border !border-neutral-600 shadow-md"
+                                inputClassName="!w-[14px] !h-[14px] rounded-sm !bg-neutral-800 border !border-neutral-600 !shadow-none"
                             />
                         </div>
                     </div>
@@ -226,21 +247,59 @@ export default function Page() {
                         </button>
                     </div>
                     <div className="w-full h-full flex flex-col grow justify-center bg-neutral-900">
-                        <InputText
-                            placeholder="Search Books"
-                            inputWrapperClassName="!w-full !min-w-full"
-                            inputBoxClassName="!p-1 !min-h-auto !max-h-auto !h-auto !bg-neutral-800 !rounded-md !border-neutral-700"
-                            inputClassName="!block !px-2 !min-h-[18px] !max-h-[18px] !h-[18px] !p-0 !text-xs !tracking-wide"
-                        />
+                        <div className="h-full flex items-center">
+                            <InputText
+                                onChange={filterBooks.setSearch}
+                                placeholder="Search Books"
+                                inputWrapperClassName="!w-full"
+                                inputBoxClassName="!p-1 !min-h-auto !max-h-auto !h-auto !bg-neutral-800 !rounded-l-md !rounded-r-none !border-neutral-700"
+                                inputClassName="!block !px-2 !min-h-[18px] !max-h-[18px] !h-[18px] !p-0 !pl-2 !text-xs !tracking-wide"
+                            />
+                            <InputDropdown
+                                options={bookSearchOptions}
+                                onChange={filterBooks.setSearchKey}
+                                toggleLabel="All"
+                                wrapperClassName="!min-h-full !max-h-full !flex !flex-col !justify-center"
+                                boxClassName="!min-h-min !h-min !max-h-min"
+                                toggleClassName="box-content !min-h-[18px] !max-h-[18px] !h-[18px] p-1 pl-2 pr-1 !gap-x-2 !bg-neutral-800 !border-neutral-700 !border-l-0 !rounded-r-md !rounded-l-none shadow-sm"
+                                toggleLabelClassName="!text-xs !tracking-wide  whitespace-nowrap"
+                            />
+                        </div>
                     </div>
                     <div className="h-full flex flex-col grow justify-center bg-neutral-900">
-                        <InputDropdown
-                            toggleLabel="Sort by Name"
-                            wrapperClassName="min-w-[128px] !min-h-full !max-h-full !flex !flex-col !justify-center"
-                            boxClassName="!min-h-min !h-min !max-h-min"
-                            toggleClassName="box-content !min-h-[18px] !max-h-[18px] !h-[18px] p-1 !gap-x-2 !bg-neutral-800 !border-neutral-700 !rounded-md shadow-sm"
-                            toggleLabelClassName="!text-xs !tracking-wide  whitespace-nowrap"
-                        />
+                        <div className="h-full flex items-center">
+                            <InputDropdown
+                                options={bookSortOptions}
+                                onChange={filterBooks.setSortKey}
+                                toggleLabel="Sort by Name"
+                                wrapperClassName="min-w-[128px] !min-h-full !max-h-full !flex !flex-col !justify-center"
+                                boxClassName="!min-h-min !h-min !max-h-min"
+                                toggleClassName="box-content !min-h-[18px] !max-h-[18px] !h-[18px] p-1 pl-2 pr-1 !gap-x-2 !bg-neutral-800 !border-neutral-700 !rounded-l-md !rounded-r-none shadow-sm"
+                                toggleLabelClassName="!text-xs !tracking-wide  whitespace-nowrap"
+                            />
+                            <button
+                                className="h-[28px] w-[28px] flex justify-center items-center -space-x-2 bg-neutral-800 border border-l-0 border-neutral-700 hover:bg-neutral-800 cursor-pointer rounded-r-md"
+                                onClick={() => filterBooks.goToNextSortDirection(filterBooks.sortDirection)}
+                            >
+                                <MoveUpIcon
+                                    size={14}
+                                    strokeWidth={1.5}
+                                    className={clsx(
+                                        filterBooks.sortDirection === ASCENDING && '!text-blue-500',
+                                        "text-neutral-500 [transform:scaleY(0.75)]"
+                                    )}
+                                />
+                                <MoveDownIcon
+                                    size={14}
+                                    strokeWidth={1.5}
+                                    className={clsx(
+                                        filterBooks.sortDirection === DESCENDING && '!text-blue-500',
+                                        "text-neutral-500 [transform:scaleY(0.75)]"
+                                    )}
+                                />
+                            </button>
+                        </div>
+                        
                     </div>
                     <div className="py-2">
                         <div className="relative w-min flex gap-x-[1px] bg-neutral-800 rounded-md">
@@ -264,7 +323,9 @@ export default function Page() {
                 </div>
                 <div className="mx-2 grid grid-cols-[calc(26px+16px)_1fr_1fr_1fr] items-center bg-neutral-900/50 border border-t-0 border-neutral-800">
                     <div className="px-3.5">
-                        <InputCheckbox/>
+                        <InputCheckbox
+                            inputClassName="!shadow-none"
+                        />
                     </div>
                     <div className="px-2 py-2 border-l border-l-neutral-800">
                         <p className="text-xs font-medium tracking-wide">
@@ -283,22 +344,34 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="mx-2">
-                    <div className="grid grid-cols-[calc(26px+16px)_1fr_1fr_1fr] items-center bg-neutral-900/25 border-x border-b border-neutral-800 hover:bg-neutral-900/0">
-                        <div className="h-full flex items-center justify-center">
-                            <InputCheckbox/>
-                        </div>
-                        <div className="h-full p-2 flex items-center gap-x-2 border-l border-neutral-800">
-                            <div className="h-full aspect-square bg-yellow-500">
+                    {data?.books.map((book) => (
+                        <div 
+                            key={book.book_id}
+                            className="grid grid-cols-[calc(26px+16px)_1fr_1fr_1fr] items-center bg-neutral-900/25 border-x border-b border-neutral-800 hover:bg-neutral-900/0"
+                        >
+                            <div className="h-full flex items-center justify-center">
+                                <InputCheckbox
+                                    inputClassName="!shadow-none"
+                                />
                             </div>
-                            <p className="text-xs tracking-wide">Lorem Ipsum</p>
+                            <div className="h-full p-2 flex items-center gap-x-2 border-l border-neutral-800">
+                                <div 
+                                    className="h-full aspect-square bg-center bg-cover"
+                                    style={{
+                                        backgroundImage: `url(${book.book_cover_image})`
+                                    }}
+                                >
+                                </div>
+                                <p className="text-xs tracking-wide">{book.book_name}</p>
+                            </div>
+                            <div className="h-full p-2 flex items-center border-l border-neutral-800">
+                                <p className="text-xs tracking-wide">{book.book_author[0]}</p>
+                            </div>
+                            <div className="h-full p-2 flex items-center border-l border-neutral-800">
+                                <p className="text-xs tracking-wide">{book.book_year}</p>
+                            </div>
                         </div>
-                        <div className="h-full p-2 flex items-center border-l border-neutral-800">
-                            <p className="text-xs tracking-wide">FName LName</p>
-                        </div>
-                        <div className="h-full p-2 flex items-center border-l border-neutral-800">
-                            <p className="text-xs tracking-wide">1997</p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
                 <div className="mx-2 p-2 flex justify-center gap-x-2 bg-neutral-900/50 border border-t-0 border-neutral-800 rounded-b-lg">
                     <button className="p-1 h-[26px] aspect-square bg-neutral-800 border border-neutral-700 rounded-md shadow">
@@ -317,16 +390,18 @@ export default function Page() {
                     </button>
                     <div className="flex items-center gap-x-1">
                         <InputText
+                            value={String(pageIndexValue)}
+                            onBlur={() => filterBooks.goToPageStr(pageIndexValue)}
                             inputBoxClassName="w-min !h-[26px] !max-h-[26px] !min-h-[26px] !px-1 !py-1 bg-neutral-800 border-neutral-700"
                             inputClassName="!block !min-w-[26px] !min-h-[26px] !max-h-[26px] !h-[26px] !text-xs !tracking-wide text-center"
                         />
                         <MinusIcon
                             size={14}
                             strokeWidth={2}
-                            className="stroke-neutral-600"
+                            className="stroke-neutral-600 [transform:scaleX(0.75)]"
                         />
                         <InputText
-                            value="10"
+                            value={String(filterBooks.lastPageIndex+1)}
                             inputBoxClassName="w-min !h-[26px] !max-h-[26px] !min-h-[26px] !px-1 !py-1 bg-neutral-800 border-neutral-700"
                             inputClassName="!block !min-w-[26px] !min-h-[26px] !max-h-[26px] !h-[26px] !text-xs !tracking-wide text-center"
                         />
