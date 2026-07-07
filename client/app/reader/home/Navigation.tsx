@@ -3,12 +3,12 @@ import useFilterObjects from "@/hooks/useFilterObject";
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, MinusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface NavigationProps {
+interface NavigationBarProps {
     filter: ReturnType<typeof useFilterObjects>;
 
 }
 
-export default function Navigation(props: NavigationProps) {
+export default function NavigationBar(props: NavigationBarProps) {
     const [pageIndexValue, setPageIndexValue] = useState("");
     
     useEffect(() => {
@@ -16,7 +16,7 @@ export default function Navigation(props: NavigationProps) {
     }, [props.filter.pageIndex]);
 
     return (
-        <div className="mx-2 p-2 flex justify-center gap-x-2 bg-neutral-900/50 border border-t-0 border-neutral-800 rounded-b-lg">
+        <div className="p-2 flex justify-center gap-x-2 bg-neutral-900/50 border border-t-0 border-neutral-800 rounded-b-lg">
             <button className="p-1 h-[26px] aspect-square bg-neutral-800 border border-neutral-700 rounded-md shadow">
                 <ChevronsLeftIcon
                     size={14}

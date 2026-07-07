@@ -1,6 +1,6 @@
 import { TrashIcon } from "lucide-react";
 
-interface DeleteButtonProps {
+export interface DeleteButtonProps {
 
 }
 

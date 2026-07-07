@@ -2,7 +2,7 @@ import InputDropdown, { Option } from "@/components/input/InputDropdown";
 import InputText from "@/components/input/InputText";
 import useFilterObjects from "@/hooks/useFilterObject";
 
-interface SearchProps {
+export interface SearchProps {
     options: Option<string>[];
     filter: ReturnType<typeof useFilterObjects>;
 }
@@ -12,7 +12,7 @@ export default function Search(props: SearchProps) {
          <div className="h-full flex items-center">
             <InputText
                 onChange={props.filter.setSearch}
-                placeholder="Search Books"
+                placeholder="Search"
                 inputWrapperClassName="!w-full"
                 inputBoxClassName="!p-1 !min-h-auto !max-h-auto !h-auto !bg-neutral-800 !rounded-l-md !rounded-r-none !border-neutral-700"
                 inputClassName="!block !px-2 !min-h-[18px] !max-h-[18px] !h-[18px] !p-0 !pl-2 !text-xs !tracking-wide"

@@ -1,13 +1,18 @@
 import { selectBooks } from "@/services/server/book";
+import { selectChapters } from "@/services/server/chapter";
 import { selectDecks } from "@/services/server/deck";
 import { selectDecksGraded } from "@/services/server/deckGraded";
 import { selectWords } from "@/services/server/word";
 
 export default async function loadData() {
-    const [books, decks, decksGraded, words] = await Promise.all([
+    const [books, chapters, decks, decksGraded, words] = await Promise.all([
         (async () => {
             const books = await selectBooks();
             return books;
+        })(),
+        (async () => {
+            const chapters = await selectChapters();
+            return chapters;
         })(),
         (async () => {
             const decks = await selectDecks();
@@ -25,6 +30,7 @@ export default async function loadData() {
 
     return {
         books,
+        chapters,
         decks,
         decksGraded,
         words

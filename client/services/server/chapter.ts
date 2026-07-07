@@ -83,6 +83,22 @@ export async function selectChapter(chapterID: number) {
     return data;
 }
 
+export async function selectChapters() {
+    const response = await fetch(`http://127.0.0.1:8000/chapters`, {
+        method: "GET",
+        credentials: "include"
+    });
+
+    if (response.status !== 200)
+        throw new Error(`Response (${response.status})`);
+
+    const data: (ChapterType & BookType)[] | null = await response.json();
+    if (!data)
+        throw new Error('Operation Failed');
+
+    return data;
+}
+
 export async function selectChapterWords(chapterID: number) {
     const response = await fetch(`http://127.0.0.1:8000/chapters/${chapterID}/words`, {
         method: "GET",

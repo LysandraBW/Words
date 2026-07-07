@@ -1,6 +1,6 @@
 import { LayoutGridIcon, LayoutListIcon } from "lucide-react";
 
-interface DisplayButtonProps {
+export interface DisplayButtonProps {
 
 }
 

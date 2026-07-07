@@ -3,7 +3,7 @@ import useFilterObjects, { ASCENDING, DESCENDING } from "@/hooks/useFilterObject
 import clsx from "clsx";
 import { MoveDownIcon, MoveUpIcon } from "lucide-react";
 
-interface SortProps {
+export interface SortProps {
     options: Option<string>[];
     filter: ReturnType<typeof useFilterObjects>;
 }
@@ -14,7 +14,7 @@ export default function Sort(props: SortProps) {
             <InputDropdown
                 options={props.options}
                 onChange={props.filter.setSortKey}
-                toggleLabel="Sort by Name"
+                toggleLabel="Sort by"
                 wrapperClassName="min-w-[128px] !min-h-full !max-h-full !flex !flex-col !justify-center"
                 boxClassName="!min-h-min !h-min !max-h-min"
                 toggleClassName="box-content !min-h-[18px] !max-h-[18px] !h-[18px] p-1 pl-2 pr-1 !gap-x-2 !bg-neutral-800 !border-neutral-700 !rounded-l-md !rounded-r-none shadow-sm"
