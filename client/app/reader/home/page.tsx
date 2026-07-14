@@ -14,6 +14,9 @@ import { Option } from "@/components/input/InputDropdown";
 import BookTab from "../BookTab";
 import ChapterTab from "../ChapterTab";
 import WordTab from "../WordTab";
+import DeckTab from "../DeckTab";
+import CreateDeck from "@/app/home/CreateDeck";
+import CreateBook from "@/app/home/CreateBook";
 
 export default function Page() {
     const tabs = ["Books", "Chapters", "Words", "Decks"];
@@ -152,7 +155,7 @@ export default function Page() {
                         className={clsx(
                             "py-1 px-2 flex justify-center items-center gap-x-2 border border-transparent rounded-lg text-sm text-neutral-500/75",
                             i !== tabIndex && "cursor-pointer hover:bg-neutral-800 hover:scale-97",
-                            i === tabIndex && "bg-blue-600 !border-blue-500 shadow-md !text-neutral-200 font-medium"
+                            i === tabIndex && "bg-blue-600 !border-blue-500 shadow-md !text-neutral-200"
                         )}
                     >
                         {tab === "Books" &&
@@ -187,6 +190,7 @@ export default function Page() {
                 {tabIndex === 0 &&
                     <BookTab
                         books={data?.books || []}
+                        onCreate={() => setShow('Create Book')}
                     />
                 }
                 {tabIndex === 1 &&
@@ -205,7 +209,27 @@ export default function Page() {
                         setLookup={setWordLookup}
                     />
                 }
+                {tabIndex === 3 &&
+                    <DeckTab
+                        decks={data?.decks || []}
+                        decksGraded={data?.decksGraded || []}
+                        onCreate={() => setShow('Create Deck')}
+                    />
+                }
             </div>
+            {show === 'Create Deck' &&
+                <CreateDeck
+                    books={data?.books || []}
+                    onClose={() => setShow('')}
+                    onDeckCreated={handleDeckCreated}
+                />
+            }
+            {show === 'Create Book' &&
+                <CreateBook
+                    onClose={() => setShow('')}
+                    onBookCreated={handleBookCreated}
+                />
+            }
         </div>
     )
 }

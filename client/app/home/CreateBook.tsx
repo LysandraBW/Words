@@ -122,7 +122,6 @@ export default function CreateBook(props: CreateBookProps) {
                 />
                 <Button
                     label="Create Book"
-                    style="blue"
                     onClick={() => onCreateBook(form)}
                 />
             </div>

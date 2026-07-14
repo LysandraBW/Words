@@ -9,6 +9,7 @@ import InputCheckboxes from "@/components/input/InputCheckbox/InputCheckboxes";
 import { toggleValue } from "@/utilities/array";
 import { ChapterType, selectChapterWords } from "@/services/server/chapter";
 import { WordType } from "@/services/server/word";
+import Panel from "@/components/Panel";
 
 
 interface CreateDeckProps {
@@ -101,7 +102,9 @@ export default function CreateDeck(props: CreateDeckProps) {
 
 
     return (
-        <div>
+        <Panel
+            onClose={props.onClose}
+        >
             <InputText
                 label="Deck Name"
                 value={form.deck_name.value}
@@ -136,6 +139,6 @@ export default function CreateDeck(props: CreateDeckProps) {
                 label="Create Deck"
                 onClick={() => onCreateDeck(form)}
             />
-        </div>
+        </Panel>
     )
 }

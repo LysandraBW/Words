@@ -11,6 +11,7 @@ import { nunito } from "../fonts";
 
 interface BookTabProps {
     books: BookType[];
+    onCreate: () => void;
 }
 
 export default function BookTab(props: BookTabProps) {
@@ -62,6 +63,7 @@ export default function BookTab(props: BookTabProps) {
                 searchOptions={bookSearchOptions}
                 sortOptions={bookSortOptions}
                 filter={filterBooks}
+                onCreate={props.onCreate}
             />
             <TableHead
                 columns={["Name", "Author", "Year"]}
