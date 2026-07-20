@@ -8,6 +8,7 @@ import NavigationBar from "./home/Navigation";
 import { PlusIcon } from "lucide-react";
 import clsx from "clsx";
 import { nunito } from "../fonts";
+import { useRouter } from "next/navigation";
 
 interface BookTabProps {
     books: BookType[];
@@ -15,6 +16,8 @@ interface BookTabProps {
 }
 
 export default function BookTab(props: BookTabProps) {
+    const router = useRouter();
+    
     const filterBooks = useFilterObjects({ 
         objects: props.books,
         getObjectValueCallback: (k, o) => {
@@ -72,6 +75,7 @@ export default function BookTab(props: BookTabProps) {
                 objects={filterBooks.filteredObjects}
                 objectID={"book_id"}
                 keys={["BookName", "BookAuthor", "book_year"]}
+                onClickObjectRow={(book: BookType) => router.push(`/reader/book?bookID=${book.book_id}`)}
                 getElementCallback={(key, book) => {
                     if (key === "BookName") {
                         return (

@@ -1,10 +1,12 @@
 "use client";
-import Logo from "@/components/Logo";
+import Logo from "../login/panel/Logo";
 import { SettingsIcon } from "lucide-react";
 import SearchWords from "./SearchWords";
 import { useState } from "react";
 import loadData from "../home/loadData";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
+import clsx from "clsx";
+import { dynaPuffFont } from "../fonts";
 
 export default function Layout({children}: {children: React.ReactNode}) {
     const [lookup, setLookup] = useState<{[word: string]: {entries: Entry[], z: number}}|null>();
@@ -48,7 +50,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
     return (
         <div className="w-full h-full grid grid-cols-[196px_1fr] grid-rows-[72px_1fr]">
-            <div className="col-start-1 col-span-1 row-start-1 row-span-1 bg-neutral-900 border-r border-b border-neutral-800">
+            <div className="col-start-1 col-span-1 row-start-1 row-span-1 flex justify-center items-center bg-neutral-900 border-r border-b border-neutral-800">
+                <span className={clsx(dynaPuffFont.className, "block text-3xl tracking-[-3px] text-neutral-100/50")}>
+                    WORDS
+                </span>
             </div>
             <div className="col-start-2 col-span-2 row-start-1 row-span-1 p-4 bg-neutral-900 border-b border-neutral-800">
                 <SearchWords

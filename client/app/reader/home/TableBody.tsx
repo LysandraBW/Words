@@ -6,6 +6,7 @@ interface TableBodyProps<ObjectType extends {[k: string]: any}> {
     objectID: keyof ObjectType;
     keys: (string)[];
     getElementCallback?: (key: string, object: ObjectType) => ReactNode;
+    onClickObjectRow: (object: ObjectType) => void;
 }
 
 export default function TableBody<ObjectType extends {[k: string]: any}>(props: TableBodyProps<ObjectType>) {
@@ -18,6 +19,7 @@ export default function TableBody<ObjectType extends {[k: string]: any}>(props: 
                     style={{
                         "gridTemplateColumns": `calc(26px + 16px) ${[...Array(props.keys.length)].map((e, i) => "1fr").join(" ")}`
                     } as any}
+                    onClick={() => props.onClickObjectRow(object)}
                 >
                     <div className="h-full flex items-center justify-center">
                         <InputCheckbox

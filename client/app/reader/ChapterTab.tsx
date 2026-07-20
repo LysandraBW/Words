@@ -6,12 +6,16 @@ import ActionBar from "./home/ActionBar/ActionBar";
 import NavigationBar from "./home/Navigation";
 import { ChapterType } from "@/services/server/chapter";
 import { BookType } from "@/services/server/book";
+import { useRouter } from "next/navigation";
 
 interface ChapterTabProps {
     chapters: (BookType & ChapterType)[];
+    onCreate: () => void;
 }
 
 export default function ChapterTab(props: ChapterTabProps) {
+    const router = useRouter();
+    
     const filter = useFilterObjects({ 
         objects: props.chapters,
         getObjectValueCallback: (k, o) => {
@@ -56,6 +60,7 @@ export default function ChapterTab(props: ChapterTabProps) {
                 searchOptions={searchOptions}
                 sortOptions={sortOptions}
                 filter={filter}
+                onCreate={props.onCreate}
             />
             <TableHead
                 columns={["Book", "Number", "Title"]}
@@ -64,6 +69,7 @@ export default function ChapterTab(props: ChapterTabProps) {
                 objects={filter.filteredObjects}
                 objectID={"chapter_id"}
                 keys={["Book", "chapter_number", "chapter_title"]}
+                onClickObjectRow={(chapter: ChapterType) => router.push(`/reader/chapter?chapterID=${chapter.chapter_id}`)}
                 getElementCallback={(key, chapter) => {
                     if (key === "Book") {
                         return (

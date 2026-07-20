@@ -196,6 +196,7 @@ export default function Page() {
                 {tabIndex === 1 &&
                     <ChapterTab
                         chapters={data?.chapters || []}
+                        onCreate={() => setShow('Create Chapter')}
                     />
                 }
                 {tabIndex === 2 &&
