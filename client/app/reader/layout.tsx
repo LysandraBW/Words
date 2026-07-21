@@ -2,11 +2,12 @@
 import Logo from "../login/panel/Logo";
 import { SettingsIcon } from "lucide-react";
 import SearchWords from "./SearchWords";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import loadData from "../home/loadData";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import clsx from "clsx";
 import { dynaPuffFont } from "../fonts";
+import DraggableWord from "@/components/DraggableWord";
 
 export default function Layout({children}: {children: React.ReactNode}) {
     const [lookup, setLookup] = useState<{[word: string]: {entries: Entry[], z: number}}|null>();
@@ -49,10 +50,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
 
     return (
-        <div className="w-full h-full grid grid-cols-[196px_1fr] grid-rows-[72px_1fr]">
+        <div className="w-full h-full grid grid-cols-[256px_1fr] grid-rows-[72px_1fr]">
             <div className="col-start-1 col-span-1 row-start-1 row-span-1 flex justify-center items-center bg-neutral-900 border-r border-b border-neutral-800">
-                <span className={clsx(dynaPuffFont.className, "block text-3xl tracking-[-3px] text-neutral-100/50")}>
-                    WORDS
+                <span className={clsx(dynaPuffFont.className, "relative block text-2xl tracking-[-3px] text-neutral-700")}>
+                    WORDS 
                 </span>
             </div>
             <div className="col-start-2 col-span-2 row-start-1 row-span-1 p-4 bg-neutral-900 border-b border-neutral-800">
@@ -71,6 +72,18 @@ export default function Layout({children}: {children: React.ReactNode}) {
             <div className="col-start-2 col-span-1 row-start-2 row-span-1 bg-neutral-950">
                 {children}
             </div>
+            {lookup && Object.entries(lookup).map(([word, wordLookupInfo]) => (
+                <Fragment key={word}>
+                    <DraggableWord
+                        word={word}
+                        entries={wordLookupInfo.entries}
+                        zIndex={wordLookupInfo.z}
+                        onOpenWord={onOpenWord}
+                        onCloseWord={onCloseWord}
+                        onRaiseWord={onRaiseWord}
+                    />
+                </Fragment>
+            ))}
         </div>
     )
 }

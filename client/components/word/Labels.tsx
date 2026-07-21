@@ -7,9 +7,9 @@ export default function Labels(props: {labels: string[]}) {
                 <span
                     key={i}
                     className={clsx(
-                        "ml-0.5 px-1.5 py-0.5",
-                        "text-xs text-neutral-500 tracking-wide font-medium",
-                        "bg-neutral-700 rounded-md"
+                        "mr-1 px-1.5 py-0.5 pb-1",
+                        "text-xs text-neutral-400 tracking-wide font-medium",
+                        "bg-neutral-800 border border-neutral-700 rounded-md shadow-md"
                     )}
                 >
                     {label}

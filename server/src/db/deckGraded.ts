@@ -61,6 +61,7 @@ export async function SelectGradedDecksByChapters(chapterIDs: number[], readerID
     return await db<DeckGraded[]>`
         SELECT  Deck_Graded.*
         FROM    Deck 
+        JOIN    Deck_Graded ON      Deck_Graded.deck_id = Deck.deck_id
         JOIN    Word        ON      Word.word_id = ANY(Deck.deck_words)
         JOIN    Chapter     ON      Chapter.chapter_id = Word.chapter_id
         WHERE   Deck.reader_id = ${readerID} AND

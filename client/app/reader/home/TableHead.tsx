@@ -7,7 +7,7 @@ interface TableHeadProps {
 export default function TableHead(props: TableHeadProps) {
     return (
         <div
-            className="grid items-center bg-neutral-900/50 border border-t-0 border-neutral-800"
+            className="grid items-center bg-neutral-900/50 border border-neutral-800 rounded-t-xl"
             style={{
                 "gridTemplateColumns": `calc(26px + 16px) ${[...Array(props.columns.length)].map((e, i) => "1fr").join(" ")}`
             } as any}    

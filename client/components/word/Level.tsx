@@ -14,14 +14,14 @@ export default function Level(props: LevelProps) {
             </span>
             <div 
                 className={clsx(
-                    "w-[1px] h-full",
+                    "w-[1px] h-full rounded-full transition-all",
                     "relative",
-                    props.level === -1 && "bg-neutral-400",
-                    props.level === 0 && "bg-neutral-500",
-                    props.level === 1 && "bg-neutral-600",
+                    props.level === -1 && "bg-neutral-700 hover:bg-neutral-400",
+                    props.level === 0 && "bg-neutral-700 hover:bg-neutral-400",
+                    props.level === 1 && "bg-neutral-700 hover:bg-neutral-400",
                 )}
             >
-                {props.long &&
+                {/* {props.long &&
                     <>
                         <div className="w-2 aspect-square rounded-full bg-transparent border border-blue-500 border-dashed absolute top-[-2px] left-[-3.5px]">
                             <div className="w-1 aspect-square rounded-full bg-white absolute top-[1px] left-[1px]">
@@ -34,7 +34,7 @@ export default function Level(props: LevelProps) {
                             </div>
                         </div>
                     </>
-                }
+                } */}
             </div>
         </div>
     )

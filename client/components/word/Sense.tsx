@@ -77,9 +77,9 @@ export default function ShowSense(props: ShowSenseProps) {
                         <div 
                             className="grid grid-cols-[auto_1fr] items-center"
                         >
-                            <PointerIcon
+                            <DotIcon
                                 size={18}
-                                className="text-xs text-neutral-500 mr-1"
+                                className="text-xs text-neutral-500"
                             />
                             <FormattedText
                                 text={node[1]}

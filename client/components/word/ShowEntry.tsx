@@ -20,7 +20,7 @@ function ScribbleTag(props: {text: string; className: string}) {
         <span
             className={clsx(
                 "block px-2 py-0.5",
-                "text-lg text-blue-500", scribble.className,
+                "text-xs font-semibold tracking-wide bg-neutral-800 border border-neutral-700 shadow-md text-blue-500",
                 props.className, "rounded-md"
             )}
         >
@@ -43,20 +43,20 @@ export default function ShowEntry(props: ShowEntryProps) {
                     long={true}
                 />
                 <div
-                    className="w-full flex flex-col gap-y-2"
+                    className="w-full flex flex-col gap-y-1"
                 >
                     <div className="flex items-center gap-x-2"> 
-                        <h6 className="text-xl text-white font-bold capitalize tracking-wide uppercase">
+                        <h6 className="text-xl text-neutral-100 font-medium capitalize uppercase">
                             {props.entry.meta.id.split(":")[0]}
                         </h6>
                         <ScribbleTag
                             text={`${props.entryNum}/${props.numEntries}`}
-                            className="bg-blue-950 text-blue-500"
+                            className="text-blue-500"
                         />
                         {props.entry.fl &&
                             <ScribbleTag
                                 text={props.entry.fl}
-                                className="bg-blue-500 text-blue-950"
+                                className="text-blue-500"
                             />
                         }
                     </div>
@@ -72,17 +72,14 @@ export default function ShowEntry(props: ShowEntryProps) {
                                 className="flex flex-col"
                             >
                                 {def.vd && 
-                                    <p className="block text-sm text-neutral-500 tracking-wide uppercase">
+                                    <p className="block text-sm text-neutral-400 tracking-wide uppercase font-medium">
                                         {def.vd}
                                     </p>
                                 }
                                 {def.sls && def.sls.map((label: string, i: number) => (
-                                    <span 
-                                        key={i}
-                                        className="block text-sm text-orange-500 tracking-wide uppercase"
-                                    >
+                                    <p key={i} className="block text-sm text-neutral-400 tracking-wide uppercase font-medium">
                                         {label}
-                                    </span>
+                                    </p>
                                 ))}
                                 <div className="flex flex-col gap-y-4">
                                     {def.sseq.map((seq: SenseSequenceElement[], seqIndex: number) => (

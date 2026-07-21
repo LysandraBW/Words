@@ -18,7 +18,7 @@ interface ActionBarProps extends DeleteButtonProps, DisplayButtonProps {
 export default function ActionBar(props: ActionBarProps) {
     
     return (
-        <div className="h-fit p-2 grid grid-rows-1 grid-cols-[min-content_min-content_1fr_min-content_min-content] gap-x-2 items-center bg-neutral-900 border border-neutral-800 rounded-t-lg">
+        <div className="h-fit p-2 mb-2 grid grid-rows-1 grid-cols-[min-content_min-content_1fr_min-content_min-content] gap-x-2 items-center bg-neutral-900/50 border border-neutral-800 rounded-xl">
             <CreateButton
                 onClick={props.onCreate}
             />

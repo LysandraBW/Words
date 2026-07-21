@@ -29,11 +29,8 @@ export default function DraggableWord(props: DraggableWordProps) {
             }}
             
         >
-            <div className="h-full w-full flex flex-col border border-neutral-700 bg-neutral-800 overflow-y-auto shadow-lg">
-                <div className="w-full flex items-center justify-between sticky top-0 bg-neutral-800 z-10">
-                    <span className="p-2 text-xs text-neutral-500 uppercase font-bold tracking-wide">
-                        {props.word}
-                    </span>
+            <div className="h-full w-full flex flex-col gap-y-4 border border-neutral-800 bg-neutral-900/90 backdrop-blur-sm overflow-y-auto rounded-xl shadow-lg">
+                <div className="w-full flex items-center justify-end sticky top-0 bg-neutral-900 border-b border-neutral-800 shadow z-10">
                     <button 
                         className="p-2 group hover:bg-red-500"
                         onClick={() => props.onCloseWord(props.word)}

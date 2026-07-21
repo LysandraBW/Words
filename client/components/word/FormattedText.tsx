@@ -27,9 +27,16 @@ export default function FormattedText(props: FormattedTextProps) {
             // Check for Comma
             // If there's a comma afterwards,
             // we do not insert a space.
-            const commaNext = i + 1 < nodes.length && [",", ":", "\"", "...", "."].includes((nodes[i+1] as any).props.children);
+            const commaNext = i + 1 < nodes.length && [",", "\"", "...", "."].includes((nodes[i+1] as any).props.children);
             if (commaNext) {
                 i += 1;
+                continue;
+            }
+
+            const semiColonNext = i + 1 < nodes.length && [":"].includes((nodes[i+1] as any).props.children);
+            if (semiColonNext) {
+                nodes.splice(i + 1, 0, (<span key={i+1} className="tracking-wide">&nbsp;</span>));
+                i += 2;
                 continue;
             }
 
@@ -39,7 +46,7 @@ export default function FormattedText(props: FormattedTextProps) {
             if (i === nodes.length - 1)
                 break;
 
-            nodes.splice(i + 1, 0, (<span key={i+1} className="tracking-wider">&nbsp;</span>));
+            nodes.splice(i + 1, 0, (<span key={i+1} className="tracking-wide">&nbsp;</span>));
             i += 2;
         }
         
@@ -68,13 +75,13 @@ export default function FormattedText(props: FormattedTextProps) {
             switch (match[1]) {
                 case "it":
                 case "wi":
-                    outerElement = React.createElement("b", {className: 'tracking-wider text-base'});   
+                    outerElement = React.createElement("b", {className: 'tracking-wide text-base'});   
                     break
                 case "b":
-                    outerElement = React.createElement("b", {className: 'tracking-wider text-base'});
+                    outerElement = React.createElement("b", {className: 'tracking-wide text-base'});
                     break
                 default:
-                    outerElement = React.createElement("span", {className: 'tracking-wider text-base'});
+                    outerElement = React.createElement("span", {className: 'tracking-wide text-base'});
             }
 
             const innerElements: ReactNode[] = formatTextWithNestedTokens(match[2]);
@@ -112,7 +119,7 @@ export default function FormattedText(props: FormattedTextProps) {
                 nodes.push((
                     <span 
                         className={clsx(
-                            "text-base text-white tracking-wider",
+                            "text-base text-neutral-100 tracking-wide",
                             props.isExample && "!text-neutral-500 text-base"
                         )}
                     >
@@ -123,7 +130,7 @@ export default function FormattedText(props: FormattedTextProps) {
             // Add the Token
             if (match[1] == "bc") {
                 nodes.push((
-                    <span className="font-medium">:</span>
+                    <span className="font-medium text-neutral-300">:</span>
                 ));
             }
             else if (match[1] == "ldquo") {
@@ -140,7 +147,7 @@ export default function FormattedText(props: FormattedTextProps) {
                 const refWord = match[1].split("|").filter(part => !!part.length)[1];
                 nodes.push((
                     <span
-                        className="text-blue-500 font-bold uppercase hover:text-blue-400 cursor-pointer"
+                        className="text-neutral-100 !tracking-normal font-medium uppercase hover:text-blue-400 cursor-pointer"
                         onClick={() => {
                             if (!context?.onOpenWord)
                                 return;
@@ -155,7 +162,7 @@ export default function FormattedText(props: FormattedTextProps) {
                 const refWord = match[1].split("|").filter(part => !!part.length)[1];
                 nodes.push((
                     <span
-                        className="text-blue-500 font-bold uppercase hover:text-blue-400 cursor-pointer"
+                        className="text-neutral-100 !tracking-normal font-medium uppercase hover:text-blue-400 cursor-pointer"
                         onClick={() => {
                             if (!context?.onOpenWord)
                                 return;
@@ -170,7 +177,7 @@ export default function FormattedText(props: FormattedTextProps) {
                 const refWord = match[1].split("|").filter(part => !!part.length)[1];
                 nodes.push((
                     <span
-                        className="text-blue-500 font-bold uppercase hover:text-blue-400 cursor-pointer"
+                        className="text-neutral-100 font-medium uppercase hover:text-blue-400 cursor-pointer"
                         onClick={() => {
                             if (!context?.onOpenWord)
                                 return;
@@ -190,8 +197,8 @@ export default function FormattedText(props: FormattedTextProps) {
             nodes.push((
                 <span 
                     className={clsx(
-                        "text-base text-white tracking-wider",
-                        props.isExample && "!text-neutral-500 text-sm"
+                        "text-base text-neutral-100 !tracking-wide",
+                        props.isExample && "!text-neutral-500 text-base"
                     )}
                 >
                     {text.slice(l, text.length).trim()}
@@ -205,7 +212,7 @@ export default function FormattedText(props: FormattedTextProps) {
     return (
         <span
             className={clsx(
-                "text-base text-white tracking-wider",
+                "text-base text-neutral-100 tracking-wide",
                 props.isExample && "!text-neutral-500 text-base"
             )}
         >

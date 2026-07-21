@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 interface ChapterTabProps {
     chapters: (BookType & ChapterType)[];
     onCreate: () => void;
+    showBook?: boolean;
 }
 
 export default function ChapterTab(props: ChapterTabProps) {
@@ -63,12 +64,12 @@ export default function ChapterTab(props: ChapterTabProps) {
                 onCreate={props.onCreate}
             />
             <TableHead
-                columns={["Book", "Number", "Title"]}
+                columns={props.showBook ? ["Book", "Number", "Title"] : ["Number", "Title"]}
             />
             <TableBody
                 objects={filter.filteredObjects}
                 objectID={"chapter_id"}
-                keys={["Book", "chapter_number", "chapter_title"]}
+                keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}
                 onClickObjectRow={(chapter: ChapterType) => router.push(`/reader/chapter?chapterID=${chapter.chapter_id}`)}
                 getElementCallback={(key, chapter) => {
                     if (key === "Book") {

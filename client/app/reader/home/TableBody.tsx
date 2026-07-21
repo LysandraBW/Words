@@ -15,7 +15,7 @@ export default function TableBody<ObjectType extends {[k: string]: any}>(props: 
             {props.objects.map((object, i) => (
                 <div 
                     key={object[props.objectID]}
-                    className="grid items-center bg-neutral-900/25 border-x border-b border-neutral-800 hover:bg-neutral-900/0"
+                    className="grid items-center bg-neutral-900/90 border-x border-b border-neutral-800 hover:bg-neutral-900/0"
                     style={{
                         "gridTemplateColumns": `calc(26px + 16px) ${[...Array(props.keys.length)].map((e, i) => "1fr").join(" ")}`
                     } as any}
