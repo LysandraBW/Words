@@ -204,14 +204,14 @@ export default function Page() {
                                     <EllipsisIcon
                                         size={14}
                                         strokeWidth={1.5}
-                                        className="stroke-neutral-400"
+                                        className="stroke-neutral-500"
                                     />
                                 </button>
                                 <button className="p-1 w-[26px] h-[26px] flex justify-center items-center bg-neutral-100/10 backdrop-blur-sm border border-neutral-400/30 rounded-lg shadow-xs">
                                     <TrashIcon
                                         size={14}
                                         strokeWidth={1.5}
-                                        className="stroke-neutral-400"
+                                        className="stroke-neutral-500"
                                     />
                                 </button>
                             </div>
