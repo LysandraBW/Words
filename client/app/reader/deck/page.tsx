@@ -182,27 +182,61 @@ export default function Page() {
 
     return (
         <div className="grid grid-rows-[auto_1fr] h-full">
-            <div className="h-[200px] grid grid-cols-2 bg-neutral-900">
-                <div className="relative p-4 flex flex-col justify-center gap-y-6">
-                    <div className="absolute top-4 left-4 flex items-center gap-x-1 text-sm text-neutral-400">
-                        <div className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                            <MoveLeftIcon
-                                size={14}
-                                strokeWidth={2}
-                                className="stroke-neutral-500"
-                            />
+            <div 
+                className={clsx(
+                    "h-[200px] grid grid-cols-2 bg-neutral-900 transition-all",
+                    show === 'Quiz' && '!h-min'
+                )}
+            >
+                <div 
+                    className={clsx(
+                        "relative p-4 flex flex-col justify-center gap-y-6 gap-x-2",
+                        show === 'Quiz' && '!h-min !p-2 !flex-row !items-center !justify-start'
+                    )}
+                >
+                    {show !== 'Quiz' &&
+                        <div className={clsx("relative flex items-center gap-x-1 text-sm text-neutral-400")}>
+                            
+                                <div className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
+                                    <MoveLeftIcon
+                                        size={14}
+                                        strokeWidth={2}
+                                        className="stroke-neutral-500"
+                                    />
+                                </div>
                         </div>
-                    </div>
-                    <div className="flex flex-col justify-center -space-y-1">
-                        <p className="block text-lg font-normal text-neutral-300">
-                            {data.deck.deck_name}
-                        </p>
-                        <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
-                            {data.deck.deck_questions.length} Questions
-                        </p>
-                    </div>
+                    }
+                    {show !== 'Quiz' &&
+                        <>
+                            <div className="flex flex-col justify-center -space-y-1">
+                                <p className="block text-lg font-normal text-neutral-300">
+                                    {data.deck.deck_name}
+                                </p>
+                                <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
+                                    {data.deck.deck_questions.length} Questions
+                                </p>
+                            </div>
+                        </>
+                    }
+                    {show === 'Quiz' &&
+                        <>
+                            <div className="flex flex-col justify-center -space-y-1">
+                                <p className="block text-lg font-normal text-neutral-300">
+                                    Taking Quiz: <span className="font-medium text-neutral-100">{data.deck.deck_name}</span>
+                                </p>
+                                {/* <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
+                                    {data.deck.deck_questions.length} Questions
+                                </p> */}
+                            </div>
+                        </>
+                    }
                 </div>
-                <div className="p-4 h-min flex gap-x-2 justify-end">
+                <div 
+                    className={clsx(
+                        "p-4 h-min flex gap-x-2 justify-end transition-all",
+                        show === 'Quiz' && '!p-2 !hidden'
+                    )}
+                >
                     <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
                         <PlayIcon
                             size={14}
