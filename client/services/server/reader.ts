@@ -12,7 +12,7 @@ export async function selectReader() {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`)
     
-    const data: ReaderType | null = await response.json();
+    const data: ReaderType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
 

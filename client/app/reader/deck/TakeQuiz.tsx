@@ -244,14 +244,20 @@ export default function TakeQuiz(props: TakeQuizProps) {
                 </div>
             </div>
             <div className="w-full p-2 grid grid-cols-2 gap-x-2 bg-neutral-900/50 border-t border-neutral-800">
-                <button className="flex justify-center items-center bg-neutral-800 border border-neutral-700 rounded-lg shadow">
+                <button className="p-1 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow">
                     <MoveLeftIcon
                         size={18}
                         strokeWidth={1.5}
-                        className="stroke-neutral-500"
+                        className="stroke-neutral-400"
                     />
+                    <span className="text-neutral-400 text-sm tracking-wide font-medium">
+                        Back
+                    </span>
                 </button>
-                <button className="flex justify-center items-center bg-neutral-800 border border-neutral-700 rounded-lg shadow">
+                <button className="p-1 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow">
+                    <span className="text-neutral-400 text-sm tracking-wide font-medium">
+                        Next
+                    </span>
                     <MoveRightIcon
                         size={18}
                         strokeWidth={1.5}
