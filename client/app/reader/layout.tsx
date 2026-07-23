@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import loadData from "../home/loadData";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import clsx from "clsx";
-import { dynaPuffFont } from "../fonts";
+import { dynaPuffFont, glutenFont, snigletFont } from "../fonts";
 import DraggableWord from "@/components/DraggableWord";
 import { ReaderType, selectReader } from "@/services/server/reader";
 import { useRouter } from "next/navigation";
@@ -74,7 +74,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
     return (
         <div className="w-full h-full grid grid-cols-[256px_1fr] grid-rows-[72px_1fr]">
             <div className="col-start-1 col-span-1 row-start-1 row-span-1 flex justify-center items-center bg-neutral-900 border-r border-b border-neutral-800">
-                <span className={clsx(dynaPuffFont.className, "relative block text-2xl tracking-[-3px] text-neutral-700")}>
+                <span className={clsx(snigletFont.className, "relative block text-3xl tracking-[-1px] text-neutral-700")}>
                     WORDS 
                 </span>
             </div>
@@ -104,20 +104,23 @@ export default function Layout({children}: {children: React.ReactNode}) {
                         </span>
                     </button>
                 </div>
-                <div className="flex flex-col items-center gap-y-3">            
+                <div className="w-full p-1 flex flex-col items-center gap-y-1 bg-neutral-950/50 border- border-neutral-800/75 shadow rounded-xl overflow-clip">            
                     {/* Profile Picture */}
                     <div 
-                        className="w-[72px] aspect-square bg-center bg-cover rounded-full border border-neutral-700 shadow-sm"
+                        className="w-full h-[80px] bg-center bg-cover border- border-neutral-800 rounded-lg"
                         style={{
                             backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
                         }}
                     >
                     </div>
                     {/* Account Details */}
-                    <div className="w-full flex flex-col gap-y-0 overflow-hidden">
+                    <div className="w-full py-1 flex flex-col gap-y-0 overflow-hidden bg-neutral-700/20-  rounded-b-md ">
                         <div className="block flex flex-col -space-y-0.5">
                             <span 
-                                className="block text-neutral-300 text-sm text-center tracking-wide- font-semibold max-w-xs letter-break overflow-hidden text-ellipsis"
+                                className={clsx(
+                                    "block text-neutral-500 text-sm text-center tracking-wide- font-medium max-w-xs letter-break overflow-hidden text-ellipsis",
+                                    // scri
+                                )}
                             >
                                 {reader?.reader_name}
                             </span>
@@ -131,7 +134,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
                             ))} */}
                         </div>
                         <div className="flex items-center justify-center gap-x-2">
-                            <span className="block text-neutral-500 text-sm text-center font-medium- whitespace-nowrap max-w-full overflow-hidden text-ellipsis">
+                            <span className="block text-neutral-500/50 text-sm text-center font-medium- whitespace-nowrap max-w-full overflow-hidden text-ellipsis lowercase">
                                 {reader?.reader_email}
                             </span>
                             {/* <div className="p-1 bg-neutral-800 border border-neutral-700 shadow-sm rounded-full">
