@@ -185,13 +185,13 @@ export default function Page() {
             <div 
                 className={clsx(
                     "h-[200px] grid grid-cols-2 bg-neutral-900 transition-all",
-                    show === 'Quiz' && '!h-min'
+                    show === 'Quiz' && '!h-min !block'
                 )}
             >
                 <div 
                     className={clsx(
                         "relative p-4 flex flex-col justify-center gap-y-6 gap-x-2",
-                        show === 'Quiz' && '!h-min !p-2 !flex-row !items-center !justify-start'
+                        show === 'Quiz' && '!h-min !p-2 !block'
                     )}
                 >
                     {show !== 'Quiz' &&
@@ -220,10 +220,12 @@ export default function Page() {
                     }
                     {show === 'Quiz' &&
                         <>
-                            <div className="flex flex-col justify-center -space-y-1">
-                                <p className="block text-lg font-normal text-neutral-300">
-                                    Taking Quiz: <span className="font-medium text-neutral-100">{data.deck.deck_name}</span>
-                                </p>
+                            <div className="w-full">
+                                <div className="w-full p-0.5 bg-taupe-800 border border-taupe-600 rounded-xl tracking-tight uppercase shadow">
+                                    <p className="w-full flex py-0.5 px-2 text-taupe-100 font-medium text-lg text-center bg-taupe-700 border border-dashed border-taupe-500 rounded-lg normal-case">
+                                        Deck Name 1
+                                    </p>
+                                </div>
                                 {/* <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
                                     {data.deck.deck_questions.length} Questions
                                 </p> */}

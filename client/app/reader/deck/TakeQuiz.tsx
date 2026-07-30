@@ -2,7 +2,7 @@ import { DeckExtendedType, shuffleCards } from "@/app/deck/shuffleCards";
 import { DeckType } from "@/services/server/deck";
 import { DeckGradedQuestionType, insertDeckGraded } from "@/services/server/deckGraded";
 import clsx from "clsx";
-import { CheckIcon, ExpandIcon, MoveLeftIcon, MoveRightIcon, PauseIcon, PlayIcon, XIcon } from "lucide-react";
+import { CheckIcon, ExpandIcon, MoveLeftIcon, MoveRightIcon, PauseIcon, PlayIcon, TriangleIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
 
@@ -113,8 +113,8 @@ export default function TakeQuiz(props: TakeQuizProps) {
 
     return (
         <div className="h-full flex flex-col border-t border-neutral-800 overflow-hidden">
-            <div className="p-2 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
-                <span className="tabular-nums text-xs bg-neutral-800 border border-neutral-700 h-6 flex justify-center items-center  px-2 rounded-md font-medium">
+            <div className="p-2  flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
+                <span className="tabular-nums text-xs text-taupe-500 bg-neutral-800 border border-neutral-700 h-6 flex justify-center items-center  px-2 rounded-md font-medium">
                     {hours}:
                     {minutes.toString().padStart(2, "0")}:
                     {seconds.toString().padStart(2, "0")}:
@@ -124,7 +124,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                     {!paused ?
                         <PauseIcon
                             size={14}
-                            strokeWidth={2}
+                            strokeWidth={1.5}
                             className="stroke-neutral-500"
                         />
                         :
@@ -171,18 +171,34 @@ export default function TakeQuiz(props: TakeQuizProps) {
                     />
                 </button>
             </div>
-            <div className="w-full p-5 grow flex flex-col bg-yellow-500- self-center overflow-auto">
-                <div className="grow grid grid-rows-[25%_1fr] gap-y-5">
-                    <div className="relative bg-red-500- p-3 bg-neutral-900 border border-neutral-800 shadow flex justify-center items-center rounded-2xl">
-                        <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-neutral-700/50 border border-neutral-600/50 rounded-lg shadow text-xs text-neutral-400/50 font-medium tracking-wide">
-                            Question {index+1} of {shuffledDeck.deck_questions.length}
-                        </span>
-                        <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-neutral-700/50 border border-neutral-600/50 rounded-lg shadow text-xs text-neutral-400/50 font-medium tracking-wide">
-                            Select the Matching Definition
-                        </span>
-                        <span className="max-w-[320px] text-2xl text-shadow text-neutral-200 text-center tracking-wide font-semibold">
-                            {word[0]}
-                        </span>
+            <div className="w-full p-5 grow flex flex-col self-center overflow-auto">
+                <div className="w-full grow grid grid-rows-[40%_1fr] gap-y-5">
+                    <div className="w-full grid grid-cols-[auto_1fr_auto] gap-x-3">
+                        <button className="p-2 flex justify-center items-center gap-x-1 bg-taupe-800 border border-taupe-700 rounded-xl shadow">
+                            <TriangleIcon
+                                size={16}
+                                strokeWidth={1.5}
+                                className="fill-taupe-600 stroke-taupe-500 rotate-270"
+                            />
+                        </button>
+                        <div className="relative bg-red-500- p-3 bg-neutral-900 border border-neutral-800 shadow flex justify-center items-center rounded-2xl">
+                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-taupe-800 border border-taupe-600 rounded-lg shadow text-xs text-taupe-500 font-medium tracking-wide">
+                                {index+1}/{shuffledDeck.deck_questions.length}
+                            </span>
+                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-taupe-800 border border-taupe-600 rounded-lg shadow text-xs text-taupe-500 font-medium tracking-wide">
+                                Select the Matching Definition
+                            </span>
+                            <span className="max-w-[320px] text-3xl text-shadow text-neutral-200 text-center tracking-wide font-semibold">
+                                {word[0]}
+                            </span>
+                        </div>
+                        <button className="p-2 flex justify-center items-center gap-x-1 bg-taupe-800 border border-taupe-700 rounded-xl shadow">
+                            <TriangleIcon
+                                size={18}
+                                strokeWidth={1.5}
+                                className="fill-taupe-600 stroke-taupe-500 rotate-90"
+                            />
+                        </button>
                     </div>
                     <div className="grid grid-cols-2 grid-rows-2 gap-5">
                         {question.words.map(([shuffledWord, shuffledWordDef, originalIndex], i) => {
@@ -233,7 +249,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                                         }
                                     </div>
                                     <div className="w-full h-full flex items-center justify-center overflow-hidden">
-                                        <span className="block text-lg text-neutral-400 tracking-wide max-w-sm">
+                                        <span className="block text-base text-neutral-400 tracking-wide max-w-sm">
                                             {shuffledWordDef}
                                         </span>
                                     </div>
@@ -242,28 +258,6 @@ export default function TakeQuiz(props: TakeQuizProps) {
                         })}
                     </div>
                 </div>
-            </div>
-            <div className="w-full p-2 grid grid-cols-2 gap-x-2 bg-neutral-900/50 border-t border-neutral-800">
-                <button className="p-1 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow">
-                    <MoveLeftIcon
-                        size={18}
-                        strokeWidth={1.5}
-                        className="stroke-neutral-400"
-                    />
-                    <span className="text-neutral-400 text-sm tracking-wide font-medium">
-                        Back
-                    </span>
-                </button>
-                <button className="p-1 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow">
-                    <span className="text-neutral-400 text-sm tracking-wide font-medium">
-                        Next
-                    </span>
-                    <MoveRightIcon
-                        size={18}
-                        strokeWidth={1.5}
-                        className="stroke-neutral-500"
-                    />
-                </button>
             </div>
         </div>
     )

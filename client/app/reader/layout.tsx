@@ -83,7 +83,15 @@ export default function Layout({children}: {children: React.ReactNode}) {
                     onOpenWord={onOpenWord}
                 />
             </div>
-            <div className="col-start-1 col-span-1 row-start-2 row-span-1 px-4 py-4 flex flex-col items-center gap-y-6 justify-between bg-neutral-900 border-r border-neutral-800">
+            <div className="col-start-1 col-span-1 row-start-2 row-span-1 px-4 py-4  flex flex-col items-center gap-y-6- justify-between bg-neutral-900 border-r border-neutral-800">
+                <div 
+                    className="h-[156px] w-full bg-center bg-cover"
+                    style={{
+                        backgroundImage: `url(https://m.media-amazon.com/images/M/MV5BMjVjMzQ0MjEtYjFlNi00MDU5LTg1ZjMtMDA1NGEwYWMwNDYxXkEyXkFqcGc@._V1_.jpg)`
+                    }}    
+                >
+
+                </div>
                 <div className="w-full flex flex-col items-center gap-y-3">
                     <button className="w-full px-2 py-1 flex items-center gap-x-2 bg-neutral-800 border border-neutral-700 shadow rounded-md">
                         <HomeIcon
@@ -104,46 +112,36 @@ export default function Layout({children}: {children: React.ReactNode}) {
                         </span>
                     </button>
                 </div>
-                <div className="w-full p-1 flex flex-col items-center gap-y-1 bg-neutral-950/50 border- border-neutral-800/75 shadow rounded-xl overflow-clip">            
+                <div className="w-full p-1- flex justify-center items-center gap-x-2 bg-neutral-950/50- border- border-neutral-800/75 shadow- rounded-xl- overflow-clip">            
                     {/* Profile Picture */}
-                    <div 
-                        className="w-full h-[80px] bg-center bg-cover border- border-neutral-800 rounded-lg"
-                        style={{
-                            backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
-                        }}
-                    >
+                    <div className="p-[2px] border border-neutral-600 bg-neutral-800 rounded-[10px] shadow">
+                        <div 
+                            className="aspect-square h-[56px] bg-center bg-cover border- border-neutral-600 rounded-lg"
+                            style={{
+                                backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
+                            }}
+                        >
+                            
+                        </div>
                     </div>
                     {/* Account Details */}
-                    <div className="w-full py-1 flex flex-col gap-y-0 overflow-hidden bg-neutral-700/20-  rounded-b-md ">
+                    <div className="hidden w-full flex flex-col gap-y-0 overflow-hidden">
                         <div className="block flex flex-col -space-y-0.5">
                             <span 
                                 className={clsx(
-                                    "block text-neutral-500 text-sm text-center tracking-wide- font-medium max-w-xs letter-break overflow-hidden text-ellipsis",
+                                    "block text-taupe-500 text-sm tracking-wide- font-medium max-w-xs letter-break overflow-hidden text-ellipsis",
                                     // scri
                                 )}
                             >
-                                {reader?.reader_name}
+                                John Smith
+                                {/* {reader?.reader_name} */}
                             </span>
-                            {/* {reader?.reader_name.split(" ").map((s: string, i: number) => (
-                                <span 
-                                    key={i}
-                                    className="block text-neutral-300 text-sm text-center tracking-wide font-medium max-w-xs overflow-hidden text-ellipsis"
-                                >
-                                    {s}
-                                </span>
-                            ))} */}
                         </div>
-                        <div className="flex items-center justify-center gap-x-2">
-                            <span className="block text-neutral-500/50 text-sm text-center font-medium- whitespace-nowrap max-w-full overflow-hidden text-ellipsis lowercase">
+                        {/* <div className="flex items-center gap-x-2">
+                            <span className="block text-neutral-500/50 text-sm font-medium- whitespace-nowrap max-w-full overflow-hidden text-ellipsis lowercase">
                                 {reader?.reader_email}
                             </span>
-                            {/* <div className="p-1 bg-neutral-800 border border-neutral-700 shadow-sm rounded-full">
-                                <SettingsIcon
-                                    size={12}
-                                    className="stroke-neutral-500"
-                                />
-                            </div> */}
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
