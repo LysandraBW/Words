@@ -72,25 +72,16 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
 
     return (
-        <div className="w-full h-full grid grid-cols-[256px_1fr] grid-rows-[72px_1fr]">
+        <div className="w-full h-full grid grid-cols-[256px_calc(100%-256px)] grid-rows-[72px_1fr]">
             <div className="col-start-1 col-span-1 row-start-1 row-span-1 px-4 flex justify-between items-center bg-neutral-900 border-r border-b border-neutral-800">
                 <div className="flex gap-x-2 items-center">
-                    <div className="h-[20px] aspect-square rounded-sm bg-taupe-800 border border-taupe-700">
+                    <div className="h-[20px] aspect-square rounded-sm bg-neutral-800 border border-neutral-700">
 
                     </div>
-                    <span className={clsx(snigletFont.className, "relative block text-2xl tracking-[-1px] text-taupe-700")}>
+                    <span className={clsx(snigletFont.className, "relative block text-2xl tracking-[-1px] text-neutral-700")}>
                         WORDS
                     </span>
                 </div>
-                {/* <button
-                    className="h-[24px] aspect-square flex justify-center items-center bg-neutral-950/50 rounded-md"
-                >
-                    <PanelLeftCloseIcon
-                        size={14}
-                        strokeWidth={1.5}
-                        className="stroke-neutral-500"
-                    />
-                </button> */}
             </div>
             <div className="col-start-2 col-span-2 row-start-1 row-span-1 p-4 grid grid-cols-[1fr_auto] gap-x-2 bg-neutral-900 border-b border-neutral-800">
                 <SearchWords
@@ -129,19 +120,19 @@ export default function Layout({children}: {children: React.ReactNode}) {
                             </span>
                         </button>
                     </div>
-                    <button className="w-full px-2 py-1 flex items-center gap-x-2 bg-taupe-800 border border-taupe-700 shadow-md rounded-md">
+                    <button className="w-full px-2 py-1 flex items-center gap-x-2 bg-neutral-950/50  rounded-md">
                         <ChevronsLeftIcon
                             size={14}
                             strokeWidth={2}
-                            className="stroke-taupe-500"
+                            className="stroke-neutral-500"
                         />
-                        <span className="text-taupe-500 text-sm font-medium">
-                            Collapse Sidebar
+                        <span className="text-neutral-500 text-sm font-medium">
+                            Collapse Side
                         </span>
                     </button>
                 </div>
             </div>
-            <div className="col-start-2 col-span-1 row-start-2 row-span-1 bg-neutral-950">
+            <div className="col-start-2 col-span-1 row-start-2 row-span-1 bg-neutral-950 overflow-clip">
                 {children}
             </div>
             {lookup && Object.entries(lookup).map(([word, wordLookupInfo]) => (

@@ -65,8 +65,10 @@ export default function ChapterTab(props: ChapterTabProps) {
             />
             <TableHead
                 columns={props.showBook ? ["Book", "Number", "Title"] : ["Number", "Title"]}
+                columnWidths="112px 1fr"
             />
             <TableBody
+                columnWidths="112px 1fr"
                 objects={filter.filteredObjects}
                 objectID={"chapter_id"}
                 keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}

@@ -135,7 +135,7 @@ export default function Page() {
 
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col ">
             <div className="w-full min-h-[196px] max-h-[196px] p-4 grid grid-cols-4 gap-x-4 border-b border-b-neutral-800">
                 {/* Statistics */}
                 {[...Array(4)].map((e, i) => (
@@ -154,7 +154,7 @@ export default function Page() {
                         onClick={() => setTabIndex(i)}
                         className={clsx(
                             "py-1 px-2 flex justify-center items-center gap-x-2 border border-transparent rounded-lg text-sm text-neutral-500/75",
-                            i !== tabIndex && "cursor-pointer hover:bg-neutral-800 hover:scale-97",
+                            i !== tabIndex && "bg-neutral-950/50 cursor-pointer hover:bg-neutral-800 hover:scale-97",
                             i === tabIndex && "bg-blue-600 !border-blue-500 shadow-md !text-neutral-200"
                         )}
                     >
@@ -186,7 +186,7 @@ export default function Page() {
                     </div>
                 ))}
             </div>
-            <div className="p-2">
+            <div className="p-2 w-[calc(100vw-256px-16px)] max-w-[calc(100vw-256px-16px)] overflow-auto">
                 {tabIndex === 0 &&
                     <BookTab
                         books={data?.books || []}

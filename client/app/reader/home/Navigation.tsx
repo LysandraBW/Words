@@ -16,7 +16,7 @@ export default function NavigationBar(props: NavigationBarProps) {
     }, [props.filter.pageIndex]);
 
     return (
-        <div className="p-1.5 flex justify-center gap-x-1 bg-neutral-900/50 border border-t-0 border-neutral-800 rounded-b-xl">
+        <div className="p-2 flex justify-center gap-x-2 bg-neutral-900/50 border border-t-0 border-neutral-800 rounded-b-xl">
             <button className="h-[24px] aspect-square flex justify-center items-center bg-neutral-800/50 border border-neutral-800 rounded-md shadow">
                 <ChevronsLeftIcon
                     size={14}
@@ -35,7 +35,7 @@ export default function NavigationBar(props: NavigationBarProps) {
                 <InputText
                     value={String(pageIndexValue)}
                     onBlur={() => props.filter.goToPageStr(pageIndexValue)}
-                    inputBoxClassName="w-min !h-[24px] !max-h-[24px] !min-h-[24px] !px-1 !py-1 bg-neutral-800/50 border-neutral-800"
+                    inputBoxClassName="w-min !h-[24px] !max-h-[24px] !min-h-[24px] !px-0 !py-1 bg-neutral-800/50 border-neutral-800"
                     inputClassName="!block !min-w-[24px] !min-h-[24px] !max-h-[24px] !h-[26px] !text-xs !tracking-wide text-center"
                 />
                 <MinusIcon
@@ -45,7 +45,7 @@ export default function NavigationBar(props: NavigationBarProps) {
                 />
                 <InputText
                     value={String(props.filter.lastPageIndex+1)}
-                    inputBoxClassName="w-min !h-[24px] !max-h-[24px] !min-h-[24px] !px-1 !py-1 bg-neutral-800/50 border-neutral-800"
+                    inputBoxClassName="w-min !h-[24px] !max-h-[24px] !min-h-[24px] !px-0 !py-1 bg-neutral-800/50 border-neutral-800"
                     inputClassName="!block !min-w-[26px] !min-h-[24px] !max-h-[24px] !h-[24px] !text-xs !tracking-wide text-center"
                 />
             </div>

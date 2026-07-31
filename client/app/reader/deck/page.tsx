@@ -192,7 +192,7 @@ export default function Page() {
                 <div 
                     className={clsx(
                         "relative p-4 flex flex-col justify-center gap-y-6 gap-x-2",
-                        show === 'Quiz' && '!h-min !p-2 !block'
+                        show === 'Quiz' && '!h-min !p-2- !block'
                     )}
                 >
                     {show !== 'Quiz' &&
@@ -221,37 +221,39 @@ export default function Page() {
                     }
                     {show === 'Quiz' &&
                         <>
-                            <p 
-                                className={clsx(
-                                    "bg-taupe-800 p-0.5 px-4 border border-b-0 border-taupe-600 w-min rounded-t-lg whitespace-nowrap text-xs text-taupe-500 font-medium uppercase- tracking-wide",
-                                    snigletFont.className
-                                )}>
-                                    Taking Quiz
-                            </p>
+                            {/* <div className="bg-neutral-900 p-0.5 border border-b-0 border-neutral-700 w-min rounded-t-lg">
+                                <p 
+                                    className={clsx(
+                                        "bg-neutral-900 p-0.5 px-4 border- border-neutral-600 w-min rounded-t-[6px] whitespace-nowrap text-xs text-neutral-500 font-medium uppercase- tracking-tight-",
+                                        // snigletFont.className
+                                    )}>
+                                        Taking Quiz
+                                </p>
+                            </div> */}
                             <div className="w-full">
-                                <div className="w-full p-0.5 bg-taupe-800 border border-taupe-600 rounded-xl rounded-tl-none tracking-tight uppercase shadow">
+                                <div className="w-full p-0.5 bg-neutral-900 border border-neutral-700 rounded-xl rounded-tl-none- tracking-tight uppercase shadow">
                                     <div 
                                         className={clsx(
-                                            "w-full flex justify-between bg-taupe-800 border border-dashed- border-taupe-600 rounded-[10px] rounded-tl-none normal-case",
+                                            "w-full flex justify-between bg-neutral-900 border- border-dashed- border-neutral-600 rounded-[10px] rounded-tl-none- normal-case",
                                             // snigletFont.className
                                         )}
                                     >
-                                        <p className="py-5 px-2 text-taupe-200 font-medium text-xl text-center">
+                                        <p className="py-5 px-2 text-neutral-200 font-medium text-xl text-center">
                                             Deck Name 1
                                         </p>
-                                        <div className="h-min p-2 flex gap-x-2">
-                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-taupe-700 border border-taupe-600 rounded-md shadow-md">
+                                        <div className="h-min p-1.5 flex gap-x-1.5">
+                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-600 rounded-md shadow-md">
                                                 <ExpandIcon
                                                     size={14}
                                                     strokeWidth={2}
-                                                    className="stroke-taupe-400"
+                                                    className="stroke-neutral-400"
                                                 />
                                             </button>
-                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-taupe-700 border border-taupe-600 rounded-md shadow-md">
+                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-600 rounded-md shadow-md">
                                                 <XIcon
                                                     size={14}
                                                     strokeWidth={2}
-                                                    className="stroke-taupe-400"
+                                                    className="stroke-neutral-400"
                                                 />
                                             </button>
                                         </div>

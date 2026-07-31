@@ -7,7 +7,7 @@ import ActionBar from "./home/ActionBar/ActionBar";
 import NavigationBar from "./home/Navigation";
 import { PlusIcon } from "lucide-react";
 import clsx from "clsx";
-import { nunito } from "../fonts";
+import { nunito, snigletFont } from "../fonts";
 import { useRouter } from "next/navigation";
 
 interface BookTabProps {
@@ -70,6 +70,7 @@ export default function BookTab(props: BookTabProps) {
             />
             <TableHead
                 columns={["Name", "Author", "Year"]}
+                
             />
             <TableBody
                 objects={filterBooks.filteredObjects}
@@ -81,12 +82,12 @@ export default function BookTab(props: BookTabProps) {
                         return (
                             <>
                                 <div 
-                                    className="w-4 h-4 bg-center bg-cover"
+                                    className="w-4 h-6 bg-center bg-cover"
                                     style={{
                                         backgroundImage: `url(${book.book_cover_image})`
                                     }}
                                 />
-                                <p className="text-xs tracking-wide">{book.book_name}</p>
+                                <p className="text-sm text-neutral-400 tracking-wide">{book.book_name}</p>
                             </>
                             
                         )
@@ -94,12 +95,12 @@ export default function BookTab(props: BookTabProps) {
                     if (key === "BookAuthor") {
                         return (
                             <>
-                                <p className="text-xs tracking-wide">{book.book_author[0] || "None"}</p>
+                                <p className="text-sm text-neutral-400 tracking-wide">{book.book_author[0] || "None"}</p>
                                 {book.book_author.length > 1 &&
                                     <div 
-                                        className="py-0.25 px-1.5 flex gap-x-0.5 justify-center items-center bg-blue-950/75 rounded-sm"
+                                        className="py-0.25 px-1.5 flex gap-x-0.5 justify-center items-center bg-blue-950/75 border border-blue-500 rounded-lg"
                                     >
-                                        <span className={clsx("text-[10px] text-blue-500 font-bold", nunito.className)}>
+                                        <span className={clsx("text-[8px] text-blue-500 font-medium font-bold-", snigletFont.className)}>
                                             {book.book_author.length - 1}
                                         </span>
                                         <PlusIcon

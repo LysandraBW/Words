@@ -113,7 +113,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
 
     return (
         <div className="h-full flex flex-col border- border-neutral-800 overflow-hidden">
-            <div className="p-2 pt-0 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
+            <div className="p-2 pb-4 px-4 pt-0 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
                 
                 <div className="h-6 p-1 grow flex gap-x-1 border border-neutral-700 rounded-xl">
                     {[...Array(5)].map((q, i) => {
@@ -136,13 +136,13 @@ export default function TakeQuiz(props: TakeQuizProps) {
                         )
                     })}
                 </div>
-                <span className="tabular-nums text-xs text-taupe-500 bg-neutral-800 border border-neutral-700 h-6 flex justify-center items-center  px-2 rounded-md font-medium">
+                <span className="tabular-nums text-xs text-neutral-500 bg-neutral-800 border border-neutral-700 h-6 flex justify-center items-center  px-2 rounded-md font-medium">
                     {hours}:
                     {minutes.toString().padStart(2, "0")}:
                     {seconds.toString().padStart(2, "0")}:
                     {milliseconds.toString().padStart(3, "0")}
                 </span>
-                <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
+                <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
                     {!paused ?
                         <PauseIcon
                             size={14}
@@ -175,29 +175,29 @@ export default function TakeQuiz(props: TakeQuizProps) {
             <div className="w-full p-5 grow flex flex-col self-center overflow-auto">
                 <div className="w-full grow grid grid-rows-[40%_1fr] gap-y-5">
                     <div className="w-full grid grid-cols-[auto_1fr_auto] gap-x-3">
-                        <button className="p-2 flex justify-center items-center gap-x-1 bg-taupe-800 border border-taupe-700 rounded-xl shadow">
+                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-xl shadow">
                             <TriangleIcon
                                 size={16}
                                 strokeWidth={1.5}
-                                className="fill-taupe-600 stroke-taupe-500 rotate-270"
+                                className="fill-neutral-600 stroke-neutral-500 rotate-270"
                             />
                         </button>
                         <div className="relative bg-red-500- p-3 bg-neutral-900 border border-neutral-800 shadow flex justify-center items-center rounded-2xl">
-                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-taupe-800 border border-taupe-600 rounded-lg shadow text-xs text-taupe-500 font-medium tracking-wide">
+                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-neutral-800 border border-neutral-600 rounded-lg shadow text-xs text-neutral-500 font-medium tracking-wide">
                                 {index+1}/{shuffledDeck.deck_questions.length}
                             </span>
-                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-taupe-800 border border-taupe-600 rounded-lg shadow text-xs text-taupe-500 font-medium tracking-wide">
+                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-neutral-800 border border-neutral-600 rounded-lg shadow text-xs text-neutral-500 font-medium tracking-wide">
                                 Select the Matching Definition
                             </span>
                             <span className="max-w-[320px] text-3xl text-shadow-lg text-neutral-200 text-center tracking-wide font-medium">
                                 {word[0]}
                             </span>
                         </div>
-                        <button className="p-2 flex justify-center items-center gap-x-1 bg-taupe-800 border border-taupe-700 rounded-xl shadow">
+                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-xl shadow">
                             <TriangleIcon
                                 size={18}
                                 strokeWidth={1.5}
-                                className="fill-taupe-400 stroke-taupe-500 rotate-90"
+                                className="fill-neutral-600 stroke-neutral-500 rotate-90"
                             />
                         </button>
                     </div>
