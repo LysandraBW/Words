@@ -112,29 +112,9 @@ export default function TakeQuiz(props: TakeQuizProps) {
         return <></>;
 
     return (
-        <div className="h-full flex flex-col border-t border-neutral-800 overflow-hidden">
-            <div className="p-2  flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
-                <span className="tabular-nums text-xs text-taupe-500 bg-neutral-800 border border-neutral-700 h-6 flex justify-center items-center  px-2 rounded-md font-medium">
-                    {hours}:
-                    {minutes.toString().padStart(2, "0")}:
-                    {seconds.toString().padStart(2, "0")}:
-                    {milliseconds.toString().padStart(3, "0")}
-                </span>
-                <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                    {!paused ?
-                        <PauseIcon
-                            size={14}
-                            strokeWidth={1.5}
-                            className="stroke-neutral-500"
-                        />
-                        :
-                        <PlayIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="stroke-neutral-500"
-                        />
-                    }
-                </button>
+        <div className="h-full flex flex-col border- border-neutral-800 overflow-hidden">
+            <div className="p-2 pt-0 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
+                
                 <div className="h-6 p-1 grow flex gap-x-1 border border-neutral-700 rounded-xl">
                     {[...Array(5)].map((q, i) => {
                         const unanswered = choices[i] == null;
@@ -156,7 +136,28 @@ export default function TakeQuiz(props: TakeQuizProps) {
                         )
                     })}
                 </div>
+                <span className="tabular-nums text-xs text-taupe-500 bg-neutral-800 border border-neutral-700 h-6 flex justify-center items-center  px-2 rounded-md font-medium">
+                    {hours}:
+                    {minutes.toString().padStart(2, "0")}:
+                    {seconds.toString().padStart(2, "0")}:
+                    {milliseconds.toString().padStart(3, "0")}
+                </span>
                 <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
+                    {!paused ?
+                        <PauseIcon
+                            size={14}
+                            strokeWidth={1.5}
+                            className="stroke-neutral-500"
+                        />
+                        :
+                        <PlayIcon
+                            size={14}
+                            strokeWidth={2}
+                            className="stroke-neutral-500"
+                        />
+                    }
+                </button>
+                {/* <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
                     <ExpandIcon
                         size={14}
                         strokeWidth={2}
@@ -169,7 +170,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                         strokeWidth={2}
                         className="stroke-neutral-500"
                     />
-                </button>
+                </button> */}
             </div>
             <div className="w-full p-5 grow flex flex-col self-center overflow-auto">
                 <div className="w-full grow grid grid-rows-[40%_1fr] gap-y-5">
@@ -188,7 +189,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                             <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-taupe-800 border border-taupe-600 rounded-lg shadow text-xs text-taupe-500 font-medium tracking-wide">
                                 Select the Matching Definition
                             </span>
-                            <span className="max-w-[320px] text-3xl text-shadow text-neutral-200 text-center tracking-wide font-semibold">
+                            <span className="max-w-[320px] text-3xl text-shadow-lg text-neutral-200 text-center tracking-wide font-medium">
                                 {word[0]}
                             </span>
                         </div>
@@ -196,7 +197,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                             <TriangleIcon
                                 size={18}
                                 strokeWidth={1.5}
-                                className="fill-taupe-600 stroke-taupe-500 rotate-90"
+                                className="fill-taupe-400 stroke-taupe-500 rotate-90"
                             />
                         </button>
                     </div>

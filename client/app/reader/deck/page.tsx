@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
-import { CaseUpperIcon, EllipsisIcon, MoveLeftIcon, PlayIcon, RefreshCwIcon, TrashIcon } from "lucide-react";
+import { CaseUpperIcon, EllipsisIcon, ExpandIcon, MoveLeftIcon, PlayIcon, RefreshCwIcon, TrashIcon, XIcon } from "lucide-react";
 import { reloadDeck, deleteDeck, updateDeck } from "@/services/server/deck";
 import { DeckGradedType, deleteDeckGraded, insertDeckGraded } from "@/services/server/deckGraded";
 import loadData from "../../deck/loadData";
@@ -10,6 +10,7 @@ import clsx from "clsx";
 import WordTab from "../WordTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import TakeQuiz from "./TakeQuiz";
+import { dynaPuffFont, glutenFont, scribble, snigletFont } from "@/app/fonts";
 
 
 export default function Page() {
@@ -220,11 +221,41 @@ export default function Page() {
                     }
                     {show === 'Quiz' &&
                         <>
+                            <p 
+                                className={clsx(
+                                    "bg-taupe-800 p-0.5 px-4 border border-b-0 border-taupe-600 w-min rounded-t-lg whitespace-nowrap text-xs text-taupe-500 font-medium uppercase- tracking-wide",
+                                    snigletFont.className
+                                )}>
+                                    Taking Quiz
+                            </p>
                             <div className="w-full">
-                                <div className="w-full p-0.5 bg-taupe-800 border border-taupe-600 rounded-xl tracking-tight uppercase shadow">
-                                    <p className="w-full flex py-0.5 px-2 text-taupe-100 font-medium text-lg text-center bg-taupe-700 border border-dashed border-taupe-500 rounded-lg normal-case">
-                                        Deck Name 1
-                                    </p>
+                                <div className="w-full p-0.5 bg-taupe-800 border border-taupe-600 rounded-xl rounded-tl-none tracking-tight uppercase shadow">
+                                    <div 
+                                        className={clsx(
+                                            "w-full flex justify-between bg-taupe-800 border border-dashed- border-taupe-600 rounded-[10px] rounded-tl-none normal-case",
+                                            // snigletFont.className
+                                        )}
+                                    >
+                                        <p className="py-5 px-2 text-taupe-200 font-medium text-xl text-center">
+                                            Deck Name 1
+                                        </p>
+                                        <div className="h-min p-2 flex gap-x-2">
+                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-taupe-700 border border-taupe-600 rounded-md shadow-md">
+                                                <ExpandIcon
+                                                    size={14}
+                                                    strokeWidth={2}
+                                                    className="stroke-taupe-400"
+                                                />
+                                            </button>
+                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-taupe-700 border border-taupe-600 rounded-md shadow-md">
+                                                <XIcon
+                                                    size={14}
+                                                    strokeWidth={2}
+                                                    className="stroke-taupe-400"
+                                                />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                                 {/* <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
                                     {data.deck.deck_questions.length} Questions
