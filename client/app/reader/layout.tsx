@@ -72,13 +72,13 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
 
     return (
-        <div className="w-full h-full grid grid-cols-[256px_calc(100%-256px)] grid-rows-[72px_1fr]">
+        <div className="w-full h-screen max-h-screen grid grid-cols-[256px_1fr] grid-rows-[72px_minmax(0,1fr)]">
             <div className="col-start-1 col-span-1 row-start-1 row-span-1 px-4 flex justify-between items-center bg-neutral-900 border-r border-b border-neutral-800">
                 <div className="flex gap-x-2 items-center">
-                    <div className="h-[20px] aspect-square rounded-sm bg-neutral-800 border border-neutral-700">
+                    <div className="h-[20px] aspect-square rounded-sm bg-blue-600 border border-blue-500">
 
                     </div>
-                    <span className={clsx(snigletFont.className, "relative block text-2xl tracking-[-1px] text-neutral-700")}>
+                    <span className={clsx(snigletFont.className, "relative block text-2xl tracking-[-1px] text-blue-100")}>
                         WORDS
                     </span>
                 </div>
@@ -132,7 +132,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
                     </button>
                 </div>
             </div>
-            <div className="col-start-2 col-span-1 row-start-2 row-span-1 bg-neutral-950 overflow-clip">
+            <div className="col-start-2 col-span-1 row-start-2 row-span-1 bg-neutral-950 grid grid-cols-1 grid-rows-1 overflow-clip">
                 {children}
             </div>
             {lookup && Object.entries(lookup).map(([word, wordLookupInfo]) => (

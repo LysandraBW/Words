@@ -68,58 +68,67 @@ export default function BookTab(props: BookTabProps) {
                 filter={filterBooks}
                 onCreate={props.onCreate}
             />
-            <TableHead
-                columns={["Name", "Author", "Year"]}
-                
-            />
-            <TableBody
-                objects={filterBooks.filteredObjects}
-                objectID={"book_id"}
-                keys={["BookName", "BookAuthor", "book_year"]}
-                onClickObjectRow={(book: BookType) => router.push(`/reader/book?bookID=${book.book_id}`)}
-                getElementCallback={(key, book) => {
-                    if (key === "BookName") {
-                        return (
-                            <>
-                                <div 
-                                    className="w-4 h-6 bg-center bg-cover"
-                                    style={{
-                                        backgroundImage: `url(${book.book_cover_image})`
-                                    }}
-                                />
-                                <p className="text-sm text-neutral-400 tracking-wide">{book.book_name}</p>
-                            </>
-                            
-                        )
-                    }
-                    if (key === "BookAuthor") {
-                        return (
-                            <>
-                                <p className="text-sm text-neutral-400 tracking-wide">{book.book_author[0] || "None"}</p>
-                                {book.book_author.length > 1 &&
-                                    <div 
-                                        className="py-0.25 px-1.5 flex gap-x-0.5 justify-center items-center bg-blue-950/75 border border-blue-500 rounded-lg"
-                                    >
-                                        <span className={clsx("text-[8px] text-blue-500 font-medium font-bold-", snigletFont.className)}>
-                                            {book.book_author.length - 1}
-                                        </span>
-                                        <PlusIcon
-                                            size={8}
-                                            strokeWidth={3}
-                                            className="stroke-blue-500"
+            <div>
+                <div
+                    className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
+                    style={{
+                        "gridTemplateColumns": `calc(26px + 16px) 1fr 1fr 1fr`
+                    }}
+                >
+                    <TableHead
+                        columns={["Name", "Author", "Year"]}
+                        
+                    />
+                    <TableBody
+                        objects={filterBooks.filteredObjects}
+                        objectID={"book_id"}
+                        keys={["BookName", "BookAuthor", "book_year"]}
+                        onClickObjectRow={(book: BookType) => router.push(`/reader/book?bookID=${book.book_id}`)}
+                        getElementCallback={(key, book) => {
+                            if (key === "BookName") {
+                                return (
+                                    <>
+                                        <div 
+                                            className="w-10 h-12 bg-center bg-cover"
+                                            style={{
+                                                backgroundImage: `url(${book.book_cover_image})`
+                                            }}
                                         />
-                                    </div>
-                                }
-                            </>
-                            
-                        )
-                    }
-                    return <></>;
-                }}
-            />
-            <NavigationBar
-                filter={filterBooks}
-            />
+                                        <p className="text-sm text-neutral-400 tracking-wide">{book.book_name}</p>
+                                    </>
+                                    
+                                )
+                            }
+                            if (key === "BookAuthor") {
+                                return (
+                                    <>
+                                        <p className="text-sm text-neutral-400 tracking-wide">{book.book_author[0] || "None"}</p>
+                                        {book.book_author.length > 1 &&
+                                            <div 
+                                                className="py-0.25 px-1.5 flex gap-x-0.5 justify-center items-center bg-blue-950/75 border border-blue-500 rounded-lg"
+                                            >
+                                                <span className={clsx("text-[8px] text-blue-500 font-medium font-bold-", snigletFont.className)}>
+                                                    {book.book_author.length - 1}
+                                                </span>
+                                                <PlusIcon
+                                                    size={8}
+                                                    strokeWidth={3}
+                                                    className="stroke-blue-500"
+                                                />
+                                            </div>
+                                        }
+                                    </>
+                                    
+                                )
+                            }
+                            return <></>;
+                        }}
+                    />
+                </div>
+                <NavigationBar
+                    filter={filterBooks}
+                />
+            </div>
         </>
     )
 }

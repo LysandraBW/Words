@@ -8,7 +8,7 @@ import { BookType } from "@/services/server/book";
 import { DeckType, deleteDeck } from "@/services/server/deck";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import clsx from "clsx";
-import { BookIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, ClipboardIcon, LayoutGridIcon, LayoutListIcon, LibraryIcon, MinusIcon, MoveDownIcon, MoveUpIcon, NotepadText, TrashIcon, WholeWordIcon } from "lucide-react";
+import { BookIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, ClipboardIcon, LayoutGridIcon, LayoutListIcon, LibraryIcon, MinusIcon, MoveDownIcon, MoveUpIcon, NotepadText, TextInitialIcon, TrashIcon, WholeWordIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Option } from "@/components/input/InputDropdown";
 import BookTab from "../BookTab";
@@ -20,7 +20,7 @@ import CreateBook from "@/app/home/CreateBook";
 
 export default function Page() {
     const tabs = ["Books", "Chapters", "Words", "Decks"];
-    const [tabIndex, setTabIndex] = useState(0);
+    const [tabIndex, setTabIndex] = useState(2);
     
     const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
     const [show, setShow] = useState('');
@@ -135,13 +135,13 @@ export default function Page() {
 
 
     return (
-        <div className="flex flex-col ">
-            <div className="w-full min-h-[196px] max-h-[196px] p-4 grid grid-cols-4 gap-x-4 border-b border-b-neutral-800">
-                {/* Statistics */}
+        <div className="grid grid-cols-1 grid-rows-[auto_auto_1fr]">
+            {/* Statistics */}
+            <div className="h-min p-4 flex gap-x-4 border-b border-b-neutral-800">
                 {[...Array(4)].map((e, i) => (
                     <div 
                         key={i}
-                        className="bg-neutral-900 border border-neutral-800 rounded-lg shadow"
+                        className="w-full h-[156px] bg-neutral-900 border border-neutral-800 rounded-lg shadow"
                     >
                     </div>
                 ))}
@@ -153,8 +153,8 @@ export default function Page() {
                         key={i}
                         onClick={() => setTabIndex(i)}
                         className={clsx(
-                            "py-1 px-2 flex justify-center items-center gap-x-2 border border-transparent rounded-lg text-sm text-neutral-500/75",
-                            i !== tabIndex && "bg-neutral-950/50 cursor-pointer hover:bg-neutral-800 hover:scale-97",
+                            "py-1 px-2 flex justify-center items-center gap-x-2 border border-transparent rounded-md text-sm text-neutral-500 font-medium",
+                            i !== tabIndex && "bg-neutral-950/50 cursor-pointer hover:bg-neutral-950/75 hover:scale-97 transition-all",
                             i === tabIndex && "bg-blue-600 !border-blue-500 shadow-md !text-neutral-200"
                         )}
                     >
@@ -171,8 +171,8 @@ export default function Page() {
                             />
                         }
                         {tab === "Words" &&
-                            <WholeWordIcon
-                                size={18}
+                            <TextInitialIcon
+                                size={16}
                                 strokeWidth={1.5}
                             />
                         }
@@ -186,7 +186,7 @@ export default function Page() {
                     </div>
                 ))}
             </div>
-            <div className="p-2 w-[calc(100vw-256px-16px)] max-w-[calc(100vw-256px-16px)] overflow-auto">
+            <div className="p-2 bg-neutral-950 grid grid-rows-[auto_1fr] grid-cols-1 gap-y-2 overflow-auto">
                 {tabIndex === 0 &&
                     <BookTab
                         books={data?.books || []}

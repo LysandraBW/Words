@@ -95,31 +95,63 @@ export default function WordTab(props: WordTabProps) {
                 searchOptions={searchOptions}
                 sortOptions={sortOptions}
                 filter={filter}
+                onCreate={() => 1}
             />
-            <TableHead
-                columns={["Word", "Definition", "Date Created", "Date Last Seen", "Number Instances", "Accuracy"]}
-            />
-            <TableBody
-                objects={filter.filteredObjects}
-                objectID={"word_id"}
-                keys={["Word", "Definition", "created_at", "last_seen", "word_number_instances", "accuracy"]}
-                getElementCallback={(key, word) => {
-                    if (key === "Word") {
-                        return (
-                            <p className="text-xs tracking-wide">{word.word[0]}</p>
-                        )
-                    }
-                    if (key === "Definition") {
-                        return (
-                            <p className="text-xs tracking-wide">{word.word[1]}</p>
-                        )
-                    }
-                    return <></>;
-                }}
-            />
-            <NavigationBar
-                filter={filter}
-            />
+            <div>
+                <div
+                    className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
+                    style={{
+                        "gridTemplateColumns": `calc(26px + 16px) 1fr 5fr 1fr 1fr 1fr 1fr`
+                    }}
+                >
+                    <TableHead
+                        columnWidths="1fr 5fr 1fr 1fr 1fr 1fr"
+                        columns={["Word", "Meaning", "Created", "Last Seen", "Seen", "Accuracy"]}
+                    />
+                    <TableBody
+                        columnWidths="1fr 5fr 1fr 1fr 1fr 1fr"
+                        objects={filter.filteredObjects}
+                        objectID={"word_id"}
+                        keys={["Word", "Definition", "Created", "Last Seen", "Seen", "Acc"]}
+                        getElementCallback={(key, word) => {
+                            if (key === "Word") {
+                                return (
+                                    <p className="text-sm tracking-wide text-neutral-400">{word.word[0]}</p>
+                                )
+                            }
+                            if (key === "Definition") {
+                                return (
+                                    <p className="text-sm tracking-wide text-neutral-400">{word.word[1]}</p>
+                                )
+                            }
+                            if (key === "Created") {
+                                return (
+                                    <p className="text-sm tracking-wide text-neutral-400">{word.created_at ? new Date(word.created_at).toLocaleDateString() : ""}</p>
+                                )
+                            }
+                            if (key === "Last Seen") {
+                                return (
+                                    <p className="text-sm tracking-wide text-neutral-400">{word.last_seen ? new Date(word.created_at).toLocaleDateString() : ""}</p>
+                                )
+                            }
+                            if (key === "Seen") {
+                                return (
+                                    <p className="text-sm tracking-wide text-neutral-400">{word.word_number_instances}x</p>
+                                )
+                            }
+                            if (key === "Acc") {
+                                return (
+                                    <p className="text-sm tracking-wide text-neutral-400">{Number(word.accuracy).toPrecision(2)}%</p>
+                                )
+                            }
+                            return <></>;
+                        }}
+                    />
+                </div>
+                <NavigationBar
+                    filter={filter}
+                />
+            </div>
         </>
     )
 }

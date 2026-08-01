@@ -1,4 +1,6 @@
+import { nunito, snigletFont } from "@/app/fonts";
 import InputCheckbox from "@/components/input/InputCheckbox/InputCheckbox";
+import clsx from "clsx";
 
 interface TableHeadProps {
     columns: string[];
@@ -7,26 +9,31 @@ interface TableHeadProps {
 
 export default function TableHead(props: TableHeadProps) {
     return (
-        <div
-            className="grid items-center bg-neutral-900/50 border border-neutral-800 rounded-t-xl"
-            style={{
-                "gridTemplateColumns": props.columnWidths ? `calc(26px + 16px) ${props.columnWidths}` : `calc(26px + 16px) ${[...Array(props.columns.length)].map((e, i) => "1fr").join(" ")}`
-            } as any}    
+        <
+            // className="grid items-center bg-neutral-900 border border-neutral-800 rounded-t-lg"
+            // style={{
+            //     "gridTemplateColumns": props.columnWidths ? `calc(26px + 16px) ${props.columnWidths}` : `calc(26px + 16px) ${[...Array(props.columns.length)].map((e, i) => "1fr").join(" ")}`
+            // } as any}    
         >
-            <div className="px-3.5">
+            <div className="px-3.5 flex justify-center items-center bg-neutral-900 border-b border-neutral-800">
                 <InputCheckbox
                     inputClassName="!shadow-none"
                 />
             </div>
             <>
                 {props.columns.map((column, i) => (
-                    <div key={i} className="px-2 py-2 border-l border-l-neutral-800">
-                        <p className="text-sm font-medium tracking-tight-">
+                    <div key={i} className="px-2 py-2 flex items-center border-l border-b border-neutral-800">
+                        <p 
+                            className={clsx(
+                                "text-xs font-semibold text-neutral-500 whitespace-nowrap overflow-hidden text-ellipsis",
+                                // nunito.className
+                            )}
+                        >
                             {column}
                         </p>
                     </div>
                 ))}
             </>
-        </div>
+        </>
     )
 }
