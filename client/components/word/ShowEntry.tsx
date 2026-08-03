@@ -69,7 +69,7 @@ export default function ShowEntry(props: ShowEntryProps) {
                         {props.entry.def?.map((def: DefinitionData, j: number) => (
                             <div 
                                 key={j}
-                                className="flex flex-col"
+                                className="flex flex-col gap-y-2"
                             >
                                 {def.vd && 
                                     <p className="block text-sm text-neutral-400 tracking-wide uppercase font-medium">

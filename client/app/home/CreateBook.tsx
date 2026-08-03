@@ -10,6 +10,7 @@ import InputImageURL from "@/components/input/InputImageURL";
 import Button from "@/components/Button";
 import SearchBooks from "./SearchBooks";
 import { addValue, deleteValue } from "@/utilities/array";
+import InputButton from "@/components/input/InputButton";
 
 
 interface CreateBookProps {
@@ -77,7 +78,7 @@ export default function CreateBook(props: CreateBookProps) {
             title="Create Book"
             onClose={props.onClose}
         >
-            <div className="px-8 py-4 flex flex-col gap-y-4">
+            <div className="px-8 py-6 flex flex-col gap-y-6">
                 <SearchBooks
                     onClickBook={(book: CreateBookType) => setForm(updateFormValues(form, book, true))}
                 />
@@ -87,14 +88,14 @@ export default function CreateBook(props: CreateBookProps) {
                     onChange={(value) => setForm(updateFormValue(form, "book_name", value))}
                     required={true}
                     error={form.book_name.error}
-                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    // inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                 />
                 <InputText
                     label="Year Published"
                     value={form.book_year.value}
                     onChange={(value) => setForm(updateFormValue(form, "book_year", value))}
                     error={form.book_year.error}
-                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    // inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                 />
                 <InputTags
                     label="Author"
@@ -102,15 +103,15 @@ export default function CreateBook(props: CreateBookProps) {
                     onDelete={(value) => setForm(updateFormValue(form, "book_author", deleteValue(value, form.book_author.value)))}
                     onInsert={(value) => setForm(updateFormValue(form, "book_author", addValue(value, form.book_author.value)))}
                     error={form.book_author.error}
-                    inputClassName="!bg-neutral-700 hover:!bg-neutral-600"
-                    buttonClassName="!bg-neutral-700 !border-neutral-800"
+                    // inputClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    buttonClassName="!bg-neutral-900 !border-neutral-800"
                 />
                 <InputImageURL
                     label="Cover Image"
                     value={form.book_cover_image.value || ""}
                     onChange={(value) => setForm(updateFormValue(form, "book_cover_image", value))}
                     error={form.book_cover_image.error}
-                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    // inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                     
             />
                 <InputImageURL
@@ -118,9 +119,9 @@ export default function CreateBook(props: CreateBookProps) {
                     value={form.book_background_image.value || ""}
                     onChange={(value) => setForm(updateFormValue(form, "book_background_image", value))}
                     error={form.book_background_image.error}
-                    inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
+                    // inputBoxClassName="!bg-neutral-700 hover:!bg-neutral-600"
                 />
-                <Button
+                <InputButton
                     label="Create Book"
                     onClick={() => onCreateBook(form)}
                 />

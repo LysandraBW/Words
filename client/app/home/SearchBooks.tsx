@@ -70,7 +70,7 @@ export default function SearchBooks(props: SearchBooksProps) {
             search={true}
             searchPlaceholder="Search"
             onSearchChange={onSearch}
-            toggleClassName="!bg-neutral-700"
+            toggleClassName="!bg-neutral-900"
         />
     )
 }

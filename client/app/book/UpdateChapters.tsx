@@ -1,5 +1,7 @@
 import Button from "@/components/Button";
+import InputButton from "@/components/input/InputButton";
 import InputText from "@/components/input/InputText";
+import Modal from "@/components/Modal";
 import { BookType } from "@/services/server/book";
 import { ChapterType, insertChapter, deleteChapter, updateChapter } from "@/services/server/chapter";
 import { createForm, Form, getFormData, resetForm, testForm, updateFormValue } from "@/utilities/form";
@@ -207,87 +209,93 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
 
     
     return (
-        <div>
-            <h5>
-                Chapters
-            </h5>
-            <Button
-                onClick={() => onUpdateChapters(props.chapters, forms)}
-                label="Save"
-                style="blue"
-            />
-            {Object.entries(forms).sort((a, b) => parseInt(a[1].chapter_number.value) - parseInt(b[1].chapter_number.value)).map(([formID, form], i) => (
-                <div 
-                    key={formID}
-                    className="grid grid-rows-1 grid-cols-[64px_1fr_36px] items-end gap-x-1"
-                >
-                    <InputText
-                        label="#"
-                        value={form.chapter_number.value}
-                        error={form.chapter_number.error}
-                        onChange={(value: string) => setForms(forms => updateChapterForm({
-                            forms, 
-                            id: formID, 
-                            form, 
-                            label: "chapter_number", 
-                            value
-                        }))}
-                        inputClassName="text-center"
-                    />
-                    <InputText
-                        label="Title"
-                        value={form.chapter_title.value}
-                        error={form.chapter_title.error}
-                        onChange={(value: string) => setForms(forms => updateChapterForm({
-                            forms, 
-                            id: formID, 
-                            form, 
-                            label: "chapter_title", 
-                            value
-                        }))}
-                    />
+        <div className="absolute top-0 left-0 z-200 w-full h-screen flex justify-center items-center">
+            <Modal
+                title="Edit Chapters"
+                onClose={props.onClose}
+            >
+                <div className="flex flex-col gap-y-6 px-8 py-4 pb-8">
+                    {Object.entries(forms).sort((a, b) => parseInt(a[1].chapter_number.value) - parseInt(b[1].chapter_number.value)).map(([formID, form], i) => (
+                        <div 
+                            key={formID}
+                            className="grid grid-rows-1 grid-cols-[64px_1fr_40px] items-end gap-x-1"
+                        >
+                            <InputText
+                                label="Num."
+                                value={form.chapter_number.value}
+                                error={form.chapter_number.error}
+                                onChange={(value: string) => setForms(forms => updateChapterForm({
+                                    forms, 
+                                    id: formID, 
+                                    form, 
+                                    label: "chapter_number", 
+                                    value
+                                }))}
+                                inputClassName="text-center"
+                            />
+                            <InputText
+                                label="Name"
+                                value={form.chapter_title.value}
+                                error={form.chapter_title.error}
+                                onChange={(value: string) => setForms(forms => updateChapterForm({
+                                    forms, 
+                                    id: formID, 
+                                    form, 
+                                    label: "chapter_title", 
+                                    value
+                                }))}
+                            />
+                            <div 
+                                onClick={() => setForms(forms => deleteChapterForm(forms, formID))}
+                                className="w-[40px] aspect-square flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800 shadow-md"
+                            >
+                                <Trash2Icon
+                                    size={18}
+                                    strokeWidth={1}
+                                    className="text-white"
+                                />
+                            </div>
+                        </div>
+                    ))}
                     <div 
-                        onClick={() => setForms(forms => deleteChapterForm(forms, formID))}
-                        className="w-full aspect-square flex justify-center items-center rounded-md bg-black"
+                        className="grid grid-rows-1 grid-cols-[64px_1fr_40px] items-end gap-x-1"
                     >
-                        <Trash2Icon
-                            size={16}
-                            className="text-white"
+                        <InputText
+                            label="Num."
+                            value={form.chapter_number.value}
+                            error={form.chapter_number.error}
+                            onChange={(value) => setForm(updateFormValue(form, "chapter_number", value))}
+                            inputClassName="text-center"
+                        />
+                        <InputText
+                            label="Name"
+                            value={form.chapter_title.value}
+                            error={form.chapter_title.error}
+                            onChange={(value) => setForm(updateFormValue(form, "chapter_title", value))}
+                        />
+                        <div 
+                            onClick={() => {
+                                if (!testForm(form))
+                                    return;
+                                setForms(forms => insertChapterForm(forms, String(chapterID--), form));
+                                setForm(resetForm(form));
+                            }}
+                            className="w-[40px] aspect-square flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800 shadow-md"
+                        >
+                            <PlusIcon
+                                size={16}
+                                className="text-white"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col">
+                        <InputButton
+                            onClick={() => onUpdateChapters(props.chapters, forms)}
+                            label="Save"
                         />
                     </div>
                 </div>
-            ))}
-            <div 
-                className="grid grid-rows-1 grid-cols-[64px_1fr_36px] items-end gap-x-1"
-            >
-                <InputText
-                    label="#"
-                    value={form.chapter_number.value}
-                    error={form.chapter_number.error}
-                    onChange={(value) => setForm(updateFormValue(form, "chapter_number", value))}
-                    inputClassName="text-center"
-                />
-                <InputText
-                    label="Title"
-                    value={form.chapter_title.value}
-                    error={form.chapter_title.error}
-                    onChange={(value) => setForm(updateFormValue(form, "chapter_title", value))}
-                />
-                <div 
-                    onClick={() => {
-                        if (!testForm(form))
-                            return;
-                        setForms(forms => insertChapterForm(forms, String(chapterID--), form));
-                        setForm(resetForm(form));
-                    }}
-                    className="w-full aspect-square flex justify-center items-center rounded-md bg-black"
-                >
-                    <PlusIcon
-                        size={16}
-                        className="text-white"
-                    />
-                </div>
-            </div>
+            </Modal>
         </div>
     )
 }

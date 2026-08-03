@@ -115,7 +115,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
         <div className="h-full flex flex-col border- border-neutral-800 overflow-hidden">
             <div className="p-2 pb-4 px-4 pt-0 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
                 
-                <div className="h-6 p-1 grow flex gap-x-1 border border-neutral-700 rounded-xl">
+                <div className="h-6 p-1 grow flex gap-x-1 border border-neutral-700 rounded-md">
                     {[...Array(5)].map((q, i) => {
                         const unanswered = choices[i] == null;
                         const correct = (!unanswered && choices[i] === 0);
@@ -125,9 +125,9 @@ export default function TakeQuiz(props: TakeQuizProps) {
                             <div
                                 key={i}
                                 className={clsx(
-                                    "relative w-full h-full bg-neutral-800 first:rounded-l-lg last:rounded-r-lg border border-neutral-700",
-                                    correct && "!bg-gradient-to-b !border-green-400 from-green-600 to-green-600 after:absolute ",
-                                    incorrect && "!bg-gradient-to-b !border-red-400 from-red-500 to-red-500 after:absolute ",
+                                    "relative w-full h-full bg-neutral-800 first:rounded-l-[3px] last:rounded-r-[3px] border border-neutral-700 shadow-sm",
+                                    correct && "!bg-gradient-to-b !border-green-600 from-green-600 to-green-600 after:absolute ",
+                                    incorrect && "!bg-gradient-to-b !border-red-500 from-red-500 to-red-500 after:absolute ",
                                     unanswered && "!bg-gradient-to-b !border-neutral-700 from-neutral-800 to-neutral-800 ",
                                 )}
                             >
@@ -174,30 +174,30 @@ export default function TakeQuiz(props: TakeQuizProps) {
             </div>
             <div className="w-full p-5 grow flex flex-col self-center overflow-auto">
                 <div className="w-full grow grid grid-rows-[40%_1fr] gap-y-5">
-                    <div className="w-full grid grid-cols-[auto_1fr_auto] gap-x-3">
-                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-xl shadow">
+                    <div className="w-full grid grid-cols-[auto_1fr_auto] gap-x-4">
+                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow">
                             <TriangleIcon
                                 size={16}
                                 strokeWidth={1.5}
-                                className="fill-neutral-600 stroke-neutral-500 rotate-270"
+                                className="fill-blue-600 stroke-blue-500 rotate-270"
                             />
                         </button>
-                        <div className="relative bg-red-500- p-3 bg-neutral-900 border border-neutral-800 shadow flex justify-center items-center rounded-2xl">
-                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-neutral-800 border border-neutral-600 rounded-lg shadow text-xs text-neutral-500 font-medium tracking-wide">
-                                {index+1}/{shuffledDeck.deck_questions.length}
+                        <div className="relative bg-red-500- p-3 bg-neutral-900 border border-neutral-800 shadow flex justify-center items-center rounded-lg">
+                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-blue-600/50 border border-blue-600 rounded-md shadow text-xs text-neutral-100 font-medium tracking-wide">
+                                {index+1} of {shuffledDeck.deck_questions.length}
                             </span>
-                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-neutral-800 border border-neutral-600 rounded-lg shadow text-xs text-neutral-500 font-medium tracking-wide">
+                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-blue-600/50 border border-blue-600 rounded-md shadow text-xs text-neutral-100 font-medium tracking-wide">
                                 Select the Matching Definition
                             </span>
                             <span className="max-w-[320px] text-3xl text-shadow-lg text-neutral-200 text-center tracking-wide font-medium">
                                 {word[0]}
                             </span>
                         </div>
-                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-800 border border-neutral-700 rounded-xl shadow">
+                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow">
                             <TriangleIcon
                                 size={18}
                                 strokeWidth={1.5}
-                                className="fill-neutral-600 stroke-neutral-500 rotate-90"
+                                className="fill-blue-600 stroke-blue-500 rotate-90"
                             />
                         </button>
                     </div>
@@ -213,12 +213,12 @@ export default function TakeQuiz(props: TakeQuizProps) {
                                     key={i}
                                     className={clsx(
                                         "p-3 grid grid-cols-[auto_1fr] gap-x-4",
-                                        "bg-neutral-900 border border-neutral-800 shadow rounded-2xl",
+                                        "bg-neutral-900 border border-neutral-800 shadow rounded-xl",
                                         "hover:scale-97 transition-all",
                                         answered && "!cursor-default" ,
                                         // correct && "bg-green-500",
                                         // incorrect && "bg-red-500",
-                                        // selected && "border-2 border-blue-500"
+                                        selected && "!border-blue-500"
                                     )}
                                     onClick={() => {
                                         // No Function or Already Answered
@@ -230,7 +230,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                                     <div 
                                         className={clsx(
                                             "w-4 h-4 flex justify-center items-center bg-neutral-800 border border-neutral-700 rounded-full shadow",
-                                            (answered && correct) && "!bg-blue-500 !border-blue-500",
+                                            (answered && correct) && "!bg-green-600 !border-green-600",
                                             (answered && incorrect) && "!bg-red-500 !border-red-500",
                                         )}
                                     >

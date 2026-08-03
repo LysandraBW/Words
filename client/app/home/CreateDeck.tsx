@@ -10,6 +10,10 @@ import { toggleValue } from "@/utilities/array";
 import { ChapterType, selectChapterWords } from "@/services/server/chapter";
 import { WordType } from "@/services/server/word";
 import Panel from "@/components/Panel";
+import InputButton from "@/components/input/InputButton";
+import clsx from "clsx";
+import InputLabel from "@/components/input/InputLabel";
+import { ChevronDownIcon } from "lucide-react";
 
 
 interface CreateDeckProps {
@@ -41,6 +45,7 @@ export default function CreateDeck(props: CreateDeckProps) {
                 // Load Data
                 // Structure: [book, [chapter, [words]]]
                 const data: [number, [ChapterType, WordType[]][]][] = await Promise.all(props.books.map(async book => {
+                    console.log(book);
                     return [
                         book.book_id,
                         await selectBookChapters(book.book_id).then(async chapters => await Promise.all(chapters.map(async chapter => {
@@ -62,7 +67,6 @@ export default function CreateDeck(props: CreateDeckProps) {
                     }
                 }
 
-                // console.log(booksToChaptersToWords);
                 setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {
@@ -103,42 +107,85 @@ export default function CreateDeck(props: CreateDeckProps) {
 
     return (
         <Panel
+            title="Create Deck"
             onClose={props.onClose}
         >
-            <InputText
-                label="Deck Name"
-                value={form.deck_name.value}
-                onChange={value => setForm(updateFormValue(form, 'deck_name', value))}
-            />
-            {props.books.map((book, i) => (
-                <div 
-                    key={i}
-                    className="flex flex-col gap-y-2"
-                >
-                    <h3 className="text-white">
-                        <b>{book.book_name}</b>
-                    </h3>
-                    {bookToChaptersToWords[book.book_id].map(([chapter, words], i) => (
-                        <div key={i}>
-                            <h4 className="text-neutral-500">
-                                <b>{chapter.chapter_title}</b>
-                            </h4>
-                            <InputCheckboxes
-                                value={form.deck_words.value}
-                                options={words.map(word => ({
-                                    value: word.word_id,
-                                    textLabel: word.word[0]
-                                }))}
-                                onChange={onToggleChapter}
-                            />
-                        </div>
-                    ))}
+            <div className="px-8 py-6 flex flex-col gap-y-6">
+                <InputText
+                    label="Deck Name"
+                    value={form.deck_name.value}
+                    onChange={value => setForm(updateFormValue(form, 'deck_name', value))}
+                />
+                <div>
+                    <InputLabel
+                        label="Add Words"
+                    />
+                    <div className="p-2 flex flex-col gap-y-2 bg-neutral-900 border border-neutral-800 shadow-md rounded-md">
+                        {props.books.map((book, i) => (
+                            <div 
+                                key={i}
+                                className="p-2 flex flex-col gap-y-2 bg-neutral-800 border border-neutral-700 shadow-md rounded-lg"
+                            >
+                                <div className="flex justify-between items-center">
+                                    <p className="text-sm text-neutral-200 font-medium">
+                                        {book.book_name}
+                                    </p>
+                                    <div className="w-5 aspect-square flex justify-center items-center bg-blue-600 border border-blue-500 rounded-full">
+                                        <ChevronDownIcon
+                                            size={14}
+                                            strokeWidth={2}
+                                            className="scale-x-80 stroke-neutral-100"
+                                        />
+                                    </div>
+                                </div>
+                                {(bookToChaptersToWords?.[book.book_id] || []).length === 0 &&
+                                    <div className="w-full h-fit px-4 py-2 bg-neutral-700 rounded-md">
+                                        <p className="text-center text-sm font-medium">
+                                            No Chapters (or Words)
+                                        </p>
+                                    </div>
+                                }
+                                {(bookToChaptersToWords?.[book.book_id] || []).map(([chapter, words], i) => (
+                                    <div 
+                                        key={i}
+                                        className={clsx(
+                                            "px-2 py-2 flex flex-col gap-y-2 bg-neutral-950/50 border border-neutral-700 shadow-md rounded-lg",
+                                            // words.length === 0 ? "gap-y-4" : "gap-y-2"
+                                        )}
+                                    >
+                                        <p className="text-neutral-200 text-sm">
+                                            <span className="w-full block px-2 py-[2px] bg-neutral-800 border border-neutral-700 rounded-md shadow text-sm text-neutral-200">Chapter {chapter.chapter_number}: {chapter.chapter_title}</span>
+                                        </p>
+                                        {words.length === 0 &&
+                                            <div className="w-full h-fit px-4 py-2 bg-neutral-950/50 rounded-md">
+                                                <p className="text-center text-sm font-medium">
+                                                    No Words
+                                                </p>
+                                            </div>
+                                        }
+                                        {words.length !== 0 &&
+                                            <InputCheckboxes
+                                                value={form.deck_words.value}
+                                                options={words.map(word => ({
+                                                    value: word.word_id,
+                                                    textLabel: word.word[0]
+                                                }))}
+                                                onChange={onToggleChapter}
+                                                labelClassName="!text-sm"
+                                                inputWrapperClassName="px-2 py-1 bg-neutral-950/50 rounded-md"
+                                            />
+                                        }
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            ))}
-            <Button
-                label="Create Deck"
-                onClick={() => onCreateDeck(form)}
-            />
+                <InputButton
+                    label="Create Deck"
+                    onClick={() => onCreateDeck(form)}
+                />
+            </div>
         </Panel>
     )
 }

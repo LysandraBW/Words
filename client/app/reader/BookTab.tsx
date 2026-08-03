@@ -89,7 +89,7 @@ export default function BookTab(props: BookTabProps) {
                                 return (
                                     <>
                                         <div 
-                                            className="w-10 h-12 bg-center bg-cover"
+                                            className="w-6 h-10 bg-center bg-cover border border-neutral-600 rounded-sm"
                                             style={{
                                                 backgroundImage: `url(${book.book_cover_image})`
                                             }}

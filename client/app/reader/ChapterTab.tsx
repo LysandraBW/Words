@@ -63,37 +63,46 @@ export default function ChapterTab(props: ChapterTabProps) {
                 filter={filter}
                 onCreate={props.onCreate}
             />
-            <TableHead
-                columns={props.showBook ? ["Book", "Number", "Title"] : ["Number", "Title"]}
-                columnWidths="112px 1fr"
-            />
-            <TableBody
-                columnWidths="112px 1fr"
-                objects={filter.filteredObjects}
-                objectID={"chapter_id"}
-                keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}
-                onClickObjectRow={(chapter: ChapterType) => router.push(`/reader/chapter?chapterID=${chapter.chapter_id}`)}
-                getElementCallback={(key, chapter) => {
-                    if (key === "Book") {
-                        return (
-                            <>
-                                <div 
-                                    className="w-4 h-4 bg-center bg-cover"
-                                    style={{
-                                        backgroundImage: `url(${chapter.book_cover_image})`
-                                    }}
-                                />
-                                <p className="text-xs tracking-wide">{chapter.book_name}</p>
-                            </>
-                            
-                        )
-                    }
-                    return <></>;
-                }}
-            />
-            <NavigationBar
-                filter={filter}
-            />
+            <div>
+                <div
+                    className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
+                    style={{
+                        "gridTemplateColumns": `calc(26px + 16px) 1fr 1fr`
+                    }}
+                >
+                    <TableHead
+                        columns={props.showBook ? ["Book", "Number", "Title"] : ["Number", "Title"]}
+                        columnWidths="112px 1fr"
+                    />
+                    <TableBody
+                        columnWidths="112px 1fr"
+                        objects={filter.filteredObjects}
+                        objectID={"chapter_id"}
+                        keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}
+                        onClickObjectRow={(chapter: ChapterType) => router.push(`/reader/chapter?chapterID=${chapter.chapter_id}`)}
+                        getElementCallback={(key, chapter) => {
+                            if (key === "Book") {
+                                return (
+                                    <>
+                                        <div 
+                                            className="w-4 h-4 bg-center bg-cover"
+                                            style={{
+                                                backgroundImage: `url(${chapter.book_cover_image})`
+                                            }}
+                                        />
+                                        <p className="text-xs tracking-wide">{chapter.book_name}</p>
+                                    </>
+                                    
+                                )
+                            }
+                            return <></>;
+                        }}
+                    />
+                </div>
+                <NavigationBar
+                    filter={filter}
+                />
+            </div>
         </>
     )
 }

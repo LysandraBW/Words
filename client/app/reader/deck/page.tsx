@@ -192,7 +192,7 @@ export default function Page() {
                 <div 
                     className={clsx(
                         "relative p-4 flex flex-col justify-center gap-y-6 gap-x-2",
-                        show === 'Quiz' && '!h-min !p-2- !block'
+                        show === 'Quiz' && '!h-min !pb-2 !block'
                     )}
                 >
                     {show !== 'Quiz' &&
@@ -231,10 +231,10 @@ export default function Page() {
                                 </p>
                             </div> */}
                             <div className="w-full">
-                                <div className="w-full p-0.5 bg-neutral-900 border border-neutral-700 rounded-xl rounded-tl-none- tracking-tight uppercase shadow">
+                                <div className="">
                                     <div 
                                         className={clsx(
-                                            "w-full flex justify-between bg-neutral-900 border- border-dashed- border-neutral-600 rounded-[10px] rounded-tl-none- normal-case",
+                                            "w-full flex justify-between bg-neutral-900 border border-neutral-700 rounded-lg rounded-tr-xl rounded-tl-none- normal-case shadow-md",
                                             // snigletFont.className
                                         )}
                                     >

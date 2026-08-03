@@ -116,7 +116,7 @@ export default function WordTab(props: WordTabProps) {
                         getElementCallback={(key, word) => {
                             if (key === "Word") {
                                 return (
-                                    <p className="text-sm tracking-wide text-neutral-400">{word.word[0]}</p>
+                                    <p className="w-full text-sm text-center- tracking-wide text-neutral-400">{word.word[0]}</p>
                                 )
                             }
                             if (key === "Definition") {

@@ -30,7 +30,16 @@ export default function DraggableWord(props: DraggableWordProps) {
             
         >
             <div className="h-full w-full flex flex-col gap-y-4 border border-neutral-800 bg-neutral-900/90 backdrop-blur-sm overflow-y-auto rounded-xl shadow-lg">
-                <div className="w-full flex items-center justify-end sticky top-0 bg-neutral-900 border-b border-neutral-800 shadow z-10">
+                <div className="w-full flex items-center justify-between sticky top-0 bg-neutral-900 border-b border-neutral-800 shadow z-10">
+                    <div className="ml-2 flex gap-x-2 items-center">
+                        <p className="text-sm">
+                            Source: Merriam-Webster
+                        </p>
+                        {/* <img
+                            className="w-3 aspect-square"
+                            src="/images/Merriam-Webster_logo.svg.webp"
+                        /> */}
+                    </div>
                     <button 
                         className="p-2 group hover:bg-red-500"
                         onClick={() => props.onCloseWord(props.word)}

@@ -8,7 +8,7 @@ import { BookType } from "@/services/server/book";
 import { DeckType, deleteDeck } from "@/services/server/deck";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import clsx from "clsx";
-import { BookIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, ClipboardIcon, LayoutGridIcon, LayoutListIcon, LibraryIcon, MinusIcon, MoveDownIcon, MoveUpIcon, NotepadText, TextInitialIcon, TrashIcon, WholeWordIcon } from "lucide-react";
+import { BookIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, CircleDashedIcon, ClipboardIcon, LayoutGridIcon, LayoutListIcon, LibraryIcon, MinusIcon, MoveDownIcon, MoveUpIcon, NotepadText, TextInitialIcon, TrashIcon, TriangleIcon, TriangleRightIcon, WholeWordIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Option } from "@/components/input/InputDropdown";
 import BookTab from "../BookTab";
@@ -141,8 +141,38 @@ export default function Page() {
                 {[...Array(4)].map((e, i) => (
                     <div 
                         key={i}
-                        className="w-full h-[156px] bg-neutral-900 border border-neutral-800 rounded-lg shadow"
+                        className="w-full h-[156px] p-4 flex flex-col justify-between bg-neutral-900 border border-neutral-800 rounded-lg shadow"
                     >
+                        <div className="flex justify-between items-center">
+                            <span
+                                className="text-neutral-300"
+                            >
+                                Card Label
+                            </span>
+                            <CircleDashedIcon
+                                size={16}
+                                className="stroke-blue-500"
+                            />
+                        </div>
+                        <div>
+                            <div className="flex gap-x-2 items-center">
+                                <span className="text-3xl text-neutral-100 font-medium">
+                                    1,000
+                                </span>
+                                <span className="px-2 py-0.5 flex gap-x-2 items-center bg-green-600/10 rounded-full">
+                                    <TriangleIcon
+                                        size={10}
+                                        className="rotate-90- fill-green-600 scale-y-60 stroke-green-700 font-medium"
+                                    />
+                                    <span className="text-xs text-green-600 font-medium">
+                                        50%
+                                    </span>
+                                </span>
+                            </div>
+                            <span className="text-sm">
+                                in a Month
+                            </span>
+                        </div>
                     </div>
                 ))}
             </div>

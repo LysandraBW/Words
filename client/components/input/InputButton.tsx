@@ -22,7 +22,7 @@ export default function Button(props: Partial<ButtonProps>) {
         >
             <div
                 className={clsx(
-                    "w-full h-[40px] min-h-[40px] max-h-[40px] px-4",
+                    "w-full h-[36px] min-h-[36px] max-h-[36px] px-4",
                     "flex flex-col justify-center items-center",
                     "rounded-md",
                     props.disabled && "cursor-default bg-white",

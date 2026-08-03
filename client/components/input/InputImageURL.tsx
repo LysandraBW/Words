@@ -1,4 +1,4 @@
-import { ImageIcon, XIcon } from "lucide-react";
+import { ImageIcon, ImagePlusIcon, XIcon } from "lucide-react";
 import InputText, { InputTextProps } from "./InputText";
 import clsx from "clsx";
 
@@ -11,7 +11,7 @@ interface InputImageURLProps extends Partial<InputTextProps> {
 
 export default function InputImageURL(props: InputImageURLProps) {
     return (
-        <div className="grid grid-cols-[1fr_36px] gap-x-1 items-end">
+        <div className="grid grid-cols-[1fr_50px] gap-x-1 items-end">
             <InputText
                 label={props.label}
                 value={props.value}
@@ -22,12 +22,12 @@ export default function InputImageURL(props: InputImageURLProps) {
             />
             <div 
                 className={clsx(
-                    "relative w-[36px] h-[36px] flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800",
+                    "relative w-[40px] h-[40px] flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800",
                     props.inputBoxClassName
                 )}
             >
                 {!props.value &&
-                    <ImageIcon
+                    <ImagePlusIcon
                         size={16}
                         className="text-neutral-500"
                     />

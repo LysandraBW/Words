@@ -9,6 +9,8 @@ import InputImageURL from "@/components/input/InputImageURL";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal";
 import { addValue, deleteValue } from "@/utilities/array";
+import Panel from "@/components/Panel";
+import InputButton from "@/components/input/InputButton";
 
 
 interface UpdateBookProps {
@@ -77,11 +79,11 @@ export default function UpdateBook(props: UpdateBookProps) {
     
 
     return (
-        <Modal
-            title="Update Book"
+        <Panel
+            title="Edit Book"
             onClose={props.onClose}
         >
-            <div className="px-8 py-4 flex flex-col gap-y-4">
+            <div className="px-8 py-4 flex flex-col gap-y-6">
                 <InputText
                     label="Name"
                     value={form.book_name.value}
@@ -114,12 +116,11 @@ export default function UpdateBook(props: UpdateBookProps) {
                     onChange={(value) => setForm(updateFormValue(form, "book_background_image", value))}
                     error={form.book_background_image.error}
                 />
-                <Button
-                    label="Update Book"
-                    style="blue"
+                <InputButton
+                    label="Save"
                     onClick={() => onUpdateBook(form)}
                 />
             </div>
-        </Modal>
+        </Panel>
     )
 }

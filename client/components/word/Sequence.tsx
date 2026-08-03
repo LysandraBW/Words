@@ -2,7 +2,7 @@ import { ParenthesizedSequenceElement, SenseSequenceElement } from "@/services/w
 import Level from "./Level";
 import Sense from "./Sense";
 import clsx from "clsx";
-import { pixelifySans } from "@/app/fonts";
+import { nunito, pixelifySans, snigletFont } from "@/app/fonts";
 
 interface SequenceProps {
     sequence: SenseSequenceElement[];
@@ -51,8 +51,8 @@ export default function Sequence(props: SequenceProps) {
                                             {partialSense[0] !== 'bs' &&
                                                 <span 
                                                     className={clsx(
-                                                        pixelifySans.className,
-                                                        "w-6 min-w-6 overflow-clip block font-bold text-xs text-blue-400 text-center whitespace-nowrap"
+                                                        snigletFont.className,
+                                                        "w-6 min-w-6 overflow-clip block font-bold- text-xs text-blue-400 text-center whitespace-nowrap"
                                                     )}
                                                 >
                                                     [{partialSense[1].sn?.match(/\((\d+)\)/)?.[1]}]

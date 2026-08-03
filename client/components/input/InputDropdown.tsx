@@ -76,7 +76,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                     <button
                         onClick={() => setOpen(true)}
                         className={clsx(
-                            "w-full h-[36px] max-h-[36px] min-h-[36px] px-4",
+                            "input-box",
                             "flex justify-between items-center",
                             "rounded-md border border-neutral-800",
                             !props.search && "cursor-pointer",
@@ -85,7 +85,7 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                     >
                         <label 
                             className={clsx(
-                                "text-sm",
+                                "input input-placeholder text-sm !text-neutral-500",
                                 !props.search && "cursor-pointer",
                                 props.toggleLabelClassName
                             )}
@@ -109,10 +109,10 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder={props.searchPlaceholder}
                         className={clsx(
-                            "w-full h-[36px] max-h-[36px] min-h-[36px] px-4",
+                            "input-box input input-placeholder",
                             "flex justify-between items-center",
                             "rounded-md border border-neutral-800 outline-none",
-                            "text-sm text-neutral-500 tracking-wide focus:text-white placeholder:text-sm placeholder:text-neutral-500",
+                            // "text-sm text-neutral-500 tracking-wide focus:text-white placeholder:text-sm placeholder:text-neutral-500",
                             props.toggleClassName
                         )}
                     />

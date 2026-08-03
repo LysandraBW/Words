@@ -9,6 +9,9 @@ interface InputCheckboxesProps<V> {
     error: string;
     options: Option<V>[];
     onChange: (value: V) => void;
+    inputClassName: string;
+    labelClassName: string;
+    inputWrapperClassName: string;
 }
 
 
@@ -20,21 +23,27 @@ export default function InputCheckboxes<V>(props: Partial<InputCheckboxesProps<V
     }
     
     return (
-        <div>
+        <div className="">
             {props.label &&
                 <p>
                     {props.label}
                 </p>
             }
-            {props.options?.map((option, i) => (
-                <Fragment key={i}>
-                    <InputCheckbox
-                        label={option.textLabel}
-                        checked={props.value?.includes(option.value)}
-                        onChange={() => onChange(option.value)}
-                    />
-                </Fragment>
-            ))}
+            <div className="flex flex-col gap-1">
+                {props.options?.map((option, i) => (
+                    <div 
+                        key={i}
+                        className={props.inputWrapperClassName}
+                    >
+                        <InputCheckbox
+                            label={option.textLabel}
+                            labelClassName={props.labelClassName}
+                            checked={props.value?.includes(option.value)}
+                            onChange={() => onChange(option.value)}
+                        />
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

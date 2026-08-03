@@ -11,9 +11,9 @@ export default function InputTag(props: InputTagProps) {
         <span 
             className={clsx(
                 "px-2 py-0.5 flex items-center gap-x-1",
-                "text-xs text-neutral-500 tracking-wide font-medium",
-                "rounded-md bg-neutral-900",
-                "cursor-pointer hover:bg-neutral-900"
+                "text-xs text-neutral-300 tracking-wide font-medium",
+                "rounded-md bg-blue-600 border border-blue-500",
+                "cursor-pointer"
             )}
         >
             {props.tag}
@@ -21,7 +21,7 @@ export default function InputTag(props: InputTagProps) {
                 onClick={props.onDelete}
                 size={10}
                 strokeWidth={2.5}
-                className="hover:text-red-500"
+                className="text-neutral-100 hover:text-red-500"
             />
         </span>
     )

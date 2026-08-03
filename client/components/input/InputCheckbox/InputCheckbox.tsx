@@ -7,6 +7,7 @@ interface InputCheckboxProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
     inputClassName: string;
+    labelClassName: string;
 }
 
 
@@ -23,14 +24,9 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
 
     return (
         <label 
-            className="block"
+            className="block flex gap-x-2 items-center"
             onClick={onChange}    
         >
-            {/* <input
-                type="checkbox"
-                checked={props.checked}
-                onChange={onChange}
-            /> */}
             <div
                 className={clsx(
                     "!w-[16px] !h-[16px] flex justify-center items-center rounded-sm bg-neutral-800 border border-neutral-600 shadow-sm",
@@ -46,7 +42,13 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
                 }
             </div>
             {props.label &&
-                <span className="text-red-500">
+                <span 
+                    className={clsx(
+                        "text-neutral-400",
+                        props.checked && "!text-neutral-300",
+                        props.labelClassName
+                    )}
+                >
                     {props.label}
                 </span>
             }

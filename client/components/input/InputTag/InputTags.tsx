@@ -39,15 +39,15 @@ export default function InputTags(props: Partial<InputTagsProps>) {
             <InputLabel
                 label={props.label}
             />
-            <div className="min-h-[36px] max-h-[36px] h-[36px] flex">
+            <div className="min-h-[40px] max-h-[40px] h-[40px] flex">
                 <input
                     value={value}
                     onKeyUp={onEnter}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder={props.placeholder}
                     className={clsx(
-                        "w-full min-h-[36px] max-h-[36px] h-[36px] px-4 py-1",
-                        "bg-neutral-900 rounded-l-md outline-none peer hover:bg-neutral-800 focus:bg-neutral-800 border border-neutral-800",
+                        "input-box",
+                        "rounded-r-none outline-none peer",
                         "text-sm text-neutral-500 tracking-normal focus:text-white",
                         props.inputClassName
                     )}
@@ -55,7 +55,7 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                 <button
                     onClick={onClick}
                     className={clsx(
-                        "px-4 py-1 bg-neutral-900 rounded-r-md cursor-pointer group border border-neutral-700 border-l-0",
+                        "px-4 py-1 bg-neutral-900 rounded-r-md cursor-pointer group border border-neutral-800 border-l-0",
                         props.buttonClassName
                     )}
                 >
@@ -66,7 +66,7 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                 </button>
             </div>
             {!!props.value?.length &&
-                <div className="flex gap-1">
+                <div className="mt-0.5 flex gap-1">
                     {props.value?.map((value, i) => (
                         <Fragment key={i}>
                             <InputTag

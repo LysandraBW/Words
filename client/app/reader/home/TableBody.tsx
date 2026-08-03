@@ -15,6 +15,7 @@ export default function TableBody<ObjectType extends {[k: string]: any}>(props: 
         <>
             {props.objects.map((object, i) => (
                 <Fragment 
+                    key={i}
                     // key={object[props.objectID]}
                     // className="grid items-center bg-neutral-900 border-x border-b border-neutral-800 hover:bg-neutral-900/50"
                     // style={{

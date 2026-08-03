@@ -75,8 +75,15 @@ export default function Layout({children}: {children: React.ReactNode}) {
         <div className="w-full h-screen max-h-screen grid grid-cols-[256px_1fr] grid-rows-[72px_minmax(0,1fr)]">
             <div className="col-start-1 col-span-1 row-start-1 row-span-1 px-4 flex justify-between items-center bg-neutral-900 border-r border-b border-neutral-800">
                 <div className="flex gap-x-2 items-center">
-                    <div className="h-[20px] aspect-square rounded-sm bg-blue-600 border border-blue-500">
-
+                    <div className="h-[19px] aspect-square p-[2px] grid grid-cols-[4px_1fr] grid-rows-3 gap-[2px] rounded-sm bg-blue-600 border border-blue-500">
+                        <div className="h-full col-start-1 col-span-1 row-start-1 row-span-1 bg-blue-400 rounded-[1px]">
+                        </div>
+                        <div className="h-full col-start-2 col-span-1 row-start-1 row-span-1 bg-blue-800 rounded-[2px]">
+                        </div>
+                        <div className="h-full col-start-1 col-span-2 row-start-2 row-span-1 bg-blue-800 rounded-[2px]">
+                        </div>
+                        <div className="h-full col-start-1 col-span-2 row-start-3 row-span-1 bg-blue-800 rounded-[2px]">
+                        </div>
                     </div>
                     <span className={clsx(snigletFont.className, "relative block text-2xl tracking-[-1px] text-blue-100")}>
                         WORDS
@@ -87,15 +94,13 @@ export default function Layout({children}: {children: React.ReactNode}) {
                 <SearchWords
                     onOpenWord={onOpenWord}
                 />
-                <div className="p-[2px] border border-neutral-600 bg-neutral-800 rounded-[10px] shadow">
-                    <div 
-                        className="aspect-square h-full bg-center bg-cover border- border-neutral-600 rounded-lg"
-                        style={{
-                            backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
-                        }}
-                    >
-                        
-                    </div>
+                <div 
+                    className="aspect-square h-full bg-center bg-cover border border-neutral-600 bg-neutral-800 rounded-md shadow"
+                    style={{
+                        backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
+                    }}
+                >
+                    
                 </div>
             </div>
             <div className="col-start-1 col-span-1 row-start-2 row-span-1 px-4 py-4 flex flex-col items-center gap-y-6 justify-between bg-neutral-900 border-r border-neutral-800">
