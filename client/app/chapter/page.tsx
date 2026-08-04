@@ -113,10 +113,10 @@ export default function Page() {
                     {data.chapter.book_name} {'>'} ({data.chapter.chapter_number}) {data.chapter.chapter_title}
                 </h3>
             </div>
-            <ShowWords
+            {/* <ShowWords
                 words={data.words}
                 decksGraded={data.decksGraded}
-            />
+            /> */}
             <div
                 className="bg-blue-200"
             >

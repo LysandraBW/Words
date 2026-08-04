@@ -15,7 +15,7 @@ interface ShowEntryProps {
 }
 
 
-function ScribbleTag(props: {text: string; className: string}) {
+export function ScribbleTag(props: {text: string; className: string}) {
     return (
         <span
             className={clsx(

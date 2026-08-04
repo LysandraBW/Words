@@ -54,7 +54,7 @@ export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>
 
 export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: Partial<Pick<D, K>>, test?: boolean): Form<D> {
     const labels: K[] = Object.keys(data) as any;
-    const updatedForm: Form<D> = {...form};
+    let updatedForm: Form<D> = {...form};
 
     for (const label of labels) {
         const field = {
@@ -68,6 +68,11 @@ export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D
                 field.hasError = true;
                 field.error = output.error.message;
             }
+        }
+
+        updatedForm = {
+            ...updatedForm,
+            [label]: field
         }
     }
 

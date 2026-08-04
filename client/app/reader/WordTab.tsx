@@ -8,6 +8,7 @@ import ActionBar from "./home/ActionBar/ActionBar";
 import TableHead from "./home/TableHead";
 import TableBody from "./home/TableBody";
 import NavigationBar from "./home/Navigation";
+import { MinusIcon, PlusIcon } from "lucide-react";
 
 
 interface WordTabProps {
@@ -23,6 +24,7 @@ interface WordTabProps {
     onOpenWord: (word: string) => void;
     onCloseWord: (word: string) => void;
     onBringWordToFront: (word: string) => void;
+    onCreate: () => void;
 }
 
 export default function WordTab(props: WordTabProps) {
@@ -95,7 +97,7 @@ export default function WordTab(props: WordTabProps) {
                 searchOptions={searchOptions}
                 sortOptions={sortOptions}
                 filter={filter}
-                onCreate={() => 1}
+                onCreate={props.onCreate}
             />
             <div>
                 <div
@@ -136,7 +138,21 @@ export default function WordTab(props: WordTabProps) {
                             }
                             if (key === "Seen") {
                                 return (
-                                    <p className="text-sm tracking-wide text-neutral-400">{word.word_number_instances}x</p>
+                                    <div className="w-full flex justify-between items-center">
+                                        <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
+                                            <MinusIcon
+                                                size={14}
+                                                className="stroke-neutral-500 scale-x-70"
+                                            />
+                                        </button>
+                                        <p className="text-sm tracking-wide text-neutral-400">{word.word_number_instances}x</p>
+                                        <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
+                                            <PlusIcon
+                                                size={14}
+                                                className="stroke-neutral-500 scale-x-95"
+                                            />
+                                        </button>
+                                    </div>
                                 )
                             }
                             if (key === "Acc") {
