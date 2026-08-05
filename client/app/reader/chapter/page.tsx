@@ -138,7 +138,7 @@ export default function Page() {
         <>
             <div className="grid grid-cols-1 grid-rows-[auto_auto_1fr]">
                 {/* Book Picture */}
-                <div className="relative z-10 p-4">
+                <div className="relative z-10 p-2">
                     <div 
                         className="relative h-[156px] grid grid-cols-[auto_1fr] bg-cover bg-center bg-no-repeat border border-neutral-800 rounded-lg overflow-clip"
                         style={{
@@ -257,13 +257,19 @@ export default function Page() {
             {show === 'Update Chapter' &&
                 <div className="">
                     <UpdateChapter
+                        chapter={data?.chapter}
                         onClose={() => setShow('')}
+                        onChapterUpdated={() => 1}
                     />
                 </div>
             }
             {show === 'Log Word' &&
                 <div className="">
                     <LogWord
+                        book={data?.chapter}
+                        chapter={data?.chapter}
+                        books={data?.books}
+                        chapters={data?.chapters}
                         onClose={() => setShow('')}
                     />
                 </div>

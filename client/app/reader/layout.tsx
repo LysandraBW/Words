@@ -1,6 +1,6 @@
 "use client";
 import Logo from "../login/panel/Logo";
-import { ArrowLeftFromLineIcon , ChevronsLeftIcon, HomeIcon, PanelLeftCloseIcon, SettingsIcon } from "lucide-react";
+import { ArrowLeftFromLineIcon , ChevronsLeftIcon, HomeIcon, LogOutIcon, PanelLeftCloseIcon, SettingsIcon } from "lucide-react";
 import SearchWords from "./SearchWords";
 import { Fragment, useEffect, useState } from "react";
 import loadData from "../home/loadData";
@@ -10,6 +10,8 @@ import { dynaPuffFont, glutenFont, snigletFont } from "../fonts";
 import DraggableWord from "@/components/DraggableWord";
 import { ReaderType, selectReader } from "@/services/server/reader";
 import { useRouter } from "next/navigation";
+import { Tooltip } from 'react-tooltip'
+
 
 export default function Layout({children}: {children: React.ReactNode}) {
     const router = useRouter();
@@ -95,13 +97,60 @@ export default function Layout({children}: {children: React.ReactNode}) {
                     onOpenWord={onOpenWord}
                 />
                 <div 
-                    className="aspect-square h-full bg-center bg-cover border border-neutral-600 bg-neutral-800 rounded-md shadow"
+                    id="profile"
+                    className="aspect-square h-full bg-center bg-cover border border-neutral-600 bg-neutral-800 !rounded-md shadow"
                     style={{
                         backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
                     }}
                 >
                     
                 </div>
+                <Tooltip 
+                    anchorSelect="#profile"
+                    clickable
+                    style={{
+                        width: "300px",
+                        borderRadius: "6px",
+                        padding: 0,
+                        boxShadow: "0px 2px 2px 0px #00000010",
+                        zIndex: 200,
+                        pointerEvents: "auto"
+                    }}
+                    className="!p-0 !bg-neutral-800 !opacity-100 border border-neutral-700 rounded-lg !shadow-md"    
+                >
+                    <div className="">
+                        <div className="flex">
+                            <div 
+                                id="profile"
+                                className="w-10 h-10 min-h-10 min-w-10 m-4 mr-0 bg-center bg-cover border border-neutral-600 bg-neutral-800 !rounded-md shadow"
+                                style={{
+                                    backgroundImage: `url(https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg)`
+                                }}
+                            >
+                                
+                            </div>
+                            <div className="p-4">
+                                <p className="text-sm text-neutral-100 font-medium">
+                                    {reader?.reader_name}
+                                </p>
+                                <p className="text-sm text-neutral-300 tracking-wide">
+                                    {reader?.reader_email}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="p-2 flex justify-end !bg-neutral-900 rounded-b-lg ">
+                            <button className="px-2 py-0.5 flex items-center gap-x-2 bg-neutral-700 border border-neutral-600 rounded-md shadow-md">
+                                <LogOutIcon
+                                    size={14}
+                                    className="stroke-neutral-300"
+                                />
+                                <label className="text-xs text-neutral-200 font-medium">
+                                    Log Out
+                                </label>
+                            </button>
+                        </div>
+                    </div>
+                </Tooltip>
             </div>
             <div className="col-start-1 col-span-1 row-start-2 row-span-1 px-4 py-4 flex flex-col items-center gap-y-6 justify-between bg-neutral-900 border-r border-neutral-800">
                 <div className="w-full h-full flex flex-col justify-between gap-y-3">

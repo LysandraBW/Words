@@ -21,7 +21,12 @@ export default function Sequence(props: SequenceProps) {
                 {props.sequence.map((sense: SenseSequenceElement, i: number) => (
                     <div key={i}>
                         {(sense[0] === "sense" || sense[0] === "sen" || sense[0] === "bs") &&
-                            <div className="grid grid-cols-[auto_1fr]">
+                            <div 
+                                className={clsx(
+                                    "grid grid-cols-[auto_1fr]",
+                                    !(props.sequence.length > 1 && sense[0] !== "bs" && sense[1]["sn"] && /[a-z]/i.test(sense[1]["sn"])) && "!grid-cols-1"
+                                )}
+                            >
                                 {/* Check for Letters */}
                                 {(props.sequence.length > 1 && sense[0] !== "bs" && sense[1]["sn"] && /[a-z]/i.test(sense[1]["sn"])) &&
                                     <Level
@@ -35,17 +40,17 @@ export default function Sequence(props: SequenceProps) {
                             </div>
                         }
                         {(sense[0] === "pseq") && (
-                            <div className="grid grid-cols-[auto_1fr]">
+                            <div className="grid grid-cols-[auto_1fr] w-full">
                                 <Level
                                     label={'abcdefghijklmnopqrstuvwxyz'[i]}
                                     level={1}
                                     long={sense[1].length > 1}
                                 />
-                                <div className="flex flex-col gap-y-2">
+                                <div className="flex flex-col gap-y-2 w-full">
                                     {sense[1].map((partialSense: ParenthesizedSequenceElement, p: number) => (
                                         <div 
                                             key={p}
-                                            className="flex text-white"
+                                            className="w-full grow min-w-0 flex text-white"
                                         >
                                             {/* Check for Numbers */}
                                             {partialSense[0] !== 'bs' &&

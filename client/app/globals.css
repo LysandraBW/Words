@@ -34,3 +34,7 @@ button * {
             text-neutral-500/75
     }
 }
+
+.react-tooltip-content-wrapper {
+    padding: 0 !important;
+}

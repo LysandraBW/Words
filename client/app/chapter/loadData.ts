@@ -1,13 +1,14 @@
-import { selectChapter, selectChapterWords } from "@/services/server/chapter";
+import { selectChapter, selectChapters, selectChapterWords } from "@/services/server/chapter";
 import { selectDecksByChapter } from "@/services/server/deck";
 import { selectDecksGradedByChapters } from "@/services/server/deckGraded";
 import { Dispatch, SetStateAction } from "react";
 import { ChapterType } from "@/services/server/chapter";
 import { WordType } from "@/services/server/word";
+import { selectBooks } from "@/services/server/book";
 
 
 export default async function loadData(chapterID: number) {
-    const [chapter, words, decks, decksGraded] = await Promise.all([
+    const [chapter, words, decks, decksGraded, books, chapters] = await Promise.all([
         (async () => {
             const chapter = await selectChapter(chapterID);
             return chapter;
@@ -23,6 +24,14 @@ export default async function loadData(chapterID: number) {
         (async () => {
             const decksGraded = await selectDecksGradedByChapters(chapterID);
             return decksGraded;
+        })(),
+        (async () => {
+            const books = await selectBooks();
+            return books;
+        })(),
+        (async () => {
+            const chapters = await selectChapters();
+            return chapters;
         })()
     ]);
 
@@ -30,7 +39,9 @@ export default async function loadData(chapterID: number) {
         chapter,
         words,
         decks,
-        decksGraded
+        decksGraded,
+        books,
+        chapters
     }
 }
 

@@ -1,12 +1,13 @@
 import { Fragment, useEffect, useState } from "react";
 import FormattedText from "./FormattedText";
 import Labels from "./Labels";
-import { DotIcon, PointerIcon } from "lucide-react";
+import { DotIcon, PlusIcon, PointerIcon } from "lucide-react";
 import { DefiningText, ParenthesizedSequenceElement, Sense, TruncatedSense } from "@/services/words/getWordEntry";
 
 
 interface ShowSenseProps {
     sense: ParenthesizedSequenceElement;
+    onClick?: (meaning: string) => void;
 }
 
 
@@ -62,24 +63,39 @@ export default function ShowSense(props: ShowSenseProps) {
 
 
     return (
-        <div>
-            <Labels
-                labels={labels}
-            />
+        <div className="relative grid- grid-cols-1 grid-rows-1 w-[calc(100%-0px)]">
+            {labels.length !== 0 &&
+                <div className="inline relative top-[-1.5px]">
+                    <Labels
+                        labels={labels}
+                    />
+                </div>
+            }
             {nodes?.map((node, i) => (
                 <Fragment key={i}>
                     {node[0] === "meaning" &&
-                        <FormattedText
-                            text={node[1]}
-                        />
+                        <div className="inline-block pr-[calc(48px)]">
+                            <FormattedText
+                                text={node[1]}
+                            />
+                            <button 
+                                onClick={() => props.onClick && props.onClick(node[1])}
+                                className="absolute top-0 right-0 w-[18px] aspect-square h-min flex justify-center items-center bg-blue-600 border border-blue-500 rounded-md shadow-sm"    
+                            >
+                                <PlusIcon
+                                    size={10}
+                                    className="stroke-neutral-100 scale-x-95"
+                                />
+                            </button>
+                        </div>
                     }
                     {node[0] === "example" &&
                         <div 
-                            className="grid grid-cols-[auto_1fr] items-center"
+                            className="grid grid-cols-[auto_1fr]"
                         >
                             <DotIcon
                                 size={18}
-                                className="text-xs text-neutral-500"
+                                className="relative top-[3px] text-xs text-neutral-500"
                             />
                             <FormattedText
                                 text={node[1]}

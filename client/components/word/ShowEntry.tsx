@@ -36,7 +36,9 @@ export const EntryHandlerContext = createContext<{onOpenWord: (word: string) => 
 export default function ShowEntry(props: ShowEntryProps) {
     return (
         <EntryHandlerContext.Provider value={{onOpenWord: props.onOpenWord}}>
-            <div className="grid grid-cols-[auto_1fr]">
+            <div 
+                className="grid grid-cols-[auto_1fr]"
+            >
                 <Level
                     level={-1}
                     label={""}

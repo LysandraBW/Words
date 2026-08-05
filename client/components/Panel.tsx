@@ -12,7 +12,7 @@ interface PanelProps {
 export default function Panel(props: PanelProps) {
     return (
         <div 
-            className="absolute z-[300] w-[480px] min-w-[480px] max-w-[480px] min-h-screen h-screen max-h-screen absolute top-0 right-0 overflow-y-auto bg-neutral-950/80 backdrop-blur-xl border-l border-l-neutral-900"
+            className="absolute z-[300] w-[480px] min-w-[480px] max-w-[480px] min-h-screen h-screen max-h-screen absolute top-0 right-0 overflow-y-auto bg-neutral-950/95 backdrop-blur-xl border-l border-l-neutral-900"
             style={{
                 boxShadow: '#00000008 0px 0px 10px 10px'
             }}    
