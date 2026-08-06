@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
-import { CaseUpperIcon, EllipsisIcon, ExpandIcon, MoveLeftIcon, PlayIcon, RefreshCwIcon, TrashIcon, XIcon } from "lucide-react";
+import { CaseUpperIcon, EllipsisIcon, ExpandIcon, LightbulbIcon, MoveLeftIcon, PlayIcon, RefreshCwIcon, TextInitialIcon, TrashIcon, XIcon } from "lucide-react";
 import { reloadDeck, deleteDeck, updateDeck } from "@/services/server/deck";
 import { DeckGradedType, deleteDeckGraded, insertDeckGraded } from "@/services/server/deckGraded";
 import loadData from "../../deck/loadData";
@@ -10,7 +10,10 @@ import clsx from "clsx";
 import WordTab from "../WordTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import TakeQuiz from "./TakeQuiz";
-import { dynaPuffFont, glutenFont, scribble, snigletFont } from "@/app/fonts";
+import IconButton from "@/components/ui/IconButton";
+import Tab from "../home/Tab";
+import DeckGradedTab from "../DeckGradedTab";
+import UpdateDeck from "@/app/reader/deck/UpdateDeck";
 
 
 export default function Page() {
@@ -22,7 +25,7 @@ export default function Page() {
         return router.back();
     
     const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
-    const [show, setShow] = useState<string|DeckGradedType>('Quiz');
+    const [show, setShow] = useState<string|DeckGradedType>('');
 
     const tabs = ["Words", "Attempts"];
     const [tabIndex, setTabIndex] = useState(0);
@@ -182,10 +185,15 @@ export default function Page() {
 
 
     return (
-        <div className="grid grid-rows-[auto_1fr] h-full">
+        <div 
+            className={clsx(
+                "grid grid-rows-[auto_auto_1fr] h-full",
+                show === 'Quiz' && "!grid-rows-[auto_1fr]"
+            )}    
+        >
             <div 
                 className={clsx(
-                    "h-[200px] grid grid-cols-2 bg-neutral-900 transition-all",
+                    "h-[156px] grid grid-cols-2 bg-neutral-900 transition-all",
                     show === 'Quiz' && '!h-min !block'
                 )}
             >
@@ -196,72 +204,40 @@ export default function Page() {
                     )}
                 >
                     {show !== 'Quiz' &&
-                        <div className={clsx("relative flex items-center gap-x-1 text-sm text-neutral-400")}>
-                            
-                                <div className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                                    <MoveLeftIcon
-                                        size={14}
-                                        strokeWidth={2}
-                                        className="stroke-neutral-500"
-                                    />
-                                </div>
-                        </div>
-                    }
-                    {show !== 'Quiz' &&
                         <>
                             <div className="flex flex-col justify-center -space-y-1">
                                 <p className="block text-lg font-normal text-neutral-300">
-                                    {data.deck.deck_name}
+                                    {data.deck.deck_questions.length} Question{data.deck.deck_questions.length === 1 ? "" : "s"}
                                 </p>
                                 <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
-                                    {data.deck.deck_questions.length} Questions
+                                    {data.deck.deck_name}
                                 </p>
                             </div>
                         </>
                     }
                     {show === 'Quiz' &&
                         <>
-                            {/* <div className="bg-neutral-900 p-0.5 border border-b-0 border-neutral-700 w-min rounded-t-lg">
-                                <p 
-                                    className={clsx(
-                                        "bg-neutral-900 p-0.5 px-4 border- border-neutral-600 w-min rounded-t-[6px] whitespace-nowrap text-xs text-neutral-500 font-medium uppercase- tracking-tight-",
-                                        // snigletFont.className
-                                    )}>
-                                        Taking Quiz
-                                </p>
-                            </div> */}
                             <div className="w-full">
                                 <div className="">
                                     <div 
                                         className={clsx(
-                                            "w-full flex justify-between bg-neutral-900 border border-neutral-700 rounded-lg rounded-tr-xl rounded-tl-none- normal-case shadow-md",
-                                            // snigletFont.className
+                                            "ml-3 flex justify-between bg-neutral-950/50 rounded-lg normal-case",
+                                            "relative before:h-[calc(100%-8px)] before:w-[4px] before:rounded-full before:bg-blue-500 before:border before:border-blue-500 before:top-[4px] before:left-[-10px] before:absolute"
                                         )}
                                     >
-                                        <p className="py-5 px-2 text-neutral-200 font-medium text-xl text-center">
-                                            Deck Name 1
-                                        </p>
+                                        <div className="py-5 px-2 relative">
+                                            <p className="text-neutral-100 font-medium text-xl">
+                                                Taking {data?.deck.deck_name}
+                                            </p>
+                                        </div>
                                         <div className="h-min p-1.5 flex gap-x-1.5">
-                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-600 rounded-md shadow-md">
-                                                <ExpandIcon
-                                                    size={14}
-                                                    strokeWidth={2}
-                                                    className="stroke-neutral-400"
-                                                />
-                                            </button>
-                                            <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-600 rounded-md shadow-md">
-                                                <XIcon
-                                                    size={14}
-                                                    strokeWidth={2}
-                                                    className="stroke-neutral-400"
-                                                />
-                                            </button>
+                                            <IconButton
+                                                Icon={XIcon}
+                                                onClick={() => setShow('')}
+                                            />
                                         </div>
                                     </div>
                                 </div>
-                                {/* <p className="block text-2xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
-                                    {data.deck.deck_questions.length} Questions
-                                </p> */}
                             </div>
                         </>
                     }
@@ -272,71 +248,41 @@ export default function Page() {
                         show === 'Quiz' && '!p-2 !hidden'
                     )}
                 >
-                    <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                        <PlayIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="stroke-neutral-500"
-                        />
-                    </button>
-                    <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                        <RefreshCwIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="stroke-neutral-500"
-                        />
-                    </button>
-                    <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                        <EllipsisIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="stroke-neutral-500"
-                        />
-                    </button>
-                    <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                        <TrashIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="stroke-neutral-500"
-                        />
-                    </button>
+                    <IconButton
+                        Icon={PlayIcon}
+                        onClick={() => setShow('Quiz')}
+                    />
+                    <IconButton
+                        Icon={RefreshCwIcon}
+                        onClick={async () => onReloadDeck(data.deck.deck_id)}
+                    />
+                    <IconButton
+                        Icon={EllipsisIcon}
+                        onClick={async () => setShow('Update Deck')}
+                    />
+                    <IconButton
+                        Icon={TrashIcon}
+                        onClick={() => onDeleteDeck(data.deck.deck_id)}
+                    />
                 </div>
             </div>
             {show !== 'Quiz' &&
                 <>
-                    {/* Tabs */}
-                    <div className="w-full p-2 grid grid-cols-2 gap-x-2 bg-neutral-900/50 border-y border-neutral-800">
-                        {tabs.map((tab, i) => (
-                            <div 
-                                key={i}
-                                onClick={() => setTabIndex(i)}
-                                className={clsx(
-                                    "py-1 px-2 flex justify-center items-center gap-x-2 border border-transparent rounded-lg text-sm text-neutral-500/75",
-                                    i !== tabIndex && "cursor-pointer hover:bg-neutral-800 hover:scale-97",
-                                    i === tabIndex && "bg-neutral-700 !border-neutral-600 shadow-md !text-neutral-200"
-                                )}
-                            >
-                                <p
-                                    className={clsx(
-                                        "flex items-center gap-x-2 text-xs text-neutral-500/75 tracking-wide rounded-md",
-                                        i !== tabIndex && "cursor-pointer hover:bg-white/10 hover:scale-97 transition-all",
-                                        i === tabIndex && "!text-neutral-200 font-medium"
-                                    )}
-                                >
-                                    {tab === "Words" &&
-                                        <CaseUpperIcon
-                                            size={14}
-                                            strokeWidth={1.5}
-                                            className="relative top-[1px]"
-                                        />
-                                    }
-                                    {tab}
-                                </p>
-                                
-                            </div>
-                        ))}
+                    <div className="w-full p-2 grid grid-cols-2 gap-x-2 bg-neutral-900 border-y border-neutral-800">
+                        <Tab
+                            TabIcon={TextInitialIcon}
+                            tabLabel="Words"
+                            selected={tabIndex === 0}
+                            onClick={() => setTabIndex(0)}
+                        />
+                        <Tab
+                            TabIcon={LightbulbIcon}
+                            tabLabel="Attempts"
+                            selected={tabIndex === 1}
+                            onClick={() => setTabIndex(1)}
+                        />
                     </div>
-                    <div className="p-2">
+                    <div className="p-2 bg-neutral-950 grid grid-rows-[auto_1fr] grid-cols-1 gap-y-2 overflow-auto">
                         {tabIndex === 0 &&
                             <WordTab
                                 words={data?.words || []}
@@ -346,6 +292,16 @@ export default function Page() {
                                 onBringWordToFront={onBringWordToFront}
                                 lookup={wordLookup || null}
                                 setLookup={setWordLookup}
+                                onCreate={() => null}
+                                onDelete={() => null}
+                            />
+                        }
+                        {tabIndex === 1 &&
+                            <DeckGradedTab
+                                deck={data?.deck || []}
+                                decksGraded={data?.decksGraded || []}
+                                onCreate={() => null}
+                                onDelete={() => null}
                             />
                         }
                     </div>
@@ -356,6 +312,14 @@ export default function Page() {
                     deck={data.deck}
                     onClose={() => setShow('')}
                     onQuizFinished={handleDeckGradedCreated}
+                />
+            }
+            {show === 'Update Deck' &&
+                <UpdateDeck
+                    books={data.books}
+                    deck={data.deck}
+                    onDeckUpdated={handleDeckUpdated}
+                    onClose={() => setShow('')}
                 />
             }
         </div>

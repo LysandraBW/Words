@@ -1,51 +1,52 @@
 import Button from "@/components/Button";
+import InputButton from "@/components/input/InputButton";
+import InputCheckboxes from "@/components/input/InputCheckbox/InputCheckboxes";
+import InputLabel from "@/components/input/InputLabel";
 import InputText from "@/components/input/InputText";
-import { BookType, selectBookChapters } from "@/services/server/book";
-import { insertDeck, DeckType, CreateDeckType } from "@/services/server/deck";
+import Panel from "@/components/Panel";
+import { BookType, selectBookChapters, selectBookWords } from "@/services/server/book";
+import { ChapterType, selectChapterWords } from "@/services/server/chapter";
+import { DeckType, updateDeck } from "@/services/server/deck"
+import { WordType } from "@/services/server/word";
+import { sameArrays, toggleValue } from "@/utilities/array";
 import { createForm, Form, getFormData, testForm, updateFormValue } from "@/utilities/form";
+import clsx from "clsx";
+import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import z from "zod";
-import InputCheckboxes from "@/components/input/InputCheckbox/InputCheckboxes";
-import { toggleValue } from "@/utilities/array";
-import { ChapterType, selectChapterWords } from "@/services/server/chapter";
-import { WordType } from "@/services/server/word";
-import Panel from "@/components/Panel";
-import InputButton from "@/components/input/InputButton";
-import clsx from "clsx";
-import InputLabel from "@/components/input/InputLabel";
-import { ChevronDownIcon } from "lucide-react";
 
 
-interface CreateDeckProps {
+interface UpdateDeckProps {
+    deck: DeckType;
     books: BookType[];
     onClose: () => void;
-    onDeckCreated: (deck: DeckType) => void;
+    onDeckUpdated: (deck: Awaited<ReturnType<typeof updateDeck>>, words: WordType[]) => void;
 }
 
 
-export default function CreateDeck(props: CreateDeckProps) {
+export default function UpdateDeck(props: UpdateDeckProps) {
+    const [words, setWords] = useState<WordType[]>();
     const [bookToChaptersToWords, setBookToChaptersToWords] = useState<{[bookID: number]: [ChapterType, WordType[]][]}>(); 
-    const [form, setForm] = useState<Form<CreateDeckType>>(createForm([
+    const [form, setForm] = useState<Form<DeckType>>(createForm([
         {
             label: 'deck_name',
-            value: '',
-            test: z.string().trim().min(1, "Must enter a name")
+            value: props.deck.deck_name,
+            test: z.any()
         },
         {
             label: 'deck_words',
-            value: [],
-            test: z.array(z.number())
+            value: props.deck.deck_words,
+            test: z.any()
         }
     ]));
-    
-    
+
+
     useEffect(() => {
         const load = async () => {
             try {
                 // Load Data
                 // Structure: [book, [chapter, [words]]]
                 const data: [number, [ChapterType, WordType[]][]][] = await Promise.all(props.books.map(async book => {
-                    console.log(book);
                     return [
                         book.book_id,
                         await selectBookChapters(book.book_id).then(async chapters => await Promise.all(chapters.map(async chapter => {
@@ -57,16 +58,18 @@ export default function CreateDeck(props: CreateDeckProps) {
                     ];
                 }));
 
+                const words: WordType[] = [];
                 const booksToChaptersToWords: {[bookID: number]: [ChapterType, WordType[]][]} = {};
                 for (const [bookID, chaptersToWords] of data) {
                     // Initialize Book Entry
                     if (!(bookID in booksToChaptersToWords))
                         booksToChaptersToWords[bookID] = [];
-                    for (const [chapter, words] of chaptersToWords) {
-                        booksToChaptersToWords[bookID].push([chapter, words]);
+                    for (const [chapter, chapterWords] of chaptersToWords) {
+                        booksToChaptersToWords[bookID].push([chapter, chapterWords]);
+                        words.push(...chapterWords);
                     }
                 }
-
+                setWords(words);
                 setBookToChaptersToWords(booksToChaptersToWords);
             }
             catch (err) {
@@ -76,22 +79,36 @@ export default function CreateDeck(props: CreateDeckProps) {
         load();
     }, [props.books]);
 
-    
-    const onCreateDeck = async (form: Form<CreateDeckType>) => {
+
+    if (!words || !bookToChaptersToWords)
+        return <>Loading</>;
+
+
+    const onUpdateDeck = async (form: Form<DeckType>) => {
         try {
             if (!testForm(form))
                 throw new Error('Invalid Form');
 
             const deck = getFormData(form);
-            const inserted = await insertDeck(deck);
-            props.onDeckCreated(inserted);
+            const updatedDeck = await updateDeck({
+                deck_id: props.deck.deck_id,
+                deck_name: deck.deck_name,
+                deck_words: sameArrays(props.deck.deck_words, deck.deck_words) ? null : deck.deck_words
+            });
+
+            // Updated Words
+            // We could just call the function to load all the words.
+            // But, I'd feel like that would be wasteful. We already
+            // have all the words!
+            const updatedWords = words.filter(word => deck.deck_words.includes(word.word_id));
+            props.onDeckUpdated(updatedDeck, updatedWords);
         }
-        catch (error) {
-            alert(error);
+        catch (err) {
+            alert(err);
         }
     }
 
-    
+
     const onToggleChapter = (chapterID: number) => {
         setForm(form => updateFormValue(
             form, 
@@ -99,11 +116,7 @@ export default function CreateDeck(props: CreateDeckProps) {
             toggleValue(chapterID, form.deck_words.value)
         ));
     }
-
-
-    if (!bookToChaptersToWords)
-        return <>Loading</>;
-
+    
 
     return (
         <Panel
@@ -186,7 +199,7 @@ export default function CreateDeck(props: CreateDeckProps) {
                 <Button
                     label="Create Deck"
                     outerClassName="!w-full"
-                    onClick={() => onCreateDeck(form)}
+                    onClick={() => onUpdateDeck(form)}
                 />
             </div>
         </Panel>

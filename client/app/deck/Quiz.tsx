@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { DeckGradedQuestionType, insertDeckGraded } from "@/services/server/deckGraded";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
-import { DeckExtendedType, shuffleCards } from "./shuffleCards";
+import { DeckExtendedType, shuffleCards } from "../reader/deck/shuffleCards";
 import Progress from "@/app/deck/Progress";
 import Question from "@/app/deck/Question";
 import { DeckType } from "@/services/server/deck";

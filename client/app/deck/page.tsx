@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
-import UpdateDeck from "./UpdateDeck";
+import UpdateDeck from "../reader/deck/UpdateDeck";
 import Quiz from "./Quiz";
 import Button from "@/components/Button";
 import { BookIcon, TrashIcon } from "lucide-react";
@@ -175,10 +175,10 @@ export default function Page() {
                     </div>
                 ))}
             </div>
-            <ShowWords
+            {/* <ShowWords
                 words={data.words}
                 decksGraded={data.decksGraded}
-            />
+            /> */}
             <Button
                 label="Start Quiz"
                 onClick={() => setShow('Quiz')}

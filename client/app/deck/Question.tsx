@@ -1,4 +1,4 @@
-import { DeckExtendedType } from "@/app/deck/shuffleCards";
+import { DeckExtendedType } from "@/app/reader/deck/shuffleCards";
 import clsx from "clsx";
 
 

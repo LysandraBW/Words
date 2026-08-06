@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import { DeckGradedType } from "@/services/server/deckGraded";
 import { TrashIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { DeckExtendedType, shuffleCards } from "./shuffleCards";
+import { DeckExtendedType, shuffleCards } from "../reader/deck/shuffleCards";
 import Progress from "@/app/deck/Progress";
 import Question from "@/app/deck/Question";
 

@@ -10,46 +10,44 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 
-interface DeckTabProps {
-    decks: DeckType[];
+interface DeckGradedTabProps {
+    deck: DeckType;
     decksGraded: DeckGradedType[];
     onCreate: () => void;
     onDelete: () => void;
 }
 
 
-export default function DeckTab(props: DeckTabProps) {
+export default function DeckGradedTab(props: DeckGradedTabProps) {
     const router = useRouter();
 
     const [display, setDisplay] = useState("List");
     const [selected, setSelected] = useState<Set<number>>(new Set());
 
-
     const filter = useFilterObjects({ 
-        objects: props.decks
+        objects: props.decksGraded
     });
 
-    
-    const searchOptions: Option<string>[] = [
-        {
-            value: "deck_name",
-            textLabel: "Name"
-        }
-    ];
-
-
+    const searchOptions: Option<string>[] = [];
     const sortOptions: Option<string>[] = [
         {
-            value: "deck_name",
-            textLabel: "Name"
+            value: "deck_duration",
+            textLabel: "Duration"
+        },
+        {
+            value: "number_correct",
+            textLabel: "Number Correct"
+        },
+        {
+            value: "number_incorrect",
+            textLabel: "Number Incorrect"
         }
     ];
 
 
     const toggleAllCheckboxes = () => {
-        // All Selected
         if (selected.size === 0) {
-            const deckIDs = props.decks.map(deck => deck.deck_id);
+            const deckIDs = props.decksGraded.map(deck => deck.deck_graded_id);
             setSelected(new Set(deckIDs));
         }
         else {
@@ -87,22 +85,31 @@ export default function DeckTab(props: DeckTabProps) {
                 <div
                     className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
                     style={{
-                        "gridTemplateColumns": `calc(26px + 16px) 1fr`
+                        "gridTemplateColumns": `calc(26px + 16px) 1fr 1fr 1fr`
                     }}
                 >
                     <TableHead
-                        columns={["Name"]}
-                        allSelected={selected.size === props.decks.length && !!props.decks.length}
+                        columns={["Duration", "Number Correct", "Number Incorrect"]}
+                        allSelected={selected.size === props.decksGraded.length && !!props.decksGraded.length}
                         onToggleAllCheckboxes={toggleAllCheckboxes}
                     />
                     <TableBody
-                        objectID={"deck_id"}
-                        onClickObjectRow={(deck: DeckType) => router.push(`/reader/deck?deckID=${deck.deck_id}`)}
+                        objectID={"deck_graded_id"}
                         objects={filter.filteredObjects}
                         onSelectObject={selectObject}
                         onDeselectObject={deselectObject}
                         selectedObjects={selected}
-                        keys={["deck_name"]}
+                        keys={["Duration", "number_correct", "number_incorrect"]}
+                        getElementCallback={(key, deck_graded) => {
+                            if (key === "Duration") {
+                                return (
+                                    <p className="w-full text-sm text-center- tracking-wide text-neutral-400">
+                                        {deck_graded.duration}ms
+                                    </p>
+                                )
+                            }
+                            return <></>;
+                        }}
                     />
                 </div>
                 <NavigationBar

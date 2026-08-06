@@ -1,5 +1,5 @@
 "use client";
-import loadData, { useDataHandlers } from "@/app/chapter/loadData";
+import loadData, { useDataHandlers } from "@/app/reader/chapter/loadData";
 import { deleteChapter } from "@/services/server/chapter";
 import { insertWord, decrementWordNumberInstances as decrementWord, deleteWord, incrementWordNumberInstances as incrementWord } from "@/services/server/word";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,6 +10,7 @@ import WordTab from "../WordTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import UpdateChapter from "./UpdateChapter";
 import LogWord from "./LogWord";
+import IconButton from "@/components/ui/IconButton";
 
 export default function Page() {
     const router = useRouter();
@@ -21,7 +22,7 @@ export default function Page() {
     const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
     const handlers = useDataHandlers(setData);
     
-    const [show, setShow] = useState<string>('Log Word');
+    const [show, setShow] = useState<string>('');
 
     const [wordLookup, setWordLookup] = useState<{[word: string]: {entries: Entry[], z: number}}|null>();
 
@@ -224,20 +225,16 @@ export default function Page() {
                             </div>
                         </div>
                         <div className="p-2 flex gap-x-2 justify-end">
-                            <button className="p-1 w-[26px] h-[26px] flex justify-center items-center bg-neutral-100/10 backdrop-blur-sm border border-neutral-400/30 rounded-lg shadow-xs">
-                                <EllipsisIcon
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="stroke-neutral-500"
-                                />
-                            </button>
-                            <button className="p-1 w-[26px] h-[26px] flex justify-center items-center bg-neutral-100/10 backdrop-blur-sm border border-neutral-400/30 rounded-lg shadow-xs">
-                                <TrashIcon
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="stroke-neutral-500"
-                                />
-                            </button>
+                            <IconButton
+                                Icon={EllipsisIcon}
+                                onClick={() => setShow('Update Chapter')}
+                                className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
+                            />
+                            <IconButton
+                                Icon={TrashIcon}
+                                onClick={() => null}
+                                className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
+                            />
                         </div>
                     </div>
                 </div>
@@ -245,34 +242,31 @@ export default function Page() {
                     <WordTab
                         words={data?.words || []}
                         decksGraded={data?.decksGraded || []}
+                        lookup={wordLookup || null}
                         onOpenWord={onOpenWord}
                         onCloseWord={onCloseWord}
                         onBringWordToFront={onBringWordToFront}
-                        lookup={wordLookup || null}
                         setLookup={setWordLookup}
                         onCreate={() => setShow('Log Word')}
+                        onDelete={() => null}
                     />
                 </div>
             </div>
             {show === 'Update Chapter' &&
-                <div className="">
-                    <UpdateChapter
-                        chapter={data?.chapter}
-                        onClose={() => setShow('')}
-                        onChapterUpdated={() => 1}
-                    />
-                </div>
+                <UpdateChapter
+                    chapter={data?.chapter}
+                    onClose={() => setShow('')}
+                    onChapterUpdated={() => 1}
+                />
             }
             {show === 'Log Word' &&
-                <div className="">
-                    <LogWord
-                        book={data?.chapter}
-                        chapter={data?.chapter}
-                        books={data?.books}
-                        chapters={data?.chapters}
-                        onClose={() => setShow('')}
-                    />
-                </div>
+                <LogWord
+                    book={data?.chapter}
+                    chapter={data?.chapter}
+                    books={data?.books}
+                    chapters={data?.chapters}
+                    onClose={() => setShow('')}
+                />
             }
         </>
     );

@@ -1,23 +1,19 @@
 "use client";
-import loadData from "@/app/book/loadData";
+import loadData from "@/app/reader/book/loadData";
 import { BookType } from "@/services/server/book";
 import { ChapterType } from "@/services/server/chapter";
-import clsx from "clsx";
-import { BookIcon, CaseUpperIcon, DeleteIcon, EllipseIcon, EllipsisIcon, TextInitialIcon, TrashIcon, WholeWordIcon } from "lucide-react";
+import { BookIcon, EllipsisIcon, TextInitialIcon, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import BookTab from "../BookTab";
 import ChapterTab from "../ChapterTab";
 import WordTab from "../WordTab";
-import DeckTab from "../DeckTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import BookScene from "./BookScene";
-import UpdateChapters from "@/app/book/UpdateChapters";
-import UpdateBook from "@/app/book/UpdateBook";
-import Modal from "@/components/Modal";
-import InputText from "@/components/input/InputText";
-import InputButton from "@/components/input/InputButton";
+import UpdateChapters from "@/app/reader/book/UpdateChapters";
+import UpdateBook from "@/app/reader/book/UpdateBook";
 import AddChapter from "./AddChapter";
+import Tab from "../home/Tab";
+import IconButton from "@/components/ui/IconButton";
 
 export default function Page() {
     const router = useRouter();
@@ -27,8 +23,6 @@ export default function Page() {
     if (!bookID)
         return router.push('/home');
 
-    
-    const tabs = ["Chapters", "Words"];
     const [tabIndex, setTabIndex] = useState(0);
 
     const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
@@ -199,57 +193,39 @@ export default function Page() {
                             </div>
                         </div>
                         <div className="p-2 flex gap-x-2 justify-end">
-                            <button className="p-1 w-[26px] h-[26px] flex justify-center items-center bg-neutral-100/10 backdrop-blur-sm border border-neutral-400/30 rounded-lg shadow-xs">
-                                <EllipsisIcon
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="stroke-neutral-500"
-                                />
-                            </button>
-                            <button className="p-1 w-[26px] h-[26px] flex justify-center items-center bg-neutral-100/10 backdrop-blur-sm border border-neutral-400/30 rounded-lg shadow-xs">
-                                <TrashIcon
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="stroke-neutral-500"
-                                />
-                            </button>
+                            <IconButton
+                                Icon={EllipsisIcon}
+                                onClick={() => setShow('Update Book')}
+                                className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
+                            />
+                            <IconButton
+                                Icon={TrashIcon}
+                                onClick={() => null}
+                                className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
+                            />
                         </div>
                     </div>
                 </div>
-                {/* Tabs */}
                 <div className="w-full p-2 grid grid-cols-2 gap-x-2 bg-neutral-900 border-y border-neutral-800">
-                    {tabs.map((tab, i) => (
-                        <div 
-                            key={i}
-                            onClick={() => setTabIndex(i)}
-                            className={clsx(
-                                "py-1 px-2 flex justify-center items-center gap-x-2 border border-transparent rounded-md text-sm text-neutral-500 font-medium",
-                                i !== tabIndex && "bg-neutral-950/50 cursor-pointer hover:bg-neutral-950/75 hover:scale-97 transition-all",
-                                i === tabIndex && "bg-blue-600 !border-blue-500 shadow-md !text-neutral-200"
-                            )}
-                        >
-                        {tab === "Chapters" &&
-                                <BookIcon
-                                    size={16}
-                                    strokeWidth={1.5}
-                                />
-                            }
-                            {tab === "Words" &&
-                                <TextInitialIcon
-                                    size={16}
-                                    strokeWidth={1.5}
-                                    className="relative top-[1px]"
-                                />
-                            }
-                            {tab}
-                        </div>
-                    ))}
+                    <Tab
+                        TabIcon={BookIcon}
+                        tabLabel="Chapters"
+                        selected={tabIndex === 0}
+                        onClick={() => setTabIndex(0)}
+                    />
+                    <Tab
+                        TabIcon={TextInitialIcon}
+                        tabLabel="Words"
+                        selected={tabIndex === 1}
+                        onClick={() => setTabIndex(1)}
+                    />
                 </div>
                 <div className="p-2 bg-neutral-950 grid grid-rows-[auto_1fr] grid-cols-1 gap-y-2 overflow-auto">
                     {tabIndex === 0 &&
                         <ChapterTab
                             chapters={chapters}
-                            onCreate={() => null}
+                            onCreate={() => setShow('Add Chapter')}
+                            onDelete={() => null}
                             showBook={false}
                         />
                     }
@@ -257,33 +233,31 @@ export default function Page() {
                         <WordTab
                             words={data?.words || []}
                             decksGraded={data?.decksGraded || []}
+                            lookup={wordLookup || null}
                             onOpenWord={onOpenWord}
                             onCloseWord={onCloseWord}
                             onBringWordToFront={onBringWordToFront}
-                            lookup={wordLookup || null}
                             setLookup={setWordLookup}
+                            onCreate={() => null}
+                            onDelete={() => null}
                         />
                     }
                 </div>
             </div>
             {show === 'Update Chapters' &&
-                <div className="bg-red-500">
-                    <UpdateChapters
-                        book={data.book}
-                        chapters={data.chapters}
-                        onChaptersUpdated={handleChaptersUpdated}
-                        onClose={() => setShow('')}
-                    />
-                </div>
+                <UpdateChapters
+                    book={data.book}
+                    chapters={data.chapters}
+                    onChaptersUpdated={handleChaptersUpdated}
+                    onClose={() => setShow('')}
+                />
             }
             {show === 'Update Book' &&
-                <div className="bg-blue-500">
-                    <UpdateBook
-                        book={data.book}
-                        onBookUpdated={handleBookUpdated}
-                        onClose={() => setShow('')}
-                    />
-                </div>
+                <UpdateBook
+                    book={data.book}
+                    onBookUpdated={handleBookUpdated}
+                    onClose={() => setShow('')}
+                />
             }
             {show === 'Add Chapter' &&
                 <AddChapter

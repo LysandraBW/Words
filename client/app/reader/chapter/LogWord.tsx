@@ -129,7 +129,6 @@ export default function LogWord(props: LogWordProps) {
                     {type === "Quick" &&
                         <div className="w-full h-full flex-col">
                             <InputDropdown
-                                // label="Search Word"
                                 value={[selected]}
                                 options={suggestions.map((suggestion, i) => ({
                                     value: suggestion,
@@ -157,7 +156,6 @@ export default function LogWord(props: LogWordProps) {
                                 toggleLabel="Search"
                                 toggleLabelClassName="!text-sm"
                                 search
-                                // searchPlaceholder="Search Merriam-Webster"
                                 elementLeft={(
                                     <div 
                                         className={clsx(
@@ -182,7 +180,7 @@ export default function LogWord(props: LogWordProps) {
                                     </div>
                                 )}
                             />
-                            {selectedEntry &&
+                            {(selected && selectedEntry && typeof selectedEntry[0] !== "string") &&
                                 <div className="w-full min-h-10 max-h-full grid grid-rows-[auto_1fr] bg-neutral-900 border border-t-0 border-neutral-800 rounded-b-lg overflow-auto">
                                     <div>
                                         <div className="relative w-full h-8 flex gap-x-1 bg-neutral-900 border-b border-neutral-800 rounded-t-md shadow-sm">
@@ -316,6 +314,7 @@ export default function LogWord(props: LogWordProps) {
                                                         entryNum={i+1}
                                                         numEntries={selectedEntry.length}
                                                         onOpenWord={(word) => setSelected(word)}
+                                                        allowLog
                                                     />
                                                 </div>
                                             ))}

@@ -51,7 +51,7 @@ export default function TableBody<ObjectType extends {[k: string]: any}>(props: 
                             key={key}
                             onClick={() => onClickObjectRow(object)}
                             className={clsx(
-                                "h-full p-2 flex items-center gap-x-2 overflow-clip",
+                                "min-w-0 h-full p-2 flex items-center gap-x-2 overflow-clip",
                                 "border-l border-b border-neutral-800"
                             )}
                         >

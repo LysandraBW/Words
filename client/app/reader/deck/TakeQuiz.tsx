@@ -1,10 +1,11 @@
-import { DeckExtendedType, shuffleCards } from "@/app/deck/shuffleCards";
+import { DeckExtendedType, shuffleCards } from "@/app/reader/deck/shuffleCards";
 import { DeckType } from "@/services/server/deck";
 import { DeckGradedQuestionType, insertDeckGraded } from "@/services/server/deckGraded";
 import clsx from "clsx";
 import { CheckIcon, ExpandIcon, MoveLeftIcon, MoveRightIcon, PauseIcon, PlayIcon, TriangleIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
+
 
 interface TakeQuizProps {
     deck: DeckType;
@@ -96,14 +97,6 @@ export default function TakeQuiz(props: TakeQuizProps) {
         }
     }
 
-
-    // 
-    const notComplete = Object.values(choices).length !== props.deck.deck_questions.length;
-    const notAnswered = shuffledDeck && choices[index] == null;
-    const lastCard = shuffledDeck && index === shuffledDeck.deck_questions.length - 1;
-
-    
-    // 
     const question = shuffledDeck.deck_questions[index]
     const choice = choices[index]
 
@@ -116,7 +109,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
             <div className="p-2 pb-4 px-4 pt-0 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
                 
                 <div className="h-6 p-1 grow flex gap-x-1 border border-neutral-700 rounded-md">
-                    {[...Array(5)].map((q, i) => {
+                    {[...Array(props.deck.deck_questions.length)].map((q, i) => {
                         const unanswered = choices[i] == null;
                         const correct = (!unanswered && choices[i] === 0);
                         const incorrect = !unanswered && !correct;
@@ -142,7 +135,16 @@ export default function TakeQuiz(props: TakeQuizProps) {
                     {seconds.toString().padStart(2, "0")}:
                     {milliseconds.toString().padStart(3, "0")}
                 </span>
-                <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
+                <button 
+                    onClick={() => {
+                        if (paused)
+                            start();
+                        else
+                            pause();
+                        setPaused(!paused);
+                    }}
+                    className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700 rounded-md shadow-sm"
+                >
                     {!paused ?
                         <PauseIcon
                             size={14}
@@ -157,47 +159,51 @@ export default function TakeQuiz(props: TakeQuizProps) {
                         />
                     }
                 </button>
-                {/* <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                    <ExpandIcon
-                        size={14}
-                        strokeWidth={2}
-                        className="stroke-neutral-500"
-                    />
-                </button>
-                <button className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700/50 rounded-md shadow-sm">
-                    <XIcon
-                        size={14}
-                        strokeWidth={2}
-                        className="stroke-neutral-500"
-                    />
-                </button> */}
+                {Object.keys(choices).length === props.deck.deck_questions.length &&
+                    <button 
+                        onClick={() => onFinishQuiz(choices, totalMilliseconds)}
+                        className="h-[24px] px-2 flex justify-center items-center bg-blue-500 rounded-md shadow"
+                    >
+                        <span className="text-xs text-neutral-100 font-medium">
+                            Finish
+                        </span>
+                    </button>
+                }
             </div>
             <div className="w-full p-5 grow flex flex-col self-center overflow-auto">
                 <div className="w-full grow grid grid-rows-[40%_1fr] gap-y-5">
                     <div className="w-full grid grid-cols-[auto_1fr_auto] gap-x-4">
-                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow">
+                        <button 
+                            disabled={index === 0} 
+                            onClick={() => setIndex(index - 1)}
+                            className="p-2 flex justify-center items-center gap-x-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow"
+                        >
                             <TriangleIcon
-                                size={16}
+                                size={12}
                                 strokeWidth={1.5}
-                                className="fill-blue-600 stroke-blue-500 rotate-270"
+                                className="fill-blue-600 stroke-blue-600 rotate-270"
                             />
                         </button>
                         <div className="relative bg-red-500- p-3 bg-neutral-900 border border-neutral-800 shadow flex justify-center items-center rounded-lg">
-                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-blue-600/50 border border-blue-600 rounded-md shadow text-xs text-neutral-100 font-medium tracking-wide">
+                            <span className="absolute left-1.5 top-1.5 px-1.5 py-0.5 bg-blue-600/10 rounded-md text-xs text-blue-500 font-medium tracking-wide">
                                 {index+1} of {shuffledDeck.deck_questions.length}
                             </span>
-                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-blue-600/50 border border-blue-600 rounded-md shadow text-xs text-neutral-100 font-medium tracking-wide">
+                            <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 bg-blue-600/10 rounded-md text-xs text-blue-500 font-medium tracking-wide">
                                 Select the Matching Definition
                             </span>
                             <span className="max-w-[320px] text-3xl text-shadow-lg text-neutral-200 text-center tracking-wide font-medium">
                                 {word[0]}
                             </span>
                         </div>
-                        <button className="p-2 flex justify-center items-center gap-x-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow">
+                        <button
+                            disabled={index === props.deck.deck_questions.length - 1} 
+                            onClick={() => setIndex(index + 1)}
+                            className="p-2 flex justify-center items-center gap-x-1 bg-neutral-900 border border-neutral-800 rounded-lg shadow"
+                        >
                             <TriangleIcon
-                                size={18}
+                                size={12}
                                 strokeWidth={1.5}
-                                className="fill-blue-600 stroke-blue-500 rotate-90"
+                                className="fill-blue-600 stroke-blue-600 rotate-90"
                             />
                         </button>
                     </div>

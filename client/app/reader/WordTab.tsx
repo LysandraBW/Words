@@ -136,7 +136,7 @@ export default function WordTab(props: WordTabProps) {
                 <div
                     className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
                     style={{
-                        "gridTemplateColumns": `calc(26px + 16px) 1fr 5fr 1fr 1fr 1fr 1fr`
+                        "gridTemplateColumns": `calc(26px + 16px) auto 5fr 1fr 1fr auto 1fr`
                     }}
                 >
                     <TableHead
@@ -154,34 +154,44 @@ export default function WordTab(props: WordTabProps) {
                         getElementCallback={(key, word) => {
                             if (key === "Word") {
                                 return (
-                                    <p className="w-full text-sm text-center- tracking-wide text-neutral-400">{word.word[0]}</p>
+                                    <p className="w-full text-sm text-center- tracking-wide text-neutral-400">
+                                        {word.word[0]}
+                                    </p>
                                 )
                             }
                             if (key === "Definition") {
                                 return (
-                                    <p className="text-sm tracking-wide text-neutral-400">{word.word[1]}</p>
+                                    <p className="text-sm tracking-wide text-neutral-400 whitespace-nowrap text-ellipsis">
+                                        {word.word[1]
+                                    }</p>
                                 )
                             }
                             if (key === "Created") {
                                 return (
-                                    <p className="text-sm tracking-wide text-neutral-400">{word.created_at ? new Date(word.created_at).toLocaleDateString() : ""}</p>
+                                    <p className="text-sm tracking-wide text-neutral-400">
+                                        {word.created_at ? new Date(word.created_at).toLocaleDateString() : ""}
+                                    </p>
                                 )
                             }
                             if (key === "Last Seen") {
                                 return (
-                                    <p className="text-sm tracking-wide text-neutral-400">{word.last_seen ? new Date(word.created_at).toLocaleDateString() : ""}</p>
+                                    <p className="text-sm tracking-wide text-neutral-400">
+                                        {word.last_seen ? new Date(word.created_at).toLocaleDateString() : ""}
+                                    </p>
                                 )
                             }
                             if (key === "Seen") {
                                 return (
-                                    <div className="w-full flex justify-between items-center">
+                                    <div className="w-full flex justify-between items-center gap-x-2">
                                         <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
                                             <MinusIcon
                                                 size={14}
                                                 className="stroke-neutral-500 scale-x-70"
                                             />
                                         </button>
-                                        <p className="text-sm tracking-wide text-neutral-400">{word.word_number_instances}x</p>
+                                        <p className="text-sm tracking-wide text-neutral-400">
+                                            {word.word_number_instances}x
+                                        </p>
                                         <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
                                             <PlusIcon
                                                 size={14}
@@ -193,7 +203,9 @@ export default function WordTab(props: WordTabProps) {
                             }
                             if (key === "Acc") {
                                 return (
-                                    <p className="text-sm tracking-wide text-neutral-400">{Number(word.accuracy).toPrecision(2)}%</p>
+                                    <p className="text-sm tracking-wide text-neutral-400">
+                                        {Number(word.accuracy).toPrecision(2)}%
+                                    </p>
                                 )
                             }
                             return <></>;
