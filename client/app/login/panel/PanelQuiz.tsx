@@ -61,7 +61,6 @@ export default function PanelQuiz() {
 
 
     const selectChoice = (choiceIndex: number) => {
-        console.log(2)
         if (!questions)
             return;
         const updatedQuestions = [...questions].map((e, i) => i === questionIndex ? {...e, selectedOptionIndex: choiceIndex} : e);

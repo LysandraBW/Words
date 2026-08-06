@@ -12,6 +12,7 @@ interface ShowEntryProps {
     entryNum: number;
     numEntries: number;
     onOpenWord: (word: string) => void;
+    allowLog: boolean;
 }
 
 
@@ -89,6 +90,7 @@ export default function ShowEntry(props: ShowEntryProps) {
                                             <Sequence
                                                 sequence={seq}
                                                 sequenceNum={seqIndex+1}
+                                                allowLog={props.allowLog}
                                             />
                                         </Fragment>
                                     ))}

@@ -3,9 +3,7 @@ import { useState } from "react";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import PanelWord from "./panel/PanelWord";
-import QuizPanel from "./panel/PanelQuiz";
-import PageToggle from "./PageToggle";
-import motion from "framer-motion";
+import PanelQuiz from "./panel/PanelQuiz";
 
 
 export default function Page() {
@@ -28,7 +26,7 @@ export default function Page() {
             </main>
             {page === "signIn" ?
                 <PanelWord/> :
-                <QuizPanel/>
+                <PanelQuiz/>
             }
         </div>
     )

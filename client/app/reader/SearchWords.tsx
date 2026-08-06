@@ -1,7 +1,7 @@
 import InputDropdown from "@/components/input/InputDropdown";
 import getSuggestions from "@/services/words/getAutoCompletion";
 import { useState } from "react";
-import { BookTextIcon, BoxIcon, LibraryIcon, LightbulbIcon, SearchIcon, WholeWordIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 
 interface SearchWordsProps {
     onOpenWord: (word: string) => void;
@@ -21,9 +21,6 @@ export default function SearchWords(props: SearchWordsProps) {
                     textLabel: suggestion,
                     optionLabel: (
                         <div className="flex items-center">
-                            {/* <span className="relative z-100 min-w-[32px] aspect-square mr-2 flex justify-center items-center bg-neutral-900/50 border border-neutral-700 rounded-md  text-xs text-center font-medium group-hover:!text-neutral-400">
-                                {i+1}
-                            </span> */}
                             {suggestion}
                         </div>
                     )
@@ -49,16 +46,6 @@ export default function SearchWords(props: SearchWordsProps) {
                         />
                     </div>
                 )}
-                // elementNeedSearch={(
-                //     <div className="flex flex-col items-center">
-                //         <h6 className="text-neutral-500 font-medium">
-                //             Search Merriam-Webster
-                //         </h6>
-                //         <p className="mt-1 max-w-[256px] text-center">
-                //             You'll need to start searching for a word to find a match.
-                //         </p>
-                //     </div>
-                // )}
                 elementNoResultsFound={(
                     <div className="flex flex-col items-center">
                         <h6 className="text-neutral-500 font-medium">

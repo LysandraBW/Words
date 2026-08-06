@@ -1,22 +1,27 @@
 import useFilterObjects from "@/hooks/useFilterObject";
 import { Option } from "@/components/input/InputDropdown";
-import TableHead from "./home/TableHead";
-import TableBody from "./home/TableBody";
-import ActionBar from "./home/ActionBar/ActionBar";
-import NavigationBar from "./home/Navigation";
+import TableHead from "../../components/ui/table/TableHead";
+import TableBody from "../../components/ui/table/TableBody";
+import ActionBar from "../../components/ui/table/ActionBar";
+import NavigationBar from "../../components/ui/table/Navigation";
 import { ChapterType } from "@/services/server/chapter";
 import { BookType } from "@/services/server/book";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface ChapterTabProps {
     chapters: (BookType & ChapterType)[];
     onCreate: () => void;
+    onDelete: () => void;
     showBook?: boolean;
 }
 
 export default function ChapterTab(props: ChapterTabProps) {
     const router = useRouter();
     
+    const [display, setDisplay] = useState("List");
+    const [selected, setSelected] = useState<Set<number>>(new Set());
+
     const filter = useFilterObjects({ 
         objects: props.chapters,
         getObjectValueCallback: (k, o) => {
@@ -55,6 +60,32 @@ export default function ChapterTab(props: ChapterTabProps) {
     ];
 
 
+    const toggleAllCheckboxes = () => {
+        // All Selected
+        if (selected.size === 0) {
+            const bookIDs = props.chapters.map(chapter => chapter.chapter_id);
+            setSelected(new Set(bookIDs));
+        }
+        else {
+            setSelected(new Set());
+        }
+    }
+
+
+    const selectObject = (objectID: number) => {
+        const updatedSelectedBooks = new Set(selected);
+        updatedSelectedBooks.add(objectID);
+        setSelected(updatedSelectedBooks);
+    }
+
+
+    const deselectObject = (objectID: number) => {
+        const updatedSelectedBooks = new Set(selected);
+        updatedSelectedBooks.delete(objectID);
+        setSelected(updatedSelectedBooks);
+    }
+
+
     return (
         <>
             <ActionBar
@@ -62,6 +93,9 @@ export default function ChapterTab(props: ChapterTabProps) {
                 sortOptions={sortOptions}
                 filter={filter}
                 onCreate={props.onCreate}
+                onDelete={props.onDelete}
+                display={display}
+                onDisplayChange={setDisplay}
             />
             <div>
                 <div
@@ -72,14 +106,17 @@ export default function ChapterTab(props: ChapterTabProps) {
                 >
                     <TableHead
                         columns={props.showBook ? ["Book", "Number", "Title"] : ["Number", "Title"]}
-                        columnWidths="112px 1fr"
+                        allSelected={selected.size === props.chapters.length && !!props.chapters.length}
+                        onToggleAllCheckboxes={toggleAllCheckboxes}
                     />
                     <TableBody
-                        columnWidths="112px 1fr"
-                        objects={filter.filteredObjects}
                         objectID={"chapter_id"}
-                        keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}
+                        objects={filter.filteredObjects}
                         onClickObjectRow={(chapter: ChapterType) => router.push(`/reader/chapter?chapterID=${chapter.chapter_id}`)}
+                        onSelectObject={selectObject}
+                        onDeselectObject={deselectObject}
+                        selectedObjects={selected}
+                        keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}
                         getElementCallback={(key, chapter) => {
                             if (key === "Book") {
                                 return (

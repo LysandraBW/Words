@@ -3,11 +3,13 @@ import FormattedText from "./FormattedText";
 import Labels from "./Labels";
 import { DotIcon, PlusIcon, PointerIcon } from "lucide-react";
 import { DefiningText, ParenthesizedSequenceElement, Sense, TruncatedSense } from "@/services/words/getWordEntry";
+import clsx from "clsx";
 
 
 interface ShowSenseProps {
     sense: ParenthesizedSequenceElement;
     onClick?: (meaning: string) => void;
+    allowLog: boolean;
 }
 
 
@@ -74,19 +76,26 @@ export default function ShowSense(props: ShowSenseProps) {
             {nodes?.map((node, i) => (
                 <Fragment key={i}>
                     {node[0] === "meaning" &&
-                        <div className="inline-block pr-[calc(48px)]">
+                        <div 
+                            className={clsx(
+                                "inline-block",
+                                props.allowLog && "pr-[calc(48px)]"
+                            )}
+                        >
                             <FormattedText
                                 text={node[1]}
                             />
-                            <button 
-                                onClick={() => props.onClick && props.onClick(node[1])}
-                                className="absolute top-0 right-0 w-[18px] aspect-square h-min flex justify-center items-center bg-blue-600 border border-blue-500 rounded-md shadow-sm"    
-                            >
-                                <PlusIcon
-                                    size={10}
-                                    className="stroke-neutral-100 scale-x-95"
-                                />
-                            </button>
+                            {props.allowLog &&
+                                <button 
+                                    onClick={() => props.onClick && props.onClick(node[1])}
+                                    className="absolute top-0 right-0 w-[18px] aspect-square h-min flex justify-center items-center bg-blue-600 border border-blue-500 rounded-md shadow-sm"    
+                                >
+                                    <PlusIcon
+                                        size={10}
+                                        className="stroke-neutral-100 scale-x-95"
+                                    />
+                                </button>
+                            }
                         </div>
                     }
                     {node[0] === "example" &&

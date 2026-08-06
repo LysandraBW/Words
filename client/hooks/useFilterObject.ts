@@ -84,6 +84,17 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
         setPageIndex(nextPageIndex);
     }
 
+
+    const goToLastPage = () => {
+        goToPage(lastPageIndex);
+    }
+
+
+    const goToFirstPage = () => {
+        goToPage(0);
+    }
+
+
     const goToPage = (pageIndex: number) => {
         if (pageIndex < 0) {
             setPageIndex(0);
@@ -137,6 +148,8 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
         goToNextSortDirection,
         goToPrevPage,
         goToNextPage,
+        goToFirstPage,
+        goToLastPage,
         goToPage,
         goToPageStr,
         filteredObjects

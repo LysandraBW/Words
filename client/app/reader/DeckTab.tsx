@@ -2,20 +2,26 @@ import { Option } from "@/components/input/InputDropdown";
 import useFilterObjects from "@/hooks/useFilterObject";
 import { DeckType } from "@/services/server/deck";
 import { DeckGradedType } from "@/services/server/deckGraded";
-import ActionBar from "./home/ActionBar/ActionBar";
-import TableHead from "./home/TableHead";
-import TableBody from "./home/TableBody";
-import NavigationBar from "./home/Navigation";
+import ActionBar from "../../components/ui/table/ActionBar";
+import TableHead from "../../components/ui/table/TableHead";
+import TableBody from "../../components/ui/table/TableBody";
+import NavigationBar from "../../components/ui/table/Navigation";
+import { useState } from "react";
 
 
 interface DeckTabProps {
     decks: DeckType[];
     decksGraded: DeckGradedType[];
     onCreate: () => void;
+    onDelete: () => void;
 }
 
 
 export default function DeckTab(props: DeckTabProps) {
+    const [display, setDisplay] = useState("List");
+    const [selected, setSelected] = useState<Set<number>>(new Set());
+
+
     const filter = useFilterObjects({ 
         objects: props.decks
     });
@@ -37,13 +43,42 @@ export default function DeckTab(props: DeckTabProps) {
     ];
 
 
+    const toggleAllCheckboxes = () => {
+        // All Selected
+        if (selected.size === 0) {
+            const deckIDs = props.decks.map(deck => deck.deck_id);
+            setSelected(new Set(deckIDs));
+        }
+        else {
+            setSelected(new Set());
+        }
+    }
+
+
+    const selectObject = (objectID: number) => {
+        const updatedSelectedBooks = new Set(selected);
+        updatedSelectedBooks.add(objectID);
+        setSelected(updatedSelectedBooks);
+    }
+
+
+    const deselectObject = (objectID: number) => {
+        const updatedSelectedBooks = new Set(selected);
+        updatedSelectedBooks.delete(objectID);
+        setSelected(updatedSelectedBooks);
+    }
+
+
     return (
         <>
             <ActionBar
                 searchOptions={searchOptions}
                 sortOptions={sortOptions}
                 filter={filter}
+                display={display}
                 onCreate={props.onCreate}
+                onDelete={props.onDelete}
+                onDisplayChange={setDisplay}
             />
             <div>
                 <div
@@ -54,10 +89,15 @@ export default function DeckTab(props: DeckTabProps) {
                 >
                     <TableHead
                         columns={["Name"]}
+                        allSelected={selected.size === props.decks.length && !!props.decks.length}
+                        onToggleAllCheckboxes={toggleAllCheckboxes}
                     />
                     <TableBody
-                        objects={filter.filteredObjects}
                         objectID={"deck_id"}
+                        objects={filter.filteredObjects}
+                        onSelectObject={selectObject}
+                        onDeselectObject={deselectObject}
+                        selectedObjects={selected}
                         keys={["deck_name"]}
                     />
                 </div>

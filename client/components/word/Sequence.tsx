@@ -7,6 +7,7 @@ import { nunito, pixelifySans, snigletFont } from "@/app/fonts";
 interface SequenceProps {
     sequence: SenseSequenceElement[];
     sequenceNum: number;
+    allowLog: boolean;
 }
 
 export default function Sequence(props: SequenceProps) {
@@ -36,6 +37,7 @@ export default function Sequence(props: SequenceProps) {
                                 }
                                 <Sense
                                     sense={sense}
+                                    allowLog={props.allowLog}
                                 />
                             </div>
                         }
@@ -65,6 +67,7 @@ export default function Sequence(props: SequenceProps) {
                                             }
                                             <Sense
                                                 sense={partialSense}
+                                                allowLog={props.allowLog}
                                             />
                                         </div>
                                     ))}

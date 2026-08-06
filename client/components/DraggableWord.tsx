@@ -10,6 +10,7 @@ interface DraggableWordProps {
     onCloseWord: (word: string) => void;
     onOpenWord: (word: string) => void;
     onRaiseWord: (word: string) => void;
+    allowLog: boolean;
 }
 
 export default function DraggableWord(props: DraggableWordProps) {
@@ -35,10 +36,6 @@ export default function DraggableWord(props: DraggableWordProps) {
                         <p className="text-sm">
                             Source: Merriam-Webster
                         </p>
-                        {/* <img
-                            className="w-3 aspect-square"
-                            src="/images/Merriam-Webster_logo.svg.webp"
-                        /> */}
                     </div>
                     <button 
                         className="p-2 group hover:bg-red-500"
@@ -62,6 +59,7 @@ export default function DraggableWord(props: DraggableWordProps) {
                                 entryNum={i+1}
                                 numEntries={props.entries.length}
                                 onOpenWord={props.onOpenWord}
+                                allowLog={props.allowLog}
                             />
                         </div>
                     ))}

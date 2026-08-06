@@ -7,7 +7,7 @@ export default function NavBar() {
         <nav className="w-[256px] h-full px-8 py-4 grid grid-rows-[min-content_1fr_min-content] bg-stone-900">
             <div className="relative pb-4 flex justify-center">
                 <Logo
-                    spanClassName="text-stone-500"
+                    className="text-stone-500"
                 />
                 <div className="absolute left-0 bottom-[-4px] w-full h-[4px] flex justify-between">
                     {[...Array(20)].map((e, i) => (

@@ -11,7 +11,7 @@ import ChapterTab from "../ChapterTab";
 import WordTab from "../WordTab";
 import DeckTab from "../DeckTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
-import BookScene from "./BookScene2";
+import BookScene from "./BookScene";
 import UpdateChapters from "@/app/book/UpdateChapters";
 import UpdateBook from "@/app/book/UpdateBook";
 import Modal from "@/components/Modal";

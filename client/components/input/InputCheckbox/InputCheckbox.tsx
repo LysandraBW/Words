@@ -18,6 +18,8 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
 
         if (!props.onChange)
             return;
+
+        console.log('a');
         props.onChange(!props.checked);
     }
 
@@ -27,19 +29,21 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
             className="block flex gap-x-2 items-center"
             onClick={onChange}    
         >
-            <div
-                className={clsx(
-                    "!w-[16px] !h-[16px] flex justify-center items-center rounded-sm bg-neutral-800 border border-neutral-600 shadow-sm",
-                    props.checked && "!bg-blue-600 !border-blue-500"
-                )}
-            >
-                {props.checked &&
-                    <CheckIcon
-                        size={10}
-                        strokeWidth={3}
-                        className="stroke-neutral-100"
-                    />
-                }
+            <div className="p-1">
+                <div
+                    className={clsx(
+                        "!w-[16px] !h-[16px] flex justify-center items-center rounded-sm bg-neutral-800 hover:bg-neutral-900 border border-neutral-600 shadow-sm cursor-pointer",
+                        props.checked && "!bg-blue-600 !border-blue-500"
+                    )}
+                >
+                    {props.checked &&
+                        <CheckIcon
+                            size={10}
+                            strokeWidth={3}
+                            className="stroke-neutral-100"
+                        />
+                    }
+                </div>
             </div>
             {props.label &&
                 <span 

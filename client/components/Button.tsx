@@ -11,6 +11,7 @@ interface ButtonProps {
     innerClassName: string;
     innerMostClassName: string;
     disabled: boolean;
+    red: boolean;
 }
 
 export default function Button(props: Partial<ButtonProps>) {
@@ -19,18 +20,18 @@ export default function Button(props: Partial<ButtonProps>) {
             onClick={props.onClick}
             disabled={props.disabled}
             className={clsx(
-                "w-full h-[40px] min-h-[40px] max-h-[40px] px-4",
-                "justify-center align-center",
-                "rounded-md",
-                props.disabled && "cursor-default bg-white",
-                !props.disabled && "cursor-pointer bg-black border border-white",
+                "w-min px-4 py-1.5 flex justify-center items-center gap-x-2",
+                "bg-blue-600 border border-blue-600 rounded-md shadow",
+                props.red && "!bg-red-900 border !border-red-900 rounded-md shadow",
+                // props.disabled && "cursor-default bg-white",
+                // !props.disabled && "cursor-pointer bg-black border border-white",
                 props.outerClassName
             )}
         >
            {props.iconL}
             <label 
                 className={clsx(
-                    "text-center text-sm font-medium",
+                    "text-center text-sm font-medium whitespace-nowrap",
                     props.disabled && "cursor-default text-black",
                     !props.disabled && "cursor-pointer text-white",
                     props.labelClassName

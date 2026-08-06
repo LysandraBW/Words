@@ -4,7 +4,7 @@ import { deleteChapter } from "@/services/server/chapter";
 import { insertWord, decrementWordNumberInstances as decrementWord, deleteWord, incrementWordNumberInstances as incrementWord } from "@/services/server/word";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import BookScene from "../book/BookScene2";
+import BookScene from "../book/BookScene";
 import { ChevronRightIcon, EllipsisIcon, TrashIcon } from "lucide-react";
 import WordTab from "../WordTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";

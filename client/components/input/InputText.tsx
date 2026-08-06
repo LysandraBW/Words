@@ -18,6 +18,7 @@ export interface InputTextProps {
     inputClassName: string;
     inputBoxClassName: string;
     inputWrapperClassName: string;
+    disabled: boolean;
 }
 
 
@@ -45,6 +46,7 @@ export default function InputText(props: Partial<InputTextProps> & Partial<Input
             >
                 {props.elementLeft && props.elementLeft}
                 <input
+                    disabled={props.disabled}
                     type={props.type}
                     value={props.value}
                     onChange={onChange}

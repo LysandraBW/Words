@@ -4,10 +4,10 @@ import { WordType } from "@/services/server/word";
 import { Entry } from "@/services/words/getWordEntry";
 import getWordData, { WordData } from "@/utilities/wordData";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ActionBar from "./home/ActionBar/ActionBar";
-import TableHead from "./home/TableHead";
-import TableBody from "./home/TableBody";
-import NavigationBar from "./home/Navigation";
+import ActionBar from "../../components/ui/table/ActionBar";
+import TableHead from "../../components/ui/table/TableHead";
+import TableBody from "../../components/ui/table/TableBody";
+import NavigationBar from "../../components/ui/table/Navigation";
 import { MinusIcon, PlusIcon } from "lucide-react";
 
 
@@ -25,11 +25,15 @@ interface WordTabProps {
     onCloseWord: (word: string) => void;
     onBringWordToFront: (word: string) => void;
     onCreate: () => void;
+    onDelete: () => void;
 }
 
 export default function WordTab(props: WordTabProps) {
     const [augmentedWords, setAugmentedWords] = useState<(WordType & WordData)[]>([]);
     
+    const [display, setDisplay] = useState("List");
+    const [selected, setSelected] = useState<Set<number>>(new Set());
+
     const filter = useFilterObjects({
         objects: augmentedWords,
         getObjectValueCallback: (key, word) => {
@@ -73,6 +77,32 @@ export default function WordTab(props: WordTabProps) {
         }
     ];
 
+
+    const toggleAllCheckboxes = () => {
+        // All Selected
+        if (selected.size === 0) {
+            const ids = props.words.map(word => word.word_id);
+            setSelected(new Set(ids));
+        }
+        else {
+            setSelected(new Set());
+        }
+    }
+
+
+    const selectObject = (objectID: number) => {
+        const updatedSelectedBooks = new Set(selected);
+        updatedSelectedBooks.add(objectID);
+        setSelected(updatedSelectedBooks);
+    }
+
+
+    const deselectObject = (objectID: number) => {
+        const updatedSelectedBooks = new Set(selected);
+        updatedSelectedBooks.delete(objectID);
+        setSelected(updatedSelectedBooks);
+    }
+
     useEffect(() => {
         const load = async () => {
             const augmentedWords = [];
@@ -97,7 +127,10 @@ export default function WordTab(props: WordTabProps) {
                 searchOptions={searchOptions}
                 sortOptions={sortOptions}
                 filter={filter}
+                display={display}
                 onCreate={props.onCreate}
+                onDelete={props.onDelete}
+                onDisplayChange={setDisplay}
             />
             <div>
                 <div
@@ -107,13 +140,16 @@ export default function WordTab(props: WordTabProps) {
                     }}
                 >
                     <TableHead
-                        columnWidths="1fr 5fr 1fr 1fr 1fr 1fr"
                         columns={["Word", "Meaning", "Created", "Last Seen", "Seen", "Accuracy"]}
+                        allSelected={selected.size === props.words.length && !!props.words.length}
+                        onToggleAllCheckboxes={toggleAllCheckboxes}
                     />
                     <TableBody
-                        columnWidths="1fr 5fr 1fr 1fr 1fr 1fr"
-                        objects={filter.filteredObjects}
                         objectID={"word_id"}
+                        objects={filter.filteredObjects}
+                        onSelectObject={selectObject}
+                        onDeselectObject={deselectObject}
+                        selectedObjects={selected}
                         keys={["Word", "Definition", "Created", "Last Seen", "Seen", "Acc"]}
                         getElementCallback={(key, word) => {
                             if (key === "Word") {
