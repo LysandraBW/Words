@@ -25,6 +25,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
     const [lookup, setLookup] = useState<{[word: string]: {entries: Entry[], z: number}}|null>();
     const [page, setPage] = useState("");
     const [collapse, setCollapse] = useState(false);
+
+    const [open, setOpen] = useState(false);
     
     useEffect(() => {
         const load = async () => {
@@ -106,6 +108,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
                 />
                 <ProfilePicture
                     profilePictureURL="https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg"
+                    onClick={() => setOpen(!open)}
                 />
                 {reader &&
                     <ProfileToolKit

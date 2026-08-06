@@ -10,6 +10,7 @@ import InputImageURL from "@/components/input/InputImageURL";
 import SearchBooks from "./SearchBooks";
 import { addValue, deleteValue } from "@/utilities/array";
 import InputButton from "@/components/input/InputButton";
+import Button from "@/components/Button";
 
 
 interface CreateBookProps {
@@ -27,7 +28,7 @@ export default function CreateBook(props: CreateBookProps) {
         },
         {
             label: "book_year",
-            value: 1999,
+            value: "",
             test: z.coerce
                 .number("Must enter a valid year.")
                 .min(1000, "Must enter a year between 1000 and 3000.")
@@ -115,8 +116,9 @@ export default function CreateBook(props: CreateBookProps) {
                     onChange={(value) => setForm(updateFormValue(form, "book_background_image", value))}
                     error={form.book_background_image.error}
                 />
-                <InputButton
+                <Button
                     label="Create Book"
+                    outerClassName="!w-full"
                     onClick={() => onCreateBook(form)}
                 />
             </div>

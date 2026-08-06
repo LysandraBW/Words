@@ -53,7 +53,7 @@ export default function Page() {
 
 
     return (
-        <div className="h-full max-h-full grid grid-rows-[auto_1fr]">
+        <div className="h-full max-h-full grid grid-rows-[auto_1fr] bg-neutral-900">
             <h1 className="px-4 py-4 text-2xl text-neutral-100 font-medium bg-neutral-900 border-b border-b-neutral-800">
                 Settings
             </h1>
@@ -74,8 +74,16 @@ export default function Page() {
                 </div>
                 <>
                     {tabIndex === 0 &&
-                        <div className="w-full h-full bg-neutral-900 max-h-full overflow-auto">
-                            <div className="w-[400px] px-6 py-4 flex flex-col gap-y-6">
+                        <div className="w-full h-full px-6 py-4 bg-neutral-950/50 max-h-full overflow-auto">
+                            <div className="mb-4 flex flex-col -gap-y-1">
+                                <p className="block text-lg text-neutral-100 font-medium">
+                                    Account Details
+                                </p>
+                                <p className="text-sm text-neutral-500 max-w-xs">
+                                    The fields marked with a red star are required.
+                                </p>
+                            </div>
+                            <div className="w-[400px] flex flex-col gap-y-6">
                                 <InputText
                                     label="Name"
                                     value={form.name.value}
@@ -119,20 +127,20 @@ export default function Page() {
                         </div>
                     }
                     {tabIndex === 1 &&
-                        <div className="px-4 py-4 w-full h-full flex flex-col gap-y-4 bg-neutral-900 max-h-full overflow-auto">
-                            <div className="flex flex-col -gap-y-1">
+                        <div className="px-6 py-4 w-full h-full flex flex-col gap-y-4 bg-neutral-950/50 max-h-full overflow-auto">
+                            <div className="mb-4 flex flex-col -gap-y-1">
                                 <p className="text-lg text-neutral-100 font-medium">
                                     Delete Account
                                 </p>
-                                <p className="text-base text-neutral-400 max-w-xs">
-                                    Deleting your account is a permanent action.
+                                <p className="text-sm text-neutral-500 max-w-xs">
+                                    Deleting your account is a permanent action. You will not be able to restore your account after.
                                 </p>
                             </div>
                             <Button
                                 iconL={
                                     <Trash2Icon
-                                        size={16}
-                                        className="relative -top-[0.5px] text-neutral-100"
+                                        size={14}
+                                        className="relative -top-[0.5px] stroke-neutral-400 group-hover:stroke-red-500"
                                     />
                                 }
                                 label="Delete Account"

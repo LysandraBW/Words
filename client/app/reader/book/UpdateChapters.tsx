@@ -59,12 +59,12 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
     // Form
     // This form contains the new chapter the user is
     // creating (or can create).
-    const [form, setForm] = useState<ChapterForm>(createChapterForm(props.book.book_id, chapterID, "", ""));
+    const [chapterForm, setChapterForm] = useState<ChapterForm>(createChapterForm(props.book.book_id, chapterID, "", ""));
     
     // Forms
     // These forms contain the existing chapters or the
     // chapters that the user has created.
-    const [forms, setForms] = useState<ChapterForms>(Object.fromEntries(props.chapters.map(chapter => [
+    const [chapterForms, setChapterForms] = useState<ChapterForms>(Object.fromEntries(props.chapters.map(chapter => [
         String(chapter.chapter_id), 
         createChapterForm(
             props.book.book_id, 
@@ -86,9 +86,9 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
         label: keyof ChapterForm;
         value: ChapterType[keyof Form<ChapterType>]
     }) => {
-        if (!Object.keys(form).includes(params.label))
-            return forms;
-        return {...forms, [params.id]: updateFormValue(form, params.label, params.value, true)}
+        if (!Object.keys(chapterForm).includes(params.label))
+            return chapterForms;
+        return {...chapterForms, [params.id]: updateFormValue(chapterForm, params.label, params.value, true)}
     }
 
 
@@ -215,7 +215,7 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                 onClose={props.onClose}
             >
                 <div className="flex flex-col gap-y-6 px-8 py-4 pb-8">
-                    {Object.entries(forms).sort((a, b) => parseInt(a[1].chapter_number.value) - parseInt(b[1].chapter_number.value)).map(([formID, form], i) => (
+                    {Object.entries(chapterForms).sort((a, b) => parseInt(a[1].chapter_number.value) - parseInt(b[1].chapter_number.value)).map(([formID, form], i) => (
                         <div 
                             key={formID}
                             className="grid grid-rows-1 grid-cols-[64px_1fr_40px] items-end gap-x-1"
@@ -224,7 +224,7 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                                 label="Num."
                                 value={form.chapter_number.value}
                                 error={form.chapter_number.error}
-                                onChange={(value: string) => setForms(forms => updateChapterForm({
+                                onChange={(value: string) => setChapterForms(forms => updateChapterForm({
                                     forms, 
                                     id: formID, 
                                     form, 
@@ -237,7 +237,7 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                                 label="Name"
                                 value={form.chapter_title.value}
                                 error={form.chapter_title.error}
-                                onChange={(value: string) => setForms(forms => updateChapterForm({
+                                onChange={(value: string) => setChapterForms(forms => updateChapterForm({
                                     forms, 
                                     id: formID, 
                                     form, 
@@ -246,7 +246,7 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                                 }))}
                             />
                             <div 
-                                onClick={() => setForms(forms => deleteChapterForm(forms, formID))}
+                                onClick={() => setChapterForms(forms => deleteChapterForm(forms, formID))}
                                 className="w-[40px] aspect-square flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800 shadow-md"
                             >
                                 <Trash2Icon
@@ -262,23 +262,23 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                     >
                         <InputText
                             label="Num."
-                            value={form.chapter_number.value}
-                            error={form.chapter_number.error}
-                            onChange={(value) => setForm(updateFormValue(form, "chapter_number", value))}
+                            value={chapterForm.chapter_number.value}
+                            error={chapterForm.chapter_number.error}
+                            onChange={(value) => setChapterForm(updateFormValue(chapterForm, "chapter_number", value))}
                             inputClassName="text-center"
                         />
                         <InputText
                             label="Name"
-                            value={form.chapter_title.value}
-                            error={form.chapter_title.error}
-                            onChange={(value) => setForm(updateFormValue(form, "chapter_title", value))}
+                            value={chapterForm.chapter_title.value}
+                            error={chapterForm.chapter_title.error}
+                            onChange={(value) => setChapterForm(updateFormValue(chapterForm, "chapter_title", value))}
                         />
                         <div 
                             onClick={() => {
-                                if (!testForm(form))
+                                if (!testForm(chapterForm))
                                     return;
-                                setForms(forms => insertChapterForm(forms, String(chapterID--), form));
-                                setForm(resetForm(form));
+                                setChapterForms(forms => insertChapterForm(forms, String(chapterID--), chapterForm));
+                                setChapterForm(resetForm(chapterForm));
                             }}
                             className="w-[40px] aspect-square flex justify-center items-center rounded-md bg-neutral-900 border border-neutral-800 shadow-md"
                         >
@@ -290,7 +290,7 @@ export default function UpdateChapters(props: UpdateChaptersProps) {
                     </div>
                     <div className="flex flex-col">
                         <InputButton
-                            onClick={() => onUpdateChapters(props.chapters, forms)}
+                            onClick={() => onUpdateChapters(props.chapters, chapterForms)}
                             label="Save"
                         />
                     </div>

@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@dnd-kit/helpers": "^0.5.0",
+    "@dnd-kit/react": "^0.5.0",
     "@googleapis/books": "^8.0.1",
     "an-array-of-english-words": "^2.0.0",
     "clsx": "^2.1.1",

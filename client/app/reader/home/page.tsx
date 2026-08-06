@@ -14,6 +14,8 @@ import CreateDeck from "@/app/reader/home/CreateDeck";
 import CreateBook from "@/app/reader/home/CreateBook";
 import Card from "./Card";
 import Tab from "./Tab";
+import CreateChapter from "../book/CreateChapter";
+import CreateWord from "../chapter/CreateWord";
 
 export default function Page() {
     const [tabIndex, setTabIndex] = useState(0);
@@ -231,6 +233,19 @@ export default function Page() {
                     books={data?.books || []}
                     onClose={() => setShow('')}
                     onDeckCreated={handleDeckCreated}
+                />
+            }
+            {show === 'Create Word' &&
+                <CreateWord
+                    books={data?.books || []}
+                    chapters={data?.chapters || []}
+                    onClose={() => setShow('')}
+                    requireBookAndChapter
+                />
+            }
+            {show === 'Create Chapter' &&
+                <CreateChapter
+                    onClose={() => setShow('')}
                 />
             }
             {show === 'Create Book' &&

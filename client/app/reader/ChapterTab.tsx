@@ -101,7 +101,7 @@ export default function ChapterTab(props: ChapterTabProps) {
                 <div
                     className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
                     style={{
-                        "gridTemplateColumns": `calc(26px + 16px) 1fr 1fr`
+                        "gridTemplateColumns": `calc(26px + 16px) auto 1fr`
                     }}
                 >
                     <TableHead

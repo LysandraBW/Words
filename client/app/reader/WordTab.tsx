@@ -136,11 +136,11 @@ export default function WordTab(props: WordTabProps) {
                 <div
                     className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
                     style={{
-                        "gridTemplateColumns": `calc(26px + 16px) auto 5fr 1fr 1fr auto 1fr`
+                        "gridTemplateColumns": `calc(26px + 16px) auto 5fr auto auto auto auto`
                     }}
                 >
                     <TableHead
-                        columns={["Word", "Meaning", "Created", "Last Seen", "Seen", "Accuracy"]}
+                        columns={["Term", "Meaning", "Created", "Last Seen", "Seen", "Accuracy"]}
                         allSelected={selected.size === props.words.length && !!props.words.length}
                         onToggleAllCheckboxes={toggleAllCheckboxes}
                     />
@@ -182,7 +182,7 @@ export default function WordTab(props: WordTabProps) {
                             }
                             if (key === "Seen") {
                                 return (
-                                    <div className="w-full flex justify-between items-center gap-x-2">
+                                    <div className="w-full flex items-center gap-x-4">
                                         <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
                                             <MinusIcon
                                                 size={14}

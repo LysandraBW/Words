@@ -2,6 +2,7 @@ import { ReaderType } from "@/services/server/reader";
 import { LogOutIcon } from "lucide-react";
 import { Tooltip } from "react-tooltip";
 
+
 interface ProfileToolKitProps {
     profilePictureURL: string;
     reader: ReaderType;
@@ -21,17 +22,19 @@ export default function ProfileToolKit(props: ProfileToolKitProps) {
                 zIndex: 200,
                 pointerEvents: "auto"
             }}
-            className="!p-0 !bg-neutral-800 !opacity-100 border border-neutral-700 rounded-lg !shadow-md"    
+            className="!p-0 !bg-neutral-800 !opacity-100 border border-neutral-700 rounded-lg !shadow-md"
+            float={false}
+            positionStrategy="fixed"
+            place="bottom"
+            openOnClick
         >
             <div className="flex">
                 <div 
-                    id="profile"
                     className="w-10 h-10 min-h-10 min-w-10 m-4 mr-0 bg-center bg-cover border border-neutral-600 bg-neutral-800 !rounded-md shadow"
                     style={{
                         backgroundImage: `url(${props.profilePictureURL})`
                     }}
                 >
-                    
                 </div>
                 <div className="p-4">
                     <p className="text-sm text-neutral-100 font-medium">

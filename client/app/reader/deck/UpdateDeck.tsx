@@ -120,7 +120,7 @@ export default function UpdateDeck(props: UpdateDeckProps) {
 
     return (
         <Panel
-            title="Create Deck"
+            title="Edit Deck"
             onClose={props.onClose}
         >
             <div className="px-8 py-6 flex flex-col gap-y-6">
@@ -130,17 +130,17 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                     onChange={value => setForm(updateFormValue(form, 'deck_name', value))}
                 />
                 <div>
-                    <InputLabel
-                        label="Add Words"
-                    />
+                    <p className="mb-2 text-neutral-300 font-medium">
+                        Select Words
+                    </p>
                     <div className="mt-1 flex flex-col gap-y-6">
                         {props.books.map((book, i) => (
                             <div 
                                 key={i}
-                                className="flex flex-col gap-y-2 "
+                                className="flex flex-col gap-y-2 pl-4 border-l border-neutral-800"
                             >
                                 <div className="flex justify-between items-center">
-                                    <p className="text-sm text-neutral-200 font-medium">
+                                    <p className="text-sm text-neutral-300 font-medium-">
                                         {book.book_name}
                                     </p>
                                     {/* <div className="w-5 aspect-square flex justify-center items-center bg-blue-600 border border-blue-500 rounded-full">
@@ -197,7 +197,7 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                     </div>
                 </div>
                 <Button
-                    label="Create Deck"
+                    label="Save"
                     outerClassName="!w-full"
                     onClick={() => onUpdateDeck(form)}
                 />

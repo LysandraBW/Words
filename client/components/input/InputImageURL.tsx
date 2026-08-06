@@ -11,7 +11,7 @@ interface InputImageURLProps extends Partial<InputTextProps> {
 
 export default function InputImageURL(props: InputImageURLProps) {
     return (
-        <div className="grid grid-cols-[1fr_50px] gap-x-1 items-end">
+        <div className="grid grid-cols-[1fr_50px] gap-x-2 items-end">
             <InputText
                 label={props.label}
                 value={props.value}
@@ -27,7 +27,7 @@ export default function InputImageURL(props: InputImageURLProps) {
                 )}
             >
                 {!props.value &&
-                    <ImagePlusIcon
+                    <ImageIcon
                         size={16}
                         className="text-neutral-500"
                     />

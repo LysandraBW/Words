@@ -16,7 +16,7 @@ export default function Logo(props: LogoProps) {
         >
             <div 
                 className={clsx(
-                    "h-[19px] aspect-square p-[2px] grid grid-cols-[1fr_2fr] grid-rows-3 gap-[2px] rounded-sm bg-blue-600 border border-blue-500",
+                    "h-[19px] aspect-square p-[2px] grid grid-cols-[1fr_2fr] grid-rows-3 gap-[2px] rounded-sm bg-blue-600 border border-blue-600",
                     props.logoClassName
                 )}
             >

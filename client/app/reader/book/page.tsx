@@ -11,9 +11,10 @@ import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import BookScene from "./BookScene";
 import UpdateChapters from "@/app/reader/book/UpdateChapters";
 import UpdateBook from "@/app/reader/book/UpdateBook";
-import AddChapter from "./AddChapter";
+import AddChapter from "./CreateChapter";
 import Tab from "../home/Tab";
 import IconButton from "@/components/ui/IconButton";
+import CreateWord from "../chapter/CreateWord";
 
 export default function Page() {
     const router = useRouter();
@@ -238,7 +239,7 @@ export default function Page() {
                             onCloseWord={onCloseWord}
                             onBringWordToFront={onBringWordToFront}
                             setLookup={setWordLookup}
-                            onCreate={() => null}
+                            onCreate={() => setShow('Create Word')}
                             onDelete={() => null}
                         />
                     }
@@ -256,12 +257,23 @@ export default function Page() {
                 <UpdateBook
                     book={data.book}
                     onBookUpdated={handleBookUpdated}
+                    chapters={data.chapters}
+                    onChaptersUpdated={handleChaptersUpdated}
                     onClose={() => setShow('')}
                 />
             }
             {show === 'Add Chapter' &&
                 <AddChapter
                     onClose={() => setShow('')}
+                />
+            }
+            {show === 'Create Word' &&
+                <CreateWord
+                    book={data.book}
+                    books={data?.books || []}
+                    chapters={data?.chapters || []}
+                    onClose={() => setShow('')}
+                    requireBookAndChapter
                 />
             }
         </>

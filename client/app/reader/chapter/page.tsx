@@ -9,7 +9,7 @@ import { ChevronRightIcon, EllipsisIcon, TrashIcon } from "lucide-react";
 import WordTab from "../WordTab";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import UpdateChapter from "./UpdateChapter";
-import LogWord from "./LogWord";
+import CreateWord from "./CreateWord";
 import IconButton from "@/components/ui/IconButton";
 
 export default function Page() {
@@ -260,7 +260,7 @@ export default function Page() {
                 />
             }
             {show === 'Log Word' &&
-                <LogWord
+                <CreateWord
                     book={data?.chapter}
                     chapter={data?.chapter}
                     books={data?.books}

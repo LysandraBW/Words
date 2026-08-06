@@ -66,7 +66,7 @@ export default function InputTags(props: Partial<InputTagsProps>) {
                 </button>
             </div>
             {!!props.value?.length &&
-                <div className="mt-0.5 flex gap-1">
+                <div className="mt-2 flex gap-2">
                     {props.value?.map((value, i) => (
                         <Fragment key={i}>
                             <InputTag
