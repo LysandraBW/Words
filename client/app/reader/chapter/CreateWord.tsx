@@ -17,6 +17,7 @@ import CreateTypeTab from "@/components/word/CreateTypeTab";
 import EntryTypeTab from "@/components/word/EntryTypeTab";
 import SelectBookAndChapter from "@/components/word/SelectBookAndChapter";
 import { insertWord, WordType } from "@/services/server/word";
+import { toast } from "@/components/ui/toast/Toast";
 
 
 interface CreateWordProps {
@@ -40,7 +41,7 @@ interface WordData {
 
 export default function CreateWord(props: CreateWordProps) {
     const [type, setType] = useState('Manual');
-    const [selected, setSelected] = useState<string>('set');
+    const [selected, setSelected] = useState<string>('');
     const [selectedEntry, setSelectedEntry] = useState<Entry[]>();
     
     const [shortOrLong, setShortOrLong] = useState('Short');
@@ -60,21 +61,21 @@ export default function CreateWord(props: CreateWordProps) {
         },
         {
             label: "book_id",
-            value: props.book ? `${props.book.book_id}` : '',
-            test: z.number().optional()
+            value: props.book ? [props.book.book_id] : [],
+            test: z.array(z.coerce.number()).min(1, "Must select a book.").optional()
         },
         {
             label: "chapter_id",
-            value: props.chapter ? `${props.chapter.chapter_id}` : '',
-            test: z.number().optional()
+            value: props.chapter ? [props.chapter.chapter_id] : [],
+            test: z.array(z.coerce.number()).min(1, "Must select a chapter.").optional()
         }
     ]));
 
 
     const onCreateWord = async (form: Form<WordData>) => {
         try {
-            if (!testForm(form))
-                throw new Error('Invalid Form');
+            if (!testForm(form, setForm))
+                return;
 
             const data = getFormData(form);
             const inserted = await insertWord({
@@ -84,17 +85,23 @@ export default function CreateWord(props: CreateWordProps) {
                 ],
                 chapter_id: Number(data.chapter_id)
             });
-            props.onWordCreated(inserted);
+            props.onWordCreated(inserted[0]);
         }
         catch (error) {
-            alert(error);
+            toast({
+                type: 'error',
+                title: 'Failed to Create',
+                description: `The word was unable to be created. Please try again.`
+            });
         }
     }
 
 
     useEffect(() => {
         const load = async () => {
-            setSelectedEntry(example as any);
+            if (!selected)
+                return;
+            setSelectedEntry(await getWordEntries(selected));
         }
         load()
     }, [selected]);
@@ -136,8 +143,11 @@ export default function CreateWord(props: CreateWordProps) {
                             />
                         }
                         <div className="w-full h-full flex-col">
-                            <p className="mb-2 text-neutral-300 font-medium">
+                            <p className="mb-0 text-neutral-300 font-medium">
                                 Select Word
+                            </p>
+                            <p className="mb-2 text-neutral-500">
+                                You must select a book and chapter before you can quickly log a word.
                             </p>
                             <InputDropdown
                                 value={[selected]}
@@ -216,7 +226,7 @@ export default function CreateWord(props: CreateWordProps) {
                                                         entryNum={i+1}
                                                         numEntries={selectedEntry.length}
                                                         onOpenWord={(word) => setSelected(word)}
-                                                        allowLog
+                                                        allowLog={form.book_id.value.length !== 0 && form.chapter_id.value.length !== 0}
                                                         onLog={(definition: string) => {
                                                             const updatedForm = updateFormValues(form, {
                                                                 "word": selected,

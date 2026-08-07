@@ -44,6 +44,7 @@ export default function CreateDeck(props: CreateDeckProps) {
             const data = getFormData(form);
             const inserted = await insertDeck(data);
             props.onDeckCreated(inserted);
+            props.onClose();
         }
         catch (error) {
             alert(error);

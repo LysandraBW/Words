@@ -47,7 +47,7 @@ export async function SelectChaptersFromBook(bookID: number, readerID: string) {
 }
 
 
-export async function InsertChapter(chapter: Omit<Chapter, "chapter_id">, readerID: string) {
+export async function InsertChapter(chapter: Omit<Chapter, "chapter_id" | "chapter_number">, readerID: string) {
     return await db<Chapter[]>`
         INSERT INTO Chapter (
             chapter_title, 
@@ -55,7 +55,11 @@ export async function InsertChapter(chapter: Omit<Chapter, "chapter_id">, reader
             book_id
         )
         SELECT  ${chapter.chapter_title},
-                ${chapter.chapter_number},
+                COALESCE((
+                    SELECT MAX(chapter_number) + 1
+                    FROM Chapter
+                    WHERE book_id = ${chapter.book_id}
+                ), 1),
                 ${chapter.book_id}
         WHERE EXISTS (
             SELECT  1 
@@ -70,6 +74,7 @@ export async function InsertChapter(chapter: Omit<Chapter, "chapter_id">, reader
 
 
 export async function UpdateChapter(chapter: NullableBy<Chapter, "chapter_title" | "chapter_number">, readerID: string) {
+    console.log(chapter)
     return await db<Chapter[]>`
         UPDATE  Chapter
         SET     chapter_title = COALESCE(${chapter.chapter_title ?? null}, chapter_title),

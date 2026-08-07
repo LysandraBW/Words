@@ -1,7 +1,7 @@
 "use client";
 import loadData from "@/app/reader/book/loadData";
 import { BookType, deleteBook } from "@/services/server/book";
-import { ChapterType } from "@/services/server/chapter";
+import { ChapterType, deleteChapter } from "@/services/server/chapter";
 import { BookIcon, EllipsisIcon, TextInitialIcon, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,7 +15,8 @@ import AddChapter from "./CreateChapter";
 import Tab from "../home/Tab";
 import IconButton from "@/components/ui/IconButton";
 import CreateWord from "../chapter/CreateWord";
-import { WordType } from "@/services/server/word";
+import { deleteWord, WordType } from "@/services/server/word";
+import { toast } from "@/components/ui/toast/Toast";
 
 
 export default function Page() {
@@ -157,6 +158,69 @@ export default function Page() {
     }
 
 
+    const handleChapterDeleted = (chapter: ChapterType) => {
+        setData(data => {
+            if (!data)
+                return data;
+
+            return {
+                ...data,
+                chapters: data.chapters.filter(c => c.chapter_id !== chapter.chapter_id),
+                words: data.words.filter(w => w.chapter_id !== chapter.chapter_id)
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleWordDeleted = (word: WordType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                words: data.words.filter(w => w.word_id !== word.word_id)
+            }
+        });
+        setShow('');
+    }
+
+
+
+    const onDeleteChapters = async (chapterIDs: number[]) => {
+        try {
+            await Promise.all(chapterIDs.map(async (id) => {
+                const deletedChapter = await deleteChapter(id);
+                handleChapterDeleted(deletedChapter[0]);
+            }));
+        }
+        catch (err) {
+            toast({
+                type: 'error',
+                title: 'Failed to Delete',
+                description: `The selected chapter${chapterIDs.length === 1 ? 's were' : ' was'} unsuccessfully deleted.`
+            });
+        }
+    }
+
+
+    const onDeleteWords = async (wordIDs: number[]) => {
+        try {
+            await Promise.all(wordIDs.map(async (id) => {
+                const deletedWord = await deleteWord(id);
+                handleWordDeleted(deletedWord[0]);
+            }));
+        }
+        catch (err) {
+            toast({
+                type: 'error',
+                title: 'Failed to Delete',
+                description: `The selected word${wordIDs.length === 1 ? 's were' : ' was'} unsuccessfully deleted.`
+            });
+        }
+    }
+
+
     if (!data)
         return <></>;
 
@@ -225,13 +289,21 @@ export default function Page() {
                         <div className="relative z-50 grid grid-cols-[auto_auto] items-center gap-x-2">
                             <div className="max-h-[156px]">
                                 <BookScene
+                                    rawCoverImage={data?.book.book_cover_image || ""}
                                     coverImage={`https://images.weserv.nl/?url=${encodeURIComponent((data?.book.book_cover_image || "").replace(/^https?:\/\//, ''))}`}
                                 />
                             </div>
                             <div className="flex flex-col -space-y-1">
-                                <p className="block text-base font-medium- text-neutral-400">
-                                    {data?.book.book_author}'s
-                                </p>
+                                {data?.book.book_author.length > 1 &&
+                                    <p className="block text-base font-medium- text-neutral-400">
+                                        {data?.book.book_author.slice(0, -1).join(', ')}{data?.book.book_author.length >= 3 && ", "} and {data?.book.book_author.at(-1)}'s
+                                    </p>
+                                }
+                                {data?.book.book_author.length == 1 &&
+                                    <p className="block text-base font-medium- text-neutral-400">
+                                        {data?.book.book_author.at(-1)}'s
+                                    </p>
+                                }
                                 <p className="block text-xl font-medium text-neutral-100 max-w-xs text-shadow-sm">
                                     {data?.book.book_name}
                                 </p>
@@ -245,7 +317,18 @@ export default function Page() {
                             />
                             <IconButton
                                 Icon={TrashIcon}
-                                onClick={() => deleteBook(data?.book.book_id)}
+                                onClick={async () => {
+                                    try {
+                                        await deleteBook(data?.book.book_id);
+                                        router.back();
+                                    }
+                                    catch (err) {
+                                        toast({
+                                            title: 'Failed to Delete',
+                                            description: 'Book unsuccessfully deleted.'
+                                        })
+                                    }
+                                }}
                                 className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
                             />
                         </div>
@@ -270,7 +353,7 @@ export default function Page() {
                         <ChapterTab
                             chapters={chapters}
                             onCreate={() => setShow('Add Chapter')}
-                            onDelete={() => null}
+                            onDelete={onDeleteChapters}
                             showBook={false}
                         />
                     }
@@ -284,7 +367,7 @@ export default function Page() {
                             onBringWordToFront={onBringWordToFront}
                             setLookup={setWordLookup}
                             onCreate={() => setShow('Create Word')}
-                            onDelete={() => null}
+                            onDelete={onDeleteWords}
                         />
                     }
                 </div>
@@ -309,6 +392,7 @@ export default function Page() {
             {show === 'Add Chapter' &&
                 <AddChapter
                     books={data?.books || []}
+                    book={data?.book}
                     onChapterCreated={handleChapterCreated}
                     onClose={() => setShow('')}
                 />

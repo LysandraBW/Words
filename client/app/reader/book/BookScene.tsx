@@ -1,8 +1,9 @@
 import * as ColorThief from "colorthief";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import clsx from "clsx";
 
 function eqColors(a: ColorThief.RGB, b: ColorThief.RGB) {
     return (
@@ -136,10 +137,12 @@ function updateCameraFrustum(camera: THREE.OrthographicCamera, width: number, he
 
 interface BookSceneProps {
     coverImage: string;
+    rawCoverImage: string;
 }
 
 export default function BookScene(props: BookSceneProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [failed, setFailed] = useState(true);
     
     useEffect(() => {
         let cleanup: (() => void) | undefined;
@@ -194,19 +197,22 @@ export default function BookScene(props: BookSceneProps) {
             controls.enablePan = false;
             controls.update();
 
+            const loader = new THREE.TextureLoader();
+            loader.setCrossOrigin('anonymous');
+
             // Textures
-            const paperNormalMap1 = await (new THREE.TextureLoader()).loadAsync('/textures/paper-rough-9-NORM.png');
+            const paperNormalMap1 = await loader.loadAsync('/textures/paper-rough-9-NORM.png');
             paperNormalMap1.colorSpace = THREE.NoColorSpace;
             paperNormalMap1.wrapS = paperNormalMap1.wrapT = THREE.RepeatWrapping;
             paperNormalMap1.repeat.set(4, 4);
 
-            const paperNormalMap2 = await (new THREE.TextureLoader()).loadAsync('/textures/texture5.jpg');
+            const paperNormalMap2 = await loader.loadAsync('/textures/texture5.jpg');
             paperNormalMap2.colorSpace = THREE.NoColorSpace;
             paperNormalMap2.wrapS = THREE.RepeatWrapping;
             paperNormalMap2.repeat.set(1, 1);
             
             // Textures: Cover Image
-            const imageTexture = await (new THREE.TextureLoader()).loadAsync(props.coverImage);
+            const imageTexture = await loader.loadAsync(props.coverImage);
             imageTexture.colorSpace = THREE.SRGBColorSpace;
             const imageMaterial = new THREE.MeshPhysicalMaterial({ 
                 map: imageTexture,
@@ -453,8 +459,18 @@ export default function BookScene(props: BookSceneProps) {
                     container.removeChild(renderer.domElement);
                 }
             };
+
         }
-        load();
+
+        load()
+            .then(() => {
+                setFailed(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setFailed(true);
+            });
+
         return () => {
             cancelled = true;
             cleanup?.();
@@ -462,14 +478,18 @@ export default function BookScene(props: BookSceneProps) {
     }, [props.coverImage]);
 
     return (
-        <div 
-            ref={containerRef} 
-            style={{ 
-                width: '100%', 
-                height: '100%', 
-                position: 'relative', 
-                overflow: 'hidden' 
-            }} 
-        />
+        <>
+            <div
+                ref={containerRef} 
+                className={clsx(
+                    !failed && "w-full h-full relative overflow-hidden",
+                    failed && "mx-4 w-[80px] h-[124px] bg-neutral-950 border border-neutral-800 bg-cover bg-center rounded-md shadow",
+                )}
+                style={{
+                    backgroundImage: failed ? `url(${props.rawCoverImage})` : ''
+                }}
+            >
+            </div>
+        </>
     )
 }

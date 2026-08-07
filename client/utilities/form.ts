@@ -23,7 +23,7 @@ export function createForm(fields: Array<{
     const form = {};
     for (const field of fields) {
         (form as any)[field.label] = {
-            value: field.value || "",
+            value: field.value ?? "",
             test: field.test,
             error: "",
             isError: false,
@@ -32,7 +32,7 @@ export function createForm(fields: Array<{
     return form as any;
 }
 
-export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, value: D[K], testValue?: boolean): Form<D> {
+export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, value: D[K], testValue: boolean = true): Form<D> {
     const field = {
         ...form[label],
         "value": value
@@ -42,7 +42,11 @@ export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>
         const output = field.test.safeParse(value);
         if (output.error) {
             field.hasError = true;
-            field.error = output.error.message;
+            field.error = JSON.parse(output.error.message)[0].message;
+        }
+        else {
+            field.hasError = false;
+            field.error = ""
         }
     }
 
@@ -52,7 +56,7 @@ export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>
     }
 }
 
-export function updateFormTest<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, test: z.ZodType, testValue?: boolean): Form<D> {
+export function updateFormTest<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, test: z.ZodType, testValue: boolean = true): Form<D> {
     const field = {
         ...form[label],
         "test": test
@@ -62,7 +66,11 @@ export function updateFormTest<D extends Data, K extends keyof D>(form: Form<D>,
         const output = field.test.safeParse(field.value);
         if (output.error) {
             field.hasError = true;
-            field.error = output.error.message;
+            field.error = JSON.parse(output.error.message)[0].message;
+        }
+        else {
+            field.hasError = false;
+            field.error = ""
         }
     }
 
@@ -72,7 +80,7 @@ export function updateFormTest<D extends Data, K extends keyof D>(form: Form<D>,
     }
 }
 
-export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: Partial<Pick<D, K>>, testValue?: boolean): Form<D> {
+export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: Partial<Pick<D, K>>, testValue: boolean = true): Form<D> {
     const labels: K[] = Object.keys(data) as any;
     let updatedForm: Form<D> = {...form};
 
@@ -86,7 +94,11 @@ export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D
             const output = field.test.safeParse(data[label]);
             if (output.error) {
                 field.hasError = true;
-                field.error = output.error.message;
+                field.error = JSON.parse(output.error.message)[0].message;
+            }
+            else {
+                field.hasError = false;
+                field.error = ""
             }
         }
 
@@ -124,13 +136,34 @@ export function resetForm<D extends Data>(form: Form<D>, defaultValues?: {[K in 
     return updatedForm;
 }
 
-export function testForm<D extends Data>(form: Form<D>): boolean {
+export function testForm<D extends Data>(form: Form<D>, setForm?: (form: Form<D>) => void): boolean {
     let valid = true;
-
-    for (const field of Object.values(form) as Field<any>[]) {
+    let updatedForm: Form<D> = {...form};
+    const labels = Object.keys(form);
+    
+    for (const label of labels) {
+        const field = {...form[label]};
+    
         const output = field.test.safeParse(field.value);
-        valid = valid && output.error === undefined;
+        if (output.error) {
+            console.log(output.error)
+            valid = false;
+            field.hasError = true;
+            field.error = JSON.parse(output.error.message)[0].message;
+        }
+        else {
+            field.hasError = false;
+            field.error = ""
+        }
+
+        updatedForm = {
+            ...updatedForm,
+            [label]: field
+        }
     }
+
+    if (setForm)
+        setForm(updatedForm);
 
     return valid;
 }

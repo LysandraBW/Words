@@ -20,7 +20,7 @@ export default function Search(props: SearchProps) {
             <InputDropdown
                 options={props.options}
                 onChange={props.filter.setSearchKey}
-                toggleLabel="All"
+                toggleLabel={"Search by" + ` ${(props.options.find(option => option.value === props.filter.searchKey)?.textLabel || "").trim()}`}
                 wrapperClassName="!min-h-full !max-h-full !flex !flex-col !justify-center"
                 boxClassName="!min-h-min !h-min !max-h-min"
                 toggleClassName="box-content !min-h-[18px] !max-h-[18px] !h-[18px] p-1 pl-2 pr-1 !gap-x-2 !bg-neutral-800 !border-neutral-700 !border-l-0 !rounded-r-md !rounded-l-none shadow-sm"

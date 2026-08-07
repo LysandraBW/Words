@@ -37,10 +37,13 @@ export default function Layout({children}: {children: React.ReactNode}) {
             setReader(reader[0]);
         }
         load();
+    }, []);
 
+
+    useEffect(() => {
         const page = pathname.split("/")[2];
         setPage(page);
-    }, []);
+    }, [pathname])
 
 
     const onOpenWord = async (word: string) => {

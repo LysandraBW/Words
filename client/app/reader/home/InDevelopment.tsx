@@ -36,7 +36,7 @@ export default function InDevelopmentBanner() {
                     </span>
                 </div>
                 <span className="block max-w-lg text-sm text-neutral-500">
-                    This website is still under development. As I am the only person working on this project, it takes me some time. Nevertheless, if you would like to suggest a feature or provide criticism feel free to contact me at <span className="text-neutral-500">lysandrab.w910@gmail.com</span>.
+                    This website is under development. If you would like to recommend something or provide feedback feel free to contact me at <span className="text-neutral-500">lysandrab.w910@gmail.com</span>.
                 </span>
             </div>
         </div>

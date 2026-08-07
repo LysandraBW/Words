@@ -21,7 +21,7 @@ export default function NavigationBar(props: NavigationBarProps) {
         <div className="p-2 flex justify-center gap-x-2 bg-neutral-900 border border-t-0 border-neutral-800 rounded-b-lg">
             <IconButton
                 Icon={ChevronsLeftIcon}
-                onClick={() => props.filter.goToLastPage()}
+                onClick={() => props.filter.goToFirstPage()}
             />
             <IconButton
                 Icon={ChevronLeftIcon}
@@ -30,7 +30,7 @@ export default function NavigationBar(props: NavigationBarProps) {
             <div className="flex items-center gap-x-1">
                 <InputText
                     value={String(pageIndexValue)}
-                    onChange={(value: string) => props.filter.goToPageStr(value)}
+                    onChange={(value: string) => setPageIndexValue(value)}
                     onBlur={() => props.filter.goToPageStr(pageIndexValue)}
                     inputBoxClassName="w-min !h-[26px] !max-h-[26px] !min-h-[26px] !px-0 !py-1 bg-neutral-800 border-neutral-700"
                     inputClassName="!block !min-w-[26px] !min-h-[26px] !max-h-[26px] !h-[26px] !text-xs !tracking-wide text-center"

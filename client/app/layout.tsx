@@ -2,6 +2,7 @@ import "./globals.css";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { abcDiatype, nunito } from "@/app/fonts";
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
@@ -22,6 +23,9 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
 		>
 			<body className="w-full h-full">
 				{children}
+				<Toaster
+					position="top-center"
+				/>
 			</body>
     	</html>
   	);

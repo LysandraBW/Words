@@ -23,7 +23,9 @@ export default function ChapterTab(props: ChapterTabProps) {
     const [selected, setSelected] = useState<Set<number>>(new Set());
 
     const filter = useFilterObjects({ 
-        objects: props.chapters,
+        objects: props.chapters.sort((a, b) => {
+            return parseInt(a.chapter_number) - parseInt(b.chapter_number);
+        }),
         getObjectValueCallback: (k, o) => {
             if (k === "all")
                 return o.chapter_title + " " + o.chapter_number;
@@ -101,7 +103,7 @@ export default function ChapterTab(props: ChapterTabProps) {
                 <div
                     className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
                     style={{
-                        "gridTemplateColumns": `calc(26px + 16px) 1fr`
+                        "gridTemplateColumns": props.showBook ? 'calc(26px + 16px) 1fr 1fr' : `calc(26px + 16px) 1fr`
                     }}
                 >
                     <TableHead
@@ -122,12 +124,14 @@ export default function ChapterTab(props: ChapterTabProps) {
                                 return (
                                     <>
                                         <div 
-                                            className="w-4 h-4 bg-center bg-cover"
+                                            className="w-6 h-10 bg-center bg-cover border border-neutral-600 rounded-sm"
                                             style={{
                                                 backgroundImage: `url(${chapter.book_cover_image})`
                                             }}
                                         />
-                                        <p className="text-xs tracking-wide">{chapter.book_name}</p>
+                                        <p className="text-sm text-neutral-400 tracking-wide">
+                                            {chapter.book_name}
+                                        </p>
                                     </>
                                     
                                 )

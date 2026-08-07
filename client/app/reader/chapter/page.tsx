@@ -53,12 +53,10 @@ export default function Page() {
 
     const onDeleteWords = async (wordIDs: number[]) => {
         try {
-            await Promise.all(wordIDs.map(id => (
-                async () => {
-                    const deletedWord = await deleteWord(id);
-                    handlers.handleWordDeleted(deletedWord);
-                }
-            )));
+            await Promise.all(wordIDs.map(async (id) => {
+                const deletedWord = await deleteWord(id);
+                handlers.handleWordDeleted(deletedWord[0]);
+            }));
         }
         catch (err) {
             alert(err);
@@ -69,7 +67,8 @@ export default function Page() {
     const onIncrementWord = async (wordID: number) => {
         try {
             const updatedWord = await incrementWord(wordID);
-            handlers.handleWordIncremented(updatedWord);
+            console.log(updatedWord)
+            handlers.handleWordIncremented(updatedWord[0]);
         }
         catch (err) {
             alert(err);
@@ -80,7 +79,7 @@ export default function Page() {
     const onDecrementWord = async (wordID: number) => {
         try {
             const updatedWord = await decrementWord(wordID);
-            handlers.handleWordDecremented(updatedWord);
+            handlers.handleWordDecremented(updatedWord[0]);
         }
         catch (err) {
             alert(err);
@@ -192,14 +191,22 @@ export default function Page() {
                         <div className="relative z-50 grid grid-cols-[auto_auto] items-center gap-x-2">
                             <div className="max-h-[156px]">
                                 <BookScene
+                                    rawCoverImage={data?.chapter.book_cover_image || ""}
                                     coverImage={`https://images.weserv.nl/?url=${encodeURIComponent((data?.chapter.book_cover_image || "").replace(/^https?:\/\//, ''))}`}
                                 />
                             </div>
                             <div className="grid grid-rows-[1fr_auto_1fr] grid-cols-1 gap-y-0">
                                 <div className="row-start-2 row-span-1 relative flex flex-col -space-y-1">
-                                    <p className="block text-base font-medium- text-neutral-400">
-                                        {data?.chapter.book_author}'s
-                                    </p>
+                                    {data?.chapter.book_author.length > 1 &&
+                                        <p className="block text-base font-medium- text-neutral-400">
+                                            {data?.chapter.book_author.slice(0, -1).join(', ')}{data?.chapter.book_author.length >= 3 && ", "} and {data?.chapter.book_author.at(-1)}'s
+                                        </p>
+                                    }
+                                    {data?.chapter.book_author.length === 1 &&
+                                        <p className="block text-base font-medium- text-neutral-400">
+                                            {data?.chapter.book_author.at(-1)}'s
+                                        </p>
+                                    }
                                     <p className="block text-base font-medium text-neutral-100 max-w-xs">
                                         {data?.chapter.book_name}
                                     </p>

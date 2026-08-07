@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { EllipsisIcon, LightbulbIcon, PlayIcon, RefreshCwIcon, TextInitialIcon, TrashIcon, XIcon } from "lucide-react";
 import { reloadDeck, deleteDeck, updateDeck } from "@/services/server/deck";
 import { DeckGradedType, deleteDeckGraded, insertDeckGraded } from "@/services/server/deckGraded";
-import loadData from "../../deck/loadData";
+import loadData from "./loadData";
 import { WordType } from "@/services/server/word";
 import clsx from "clsx";
 import WordTab from "../WordTab";

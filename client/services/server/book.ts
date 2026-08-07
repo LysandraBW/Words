@@ -94,7 +94,7 @@ export async function insertBook(book: CreateBookType) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: BookType | null = await response.json();
+    const data: BookType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
 
@@ -130,7 +130,7 @@ export async function deleteBook(bookID: number) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: BookType | null = await response.json();
+    const data: BookType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
 

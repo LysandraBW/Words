@@ -37,7 +37,9 @@ export default function WordTab(props: WordTabProps) {
     const [selected, setSelected] = useState<Set<number>>(new Set());
 
     const filter = useFilterObjects({
-        objects: augmentedWords,
+        objects: augmentedWords.sort((a, b) => {
+            return (new Date(a.created_at)).getTime() - (new Date(b.created_at)).getTime();
+        }),
         getObjectValueCallback: (key, word) => {
             if (key === "word") {
                 return word.word[0];
@@ -45,11 +47,18 @@ export default function WordTab(props: WordTabProps) {
             if (key === "def") {
                 return word.word[1];
             }
+            if (key === "all") {
+                return word.word[0] + " " + word.word[1];
+            }
             return "";
         }
     });
 
     const searchOptions = [
+        {
+            value: 'all',
+            textLabel: 'All'
+        },
         {
             value: 'word',
             textLabel: 'Word'
@@ -70,7 +79,7 @@ export default function WordTab(props: WordTabProps) {
             textLabel: 'Added'
         },
         {
-            value: 'seen',
+            value: 'word_number_instances',
             textLabel: 'Seen'
         },
         {
@@ -105,6 +114,7 @@ export default function WordTab(props: WordTabProps) {
         setSelected(updatedSelectedBooks);
     }
 
+
     useEffect(() => {
         const load = async () => {
             const augmentedWords = [];
@@ -119,9 +129,16 @@ export default function WordTab(props: WordTabProps) {
                 }
             }
             setAugmentedWords(augmentedWords);
+            filter.setSearchKey('all');
         }
         load();
-    }, [props.words.length, props.decksGraded.length]);
+    }, [props.words, props.decksGraded.length]);
+
+
+    useEffect(() => {
+        console.log(props.words);
+    }, [props.words]);
+
 
     return (
         <>
@@ -188,7 +205,7 @@ export default function WordTab(props: WordTabProps) {
                             }
                             if (key === "Seen") {
                                 return (
-                                    <div className="w-full flex items-center gap-x-4">
+                                    <div className="w-full grid grid-cols-3 gap-x-4">
                                         {(props.onIncrement && props.onDecrement) &&
                                             <button 
                                                 onClick={() => props.onDecrement && props.onDecrement(word.word_id)}
@@ -200,7 +217,7 @@ export default function WordTab(props: WordTabProps) {
                                                 />
                                             </button>
                                         }
-                                        <p className="text-sm tracking-wide text-neutral-400">
+                                        <p className="text-sm tracking-wide text-center text-neutral-400">
                                             {word.word_number_instances}x
                                         </p>
                                         {(props.onIncrement && props.onDecrement) && 
@@ -220,7 +237,7 @@ export default function WordTab(props: WordTabProps) {
                             if (key === "Acc") {
                                 return (
                                     <p className="text-sm tracking-wide text-neutral-400">
-                                        {Number(word.accuracy).toPrecision(2)}%
+                                        {Number(word.accuracy*100).toPrecision(2)}%
                                     </p>
                                 )
                             }

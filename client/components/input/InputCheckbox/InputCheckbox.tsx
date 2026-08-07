@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { CheckIcon } from "lucide-react";
-import { ChangeEvent } from "react";
+
 
 interface InputCheckboxProps {
     label: string;
@@ -19,7 +19,6 @@ export default function InputCheckbox(props: Partial<InputCheckboxProps>) {
         if (!props.onChange)
             return;
 
-        console.log('a');
         props.onChange(!props.checked);
     }
 

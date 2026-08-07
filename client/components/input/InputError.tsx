@@ -6,7 +6,7 @@ export default function InputError(props: Partial<InputErrorProps>) {
     return (
         <>
             {!!props.error?.length &&
-                <span className="text-sm text-red-500 tracking-wide">
+                <span className="text-sm text-red-500/90 tracking-wide">
                     {props.error}
                 </span>
             }

@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 import InputWrapper from "./InputWrapper";
 import InputLabel from "./InputLabel";
+import InputError from "./InputError";
 
 export interface Option<V> {
     value: V;
@@ -112,7 +113,6 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                             "input-box input input-placeholder",
                             "flex justify-between items-center",
                             "rounded-md border border-neutral-800 outline-none",
-                            // "text-sm text-neutral-500 tracking-wide focus:text-white placeholder:text-sm placeholder:text-neutral-500",
                             props.toggleClassName
                         )}
                     />
@@ -132,11 +132,14 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         {!props.options?.length &&
                             <div 
                                 className={clsx(
-                                    "w-full h-full p-8 flex flex-col gap-y-0 justify-center items-center",
+                                    "w-full h-full p-4 flex flex-col gap-y-0 justify-center items-center",
                                     (props.search && search && !props.elementNoResultsFound) && "!invisible",
                                     (props.search && !search && !props.elementNeedSearch) && "!invisible"
                                 )}
                             >
+                                {!props.search &&
+                                    props.elementNoResultsFound 
+                                }
                                 {(props.search && search) &&
                                     props.elementNoResultsFound    
                                 }
@@ -148,10 +151,15 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                         {props.options?.map((option, i) => (
                             <div 
                                 key={i}
-                                onClick={() => props.onChange && props.onChange(option.value)}
+                                onClick={() => {
+                                    if (!props.onChange)
+                                        return;
+                                    props.onChange(option.value);
+                                    setOpen(false);
+                                }}
                                 className={clsx(
                                     "p-2 overflow-x-clip",
-                                    "grid grid-cols-[auto_16px] gap-x-4 items-center",
+                                    "flex gap-x-4 items-center",
                                     "border-b border-b-neutral-800 last:border-b-0 text-white cursor-pointer",
                                     "group hover:bg-neutral-700",
                                     props.optionContainerClassName
@@ -166,15 +174,22 @@ export default function InputDropdown<V>(props: Partial<InputDropdownProps<V>>) 
                                     {option.optionLabel || option.textLabel}
                                 </div>
                                 {props.value?.includes(option.value) &&
-                                    <Check
-                                        size={16}
-                                    />
+                                    <div className="">
+                                        {props.value?.includes(option.value) &&
+                                            <Check
+                                                size={16}
+                                            />
+                                        }
+                                    </div>
                                 }
                             </div>
                         ))}
                     </div>
                 }
             </div>
+            <InputError
+                error={props.error}
+            />
         </InputWrapper>
     )
 }

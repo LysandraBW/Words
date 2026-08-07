@@ -50,7 +50,7 @@ export default function InputTextArea(props: Partial<InputTextAreaProps> & Parti
                     placeholder={props.placeholder}
                     className={clsx(
                         "input input-placeholder",
-                        "input-box !min-h-[96px] !max-h-none",
+                        "input-box !py-3 !min-h-[96px] !max-h-none",
                         props.inputBoxClassName,
                         props.inputClassName
                     )}

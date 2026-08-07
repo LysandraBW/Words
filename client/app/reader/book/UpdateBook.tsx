@@ -17,6 +17,7 @@ import clsx from "clsx";
 import MutateChapterInList from "./MutateChapterItem";
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
+import { toast } from "@/components/ui/toast/Toast";
 
 
 // Newly created chapters are given a fake ID.
@@ -96,29 +97,43 @@ export default function UpdateBook(props: UpdateBookProps) {
         {
             label: "book_year",
             value: props.book.book_year,
-            test: z.coerce.number("Must enter a year between 1000 and 3000.")
-            .min(1000, "Must enter a year between 1000 and 3000.")
-            .max(3000, "Must enter a year between 1000 and 3000.")
+            test: z.preprocess(
+                (val) => (val === "" ? undefined : val),
+                z.coerce
+                    .number("Must enter a valid year.")
+                    .min(1000, "Must enter a year between 1000 and 3000.")
+                    .max(3000, "Must enter a year between 1000 and 3000.")
+                    .optional()
+            )
         },
         {
             label: "book_author",
             value: props.book.book_author,
-            test: z.array(z.string().min(1, "Authors must have a name."))
+            test: z.preprocess(
+                (val) => (val === "" ? undefined : val),
+                z.array(
+                    z.string().trim().min(1, "Must enter a name for the author.")
+                ).optional()
+            )
         }
     ]));
 
 
     const onUpdateBook = async (form: Form<UpdateBookType>) => {
         try {
-            if (!testForm(form))
-                throw new Error('Invalid Form');
+            if (!testForm(form, setForm))
+                return;
 
             const book = getFormData(form);
             const updatedBook = await updateBook(book);
             props.onBookUpdated(updatedBook);
         }
         catch (error) {
-            alert(error);
+            toast({
+                type: 'error',
+                title: 'Failed to Update',
+                description: `The book was unable to be updated. Please try again.`
+            });
         }
     }
     
@@ -144,7 +159,7 @@ export default function UpdateBook(props: UpdateBookProps) {
     const sortedChapterForms = Object.entries(chapterForms).sort((a, b) => {
         return parseInt(a[1].chapter_number.value) - parseInt(b[1].chapter_number.value);
     });
-
+    
     // Update Form
     // This updates a single form,
     // and then updates the forms variable
@@ -195,14 +210,14 @@ export default function UpdateBook(props: UpdateBookProps) {
         const chapters: ChapterType[] = [];
 
         try {
-            if (!Object.values(newChapters).every(chapter => testForm(chapter)))
-                throw new Error('Invalid Form');
+            if (!Object.entries(newChapters).every(([chapterFormID, chapterForm]) => testForm(chapterForm, (form) => setChapterForms(forms => ({
+                ...forms,
+                [chapterFormID]: form
+            })))))
+                return;
 
             const oldChapterIDs = new Set(oldChapters.map(chapter => chapter.chapter_id));
             const newChapterIDs = new Set(Object.values(newChapters).map(chapter => chapter.chapter_id.value));
-            
-            const oldChapterNumbers = new Set(oldChapters.map(chapter => chapter.chapter_number));
-            const newChapterNumbers = new Set(Object.values(newChapters).map(chapter => chapter.chapter_number.value));
 
             // Intersecting Chapter IDs 
             // -> Update
@@ -220,40 +235,14 @@ export default function UpdateBook(props: UpdateBookProps) {
                     (oldChapterData.chapter_number === newChapterData.chapter_number)
                 ) continue;
 
+                console.log(newChapterData)
                 const chapter = await updateChapter(newChapterData);
                 chapters.push(chapter);
 
                 oldChapterIDs.delete(id);
                 newChapterIDs.delete(id);
             }
-
-
-            // Intersecting Chapter Numbers 
-            // -> Update
-            const updateChapterNumbers = oldChapterNumbers.intersection(newChapterNumbers);
-            for (const number of updateChapterNumbers) {
-                const oldChapter = oldChapters.find(chapter => chapter.chapter_number === number);
-                const newChapter = Object.values(newChapters).find(chapter => chapter.chapter_number.value === number);
-
-                if (!oldChapter || !newChapter) 
-                    throw new Error('Cannot Find Old or New Chapters');
-
-                const newChapterData = getFormData(newChapter);
-                newChapterData.chapter_id = oldChapter.chapter_id;
-
-                // No Changes Made
-                if (
-                    (oldChapter.chapter_title === newChapterData.chapter_title) && 
-                    (oldChapter.chapter_number === newChapterData.chapter_number)
-                ) continue;
-
-                const chapter = await updateChapter(newChapterData);
-                chapters.push(chapter);
-
-                oldChapterIDs.delete(oldChapter.chapter_id);
-                newChapterIDs.delete(newChapter.chapter_id.value);
-            }
-
+            
 
             // Delete
             const deleteChapterIDs = oldChapterIDs.difference(newChapterIDs);
@@ -273,7 +262,11 @@ export default function UpdateBook(props: UpdateBookProps) {
             props.onChaptersUpdated(chapters);
         }
         catch (err) {
-            alert(err);
+            toast({
+                type: 'error',
+                title: 'Failed to Update',
+                description: `The book was unable to be updated. Please try again.`
+            });
         }
     }
 

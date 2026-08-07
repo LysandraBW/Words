@@ -180,10 +180,9 @@ export async function createChapter(req: Request, res: Response) {
         if (!sessionID)
             return res.sendStatus(401);
         
-        const output = ChapterSchema.omit({ chapter_id: true }).safeParse({
+        const output = ChapterSchema.omit({ chapter_id: true, chapter_number: true }).safeParse({
             book_id: req.body.book_id,
             chapter_title: req.body.chapter_title,
-            chapter_number: req.body.chapter_number,
             reader_id: await AuthorizeReaderBySession(sessionID)
         });
 
@@ -257,8 +256,8 @@ export async function deleteChapter(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const [deleted] = await DeleteChapter(output.data.chapter_id, output.data.reader_id);
-        if (!deleted)
+        const deleted = await DeleteChapter(output.data.chapter_id, output.data.reader_id);
+        if (!deleted.length)
             throw new Error('Delete Failed');
 
         return res.status(200).json(deleted);

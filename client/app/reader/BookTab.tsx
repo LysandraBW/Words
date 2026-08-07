@@ -122,7 +122,7 @@ export default function BookTab(props: BookTabProps) {
                         onSelectObject={selectBook}
                         onDeselectObject={deselectBook}
                         selectedObjects={selectedBooks}
-                        keys={["BookName", "BookAuthor", "book_year"]}
+                        keys={["BookName", "BookAuthor", "BookYear"]}
                         getElementCallback={(key, book) => {
                             if (key === "BookName") {
                                 return (
@@ -160,6 +160,16 @@ export default function BookTab(props: BookTabProps) {
                                                 />
                                             </div>
                                         }
+                                    </>
+                                    
+                                )
+                            }
+                            if (key === "BookYear") {
+                                return (
+                                    <>
+                                        <p className="text-sm text-neutral-400 tracking-wide">
+                                            {book.book_year || "None"}
+                                        </p>
                                     </>
                                     
                                 )

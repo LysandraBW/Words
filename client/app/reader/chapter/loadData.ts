@@ -95,13 +95,10 @@ export function useDataHandlers(setData: Dispatch<SetStateAction<Awaited<ReturnT
                 return data;
             return {
                 ...data,
-                words: data.words.map(w => {
-                    if (w.word_id !== word.word_id)
-                        return w;
-                    w.word_number_instances += 1;
-                    return w;
-                })
-            }
+                words: data.words.map(w =>
+                    w.word_id === word.word_id ? { ...w, ...word } : w
+                )
+            };
         });
     }
 
@@ -112,13 +109,10 @@ export function useDataHandlers(setData: Dispatch<SetStateAction<Awaited<ReturnT
                 return data;
             return {
                 ...data,
-                words: data.words.map(w => {
-                    if (w.word_id !== word.word_id)
-                        return w;
-                    w.word_number_instances -= 1;
-                    return w;
-                })
-            }
+                words: data.words.map(w =>
+                    w.word_id === word.word_id ? { ...w, ...word } : w
+                )
+            };
         });
     }
 

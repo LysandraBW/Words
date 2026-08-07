@@ -25,14 +25,14 @@ const BookSchema = z.object({
         emptyStringToNull, 
         z.coerce.number().nullish()
     ),
-    background_color: z.preprocess(
-        emptyStringToNull, 
-        z.string().trim().min(1)
-    ),
-    foreground_color: z.preprocess(
-        emptyStringToNull, 
-        z.string().trim().min(1)
-    ),
+    // background_color: z.preprocess(
+    //     emptyStringToNull, 
+    //     z.string().trim().min(1)
+    // ),
+    // foreground_color: z.preprocess(
+    //     emptyStringToNull, 
+    //     z.string().trim().min(1)
+    // ),
     book_author: z.array(z.string()).nullish(),
     reader_id: z.string()
 });
@@ -233,8 +233,6 @@ export async function createBook(req: Request, res: Response) {
             book_name: req.body.book_name,
             book_cover_image: req.body.book_cover_image,
             book_background_image: req.body.book_background_image,
-            background_color: req.body.background_color,
-            foreground_color: req.body.foreground_color,
             book_year: req.body.book_year,
             book_author: req.body.book_author,
             reader_id: await AuthorizeReaderBySession(sessionID)
@@ -245,8 +243,8 @@ export async function createBook(req: Request, res: Response) {
             return res.sendStatus(400);
         }
         
-        const [book] = await InsertBook(output.data);
-        if (!book)
+        const book = await InsertBook(output.data);
+        if (!book.length)
             throw new Error('Create Failed');
 
         return res.status(200).json(book);
@@ -266,15 +264,13 @@ export async function updateBook(req: Request, res: Response) {
         if (!sessionID)
             return res.sendStatus(401);
         
-        const output = nullableBy(BookSchema, ["book_name", "book_author", "book_cover_image", "book_background_image", "book_year", "background_color", "foreground_color"]).safeParse({
+        const output = nullableBy(BookSchema, ["book_name", "book_author", "book_cover_image", "book_background_image", "book_year"]).safeParse({
             book_id: req.body.book_id,
             book_name: req.body.book_name,
             book_cover_image: req.body.book_cover_image,
             book_background_image: req.body.book_background_image,
             book_year: req.body.book_year,
             book_author: req.body.book_author,
-            background_color: req.body.background_color,
-            foreground_color: req.body.foreground_color,
             reader_id: await AuthorizeReaderBySession(sessionID)
         });
 
@@ -314,8 +310,8 @@ export async function deleteBook(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const [book] = await DeleteBook(output.data.book_id, output.data.reader_id);
-        if (!book)
+        const book = await DeleteBook(output.data.book_id, output.data.reader_id);
+        if (!book.length)
             throw new Error('Delete Failed');
 
         return res.status(200).json(book);

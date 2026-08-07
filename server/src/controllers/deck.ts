@@ -274,7 +274,10 @@ export async function deleteDeck(req: Request, res: Response) {
             return res.sendStatus(400);
         }
 
-        const [deleted] = await DeleteDeck(output.data.deck_id, output.data.reader_id);
+        const deleted = await DeleteDeck(output.data.deck_id, output.data.reader_id);
+        if (!deleted.length)
+            throw new Error('Delete Failed');
+
         return res.status(200).json(deleted);
     }
     catch (error) {

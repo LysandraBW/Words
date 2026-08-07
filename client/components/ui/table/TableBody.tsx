@@ -25,6 +25,46 @@ export default function TableBody<ObjectType extends {[k: string]: any}>(props: 
 
     return (
         <>
+            {props.objects.length === 0 &&
+                <>
+                    {[...Array(1)].map((e, i) => (
+                        <div
+                            key={i}
+                            className="h-10 flex items-center justify-center border-b border-neutral-800"
+                        />
+                    ))}
+                    {[...Array(props.keys.length)].map((e, i) => (
+                        <div
+                            key={i}
+                            className="h-10 flex items-center justify-center border-l border-b border-neutral-800"
+                        />
+                    ))}
+                    {[...Array(1)].map((e, i) => (
+                        <div
+                            key={i}
+                            className="h-10 flex items-center justify-center border-b border-neutral-800"
+                        />
+                    ))}
+                    {[...Array(props.keys.length)].map((e, i) => (
+                        <div
+                            key={i}
+                            className="h-10 flex items-center justify-center border-l border-b border-neutral-800"
+                        />
+                    ))}
+                    {[...Array(1)].map((e, i) => (
+                        <div
+                            key={i}
+                            className="h-10 flex items-center justify-center border-b border-neutral-800"
+                        />
+                    ))}
+                    {[...Array(props.keys.length)].map((e, i) => (
+                        <div
+                            key={i}
+                            className="h-10 flex items-center justify-center border-l border-b border-neutral-800"
+                        />
+                    ))}
+                </>
+            }
             {props.objects.map((object, i) => (
                 <Fragment 
                     key={i}

@@ -40,7 +40,7 @@ export async function insertWord(word: CreateWordType) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: WordType | null = await response.json();
+    const data: WordType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
 
@@ -57,7 +57,7 @@ export async function deleteWord(wordID: number) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: WordType | null = await response.json();
+    const data: WordType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
     
@@ -74,7 +74,7 @@ export async function incrementWordNumberInstances(wordID: number) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: WordType | null = await response.json();
+    const data: WordType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
     
@@ -91,7 +91,7 @@ export async function decrementWordNumberInstances(wordID: number) {
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
 
-    const data: WordType | null = await response.json();
+    const data: WordType[] | null = await response.json();
     if (!data)
         throw new Error('Operation Failed');
     

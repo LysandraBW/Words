@@ -78,7 +78,7 @@ export async function deleteDeck(deckID: number) {
     if (response.status !== 200)
         throw new Error(`Failed to Delete Deck (${response.status})`);
 
-    const data: DeckType | null = await response.json();
+    const data: DeckType[] | null = await response.json();
     if (!data)
         throw new Error('Failed to Delete Deck');
 

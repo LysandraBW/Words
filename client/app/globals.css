@@ -14,7 +14,7 @@ button * {
             w-full min-h-[40px] max-h-[40px] h-[40px] 
             px-4 py-1
             flex gap-x-2 items-center
-            bg-neutral-900 border border-neutral-800 rounded-md has-[:focus]:bg-neutral-800 has-[:focus]:border-neutral-700 focus:bg-neutral-800 focus:border-neutral-700 shadow
+            bg-neutral-900 border border-neutral-800 rounded-md has-[:focus]:bg-neutral-800 has-[:focus]:!border-neutral-700 focus:bg-neutral-800 focus:!border-neutral-700 shadow
     }
 
     .input {

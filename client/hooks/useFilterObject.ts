@@ -23,9 +23,9 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
     const [filteredObjects, setFilteredObjects] = useState<ObjectType[]>([]);
 
     // Page
-    const pageSize = params.pageSize ?? 10; 
+    const pageSize = params.pageSize ?? 5; 
     const [pageIndex, setPageIndex] = useState(0);
-    const lastPageIndex = Math.ceil(filteredObjects.length / pageSize) - 1;
+    const lastPageIndex = Math.ceil(params.objects.length / pageSize) - 1;
 
     const getObjectValue = (key: string, object: ObjectType) => {
         if (key in object)
@@ -36,7 +36,16 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
     }
 
     const sortObjects = (sortKey: string, sortDirection: boolean | null, objects: ObjectType[]) => {
-        const sorted: ObjectType[] = objects.toSorted((a: ObjectType, b: ObjectType) => getObjectValue(sortKey, a).localeCompare(getObjectValue(sortKey, b)));
+        let sorted: ObjectType[] = objects;
+        const isNumber = objects.every(object => /^[+-]?\d+(\.\d+)?$/.test(getObjectValue(sortKey, object)));
+
+        if (isNumber && (sortDirection === true || sortDirection === false)) {
+            sorted = objects.toSorted((a: ObjectType, b: ObjectType) => Number(getObjectValue(sortKey, b)) - Number((getObjectValue(sortKey, a))));
+        }
+        else if (sortDirection === true || sortDirection === false) {
+            sorted = objects.toSorted((a: ObjectType, b: ObjectType) => getObjectValue(sortKey, a).localeCompare(getObjectValue(sortKey, b)))
+        }
+
         if (sortDirection === DESCENDING)
             return sorted.reverse();
         return sorted;
@@ -111,7 +120,7 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
         pageNumber = pageNumber.trim();
         if (!/^[0-9]+$/.test(pageNumber))
             return;
-        goToPage(parseInt(pageNumber));
+        goToPage(parseInt(pageNumber) - 1);
     }
 
     useEffect(() => {
@@ -119,6 +128,7 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
             setFilteredObjects([]);
             return;
         }
+        
         const searchedObjects = searchKey ? searchObjects(searchKey, search, params.objects) : params.objects;
         const sortedObjects = sortKey ? sortObjects(sortKey, sortDirection, searchedObjects) : searchedObjects;
         const slicedObjects = sliceObjects(pageIndex, pageSize, sortedObjects);
@@ -130,7 +140,7 @@ export default function useFilterObjects<ObjectType extends {[k: string]: any}>(
         search, 
         pageSize, 
         pageIndex, 
-        params.objects.length
+        params.objects
     ]);
 
     return {

@@ -3,7 +3,7 @@ import loadData from "@/app/reader/home/loadData";
 import { BookType, deleteBook } from "@/services/server/book";
 import { DeckType, deleteDeck } from "@/services/server/deck";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
-import { BookIcon, CircleDashedIcon, ClipboardIcon, LibraryIcon, TextInitialIcon } from "lucide-react";
+import { AlertCircleIcon, BookIcon, CircleDashedIcon, ClipboardIcon, LibraryIcon, TextInitialIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import BookTab from "../BookTab";
 import ChapterTab from "../ChapterTab";
@@ -18,6 +18,8 @@ import CreateWord from "../chapter/CreateWord";
 import { ChapterType, deleteChapter } from "@/services/server/chapter";
 import { deleteWord, WordType } from "@/services/server/word";
 import InDevelopmentBanner from "./InDevelopment";
+import { toast } from "@/components/ui/toast/Toast";
+
 
 export default function Page() {
     const [tabIndex, setTabIndex] = useState(0);
@@ -118,9 +120,16 @@ export default function Page() {
         setData(data => {
             if (!data)
                 return data;
+
+            const removedChapterIDs = new Set(
+                data.chapters.filter(c => c.book_id === book.book_id).map(c => c.chapter_id)
+            );
+
             return {
                 ...data,
-                books: data.books.filter(b => b.book_id !== book.book_id)
+                books: data.books.filter(b => b.book_id !== book.book_id),
+                chapters: data.chapters.filter(c => c.book_id !== book.book_id),
+                words: data.words.filter(w => !removedChapterIDs.has(w.chapter_id))
             }
         });
         setShow('');
@@ -133,7 +142,8 @@ export default function Page() {
                 return data;
             return {
                 ...data,
-                chapters: data.chapters.filter(c => c.chapter_id !== chapter.chapter_id)
+                chapters: data.chapters.filter(c => c.chapter_id !== chapter.chapter_id),
+                words: data.words.filter(w => w.chapter_id !== chapter.chapter_id)
             }
         });
         setShow('');
@@ -141,6 +151,7 @@ export default function Page() {
 
 
     const handleWordDeleted = (word: WordType) => {
+        console.log(word, data?.words);
         setData(data => {
             if (!data)
                 return data;
@@ -168,13 +179,10 @@ export default function Page() {
 
     const onDeleteDecks = async (deckIDs: number[]) => {
         try {
-            await Promise.all(deckIDs.map((id) => (
-                async () => {
-                    const deletedDeck = await deleteDeck(id);
-                    handleDeckDeleted(deletedDeck);
-                }
-            )))
-            
+            await Promise.all(deckIDs.map(async (id) => {
+                const deletedDeck = await deleteDeck(id);
+                handleDeckDeleted(deletedDeck[0]);
+            }));
         }
         catch (err) {
             alert(err);
@@ -184,45 +192,51 @@ export default function Page() {
     
     const onDeleteBooks = async (bookIDs: number[]) => {
         try {
-            await Promise.all(bookIDs.map((id) => (
-                async () => {
-                    const deletedBook = await deleteBook(id);
-                    handleBookDeleted(deletedBook);
-                }
-            )));
+            await Promise.all(bookIDs.map(async (id) => {
+                const deletedBook = await deleteBook(id);
+                handleBookDeleted(deletedBook[0]);
+            }));
         }
         catch (err) {
-            alert(err);
+            toast({
+                type: 'error',
+                title: 'Failed to Delete',
+                description: `The selected book${bookIDs.length === 1 ? 's were' : ' was'} unsuccessfully deleted.`,
+            });
         }
     }
 
 
     const onDeleteChapters = async (chapterIDs: number[]) => {
         try {
-            await Promise.all(chapterIDs.map((id) => (
-                async () => {
-                    const deletedChapter = await deleteChapter(id);
-                    handleChapterDeleted(deletedChapter);
-                }
-            )));
+            await Promise.all(chapterIDs.map(async (id) => {
+                const deletedChapter = await deleteChapter(id);
+                handleChapterDeleted(deletedChapter[0]);
+            }));
         }
         catch (err) {
-            alert(err);
+            toast({
+                type: 'error',
+                title: 'Failed to Delete',
+                description: `The selected chapter${chapterIDs.length === 1 ? 's were' : ' was'} unsuccessfully deleted.`
+            });
         }
     }
 
 
     const onDeleteWords = async (wordIDs: number[]) => {
         try {
-            await Promise.all(wordIDs.map((id) => (
-                async () => {
-                    const deletedWord = await deleteWord(id);
-                    handleWordDeleted(deletedWord);
-                }
-            )));
+            await Promise.all(wordIDs.map(async (id) => {
+                const deletedWord = await deleteWord(id);
+                handleWordDeleted(deletedWord[0]);
+            }));
         }
         catch (err) {
-            alert(err);
+            toast({
+                type: 'error',
+                title: 'Failed to Delete',
+                description: `The selected word${wordIDs.length === 1 ? 's were' : ' was'} unsuccessfully deleted.`
+            });
         }
     }
 
@@ -305,6 +319,7 @@ export default function Page() {
                 }
                 {tabIndex === 1 &&
                     <ChapterTab
+                        showBook
                         chapters={data?.chapters || []}
                         onDelete={onDeleteChapters}
                         onCreate={() => setShow('Create Chapter')}
