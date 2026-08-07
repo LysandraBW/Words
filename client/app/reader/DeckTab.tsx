@@ -14,7 +14,7 @@ interface DeckTabProps {
     decks: DeckType[];
     decksGraded: DeckGradedType[];
     onCreate: () => void;
-    onDelete: () => void;
+    onDelete: (deckIDs: number[]) => void;
 }
 
 
@@ -80,7 +80,7 @@ export default function DeckTab(props: DeckTabProps) {
                 filter={filter}
                 display={display}
                 onCreate={props.onCreate}
-                onDelete={props.onDelete}
+                onDelete={() => props.onDelete([...selected])}
                 onDisplayChange={setDisplay}
             />
             <div>

@@ -14,7 +14,7 @@ import { useState } from "react";
 interface BookTabProps {
     books: BookType[];
     onCreate: () => void;
-    onDelete: () => void;
+    onDelete: (bookIDs: number[]) => void;
 }
 
 export default function BookTab(props: BookTabProps) {
@@ -99,7 +99,7 @@ export default function BookTab(props: BookTabProps) {
                 sortOptions={bookSortOptions}
                 filter={filterBooks}
                 onCreate={props.onCreate}
-                onDelete={props.onDelete}
+                onDelete={() => props.onDelete([...selectedBooks])}
                 display={display}
                 onDisplayChange={setDisplay}
             />

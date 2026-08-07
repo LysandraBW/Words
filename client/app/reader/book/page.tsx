@@ -1,6 +1,6 @@
 "use client";
 import loadData from "@/app/reader/book/loadData";
-import { BookType } from "@/services/server/book";
+import { BookType, deleteBook } from "@/services/server/book";
 import { ChapterType } from "@/services/server/chapter";
 import { BookIcon, EllipsisIcon, TextInitialIcon, TrashIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -15,6 +15,8 @@ import AddChapter from "./CreateChapter";
 import Tab from "../home/Tab";
 import IconButton from "@/components/ui/IconButton";
 import CreateWord from "../chapter/CreateWord";
+import { WordType } from "@/services/server/word";
+
 
 export default function Page() {
     const router = useRouter();
@@ -76,6 +78,37 @@ export default function Page() {
     }
 
 
+    const handleChapterCreated = (chapter: ChapterType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                chapters: [
+                    ...data.chapters,
+                    chapter
+                ]
+            }
+        });
+    }
+
+
+    const handleWordCreated = (word: WordType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                words: [
+                    ...data.words, 
+                    word
+                ]
+            }
+        });
+        setShow('');
+    }
+
+
     const onOpenWord = async (word: string) => {
         let wordEntries = await getWordEntries(word);
         setWordLookup(showing => {
@@ -110,6 +143,17 @@ export default function Page() {
                 })
             );
         })
+    }
+
+
+    const onDeleteBook = async (bookID: number) => {
+        try {
+            await deleteBook(bookID);
+            router.back();
+        }
+        catch (err) {
+            alert(err);
+        }
     }
 
 
@@ -201,7 +245,7 @@ export default function Page() {
                             />
                             <IconButton
                                 Icon={TrashIcon}
-                                onClick={() => null}
+                                onClick={() => deleteBook(data?.book.book_id)}
                                 className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
                             />
                         </div>
@@ -256,14 +300,16 @@ export default function Page() {
             {show === 'Update Book' &&
                 <UpdateBook
                     book={data.book}
-                    onBookUpdated={handleBookUpdated}
                     chapters={data.chapters}
+                    onBookUpdated={handleBookUpdated}
                     onChaptersUpdated={handleChaptersUpdated}
                     onClose={() => setShow('')}
                 />
             }
             {show === 'Add Chapter' &&
                 <AddChapter
+                    books={data?.books || []}
+                    onChapterCreated={handleChapterCreated}
                     onClose={() => setShow('')}
                 />
             }
@@ -272,8 +318,9 @@ export default function Page() {
                     book={data.book}
                     books={data?.books || []}
                     chapters={data?.chapters || []}
+                    onWordCreated={handleWordCreated}
                     onClose={() => setShow('')}
-                    requireBookAndChapter
+                    requireChapter
                 />
             }
         </>

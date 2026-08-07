@@ -5,7 +5,7 @@ import { BookType } from "@/services/server/book";
 import { ChapterType } from "@/services/server/chapter";
 import getSuggestions from "@/services/words/getAutoCompletion";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
-import { createForm, Form, updateFormValues } from "@/utilities/form";
+import { createForm, Form, getFormData, testForm, updateFormValues } from "@/utilities/form";
 import clsx from "clsx";
 import { BookSearchIcon, ListIcon, TextAlignJustifyIcon, WindIcon, WorkflowIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -16,15 +16,25 @@ import ShowEntryShort from "@/components/word/ShowEntryShort";
 import CreateTypeTab from "@/components/word/CreateTypeTab";
 import EntryTypeTab from "@/components/word/EntryTypeTab";
 import SelectBookAndChapter from "@/components/word/SelectBookAndChapter";
+import { insertWord, WordType } from "@/services/server/word";
 
 
 interface CreateWordProps {
     book?: BookType;
     chapter?: ChapterType;
     onClose: () => void;
+    onWordCreated: (word: WordType) => void;
     books: BookType[];
     chapters: ChapterType[];
-    requireBookAndChapter?: boolean;
+    requireChapter?: boolean;
+}
+
+
+interface WordData {
+    word: string;
+    meaning: string;
+    book_id: string;
+    chapter_id: string;
 }
 
 
@@ -36,7 +46,7 @@ export default function CreateWord(props: CreateWordProps) {
     const [shortOrLong, setShortOrLong] = useState('Short');
     
     const [suggestions, setSuggestions] = useState<string[]>([]);
-    const [form, setForm] = useState<Form<any>>(createForm([
+    const [form, setForm] = useState<Form<WordData>>(createForm([
         
         {
             label: "word",
@@ -59,6 +69,27 @@ export default function CreateWord(props: CreateWordProps) {
             test: z.number().optional()
         }
     ]));
+
+
+    const onCreateWord = async (form: Form<WordData>) => {
+        try {
+            if (!testForm(form))
+                throw new Error('Invalid Form');
+
+            const data = getFormData(form);
+            const inserted = await insertWord({
+                word: [
+                    data.word, 
+                    data.meaning
+                ],
+                chapter_id: Number(data.chapter_id)
+            });
+            props.onWordCreated(inserted);
+        }
+        catch (error) {
+            alert(error);
+        }
+    }
 
 
     useEffect(() => {
@@ -96,7 +127,7 @@ export default function CreateWord(props: CreateWordProps) {
             <div className="px-8 py-4 border-t border-neutral-900 flex flex-col gap-y-6">
                 {type === "Quick" &&
                     <div className="flex flex-col gap-y-8">
-                        {props.requireBookAndChapter &&
+                        {props.requireChapter &&
                             <SelectBookAndChapter
                                 books={props.books}
                                 chapters={props.chapters}
@@ -186,12 +217,13 @@ export default function CreateWord(props: CreateWordProps) {
                                                         numEntries={selectedEntry.length}
                                                         onOpenWord={(word) => setSelected(word)}
                                                         allowLog
-                                                        onLog={(def: string) => {
+                                                        onLog={(definition: string) => {
                                                             const updatedForm = updateFormValues(form, {
                                                                 "word": selected,
-                                                                "meaning": def
+                                                                "meaning": definition
                                                             });
                                                             setForm(updatedForm);
+                                                            onCreateWord(updatedForm);
                                                         }}
                                                     />
                                                 </div>
@@ -201,9 +233,7 @@ export default function CreateWord(props: CreateWordProps) {
                                     {shortOrLong === 'Long' &&
                                         <div className="w-full bg-neutral-900 border-x- border-b- border-neutral-800 rounded-b-md p-2 pl-0 flex flex-col gap-y-10 max-h-[300px]- overflow-auto">
                                             {selectedEntry.map((entry: Entry, i: number) => (
-                                                <div
-                                                    key={i}
-                                                >
+                                                <div key={i}>
                                                     <ShowEntry
                                                         entry={entry}
                                                         entryNum={i+1}
@@ -223,10 +253,11 @@ export default function CreateWord(props: CreateWordProps) {
                 {type === "Manual" &&
                     <div className="flex flex-col gap-y-8">
                         <CreateWordManual
-                            books={props.books}
-                            chapters={props.chapters}
                             form={form}
                             setForm={setForm}
+                            books={props.books}
+                            chapters={props.chapters}
+                            onCreate={() => onCreateWord(form)}
                         />
                     </div>
                 }

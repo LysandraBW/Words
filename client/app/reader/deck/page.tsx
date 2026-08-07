@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react";
-import { CaseUpperIcon, EllipsisIcon, ExpandIcon, LightbulbIcon, MoveLeftIcon, PlayIcon, RefreshCwIcon, TextInitialIcon, TrashIcon, XIcon } from "lucide-react";
+import { EllipsisIcon, LightbulbIcon, PlayIcon, RefreshCwIcon, TextInitialIcon, TrashIcon, XIcon } from "lucide-react";
 import { reloadDeck, deleteDeck, updateDeck } from "@/services/server/deck";
 import { DeckGradedType, deleteDeckGraded, insertDeckGraded } from "@/services/server/deckGraded";
 import loadData from "../../deck/loadData";
@@ -26,8 +26,7 @@ export default function Page() {
     
     const [data, setData] = useState<Awaited<ReturnType<typeof loadData>>>();
     const [show, setShow] = useState<string|DeckGradedType>('');
-
-    const tabs = ["Words", "Attempts"];
+    
     const [tabIndex, setTabIndex] = useState(0);
 
     const [wordLookup, setWordLookup] = useState<{[word: string]: {entries: Entry[], z: number}}|null>();
@@ -86,10 +85,14 @@ export default function Page() {
     }
 
 
-    const onDeleteDeckGraded = async (deckGradedID: number) => {
+    const onDeleteDeckGraded = async (deckGradedIDs: number[]) => {
         try {
-            const deletedDeckGraded = await deleteDeckGraded(deckGradedID);
-            handleDeckGradedDeleted(deletedDeckGraded);
+            await Promise.all(deckGradedIDs.map((id) => (
+                async () => {
+                    const deletedDeckGraded = await deleteDeckGraded(id);
+                    handleDeckGradedDeleted(deletedDeckGraded);
+                }
+            )));
         }
         catch (err) {
             alert(err);
@@ -241,6 +244,32 @@ export default function Page() {
                             </div>
                         </>
                     }
+                    {(show && typeof show !== 'string') &&
+                        <>
+                            <div className="w-full">
+                                <div className="">
+                                    <div 
+                                        className={clsx(
+                                            "ml-3 flex justify-between bg-neutral-950/50 rounded-lg normal-case",
+                                            "relative before:h-[calc(100%-8px)] before:w-[4px] before:rounded-full before:bg-blue-500 before:border before:border-blue-500 before:top-[4px] before:left-[-10px] before:absolute"
+                                        )}
+                                    >
+                                        <div className="py-5 px-2 relative">
+                                            <p className="text-neutral-100 font-medium text-xl">
+                                                {data?.deck.deck_name} Results
+                                            </p>
+                                        </div>
+                                        <div className="h-min p-1.5 flex gap-x-1.5">
+                                            <IconButton
+                                                Icon={XIcon}
+                                                onClick={() => setShow('')}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    }
                 </div>
                 <div 
                     className={clsx(
@@ -292,16 +321,14 @@ export default function Page() {
                                 onBringWordToFront={onBringWordToFront}
                                 lookup={wordLookup || null}
                                 setLookup={setWordLookup}
-                                onCreate={() => null}
-                                onDelete={() => null}
                             />
                         }
                         {tabIndex === 1 &&
                             <DeckGradedTab
                                 deck={data?.deck || []}
                                 decksGraded={data?.decksGraded || []}
-                                onCreate={() => null}
-                                onDelete={() => null}
+                                onDelete={onDeleteDeckGraded}
+                                onClickObjectRow={onShowQuizResults}
                             />
                         }
                     </div>
@@ -310,14 +337,15 @@ export default function Page() {
             {show === 'Quiz' &&
                 <TakeQuiz
                     deck={data.deck}
-                    onClose={() => setShow('')}
+                    deckGraded={(show && typeof show !== 'string') ? show : null}
                     onQuizFinished={handleDeckGradedCreated}
+                    onClose={() => setShow('')}
                 />
             }
             {show === 'Update Deck' &&
                 <UpdateDeck
-                    books={data.books}
                     deck={data.deck}
+                    books={data.books}
                     onDeckUpdated={handleDeckUpdated}
                     onClose={() => setShow('')}
                 />

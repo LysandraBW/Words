@@ -24,8 +24,10 @@ interface WordTabProps {
     onOpenWord: (word: string) => void;
     onCloseWord: (word: string) => void;
     onBringWordToFront: (word: string) => void;
-    onCreate: () => void;
-    onDelete: () => void;
+    onCreate?: () => void;
+    onDelete?: (wordIDs: number[]) => void;
+    onIncrement?: (wordID: number) => void;
+    onDecrement?: (wordID: number) => void;
 }
 
 export default function WordTab(props: WordTabProps) {
@@ -129,7 +131,11 @@ export default function WordTab(props: WordTabProps) {
                 filter={filter}
                 display={display}
                 onCreate={props.onCreate}
-                onDelete={props.onDelete}
+                onDelete={props.onDelete ? (() => {
+                    if (!props.onDelete)
+                        return;
+                    props.onDelete([...selected])
+                }) : null}
                 onDisplayChange={setDisplay}
             />
             <div>
@@ -183,21 +189,31 @@ export default function WordTab(props: WordTabProps) {
                             if (key === "Seen") {
                                 return (
                                     <div className="w-full flex items-center gap-x-4">
-                                        <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
-                                            <MinusIcon
-                                                size={14}
-                                                className="stroke-neutral-500 scale-x-70"
-                                            />
-                                        </button>
+                                        {(props.onIncrement && props.onDecrement) &&
+                                            <button 
+                                                onClick={() => props.onDecrement && props.onDecrement(word.word_id)}
+                                                className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm"
+                                            >
+                                                <MinusIcon
+                                                    size={14}
+                                                    className="stroke-neutral-500 scale-x-70"
+                                                />
+                                            </button>
+                                        }
                                         <p className="text-sm tracking-wide text-neutral-400">
                                             {word.word_number_instances}x
                                         </p>
-                                        <button className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm">
-                                            <PlusIcon
-                                                size={14}
-                                                className="stroke-neutral-500 scale-x-95"
-                                            />
-                                        </button>
+                                        {(props.onIncrement && props.onDecrement) && 
+                                            <button 
+                                                onClick={() => props.onIncrement && props.onIncrement(word.word_id)}
+                                                className="p-0.5 bg-neutral-800 border border-neutral-700 rounded-md shadow-sm"
+                                            >
+                                                <PlusIcon
+                                                    size={14}
+                                                    className="stroke-neutral-500 scale-x-95"
+                                                />
+                                            </button>
+                                        }
                                     </div>
                                 )
                             }

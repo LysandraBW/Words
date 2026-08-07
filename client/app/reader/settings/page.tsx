@@ -1,46 +1,77 @@
 "use client";
-import InputButton from "@/components/input/InputButton";
 import InputText from "@/components/input/InputText";
-import { ReaderType, selectReader } from "@/services/server/reader";
-import { LaughIcon, PencilIcon, SmileIcon, StarIcon, Trash2Icon, UserIcon, UserXIcon } from "lucide-react";
+import { deleteReader, ReaderType, selectReader, updateReader, UpdateReaderType } from "@/services/server/reader";
+import { Trash2Icon, UserIcon, UserXIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import NavBarTab from "../NavBarTab";
 import Button from "@/components/Button";
-import ProfilePicture from "@/components/ProfilePicture";
-import { createForm, Form, updateFormValue } from "@/utilities/form";
+import { createForm, Form, getFormData, testForm, updateFormTest, updateFormValue } from "@/utilities/form";
 import z from "zod";
+import { useRouter } from "next/navigation";
+
 
 export default function Page() {
+    const router = useRouter();
+    
     const [tabIndex, setTabIndex] = useState(0);
     const [reader, setReader] = useState<ReaderType>();
 
-    const [form, setForm] = useState<Form<any>>(createForm([
+    const [form, setForm] = useState<Form<UpdateReaderType & {confirm_reader_password: string}>>(createForm([
         {
-            label: "name",
-            value: '',
+            label: "reader_name",
+            value: reader?.reader_name,
             test: z.string().trim().min(1, "Must enter a name.")
         },
         {
-            label: "email",
-            value: '',
-            test: z.string().trim().min(1, "Must enter an email address/")
+            label: "reader_email",
+            value: reader?.reader_email,
+            test: z.string().trim().min(1, "Must enter an email address.")
         },
         {
-            label: "url",
-            value: '',
+            label: "reader_profile_image",
+            value: reader?.reader_profile_image,
             test: z.url().trim().optional()
         },
         {
-            label: "password",
+            label: "reader_password",
             value: '',
             test: z.string().optional()
         },
         {
-            label: "confirm_password",
+            label: "confirm_reader_password",
             value: '',
             test: z.string().optional()
         }
     ]));
+
+
+    const onUpdateReader = async (form: Form<UpdateReaderType>) => {
+        try {
+            if (!testForm(form))
+                throw new Error('Invalid Form');
+            
+            const updated = await updateReader(getFormData(form));
+            setReader(updated[0]);
+            alert('Worked');
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+
+    const onDeleteReader = async () => {
+        try {
+            if (!reader)
+                throw new Error('Failed to Delete');
+
+            await deleteReader(reader?.reader_id);
+            router.push('/login');
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
 
 
     useEffect(() => {
@@ -50,6 +81,16 @@ export default function Page() {
         }
         load();
     }, []);
+
+
+    useEffect(() => {
+        setForm(updateFormTest(
+            form,
+            "confirm_reader_password",
+            z.literal(form.reader_password.value, 'Passwords must match.'),
+            true
+        ));
+    }, [form.reader_password.value]);
 
 
     return (
@@ -86,41 +127,41 @@ export default function Page() {
                             <div className="w-[400px] flex flex-col gap-y-6">
                                 <InputText
                                     label="Name"
-                                    value={form.name.value}
-                                    onChange={(value) => setForm(updateFormValue(form, "name", value))}
+                                    value={form.reader_name.value}
+                                    onChange={(value) => setForm(updateFormValue(form, "reader_name", value))}
                                     required={true}
-                                    error={form.name.error}
+                                    error={form.reader_name.error}
                                 />
                                 <InputText
                                     label="Email"
-                                    value={form.email.value}
-                                    onChange={(value) => setForm(updateFormValue(form, "email", value))}
+                                    value={form.reader_email.value}
+                                    onChange={(value) => setForm(updateFormValue(form, "reader_email", value))}
                                     required={true}
-                                    error={form.email.error}
+                                    error={form.reader_email.error}
                                 />
                                 <InputText
                                     label="Profile Picture"
-                                    value={form.url.value}
-                                    onChange={(value) => setForm(updateFormValue(form, "url", value))}
-                                    error={form.url.error}
+                                    value={form.reader_profile_image.value || ''}
+                                    onChange={(value) => setForm(updateFormValue(form, "reader_profile_image", value))}
+                                    error={form.reader_profile_image.error}
                                 />
                                 <InputText
-                                    label="Password"
-                                    value={form.password.value}
-                                    onChange={(value) => setForm(updateFormValue(form, "password", value))}
+                                    label="New Password"
+                                    value={form.reader_password.value}
+                                    onChange={(value) => setForm(updateFormValue(form, "reader_password", value))}
                                     required={true}
-                                    error={form.password.error}
+                                    error={form.reader_password.error}
                                 />
                                 <InputText
-                                    label="Confirm Password"
-                                    value={form.confirm_password.value}
-                                    onChange={(value) => setForm(updateFormValue(form, "confirm_password", value))}
+                                    label="Confirm New Password"
+                                    value={form.confirm_reader_password.value}
+                                    onChange={(value) => setForm(updateFormValue(form, "confirm_reader_password", value))}
                                     required={true}
-                                    error={form.confirm_password.error}
+                                    error={form.confirm_reader_password.error}
                                 />
                                 <Button
                                     label="Save"
-                                    onClick={() => 1}
+                                    onClick={() => onUpdateReader(form)}
                                     outerClassName="!w-full"
                                 />
                             </div>
@@ -137,13 +178,14 @@ export default function Page() {
                                 </p>
                             </div>
                             <Button
+                                label="Delete Account"
+                                onClick={onDeleteReader}
                                 iconL={
                                     <Trash2Icon
                                         size={14}
                                         className="relative -top-[0.5px] stroke-neutral-400 group-hover:stroke-red-500"
                                     />
                                 }
-                                label="Delete Account"
                                 red
                             />
                         </div>

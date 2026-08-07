@@ -1,7 +1,7 @@
 "use client";
 import loadData, { useDataHandlers } from "@/app/reader/chapter/loadData";
 import { deleteChapter } from "@/services/server/chapter";
-import { insertWord, decrementWordNumberInstances as decrementWord, deleteWord, incrementWordNumberInstances as incrementWord } from "@/services/server/word";
+import { insertWord, decrementWordNumberInstances as decrementWord, deleteWord, incrementWordNumberInstances as incrementWord, CreateWordType, WordType } from "@/services/server/word";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import BookScene from "../book/BookScene";
@@ -51,21 +51,14 @@ export default function Page() {
     }
 
 
-    const onCreateWord = async (word: string, wordDefinition: string) => {
+    const onDeleteWords = async (wordIDs: number[]) => {
         try {
-            const createdWord = await insertWord({word: [word, wordDefinition]});
-            handlers.handleWordCreated(createdWord);
-        }
-        catch (err) {
-            alert(err);
-        }
-    }  
-
-
-    const onDeleteWord = async (wordID: number) => {
-        try {
-            const deletedWord = await deleteWord(wordID);
-            handlers.handleWordDeleted(deletedWord);
+            await Promise.all(wordIDs.map(id => (
+                async () => {
+                    const deletedWord = await deleteWord(id);
+                    handlers.handleWordDeleted(deletedWord);
+                }
+            )));
         }
         catch (err) {
             alert(err);
@@ -147,7 +140,6 @@ export default function Page() {
                         }}
                     >
                         <div className="absolute z-0 left-0 top-0 w-full h-full bg-linear-to-r from-black/50 to-black/0">
-
                         </div>
                         {/* Band 1 */}
                         <div 
@@ -218,7 +210,7 @@ export default function Page() {
                                             className="relative top-[1.5px] stroke-yellow-400"
                                         />
                                         <p className="mt-0.5 row-start-3 row-span-1 font-medium text-xl text-neutral-100 text-shadow-sm">
-                                            Chapter {data?.chapter.chapter_number}: Introduction
+                                            {data?.chapter.chapter_title}
                                         </p>
                                     </div>
                                 </div>
@@ -232,7 +224,7 @@ export default function Page() {
                             />
                             <IconButton
                                 Icon={TrashIcon}
-                                onClick={() => null}
+                                onClick={() => onDeleteChapter(data?.chapter.chapter_id)}
                                 className="!bg-neutral-100/10 !backdrop-blur-sm !border-neutral-400/30 !shadow-xs"
                             />
                         </div>
@@ -242,29 +234,33 @@ export default function Page() {
                     <WordTab
                         words={data?.words || []}
                         decksGraded={data?.decksGraded || []}
+                        onCreate={() => setShow('Log Word')}
+                        onDelete={onDeleteWords}
+                        onIncrement={onIncrementWord}
+                        onDecrement={onDecrementWord}
+                        // Lookup
                         lookup={wordLookup || null}
+                        setLookup={setWordLookup}
                         onOpenWord={onOpenWord}
                         onCloseWord={onCloseWord}
                         onBringWordToFront={onBringWordToFront}
-                        setLookup={setWordLookup}
-                        onCreate={() => setShow('Log Word')}
-                        onDelete={() => null}
                     />
                 </div>
             </div>
             {show === 'Update Chapter' &&
                 <UpdateChapter
                     chapter={data?.chapter}
+                    onChapterUpdated={handlers.handleChapterUpdated}
                     onClose={() => setShow('')}
-                    onChapterUpdated={() => 1}
                 />
             }
             {show === 'Log Word' &&
                 <CreateWord
                     book={data?.chapter}
-                    chapter={data?.chapter}
                     books={data?.books}
+                    chapter={data?.chapter}
                     chapters={data?.chapters}
+                    onWordCreated={handlers.handleWordCreated}
                     onClose={() => setShow('')}
                 />
             }

@@ -1,10 +1,9 @@
 "use client";
 import loadData from "@/app/reader/home/loadData";
-import { BookType } from "@/services/server/book";
+import { BookType, deleteBook } from "@/services/server/book";
 import { DeckType, deleteDeck } from "@/services/server/deck";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
-import clsx from "clsx";
-import { BookIcon, CircleDashedIcon, ClipboardIcon, LibraryIcon, TextInitialIcon, TriangleIcon } from "lucide-react";
+import { BookIcon, CircleDashedIcon, ClipboardIcon, LibraryIcon, TextInitialIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import BookTab from "../BookTab";
 import ChapterTab from "../ChapterTab";
@@ -16,6 +15,9 @@ import Card from "./Card";
 import Tab from "./Tab";
 import CreateChapter from "../book/CreateChapter";
 import CreateWord from "../chapter/CreateWord";
+import { ChapterType, deleteChapter } from "@/services/server/chapter";
+import { deleteWord, WordType } from "@/services/server/word";
+import InDevelopmentBanner from "./InDevelopment";
 
 export default function Page() {
     const [tabIndex, setTabIndex] = useState(0);
@@ -56,6 +58,30 @@ export default function Page() {
     }
 
 
+    const handleChapterCreated = (chapter: ChapterType) => {
+        setData(data => {
+            if (!data)
+                return data;
+
+            const chapterBook = data.books.find(book => book.book_id === chapter.book_id);
+            if (!chapterBook)
+                return data;
+
+            return {
+                ...data,
+                chapters: [
+                    ...data.chapters, 
+                    {
+                        ...chapter,
+                        ...chapterBook
+                    }
+                ]
+            }
+        });
+        setShow('');
+    }
+
+
     const handleDeckCreated = (deck: DeckType) => {
         setData(data => {
             if (!data)
@@ -66,6 +92,61 @@ export default function Page() {
                     ...data.decks, 
                     deck
                 ]
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleWordCreated = (word: WordType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                words: [
+                    ...data.words, 
+                    word
+                ]
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleBookDeleted = (book: BookType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                books: data.books.filter(b => b.book_id !== book.book_id)
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleChapterDeleted = (chapter: ChapterType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                chapters: data.chapters.filter(c => c.chapter_id !== chapter.chapter_id)
+            }
+        });
+        setShow('');
+    }
+
+
+    const handleWordDeleted = (word: WordType) => {
+        setData(data => {
+            if (!data)
+                return data;
+            return {
+                ...data,
+                words: data.words.filter(w => w.word_id !== word.word_id)
             }
         });
         setShow('');
@@ -85,10 +166,15 @@ export default function Page() {
     }
 
 
-    const onDeleteDeck = async (deckID: number) => {
+    const onDeleteDecks = async (deckIDs: number[]) => {
         try {
-            const deletedDeck = await deleteDeck(deckID);
-            handleDeckDeleted(deletedDeck);
+            await Promise.all(deckIDs.map((id) => (
+                async () => {
+                    const deletedDeck = await deleteDeck(id);
+                    handleDeckDeleted(deletedDeck);
+                }
+            )))
+            
         }
         catch (err) {
             alert(err);
@@ -96,6 +182,51 @@ export default function Page() {
     }
 
     
+    const onDeleteBooks = async (bookIDs: number[]) => {
+        try {
+            await Promise.all(bookIDs.map((id) => (
+                async () => {
+                    const deletedBook = await deleteBook(id);
+                    handleBookDeleted(deletedBook);
+                }
+            )));
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+
+    const onDeleteChapters = async (chapterIDs: number[]) => {
+        try {
+            await Promise.all(chapterIDs.map((id) => (
+                async () => {
+                    const deletedChapter = await deleteChapter(id);
+                    handleChapterDeleted(deletedChapter);
+                }
+            )));
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+
+    const onDeleteWords = async (wordIDs: number[]) => {
+        try {
+            await Promise.all(wordIDs.map((id) => (
+                async () => {
+                    const deletedWord = await deleteWord(id);
+                    handleWordDeleted(deletedWord);
+                }
+            )));
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+
     const onOpenWord = async (word: string) => {
         let wordEntries = await getWordEntries(word);
         setWordLookup(showing => {
@@ -136,34 +267,7 @@ export default function Page() {
     return (
         <div className="grid grid-cols-1 grid-rows-[auto_auto_1fr]">
             <div className="h-min p-4 flex gap-x-4 border-b border-b-neutral-800">
-                <Card
-                    Icon={CircleDashedIcon}
-                    cardKey="Card Label"
-                    cardValue="1000"
-                    cardKeyContext="in a Month"
-                    cardValueChange={50}
-                />
-                <Card
-                    Icon={CircleDashedIcon}
-                    cardKey="Card Label"
-                    cardValue="1000"
-                    cardKeyContext="in a Month"
-                    cardValueChange={10}
-                />
-                <Card
-                    Icon={CircleDashedIcon}
-                    cardKey="Card Label"
-                    cardValue="1000"
-                    cardKeyContext="in a Month"
-                    cardValueChange={99}
-                />
-                <Card
-                    Icon={CircleDashedIcon}
-                    cardKey="Card Label"
-                    cardValue="1000"
-                    cardKeyContext="in a Month"
-                    cardValueChange={50}
-                />
+                <InDevelopmentBanner/>
             </div>
             <div className="w-full p-2 grid grid-cols-4 gap-x-2 bg-neutral-900 border-b border-b-neutral-800">
                 <Tab
@@ -195,14 +299,14 @@ export default function Page() {
                 {tabIndex === 0 &&
                     <BookTab
                         books={data?.books || []}
-                        onDelete={() => 0}
+                        onDelete={onDeleteBooks}
                         onCreate={() => setShow('Create Book')}
                     />
                 }
                 {tabIndex === 1 &&
                     <ChapterTab
                         chapters={data?.chapters || []}
-                        onDelete={() => 0}
+                        onDelete={onDeleteChapters}
                         onCreate={() => setShow('Create Chapter')}
                     />
                 }
@@ -210,13 +314,14 @@ export default function Page() {
                     <WordTab
                         words={data?.words || []}
                         decksGraded={data?.decksGraded || []}
+                        onDelete={onDeleteWords}
+                        onCreate={() => setShow('Create Word')}
+                        // Lookup
                         lookup={wordLookup || null}
                         onOpenWord={onOpenWord}
                         onCloseWord={onCloseWord}
                         onBringWordToFront={onBringWordToFront}
                         setLookup={setWordLookup}
-                        onDelete={() => 0}
-                        onCreate={() => setShow('Create Word')}
                     />
                 }
                 {tabIndex === 3 &&
@@ -224,7 +329,7 @@ export default function Page() {
                         decks={data?.decks || []}
                         decksGraded={data?.decksGraded || []}
                         onCreate={() => setShow('Create Deck')}
-                        onDelete={() => 0}
+                        onDelete={onDeleteDecks}
                     />
                 }
             </div>
@@ -240,11 +345,14 @@ export default function Page() {
                     books={data?.books || []}
                     chapters={data?.chapters || []}
                     onClose={() => setShow('')}
-                    requireBookAndChapter
+                    onWordCreated={handleWordCreated}
+                    requireChapter
                 />
             }
             {show === 'Create Chapter' &&
                 <CreateChapter
+                    books={data?.books || []}
+                    onChapterCreated={handleChapterCreated}
                     onClose={() => setShow('')}
                 />
             }

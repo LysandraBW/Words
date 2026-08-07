@@ -9,7 +9,6 @@ import z from "zod";
 import InputImageURL from "@/components/input/InputImageURL";
 import SearchBooks from "./SearchBooks";
 import { addValue, deleteValue } from "@/utilities/array";
-import InputButton from "@/components/input/InputButton";
 import Button from "@/components/Button";
 
 
@@ -63,9 +62,9 @@ export default function CreateBook(props: CreateBookProps) {
             if (!testForm(form))
                 throw new Error('Invalid Form');
 
-            const book = getFormData(form);
-            const createdBook = await insertBook(book);
-            props.onBookCreated(createdBook);
+            const data = getFormData(form);
+            const inserted = await insertBook(data);
+            props.onBookCreated(inserted);
         }
         catch (error) {
             alert(error);

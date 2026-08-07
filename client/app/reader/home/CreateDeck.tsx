@@ -10,10 +10,7 @@ import { toggleValue } from "@/utilities/array";
 import { ChapterType, selectChapterWords } from "@/services/server/chapter";
 import { WordType } from "@/services/server/word";
 import Panel from "@/components/Panel";
-import InputButton from "@/components/input/InputButton";
 import clsx from "clsx";
-import InputLabel from "@/components/input/InputLabel";
-import { ChevronDownIcon } from "lucide-react";
 
 
 interface CreateDeckProps {
@@ -38,7 +35,31 @@ export default function CreateDeck(props: CreateDeckProps) {
         }
     ]));
     
+
+    const onCreateDeck = async (form: Form<CreateDeckType>) => {
+        try {
+            if (!testForm(form))
+                throw new Error('Invalid Form');
+
+            const data = getFormData(form);
+            const inserted = await insertDeck(data);
+            props.onDeckCreated(inserted);
+        }
+        catch (error) {
+            alert(error);
+        }
+    }
+
     
+    const onToggleChapter = (chapterID: number) => {
+        setForm(form => updateFormValue(
+            form, 
+            'deck_words', 
+            toggleValue(chapterID, form.deck_words.value)
+        ));
+    }
+
+
     useEffect(() => {
         const load = async () => {
             try {
@@ -77,30 +98,6 @@ export default function CreateDeck(props: CreateDeckProps) {
     }, [props.books]);
 
     
-    const onCreateDeck = async (form: Form<CreateDeckType>) => {
-        try {
-            if (!testForm(form))
-                throw new Error('Invalid Form');
-
-            const deck = getFormData(form);
-            const inserted = await insertDeck(deck);
-            props.onDeckCreated(inserted);
-        }
-        catch (error) {
-            alert(error);
-        }
-    }
-
-    
-    const onToggleChapter = (chapterID: number) => {
-        setForm(form => updateFormValue(
-            form, 
-            'deck_words', 
-            toggleValue(chapterID, form.deck_words.value)
-        ));
-    }
-
-
     if (!bookToChaptersToWords)
         return <>Loading</>;
 

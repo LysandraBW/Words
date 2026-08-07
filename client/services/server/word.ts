@@ -8,7 +8,7 @@ export interface WordType {
 }
 
 
-export type CreateWordType = Pick<WordType, "word">;
+export type CreateWordType = Pick<WordType, "word" | "chapter_id">;
 
 
 export async function selectWords() {

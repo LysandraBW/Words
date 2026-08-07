@@ -7,20 +7,17 @@ import TableHead from "../../components/ui/table/TableHead";
 import TableBody from "../../components/ui/table/TableBody";
 import NavigationBar from "../../components/ui/table/Navigation";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 
 interface DeckGradedTabProps {
     deck: DeckType;
     decksGraded: DeckGradedType[];
-    onCreate: () => void;
-    onDelete: () => void;
+    onDelete: (deckGradedIDs: number[]) => void;
+    onClickObjectRow: (deckGraded: DeckGradedType) => void;
 }
 
 
 export default function DeckGradedTab(props: DeckGradedTabProps) {
-    const router = useRouter();
-
     const [display, setDisplay] = useState("List");
     const [selected, setSelected] = useState<Set<number>>(new Set());
 
@@ -77,8 +74,7 @@ export default function DeckGradedTab(props: DeckGradedTabProps) {
                 sortOptions={sortOptions}
                 filter={filter}
                 display={display}
-                onCreate={props.onCreate}
-                onDelete={props.onDelete}
+                onDelete={() => props.onDelete([...selected])}
                 onDisplayChange={setDisplay}
             />
             <div>
@@ -110,6 +106,7 @@ export default function DeckGradedTab(props: DeckGradedTabProps) {
                             }
                             return <></>;
                         }}
+                        onClickObjectRow={props.onClickObjectRow}
                     />
                 </div>
                 <NavigationBar

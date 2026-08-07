@@ -12,7 +12,7 @@ import { useState } from "react";
 interface ChapterTabProps {
     chapters: (BookType & ChapterType)[];
     onCreate: () => void;
-    onDelete: () => void;
+    onDelete: (chapterIDs: number[]) => void;
     showBook?: boolean;
 }
 
@@ -93,7 +93,7 @@ export default function ChapterTab(props: ChapterTabProps) {
                 sortOptions={sortOptions}
                 filter={filter}
                 onCreate={props.onCreate}
-                onDelete={props.onDelete}
+                onDelete={() => props.onDelete([...selected])}
                 display={display}
                 onDisplayChange={setDisplay}
             />
@@ -101,11 +101,11 @@ export default function ChapterTab(props: ChapterTabProps) {
                 <div
                     className="grid bg-neutral-900 border border-neutral-800 border-b-0 rounded-t-lg overflow-clip"
                     style={{
-                        "gridTemplateColumns": `calc(26px + 16px) auto 1fr`
+                        "gridTemplateColumns": `calc(26px + 16px) 1fr`
                     }}
                 >
                     <TableHead
-                        columns={props.showBook ? ["Book", "Number", "Title"] : ["Number", "Title"]}
+                        columns={props.showBook ? ["Book", "Name"] : ["Name"]}
                         allSelected={selected.size === props.chapters.length && !!props.chapters.length}
                         onToggleAllCheckboxes={toggleAllCheckboxes}
                     />
@@ -116,7 +116,7 @@ export default function ChapterTab(props: ChapterTabProps) {
                         onSelectObject={selectObject}
                         onDeselectObject={deselectObject}
                         selectedObjects={selected}
-                        keys={props.showBook ? ["Book", "chapter_number", "chapter_title"] : ["chapter_number", "chapter_title"]}
+                        keys={props.showBook ? ["Book", "chapter_title"] : ["chapter_title"]}
                         getElementCallback={(key, chapter) => {
                             if (key === "Book") {
                                 return (

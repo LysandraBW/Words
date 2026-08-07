@@ -12,6 +12,7 @@ interface CreateWordManualProps {
     setForm: (form: Form<any>) => void;
     books: BookType[];
     chapters: ChapterType[];
+    onCreate: () => void;
 }
 
 
@@ -48,6 +49,7 @@ export default function CreateWordManual(props: CreateWordManualProps) {
             <Button
                 label="Log Word"
                 outerClassName="!w-full"
+                onClick={props.onCreate}
             />
         </>
     )

@@ -1,14 +1,15 @@
 import { DeckExtendedType, shuffleCards } from "@/app/reader/deck/shuffleCards";
 import { DeckType } from "@/services/server/deck";
-import { DeckGradedQuestionType, insertDeckGraded } from "@/services/server/deckGraded";
+import { DeckGradedQuestionType, DeckGradedType, insertDeckGraded } from "@/services/server/deckGraded";
 import clsx from "clsx";
-import { CheckIcon, ExpandIcon, MoveLeftIcon, MoveRightIcon, PauseIcon, PlayIcon, TriangleIcon, XIcon } from "lucide-react";
+import { CheckIcon, PauseIcon, PlayIcon, TriangleIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useStopwatch } from "react-timer-hook";
 
 
 interface TakeQuizProps {
     deck: DeckType;
+    deckGraded?: DeckGradedType | null;
     onClose: () => void;
     onQuizFinished: (deck: Awaited<ReturnType<typeof insertDeckGraded>>) => void;
 }
@@ -32,6 +33,18 @@ export default function TakeQuiz(props: TakeQuizProps) {
         const shuffledDeck = shuffleCards(props.deck);
         setShuffledDeck(shuffledDeck);
     }, [props.deck]);
+
+
+    useEffect(() => {
+        if (!props.deckGraded)
+            return;
+
+        const choices: {[index: number]: number} = {};
+        for (let i = 0; i < props.deckGraded.deck_questions.length; i++) {
+            const deckQuestion = props.deckGraded.deck_questions[i];
+            choices[i] = deckQuestion.choice;
+        }
+    }, [props.deckGraded]);
 
 
     useEffect(() => {
@@ -107,7 +120,6 @@ export default function TakeQuiz(props: TakeQuizProps) {
     return (
         <div className="h-full flex flex-col border- border-neutral-800 overflow-hidden">
             <div className="p-2 pb-4 px-4 pt-0 flex gap-x-2 bg-neutral-900 border-b border-neutral-800">
-                
                 <div className="h-6 p-1 grow flex gap-x-1 border border-neutral-700 rounded-md">
                     {[...Array(props.deck.deck_questions.length)].map((q, i) => {
                         const unanswered = choices[i] == null;
@@ -159,7 +171,7 @@ export default function TakeQuiz(props: TakeQuizProps) {
                         />
                     }
                 </button>
-                {Object.keys(choices).length === props.deck.deck_questions.length &&
+                {(!props.deckGraded && Object.keys(choices).length === props.deck.deck_questions.length) &&
                     <button 
                         onClick={() => onFinishQuiz(choices, totalMilliseconds)}
                         className="h-[24px] px-2 flex justify-center items-center bg-blue-500 rounded-md shadow"
@@ -222,8 +234,6 @@ export default function TakeQuiz(props: TakeQuizProps) {
                                         "bg-neutral-900 border border-neutral-800 shadow rounded-xl",
                                         "hover:scale-97 transition-all",
                                         answered && "!cursor-default" ,
-                                        // correct && "bg-green-500",
-                                        // incorrect && "bg-red-500",
                                         selected && "!border-blue-500"
                                     )}
                                     onClick={() => {

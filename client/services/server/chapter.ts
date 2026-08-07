@@ -8,7 +8,9 @@ export interface ChapterType {
     book_id: number;
 }
 
-export async function insertChapter(chapter: ChapterType) {
+export type CreateChapterType = Pick<ChapterType, "chapter_title" | "book_id">
+
+export async function insertChapter(chapter: CreateChapterType) {
     const response = await fetch('http://127.0.0.1:8000/chapters', {
         method: "POST",
         credentials: "include",

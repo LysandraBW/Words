@@ -62,7 +62,7 @@ export default function Card(props: CardProps) {
                                 props.cardValueChange === 50 && "text-yellow-600"
                             )}
                         >
-                            50%
+                            {props.cardValueChange}%
                         </span>
                     </span>
                 </div>

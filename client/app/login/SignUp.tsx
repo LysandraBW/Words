@@ -1,10 +1,11 @@
 import { useRouter } from "next/navigation";
 import PageToggle from "./PageToggle";
 import { useState } from "react";
-import { createForm, Form, testForm, updateFormValue } from "@/utilities/form";
+import { createForm, Form, getFormData, testForm, updateFormValue } from "@/utilities/form";
 import z from "zod";
 import InputText from "@/components/input/InputText";
 import InputButton from "@/components/input/InputButton";
+import { signUp } from "@/services/server/reader";
 
 
 interface SignUpProps {
@@ -30,15 +31,17 @@ export default function SignUp(props: SignUpProps) {
         }
     ]));
     
+    
     const onSignUp = async (form: Form<{name: string; email: string; password: string}>) => {
         try {
             if (!testForm(form))
                 throw new Error('Invalid Fields');
             
-            const data = false;
-            if (!data) 
+            const data = getFormData(form);
+            const pass = signUp(data.name, data.email, data.password);
+            if (!pass) 
                 throw new Error("Failed");
-
+            
             router.push("/home");
         }
         catch (err) {

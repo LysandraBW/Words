@@ -32,13 +32,13 @@ export function createForm(fields: Array<{
     return form as any;
 }
 
-export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, value: D[K], test?: boolean): Form<D> {
+export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, value: D[K], testValue?: boolean): Form<D> {
     const field = {
         ...form[label],
         "value": value
     };
 
-    if (test) {
+    if (testValue) {
         const output = field.test.safeParse(value);
         if (output.error) {
             field.hasError = true;
@@ -52,7 +52,27 @@ export function updateFormValue<D extends Data, K extends keyof D>(form: Form<D>
     }
 }
 
-export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: Partial<Pick<D, K>>, test?: boolean): Form<D> {
+export function updateFormTest<D extends Data, K extends keyof D>(form: Form<D>, label: keyof D, test: z.ZodType, testValue?: boolean): Form<D> {
+    const field = {
+        ...form[label],
+        "test": test
+    };
+
+    if (testValue) {
+        const output = field.test.safeParse(field.value);
+        if (output.error) {
+            field.hasError = true;
+            field.error = output.error.message;
+        }
+    }
+
+    return {
+        ...form,
+        [label]: field
+    }
+}
+
+export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D>, data: Partial<Pick<D, K>>, testValue?: boolean): Form<D> {
     const labels: K[] = Object.keys(data) as any;
     let updatedForm: Form<D> = {...form};
 
@@ -62,7 +82,7 @@ export function updateFormValues<D extends Data, K extends keyof D>(form: Form<D
             "value": data[label]
         };
         
-        if (test) {
+        if (testValue) {
             const output = field.test.safeParse(data[label]);
             if (output.error) {
                 field.hasError = true;

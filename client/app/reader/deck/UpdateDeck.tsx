@@ -143,13 +143,6 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                                     <p className="text-sm text-neutral-300 font-medium-">
                                         {book.book_name}
                                     </p>
-                                    {/* <div className="w-5 aspect-square flex justify-center items-center bg-blue-600 border border-blue-500 rounded-full">
-                                        <ChevronDownIcon
-                                            size={14}
-                                            strokeWidth={2}
-                                            className="scale-x-80 stroke-neutral-100"
-                                        />
-                                    </div> */}
                                 </div>
                                 {(bookToChaptersToWords?.[book.book_id] || []).length === 0 &&
                                     <div className="bg-neutral-800 w-full h-fit px-4 py-2 bg-neutral-900 rounded-md">
@@ -162,8 +155,8 @@ export default function UpdateDeck(props: UpdateDeckProps) {
                                     <div 
                                         key={i}
                                         className={clsx(
-                                            "px-2 py-2 flex flex-col gap-y-2 bg-neutral-900 border border-neutral-800 shadow-md rounded-lg",
-                                            // words.length === 0 ? "gap-y-4" : "gap-y-2"
+                                            "px-2 py-2 flex flex-col gap-y-2",
+                                            "bg-neutral-900 border border-neutral-800 shadow-md rounded-lg"
                                         )}
                                     >
                                         <p className="text-neutral-200 text-sm">
