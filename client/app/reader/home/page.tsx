@@ -281,7 +281,34 @@ export default function Page() {
     return (
         <div className="grid grid-cols-1 grid-rows-[auto_auto_1fr]">
             <div className="h-min p-4 flex gap-x-4 border-b border-b-neutral-800">
-                <InDevelopmentBanner/>
+                <Card
+                    Icon={CircleDashedIcon}
+                    cardKey='Card Key'
+                    cardValue="1000"
+                    cardValueChange={70}
+                    cardKeyContext="in a Month"
+                />
+                <Card
+                    Icon={CircleDashedIcon}
+                    cardKey='Card Key'
+                    cardValue="500"
+                    cardValueChange={90}
+                    cardKeyContext="in a Month"
+                />
+                <Card
+                    Icon={CircleDashedIcon}
+                    cardKey='Card Key'
+                    cardValue="75%"
+                    cardValueChange={50}
+                    cardKeyContext="in a Month"
+                />
+                <Card
+                    Icon={CircleDashedIcon}
+                    cardKey='Card Key'
+                    cardValue="100"
+                    cardValueChange={40}
+                    cardKeyContext="in a Month"
+                />
             </div>
             <div className="w-full p-2 grid grid-cols-4 gap-x-2 bg-neutral-900 border-b border-b-neutral-800">
                 <Tab

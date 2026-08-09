@@ -45,7 +45,8 @@ export default function SignIn(props: SignInProps) {
                 toast({
                     title: 'Login Failed',
                     description: 'Check your email and password again.'
-                })
+                });
+                return;
             }
 
             router.push("/reader/home");

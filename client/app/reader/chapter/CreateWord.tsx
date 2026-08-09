@@ -103,7 +103,9 @@ export default function CreateWord(props: CreateWordProps) {
                 return;
             setSelectedEntry(await getWordEntries(selected));
         }
-        load()
+        load();
+        // setSelected('set');
+        // setSelectedEntry(example as any);
     }, [selected]);
 
 
