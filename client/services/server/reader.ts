@@ -51,7 +51,7 @@ export async function updateReader(reader: UpdateReaderType) {
 }
 
 export async function deleteReader(readerID: string) {
-    const response = await fetch(`http://127.0.0.1:8000/readers/${readerID}`, {
+    const response = await fetch(`http://127.0.0.1:8000/readers`, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -61,12 +61,8 @@ export async function deleteReader(readerID: string) {
 
     if (response.status !== 200)
         throw new Error(`Response (${response.status})`);
-
-    const data: ReaderType | null = await response.json();
-    if (!data)
-        throw new Error('Operation Failed');
-
-    return data;
+    
+    return;
 }
 
 export async function signIn(email: string, password: string) {
@@ -100,6 +96,20 @@ export async function signUp(name: string, email: string, password: string) {
             reader_email: email,
             reader_password: password
         })
+    });
+
+    return response.status === 200;
+}
+
+
+export async function signOut() {
+    const response = await fetch('http://127.0.0.1:8000/readers/signOut', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            "credentials": "include",
+        }
     });
 
     return response.status === 200;

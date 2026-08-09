@@ -6,6 +6,7 @@ import z from "zod";
 import { createForm, Form, testForm, updateFormValue } from "@/utilities/form";
 import { signIn } from "@/services/server/reader";
 import PageToggle from "./PageToggle";
+import { toast } from "@/components/ui/toast/Toast";
 
 
 interface SignInProps {
@@ -32,18 +33,22 @@ export default function SignIn(props: SignInProps) {
 
     const onLogin = async (form: Form<{email: string; password: string}>) => {
         try {
-            if (!testForm(form))
-                throw new Error('Invalid Fields');
+            if (!testForm(form, setForm))
+                return;
             
             const data = await signIn(
                 form.email.value, 
                 form.password.value
             );
 
-            if (!data) 
-                throw new Error("Failed");
+            if (!data) {
+                toast({
+                    title: 'Login Failed',
+                    description: 'Check your email and password again.'
+                })
+            }
 
-            router.push("/home");
+            router.push("/reader/home");
         }
         catch (err) {
             alert(err);

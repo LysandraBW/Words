@@ -30,6 +30,8 @@ async function makeQuestions(wordIDs: number[], readerID: string) {
         const wordDef = word.word[1] as string;
         const randWords = await getRandomWords(word.word[0], word.word[1]);
 
+        console.log(wordStr, wordDef, randWords);
+        
         return {
             type: null,
             words: [
@@ -38,6 +40,7 @@ async function makeQuestions(wordIDs: number[], readerID: string) {
             ]
         };
     }));
+    console.log(questions)
     return questions;
 }
 

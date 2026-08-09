@@ -2,12 +2,13 @@
 import InputText from "@/components/input/InputText";
 import { deleteReader, ReaderType, selectReader, updateReader, UpdateReaderType } from "@/services/server/reader";
 import { Trash2Icon, UserIcon, UserXIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import NavBarTab from "../NavBarTab";
 import Button from "@/components/Button";
 import { createForm, Form, getFormData, testForm, updateFormTest, updateFormValue } from "@/utilities/form";
 import z from "zod";
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/toast/Toast";
 
 
 export default function Page() {
@@ -19,18 +20,21 @@ export default function Page() {
     const [form, setForm] = useState<Form<UpdateReaderType & {confirm_reader_password: string}>>(createForm([
         {
             label: "reader_name",
-            value: reader?.reader_name,
+            value: reader?.reader_name ?? "",
             test: z.string().trim().min(1, "Must enter a name.")
         },
         {
             label: "reader_email",
-            value: reader?.reader_email,
+            value: reader?.reader_email ?? "",
             test: z.string().trim().min(1, "Must enter an email address.")
         },
         {
             label: "reader_profile_image",
-            value: reader?.reader_profile_image,
-            test: z.url().trim().optional()
+            value: reader?.reader_profile_image ?? "",
+            test: z.union([
+                z.literal(""),
+                z.url()
+            ]).optional()
         },
         {
             label: "reader_password",
@@ -45,9 +49,9 @@ export default function Page() {
     ]));
 
 
-    const onUpdateReader = async (form: Form<UpdateReaderType>) => {
+    const onUpdateReader = async (form: Form<UpdateReaderType & {confirm_reader_password: string}>) => {
         try {
-            if (!testForm(form))
+            if (!testForm(form, setForm))
                 throw new Error('Invalid Form');
             
             const updated = await updateReader(getFormData(form));
@@ -66,10 +70,14 @@ export default function Page() {
                 throw new Error('Failed to Delete');
 
             await deleteReader(reader?.reader_id);
+            console.log(1)
             router.push('/login');
+            console.log(2)
         }
         catch (err) {
-            alert(err);
+            toast({
+                title: 'Could Not Delete Account'
+            })
         }
     }
 
@@ -81,6 +89,40 @@ export default function Page() {
         }
         load();
     }, []);
+
+
+    useEffect(() => {
+        setForm(createForm([
+            {
+                label: "reader_name",
+                value: reader?.reader_name,
+                test: z.string().trim().min(1, "Must enter a name.")
+            },
+            {
+                label: "reader_email",
+                value: reader?.reader_email,
+                test: z.string().trim().min(1, "Must enter an email address.")
+            },
+            {
+                label: "reader_profile_image",
+                value: reader?.reader_profile_image ?? "",
+                test: z.union([
+                    z.literal(""),
+                    z.url()
+                ]).optional()
+            },
+            {
+                label: "reader_password",
+                value: '',
+                test: z.string().optional()
+            },
+            {
+                label: "confirm_reader_password",
+                value: '',
+                test: z.string().optional()
+            }
+        ]));
+    }, [reader]);
 
 
     useEffect(() => {
@@ -147,6 +189,7 @@ export default function Page() {
                                 />
                                 <InputText
                                     label="New Password"
+                                    type="Password"
                                     value={form.reader_password.value}
                                     onChange={(value) => setForm(updateFormValue(form, "reader_password", value))}
                                     required={true}
@@ -154,6 +197,7 @@ export default function Page() {
                                 />
                                 <InputText
                                     label="Confirm New Password"
+                                    type="Password"
                                     value={form.confirm_reader_password.value}
                                     onChange={(value) => setForm(updateFormValue(form, "confirm_reader_password", value))}
                                     required={true}
@@ -169,7 +213,7 @@ export default function Page() {
                     }
                     {tabIndex === 1 &&
                         <div className="px-6 py-4 w-full h-full flex flex-col gap-y-4 bg-neutral-950/50 max-h-full overflow-auto">
-                            <div className="mb-4 flex flex-col -gap-y-1">
+                            <div className="mb-0 flex flex-col -gap-y-1">
                                 <p className="text-lg text-neutral-100 font-medium">
                                     Delete Account
                                 </p>

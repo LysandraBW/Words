@@ -60,7 +60,13 @@ export async function getSimilarWords(word: string, n: number = 20) {
 
 
 export async function getRandomWords(word: string = "", wordDefinition: string = "", n: number = 3): Promise<[string, string][]> {
-    const pool = await getSimilarWordsWordNet(word) || await getSimilarWords(word.toLowerCase(), Math.max(50, n)) || words;
+    let pool = await getSimilarWordsWordNet(word);
+    
+    if (!pool.length)
+        pool = await getSimilarWords(word.toLowerCase(), Math.max(50, n))
+    
+    if (!pool.length)
+        pool = words;
     
     // Shuffle Indices
     const poolIndices = [...Array(pool.length)].map((e, i) => i);

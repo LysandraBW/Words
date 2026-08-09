@@ -21,12 +21,18 @@ export default function TakeQuiz(props: TakeQuizProps) {
     const [shuffledDeck, setShuffledDeck] = useState<DeckExtendedType>();
     const [paused, setPaused] = useState(false);
 
+    const offset = new Date();
+    offset.setMilliseconds(offset.getMilliseconds() + (props.deckGraded?.duration ?? 0));
 
     const {
         start, pause,
         hours, minutes, seconds, milliseconds,
         totalMilliseconds
-    } = useStopwatch({ autoStart: false, interval: 20 });
+    } = useStopwatch({ 
+        autoStart: false, 
+        interval: 20,
+        offsetTimestamp: offset
+    });
     
 
     useEffect(() => {
@@ -44,13 +50,15 @@ export default function TakeQuiz(props: TakeQuizProps) {
             const deckQuestion = props.deckGraded.deck_questions[i];
             choices[i] = deckQuestion.choice;
         }
+        setChoices(choices);
     }, [props.deckGraded]);
 
 
     useEffect(() => {
         if (!shuffledDeck?.deck_questions.length)
             return;
-        start();
+        if (!props.deckGraded)
+            start();
     }, [shuffledDeck]);
 
 
@@ -147,30 +155,32 @@ export default function TakeQuiz(props: TakeQuizProps) {
                     {seconds.toString().padStart(2, "0")}:
                     {milliseconds.toString().padStart(3, "0")}
                 </span>
-                <button 
-                    onClick={() => {
-                        if (paused)
-                            start();
-                        else
-                            pause();
-                        setPaused(!paused);
-                    }}
-                    className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700 rounded-md shadow-sm"
-                >
-                    {!paused ?
-                        <PauseIcon
-                            size={14}
-                            strokeWidth={1.5}
-                            className="stroke-neutral-500"
-                        />
-                        :
-                        <PlayIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="stroke-neutral-500"
-                        />
-                    }
-                </button>
+                {!props.deckGraded &&
+                    <button 
+                        onClick={() => {
+                            if (paused)
+                                start();
+                            else
+                                pause();
+                            setPaused(!paused);
+                        }}
+                        className="w-[24px] aspect-square flex items-center justify-center bg-neutral-800 border border-neutral-700 rounded-md shadow-sm"
+                    >
+                        {!paused ?
+                            <PauseIcon
+                                size={14}
+                                strokeWidth={1.5}
+                                className="stroke-neutral-500"
+                            />
+                            :
+                            <PlayIcon
+                                size={14}
+                                strokeWidth={2}
+                                className="stroke-neutral-500"
+                            />
+                        }
+                    </button>
+                }
                 {(!props.deckGraded && Object.keys(choices).length === props.deck.deck_questions.length) &&
                     <button 
                         onClick={() => onFinishQuiz(choices, totalMilliseconds)}

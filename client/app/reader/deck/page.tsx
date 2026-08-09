@@ -191,22 +191,22 @@ export default function Page() {
         <div 
             className={clsx(
                 "grid grid-rows-[auto_auto_1fr] h-full",
-                show === 'Quiz' && "!grid-rows-[auto_1fr]"
+                (show === 'Quiz' || (show && typeof show !== 'string')) && "!grid-rows-[auto_1fr]"
             )}    
         >
             <div 
                 className={clsx(
                     "h-[156px] grid grid-cols-2 bg-neutral-900 transition-all",
-                    show === 'Quiz' && '!h-min !block'
+                    (show === 'Quiz' || (show && typeof show !== 'string')) && '!h-min !block'
                 )}
             >
                 <div 
                     className={clsx(
                         "relative p-4 flex flex-col justify-center gap-y-6 gap-x-2",
-                        show === 'Quiz' && '!h-min !pb-2 !block'
+                        (show === 'Quiz' || (show && typeof show !== 'string')) && '!h-min !pb-2 !block'
                     )}
                 >
-                    {show !== 'Quiz' &&
+                    {show === '' &&
                         <>
                             <div className="flex flex-col justify-center -space-y-1">
                                 <p className="block text-lg font-normal text-neutral-300">
@@ -218,7 +218,7 @@ export default function Page() {
                             </div>
                         </>
                     }
-                    {show === 'Quiz' &&
+                    {(show === 'Quiz' || (show && typeof show !== 'string')) &&
                         <>
                             <div className="w-full">
                                 <div className="">
@@ -244,7 +244,7 @@ export default function Page() {
                             </div>
                         </>
                     }
-                    {(show && typeof show !== 'string') &&
+                    {/* {(show && typeof show !== 'string') &&
                         <>
                             <div className="w-full">
                                 <div className="">
@@ -269,12 +269,12 @@ export default function Page() {
                                 </div>
                             </div>
                         </>
-                    }
+                    } */}
                 </div>
                 <div 
                     className={clsx(
                         "p-4 h-min flex gap-x-2 justify-end transition-all",
-                        show === 'Quiz' && '!p-2 !hidden'
+                        (show === 'Quiz' || (show && typeof show !== 'string')) && '!p-2 !hidden'
                     )}
                 >
                     <IconButton
@@ -295,7 +295,7 @@ export default function Page() {
                     />
                 </div>
             </div>
-            {show !== 'Quiz' &&
+            {show === '' &&
                 <>
                     <div className="w-full p-2 grid grid-cols-2 gap-x-2 bg-neutral-900 border-y border-neutral-800">
                         <Tab
@@ -334,7 +334,7 @@ export default function Page() {
                     </div>
                 </>
             }
-            {show === 'Quiz' &&
+            {(show === 'Quiz' || (show && typeof show !== 'string')) &&
                 <TakeQuiz
                     deck={data.deck}
                     deckGraded={(show && typeof show !== 'string') ? show : null}

@@ -10,7 +10,11 @@ const ReaderSchema = z.object({
     reader_name: z.string(),
     reader_email: z.email(),
     reader_password: z.string(),
-    reader_profile_image: z.url()
+    reader_profile_image: z.union([
+        z.literal(""),
+        z.literal(null),
+        z.url()
+    ]).optional()
 });
 
 
@@ -170,8 +174,10 @@ export async function deleteReader(req: Request, res: Response) {
         }
 
         delCookie(res, "sessionID");
-        await DeleteReader(output.data.reader_id);
-        return res.status(200);
+        const rows = await DeleteReader(output.data.reader_id);
+        console.log(rows);
+        
+        return res.sendStatus(200);
     }
     catch (error) {
         console.error("Error");

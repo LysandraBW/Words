@@ -146,7 +146,7 @@ export function testForm<D extends Data>(form: Form<D>, setForm?: (form: Form<D>
     
         const output = field.test.safeParse(field.value);
         if (output.error) {
-            console.log(output.error)
+            console.log(output.error, field.value)
             valid = false;
             field.hasError = true;
             field.error = JSON.parse(output.error.message)[0].message;

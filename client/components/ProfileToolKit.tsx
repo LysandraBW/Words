@@ -1,5 +1,6 @@
-import { ReaderType } from "@/services/server/reader";
+import { ReaderType, signOut } from "@/services/server/reader";
 import { LogOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Tooltip } from "react-tooltip";
 
 
@@ -10,6 +11,8 @@ interface ProfileToolKitProps {
 
 
 export default function ProfileToolKit(props: ProfileToolKitProps) {
+    const router = useRouter();
+
     return (
         <Tooltip
             anchorSelect="#profile"
@@ -46,7 +49,13 @@ export default function ProfileToolKit(props: ProfileToolKitProps) {
                 </div>
             </div>
             <div className="p-2 flex justify-end !bg-neutral-900 rounded-b-lg ">
-                <button className="px-2 py-0.5 flex items-center gap-x-2 bg-neutral-700 border border-neutral-600 rounded-md shadow-md">
+                <button 
+                    onClick={() => {
+                        signOut();
+                        router.push("/login");
+                    }}
+                    className="px-2 py-0.5 flex items-center gap-x-2 bg-neutral-700 border border-neutral-600 rounded-md shadow-md"
+                >
                     <LogOutIcon
                         size={14}
                         className="stroke-neutral-300"

@@ -1,19 +1,17 @@
 "use client";
-import { ArrowLeftFromLineIcon , ChevronsLeftIcon, ChevronsRightIcon, HomeIcon, LogOutIcon, PanelLeftCloseIcon, SettingsIcon } from "lucide-react";
+import { ChevronsLeftIcon, ChevronsRightIcon, HomeIcon, SettingsIcon } from "lucide-react";
 import SearchWords from "./SearchWords";
 import { Fragment, useEffect, useState } from "react";
-import loadData from "./home/loadData";
 import getWordEntries, { Entry } from "@/services/words/getWordEntry";
 import clsx from "clsx";
-import { dynaPuffFont, glutenFont, snigletFont } from "../fonts";
+import { snigletFont } from "../fonts";
 import DraggableWord from "@/components/DraggableWord";
 import { ReaderType, selectReader } from "@/services/server/reader";
 import { useRouter } from "next/navigation";
-import { Tooltip } from 'react-tooltip'
 import Logo from "@/components/Logo";
 import ProfilePicture from "@/components/ProfilePicture";
 import ProfileToolKit from "@/components/ProfileToolKit";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import NavBarTab from "./NavBarTab";
 
 
@@ -30,11 +28,16 @@ export default function Layout({children}: {children: React.ReactNode}) {
     
     useEffect(() => {
         const load = async () => {
-            const reader = await selectReader();
-            if (!reader) {
+            try {
+                const reader = await selectReader();
+                if (!reader) {
+                    return router.push('/login');
+                }
+                setReader(reader[0]);
+            }
+            catch (err) {
                 return router.push('/login');
             }
-            setReader(reader[0]);
         }
         load();
     }, []);
@@ -110,13 +113,13 @@ export default function Layout({children}: {children: React.ReactNode}) {
                     onOpenWord={onOpenWord}
                 />
                 <ProfilePicture
-                    profilePictureURL="https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg"
+                    profilePictureURL={reader?.reader_profile_image || ""}
                     onClick={() => setOpen(!open)}
                 />
                 {reader &&
                     <ProfileToolKit
                         reader={reader}
-                        profilePictureURL="https://m.media-amazon.com/images/S/pv-target-images/5620550b7170b1c281665e148fca399e353c95a68f63195d3c1fa887b8c9dd5d.jpg"
+                        profilePictureURL={reader?.reader_profile_image || ""}
                     />
                 }
             </div>

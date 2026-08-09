@@ -6,6 +6,7 @@ import z from "zod";
 import InputText from "@/components/input/InputText";
 import InputButton from "@/components/input/InputButton";
 import { signUp } from "@/services/server/reader";
+import { toast } from "@/components/ui/toast/Toast";
 
 
 interface SignUpProps {
@@ -34,15 +35,22 @@ export default function SignUp(props: SignUpProps) {
     
     const onSignUp = async (form: Form<{name: string; email: string; password: string}>) => {
         try {
-            if (!testForm(form))
-                throw new Error('Invalid Fields');
+            if (!testForm(form, setForm))
+                return;
             
             const data = getFormData(form);
             const pass = signUp(data.name, data.email, data.password);
-            if (!pass) 
-                throw new Error("Failed");
             
-            router.push("/home");
+
+            if (!pass) {
+                toast({
+                    title: 'Failed to Create Account',
+                    description: 'Please try again.'
+                });
+                return;
+            }
+            
+            router.push("/reader/home");
         }
         catch (err) {
             alert(err);

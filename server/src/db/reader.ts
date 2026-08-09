@@ -80,7 +80,7 @@ export async function UpdateReader(reader: NullableBy<Reader, "reader_name" | "r
         UPDATE  Reader
         SET     reader_name = COALESCE(${reader.reader_name ?? null}, reader_name),
                 reader_email = COALESCE(${reader.reader_email ?? null}, reader_email),
-                reader_password = COALESCE(${reader.reader_password ?? null}, reader_password),
+                reader_password = COALESCE(crypt(${reader.reader_password ?? null}, gen_salt('bf')), reader_password),
                 reader_profile_image = COALESCE(${reader.reader_profile_image ?? null}, reader_profile_image)
         WHERE   reader_id = ${reader.reader_id}
         RETURNING *
